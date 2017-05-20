@@ -1,0 +1,17 @@
+{{ define "title"}} {{ .Site.Title }}{{end}}
+{{ define "header"}} {{ partial "header" .}} {{end}}
+{{ define "main"}}
+
+<div id="main">
+  <div id="hero">
+    <h1>{{.Title}}</h1>
+    <p>Projects, code, and other infrequently posted thoughts</p>
+  </div>
+  <ul id="posts">
+      {{ $paginator := .Paginate (where .Data.Pages "Type" "post") }}
+      {{ range $paginator.Pages}} {{ partial "page-summary" . }} {{ end }}
+    <section>{{ partial "pagination" .}}</section>
+  </ul>
+</div>
+{{ end }}
+{{ define "footer"}} {{ partial "footer" .}} {{end}}

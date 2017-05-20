@@ -1,0 +1,22 @@
+language: r
+cache: packages
+branches:
+  only:
+  - src
+before_script:
+- git config --global user.email "neal@crunch.io"
+- git config --global user.name "Neal Richardson"
+- R -e 'blogdown::install_hugo()'
+- git clone https://github.com/jeblister/kube.git ./themes/kube
+script:
+- R -e 'blogdown::build_site()'
+- git clone -b master https://${GH_TOKEN}@github.com/$TRAVIS_REPO_SLUG.git OUTPUT
+- cd OUTPUT
+- git rm -rf .
+- cp -r ../public/* .
+- git add .
+- git commit -m "Updating built site" || true
+- git push origin master > /dev/null 2>&1 || true
+env:
+  global:
+    secure: YGvlr/EDv4p+zkdF8K1jSqKHdLgAmIhtTOOXnZPMpnKLNYpckyjtSwzpf/m/n5SUBfFoWBhb1qZEBH2o0xlCx49LpeMOVxvRTcw5u2qBxOaaxGSD3sPYOtd44mC1aPmZBvYLYXl1wghoGArdxbY4Uuy2QacN32ko2+rJ+mycQ6rTeUleFA4mnZgi72ibQ92eCxWWSP06Y2D602AtzJrHjL/RZPokbaYSuu6fTL+mRMrTCvymkYnwfnDmHlH4OKKIDEbapqTwna8KH6g5jKoik/AXpQmZECuzlFgkiVFgqCzjiWwryG1Jr2ZoNEeQ6ZqyusM+Wm3nuMhcqbcJ08kNhKQTwaFHK9zj9iGAgBJAWXQqzMNKaAwWBfKVY622qncarTUROtbAAbxLd1C1WfKh/uETSrYBYYEnInv2bobUYZz4JimPSPi4tcDkDSgtiNihn9dYShHGoHbymRBdX1eOUiowpFY6QPCnEtc2kYPVWaqE1IiVNc2i7dGGtpLZEG7AS3O/yhTzhv8cZrTQ7PLNvcjoG77FRhMwWnK167T4nx7HXcLp6R2deOBg0E9zPtBbNWucjpVJsPtTSKSlMQXm4yZDUneKHfxT47FbfcYwmqhz8waVUpL/YEqmbRFxH7/jGpLfNiKxZ7zQ8adqkKW2PwcKBKLkOxgQltIzIJHBqMM=
