@@ -1,1 +1,0 @@
-# nealrichardson.github.io

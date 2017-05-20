@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>General on A Blog</title>
+    <link>/categories/general/</link>
+    <description>Recent content in General on A Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 19 May 2017 21:49:57 -0700</lastBuildDate>
+    
+	<atom:link href="/categories/general/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Using Travis-CI to Build Blogdown</title>
+      <link>/2017/05/19/using-travis-ci-to-build-blogdown/</link>
+      <pubDate>Fri, 19 May 2017 21:49:57 -0700</pubDate>
+      
+      <guid>/2017/05/19/using-travis-ci-to-build-blogdown/</guid>
+      <description>create repo on github git init git remote add origin git@github.com:nealrichardson/nealrichardson.github.io.git https://travis-ci.org/profile, enable
+git checkout -b src (because it&amp;rsquo;s a user page, not repo page)
+.gitignore .travis.yml DESCRIPTION generate key
+gem install travis travis encrypt &amp;ndash;add (can&amp;rsquo;t do until you&amp;rsquo;ve enabled Travis on your repository and have git remote add origin)
+https://github.com/rstudio/blogdown/issues/26 https://bookdown.org/yihui/bookdown/github.html https://github.com/curso-r/verao2017/blob/master/.travis.yml</description>
+    </item>
+    
+    <item>
+      <title>Lorem Ipsum</title>
+      <link>/2015/08/01/lorem-ipsum/</link>
+      <pubDate>Sat, 01 Aug 2015 13:09:13 -0600</pubDate>
+      
+      <guid>/2015/08/01/lorem-ipsum/</guid>
+      <description>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</description>
+    </item>
+    
+  </channel>
+</rss>
