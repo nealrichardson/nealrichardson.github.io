@@ -3,6 +3,8 @@ cache: packages
 branches:
   only:
   - src
+r_github_packages:
+- rstudio/blogdown
 before_script:
 - git config --global user.email "neal@crunch.io"
 - git config --global user.name "Neal Richardson"
