@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta name="generator" content="Hugo 0.21" />
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> Using Travis-CI to Build Blogdown </title>
+
+  
+  <meta name="description" content="Automate the building and publishing of your R Markdown static site with Travis-CI and GitHub Pages."> 
+  
+  
+  
+  
+  
+
+    
+
+  <meta name="author" content="">
+
+
+  <meta property="og:title" content="Using Travis-CI to Build Blogdown" />
+<meta property="og:description" content="Automate the building and publishing of your R Markdown static site with Travis-CI and GitHub Pages." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2017/05/23/using-travis-ci-to-build-blogdown/" />
+
+
+
+<meta property="article:published_time" content="2017-05-23T21:49:57-07:00"/>
+<meta property="article:modified_time" content="2017-05-23T21:49:57-07:00"/>
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  
+  
+
+  <link rel="canonical" href="../../../../2017/05/23/using-travis-ci-to-build-blogdown/">  
+
+  <link rel="shortcut icon" type="image/png" href="../../../../favicon.ico">
+
+
+  <link href="../../../../css/font.css" rel="stylesheet" type="text/css">
+  <link href="../../../../css/kube.min.css" rel="stylesheet" type="text/css">
+  <link href="../../../../css/kube.legenda.css" rel="stylesheet" type="text/css">
+  <link href="../../../../css/highlight.css" rel="stylesheet" type="text/css">
+  <link href="../../../../css/master.css" rel="stylesheet" type="text/css">
+  <link href="../../../../css/kube.demo.css" rel="stylesheet" type="text/css">
+
+ <link href="../../../../css/custom.css" rel="stylesheet" type="text/css">
+
+  <script src="../../../../js/jquery-2.1.4.min.js" type="text/javascript">
+  </script>
+
+  <script type="text/javascript" src="../../../../js/tocbot.min.js"></script>
+</head>
+
+
+<body class="page-kube">
+  <header> <div class="show-sm">
+    <div id="nav-toggle-box">
+      <div id="nav-toggle-brand">
+        <a href="../../../../">All posts</a>
+      </div><a data-component="toggleme" data-target="#top" href="#" id="nav-toggle"><i class="kube-menu"></i></a>
+    </div>
+  </div>
+  <div class="hide-sm" id="top">
+    <div id="top-brand">
+        <a href="../../../../">All posts</img></a>
+    </div>
+    <nav id="top-nav-main">
+      <ul>
+       
+       
+    <li><a href="../../../../about/" >About</a></li>
+    
+      </ul>
+    </nav>
+    
+  </div>
+ </header>
+  <main>
+<div class="push-center" itemscope itemtype="http://schema.org/BlogPosting">
+    
+<meta itemprop="name" content="Using Travis-CI to Build Blogdown">
+<meta itemprop="description" content="Automate the building and publishing of your R Markdown static site with Travis-CI and GitHub Pages.">
+
+
+<meta itemprop="dateModified" content="2017-05-23T21:49:57-07:00" />
+<meta itemprop="wordCount" content="1629">
+
+
+
+<meta itemprop="keywords" content="general,automation,meta,travis-ci," />
+
+<div id="hero">
+    <h1 itemprop="headline">  Using Travis-CI to Build Blogdown</h1>
+    
+<blockquote itemprop="description">Automate the building and publishing of your R Markdown static site with Travis-CI and GitHub Pages.</blockquote>
+
+<time class="post-time"><span class="icon">
+  <i class="fa fa-clock-o" aria-hidden="true"></i>
+</span>
+
+  Published <span datetime="2017-05-23T21:49:57-07:00">23 May 2017</span>
+
+<span class="icon">
+ <i class="fa fa-pencil" aria-hidden="true"></i>
+</span>
+</time>
+</div>
+<div id="post-box">
+<div id="post" itemprop="articleBody">
+
+    <p>Over on the Crunch.io dev blog, I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I’d do the same for my personal blog, though with one twist: using R and the <a href="https://github.com/rstudio/blogdown">blogdown</a> package on top of Hugo.</p>
+<p>The thread on <a href="https://github.com/rstudio/blogdown/issues/26">this issue</a> in the blogdown repository pointed to <a href="https://bookdown.org/yihui/bookdown/github.html">Yihui’s guide to building bookdown pages on Travis</a>, as well as a project that had <a href="https://github.com/curso-r/verao2017">adapted</a> that flow for <code>blogdown</code>. Both were helpful, and combined with my experience building other non-blogdown sites on Travis, I was able to simplify and improve on those examples. It was shockingly straightforward.</p>
+<p>This post outlines the steps I took to automate the Hugo/blogdown build on Travis-CI. It starts from the point of having already installed blogdown locally, created the Hugo project, played around with themes and customization, and having something serving locally that’s worth deploying. It assumes that you have a GitHub account and have used Travis before (surely you have continuous integration running on your code projects, right?).</p>
+<p>There are three main steps: setting up your repository on GitHub and Travis-CI, adding the build script, and setting up your GitHub API token access.</p>
+<div id="setup-on-github-git-and-travis-ci" class="section level1">
+<h1>Setup on GitHub, git, and Travis-CI</h1>
+<p>First, we need to <a href="https://github.com/new">create a new repository on GitHub</a>. Then, initialize a git repository locally and link it with your new repo on GitHub:</p>
+<pre><code>git init
+git remote add origin git@github.com:nealrichardson/nealrichardson.github.io.git</code></pre>
+<p>of course, substituting in your user/organization name and repository name. (GitHub will tell you the exact code to run after you create the repository there.)</p>
+<p>Next, go to <a href="https://travis-ci.org/profile">Travis</a> and enable Travis to run on your new GitHub repository. You’ll have to click the “sync” button in order for the new project to show in the list if you just created it.</p>
+<div id="user-page-vs.project-page" class="section level2">
+<h2>User page vs. project page</h2>
+<p>For a typical repository on GitHub, the usual way GitHub Pages are supported is on a <code>gh-pages</code> branch, though there are some options. However, if this is your <a href="https://help.github.com/articles/user-organization-and-project-pages/">user or organization page</a>, the static site must be on <code>master</code> branch. So, I put my markdown and blogdown/Hugo code on a <code>src</code> branch, and will use Travis to build from that and push the generated site to <code>master</code>.</p>
+<p>Given that I already had started the project locally, and I’d done <code>git init</code>, I created the <code>src</code> branch before committing my initial blog code:</p>
+<pre><code>git checkout -b src
+git add .
+git commit -m &quot;Initial commit&quot;</code></pre>
+<p>and then checked out <code>master</code> and pushed an empty README.md file up there, just so the branch would exist on GitHub. Travis will need it to exist in order to start pushing to it.</p>
+</div>
+</div>
+<div id="add-some-files" class="section level1">
+<h1>Add some files</h1>
+<div id="travis.yml" class="section level2">
+<h2>.travis.yml</h2>
+<p>The .travis.yml file is where the action happens—it’s what tells Travis what to do. The examples I found for using Travis to build bookdown or blogdown sites followed the model of putting “build” and “deploy” logic into Bash scripts, which the .travis.yml file makes executable (<a href="http://stackoverflow.com/a/38285462">which you could instead do through git</a>) and then calls. I found this unnecessarily indirect. Travis treats the YAML file like a script anyway, so you can just enter the shell commands you want to run there. That way, you can look in one file to see everything that is happening.</p>
+<p><a href="https://github.com/nealrichardson/nealrichardson.github.io/blob/src/.travis.yml">My .travis.yml</a> is grouped into a few sections. To start, it sets the language/container type to “R” and indicates that packages should be cached for faster repeat building. Second, this block</p>
+<pre><code>branches:
+  only:
+  - src</code></pre>
+<p>tells Travis only to build when I push to my <code>src</code> branch. I want to be free to make other branches in my repository and not have them trigger a build of my site—that could lead to very unexpected changes! Moreover, on success, Travis will be pushing to the <code>master</code> branch, and I don’t want that push to attempt a re-build of the site.</p>
+<p>Next, the YAML file directs the installation of the blogdown package from GitHub using the <code>r_github_packages</code> block. It’s not yet on CRAN, so GitHub is the way, and while you can (and others may) specify that it be installed via the DESCRIPTION file using some <code>devtools</code> special hooks, I’ve had success installing GitHub packages on Travis this way in the past, and it worked here too.</p>
+<p>I grouped the main action in .travis.yml into a <code>before_script</code> block and a <code>script</code> block, but that’s purely for aesthetics. The “before” block sets my GitHub user name and email—the <code>git commit</code> will need them—installs Hugo via blogdown, and then adds my Hugo theme. You could use the <code>blogdown::install_theme</code> function, but all you need it to do is checkout the theme repository to your “themes” directory, so I just do that directly.</p>
+<p>At that point, building the site is just <code>R -e 'blogdown::build_site()'</code>. That’s it.</p>
+<p>The last step is to commit the built site to a different branch, in this case “master”, and push that. Even though the Travis job has already cloned your repository from GitHub to start the build, it has only cloned the current branch, so <code>git checkout master</code> won’t work. To change branches, we have to do a fresh <code>git clone</code>.</p>
+<p>Note that the <code>clone</code> command involves a <code>GH_TOKEN</code> environment variable. That’s your API token—we’ll discuss that below.</p>
+<p>On the <code>git push</code>, I have the output redirected to <code>/dev/null</code>. I saw this suggested before when I was setting up my sites at work because without a quiet push, the Travis log would reveal the GitHub API token that was encrypted in the YAML file (see below). It turns out that this was a <a href="https://blog.travis-ci.com/2017-05-08-security-advisory">security vulnerability</a> that Travis has since fixed, but I’ve left the redirection in there for extra comfort.</p>
+</div>
+<div id="description" class="section level2">
+<h2>DESCRIPTION</h2>
+<p>Because we’re going to use an R language build on Travis, the job will expect that we’re testing an R package, so we need a DESCRIPTION file. In practice, it is useful for installing packages your R code will need, and ostensibly for installing <code>blogdown</code> itself. But since I installed blogdown in the .travis.yml file, and I’m just starting the blog and don’t have any meaningful R code to run on it, there aren’t any other dependencies to install. So, <a href="https://github.com/nealrichardson/nealrichardson.github.io/blob/src/DESCRIPTION">my DESCRIPTION</a> is pretty empty. But it exists.</p>
+</div>
+<div id="gitignore" class="section level2">
+<h2>.gitignore</h2>
+<p>For Hugo projects, you want to .gitignore the “themes” directory because they aren’t really part of your project; you add your customization of templates and stylesheets on top of a theme. I also like to ignore the “public” directory where the build static site gets written—the build on Travis will overwrite it anyway.</p>
+<p>By that logic, you may also want to ignore the <code>static/post</code> directory where blogdown appears to write generated images and other artifacts from the .Rmd code, and <code>*.html</code> from the <code>content/post</code> directory, which is the built version of the .Rmd files. I don’t have enough experience with blogdown at this point to be sure, though.</p>
+</div>
+</div>
+<div id="add-github-api-token" class="section level1">
+<h1>Add GitHub API token</h1>
+<p>As mentioned above, you need to <a href="https://github.com/settings/tokens">generate a GitHub API token</a> so that your job on Travis is authorized to push. The page will give you a bunch of checkboxes for authorization scopes to give to the token, but you only need to select the <code>public_repo</code> scope.</p>
+<p>Token in hand, encrypt it and add it to your YAML file using Travis’s Ruby library. To install that library,</p>
+<pre><code>gem install travis</code></pre>
+<p>You only need to install this the first time you deal with adding encrypted variables to Travis. In using the utility (<a href="https://docs.travis-ci.com/user/encryption-keys/">instructions here</a>), note that you’re not just encrypting the API token, you’re encrypting the pair of <code>NAME=tokenstring</code>. As mentioned above, I’m using <code>GH_TOKEN</code> as the environment variable name, so, in the project directory, run:</p>
+<pre><code>travis encrypt GH_TOKEN=token --add</code></pre>
+<p>where <code>token</code> is the string copied from the GitHub page when the token was generated. The <code>--add</code> flag will add the result to the .travis.yml file for you.</p>
+<p>While clearly this step has to happen before you can proceed with your build, I put it last in this discussion because some of the steps outlined above have to happen first. You can’t run <code>travis encrypt --add</code> until you’ve enabled Travis on your repository (on travis-ci.org), and you have to have done <code>git remote add origin</code> so that your local repository points to the same project that Travis is expecting.</p>
+<p>Once you’ve done all this, commit and <code>git push</code> your blogdown code and Travis config. You can now <del>go to the Travis site and watch the build run</del> forget about it and trust that your site is being built for you—that’s the point of automating it!<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>Given that <code>blogdown</code> is a relatively new tool, I expected that using it would show some rough edges, and that trying to build it on Travis would be challenging. It took me ten attempts to figure out the build automation for our Hugo blog at Crunch. I’d hoped I’d learned a few things about how to use Travis for static sites and could do better this time, but adding R to the mix was a complication.</p>
+<p>In the end, it was a breeze. I got the site built in only four commits this time, all trivially tweaking the setup to install blogdown itself. The complications I feared—having to install go and Hugo on top of a container configured to run R—were seamlessly handled by blogdown.</p>
+<p>And finally, to demonstrate that this post is R Markdown and not regular markdown, here’s Figure <a href="#fig:pie">1</a> from the example site that <code>blogdown</code> generates.</p>
+<pre class="r"><code>par(mar = c(0, 1, 0, 1))
+pie(
+  c(280, 60, 20),
+  c(&#39;Sky&#39;, &#39;Sunny side of pyramid&#39;, &#39;Shady side of pyramid&#39;),
+  col = c(&#39;#0292D8&#39;, &#39;#F7EA39&#39;, &#39;#C4B632&#39;),
+  init.angle = -50, border = NA
+)</code></pre>
+<div class="figure"><span id="fig:pie"></span>
+<img src="../../../../post/building-this-blog_files/figure-html/pie-1.png" alt="A fancy pie chart." width="672" />
+<p class="caption">
+Figure 1: A fancy pie chart.
+</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>If the build fails, as in when you’re setting it up or adding a new dependency, Travis will notify you by email. No news is good news.<a href="#fnref1">↩</a></p></li>
+</ol>
+</div>
+
+
+</div>
+    <div class="">
+        
+
+        
+
+
+
+    </div>
+
+    
+
+</div>
+</div>
+</main>
+  <footer>   <footer id="footer">
+    <nav>
+      <ul>
+        <li><span>enpiar</span></li>
+        <li>
+          <a href="../../../../blog/">Blog</a>
+        </li>
+      <li>
+        <a href="https://github.com/nealrichardson/">GitHub</a>
+      </li>
+        <li>
+          <a href="http://twitter.com/enpiar">Twitter</a>
+        </li>
+      </ul>
+    </nav>
+    
+  </footer>
+ </footer>
+
+
+  <script src="../../../../js/kube.js" type="text/javascript">
+  </script>
+  <script src="../../../../js/kube.legenda.js" type="text/javascript">
+  </script>
+  <script src="../../../../js/master.js" type="text/javascript">
+  </script>
+</body>
+
+</html>
