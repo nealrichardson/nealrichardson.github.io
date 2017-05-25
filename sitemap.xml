@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>/2017/05/23/using-travis-ci-to-build-blogdown/</loc>
-    <lastmod>2017-05-23T21:49:57-07:00</lastmod>
+    <loc>/2017/05/24/using-travis-ci-to-build-a-blogdown-site/</loc>
+    <lastmod>2017-05-24T21:49:57-07:00</lastmod>
   </url>
   
   <url>
@@ -14,13 +13,13 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2017-05-23T21:49:57-07:00</lastmod>
+    <lastmod>2017-05-24T21:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/automation/</loc>
-    <lastmod>2017-05-23T21:49:57-07:00</lastmod>
+    <lastmod>2017-05-24T21:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -31,31 +30,31 @@
   
   <url>
     <loc>/categories/general/</loc>
-    <lastmod>2017-05-23T21:49:57-07:00</lastmod>
+    <lastmod>2017-05-24T21:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/meta/</loc>
-    <lastmod>2017-05-23T21:49:57-07:00</lastmod>
+    <lastmod>2017-05-24T21:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2017-05-23T21:49:57-07:00</lastmod>
+    <lastmod>2017-05-24T21:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/</loc>
-    <lastmod>2017-05-23T21:49:57-07:00</lastmod>
+    <lastmod>2017-05-24T21:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/travis-ci/</loc>
-    <lastmod>2017-05-23T21:49:57-07:00</lastmod>
+    <lastmod>2017-05-24T21:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   

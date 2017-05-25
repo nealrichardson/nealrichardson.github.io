@@ -2,11 +2,11 @@
 <html lang="en-us">
 
 <head>
-  <meta name="generator" content="Hugo 0.21" />
+  <meta name="generator" content="Hugo 0.20.7" />
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> Using Travis-CI to Build Blogdown </title>
+  <title> Using Travis-CI to Build a Blogdown Site </title>
 
   
   <meta name="description" content="Automate the building and publishing of your R Markdown static site with Travis-CI and GitHub Pages."> 
@@ -21,19 +21,15 @@
   <meta name="author" content="">
 
 
-  <meta property="og:title" content="Using Travis-CI to Build Blogdown" />
+  <meta property="og:title" content="Using Travis-CI to Build a Blogdown Site" />
 <meta property="og:description" content="Automate the building and publishing of your R Markdown static site with Travis-CI and GitHub Pages." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2017/05/23/using-travis-ci-to-build-blogdown/" />
+<meta property="og:url" content="/2017/05/24/using-travis-ci-to-build-a-blogdown-site/" />
 
 
 
-<meta property="article:published_time" content="2017-05-23T21:49:57-07:00"/>
-<meta property="article:modified_time" content="2017-05-23T21:49:57-07:00"/>
-
-
-
-
+<meta property="article:published_time" content="2017-05-24T21:49:57-07:00"/>
+<meta property="article:modified_time" content="2017-05-24T21:49:57-07:00"/>
 
 
 
@@ -41,18 +37,22 @@
 
 
 
-  
 
 
 
 
   
+
+
+
+
+  
   
   
   
   
 
-  <link rel="canonical" href="../../../../2017/05/23/using-travis-ci-to-build-blogdown/">  
+  <link rel="canonical" href="../../../../2017/05/24/using-travis-ci-to-build-a-blogdown-site/">  
 
   <link rel="shortcut icon" type="image/png" href="../../../../favicon.ico">
 
@@ -99,19 +99,19 @@
   <main>
 <div class="push-center" itemscope itemtype="http://schema.org/BlogPosting">
     
-<meta itemprop="name" content="Using Travis-CI to Build Blogdown">
+<meta itemprop="name" content="Using Travis-CI to Build a Blogdown Site">
 <meta itemprop="description" content="Automate the building and publishing of your R Markdown static site with Travis-CI and GitHub Pages.">
 
 
-<meta itemprop="dateModified" content="2017-05-23T21:49:57-07:00" />
-<meta itemprop="wordCount" content="1629">
+<meta itemprop="dateModified" content="2017-05-24T21:49:57-07:00" />
+<meta itemprop="wordCount" content="1679">
 
 
 
 <meta itemprop="keywords" content="general,automation,meta,travis-ci," />
 
 <div id="hero">
-    <h1 itemprop="headline">  Using Travis-CI to Build Blogdown</h1>
+    <h1 itemprop="headline">  Using Travis-CI to Build a Blogdown Site</h1>
     
 <blockquote itemprop="description">Automate the building and publishing of your R Markdown static site with Travis-CI and GitHub Pages.</blockquote>
 
@@ -119,7 +119,7 @@
   <i class="fa fa-clock-o" aria-hidden="true"></i>
 </span>
 
-  Published <span datetime="2017-05-23T21:49:57-07:00">23 May 2017</span>
+   <span datetime="2017-05-24T21:49:57-07:00">24 May 2017</span>
 
 <span class="icon">
  <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -129,7 +129,7 @@
 <div id="post-box">
 <div id="post" itemprop="articleBody">
 
-    <p>Over on the Crunch.io dev blog, I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I’d do the same for my personal blog, though with one twist: using R and the <a href="https://github.com/rstudio/blogdown">blogdown</a> package on top of Hugo.</p>
+    <p><a href="http://crunch.io/dev/blog/building-the-blog-on-travis/">Over on the Crunch.io dev blog</a>, I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I’d do the same for my personal blog, though with one twist: using R and the <a href="https://github.com/rstudio/blogdown">blogdown</a> package on top of Hugo.</p>
 <p>The thread on <a href="https://github.com/rstudio/blogdown/issues/26">this issue</a> in the blogdown repository pointed to <a href="https://bookdown.org/yihui/bookdown/github.html">Yihui’s guide to building bookdown pages on Travis</a>, as well as a project that had <a href="https://github.com/curso-r/verao2017">adapted</a> that flow for <code>blogdown</code>. Both were helpful, and combined with my experience building other non-blogdown sites on Travis, I was able to simplify and improve on those examples. It was shockingly straightforward.</p>
 <p>This post outlines the steps I took to automate the Hugo/blogdown build on Travis-CI. It starts from the point of having already installed blogdown locally, created the Hugo project, played around with themes and customization, and having something serving locally that’s worth deploying. It assumes that you have a GitHub account and have used Travis before (surely you have continuous integration running on your code projects, right?).</p>
 <p>There are three main steps: setting up your repository on GitHub and Travis-CI, adding the build script, and setting up your GitHub API token access.</p>
@@ -154,7 +154,7 @@ git commit -m &quot;Initial commit&quot;</code></pre>
 <h1>Add some files</h1>
 <div id="travis.yml" class="section level2">
 <h2>.travis.yml</h2>
-<p>The .travis.yml file is where the action happens—it’s what tells Travis what to do. The examples I found for using Travis to build bookdown or blogdown sites followed the model of putting “build” and “deploy” logic into Bash scripts, which the .travis.yml file makes executable (<a href="http://stackoverflow.com/a/38285462">which you could instead do through git</a>) and then calls. I found this unnecessarily indirect. Travis treats the YAML file like a script anyway, so you can just enter the shell commands you want to run there. That way, you can look in one file to see everything that is happening.</p>
+<p>The .travis.yml file is where the action happens—it’s what tells Travis what to do. The examples I found for using Travis to build bookdown or blogdown sites followed the model of putting “build” and “deploy” logic into Bash scripts, which the .travis.yml file makes executable and then calls. I found this unnecessarily indirect. Travis treats the YAML file like a script anyway, so you can just enter the shell commands you want to run there. That way, you can look in one file to see everything that is happening.</p>
 <p><a href="https://github.com/nealrichardson/nealrichardson.github.io/blob/src/.travis.yml">My .travis.yml</a> is grouped into a few sections. To start, it sets the language/container type to “R” and indicates that packages should be cached for faster repeat building. Second, this block</p>
 <pre><code>branches:
   only:
@@ -174,7 +174,7 @@ git commit -m &quot;Initial commit&quot;</code></pre>
 <div id="gitignore" class="section level2">
 <h2>.gitignore</h2>
 <p>For Hugo projects, you want to .gitignore the “themes” directory because they aren’t really part of your project; you add your customization of templates and stylesheets on top of a theme. I also like to ignore the “public” directory where the build static site gets written—the build on Travis will overwrite it anyway.</p>
-<p>By that logic, you may also want to ignore the <code>static/post</code> directory where blogdown appears to write generated images and other artifacts from the .Rmd code, and <code>*.html</code> from the <code>content/post</code> directory, which is the built version of the .Rmd files. I don’t have enough experience with blogdown at this point to be sure, though.</p>
+<p>By that logic, you may also want to ignore the <code>static/post</code> directory where blogdown writes generated images and other artifacts from the .Rmd code, and <code>*.html</code> from the <code>content/post</code> directory, which is the built version of the .Rmd files. <a href="https://github.com/nealrichardson/nealrichardson.github.io/commit/8b11e195b6782ca791835bbbede54462ac14489e#diff-a084b794bc0759e7a6b77810e01874f2R3">I tried ignoring those artifacts</a>, and the site built fine on Travis without them, but I don’t have enough experience with blogdown to recommend it as a best practice. If your R code is computationally intensive or relies on third-party services that may be down when your site gets built on Travis, <em>and</em> if having the cached versions checked in prevents running the R code again on Travis, maybe it’s good to keep them.</p>
 </div>
 </div>
 <div id="add-github-api-token" class="section level1">
@@ -191,7 +191,7 @@ git commit -m &quot;Initial commit&quot;</code></pre>
 <div id="conclusion" class="section level1">
 <h1>Conclusion</h1>
 <p>Given that <code>blogdown</code> is a relatively new tool, I expected that using it would show some rough edges, and that trying to build it on Travis would be challenging. It took me ten attempts to figure out the build automation for our Hugo blog at Crunch. I’d hoped I’d learned a few things about how to use Travis for static sites and could do better this time, but adding R to the mix was a complication.</p>
-<p>In the end, it was a breeze. I got the site built in only four commits this time, all trivially tweaking the setup to install blogdown itself. The complications I feared—having to install go and Hugo on top of a container configured to run R—were seamlessly handled by blogdown.</p>
+<p>In the end, it was a breeze. The only part I had to tinker with was installing blogdown itself. The complications I feared—having to install go and Hugo on top of a container configured to run R—were seamlessly handled by blogdown.</p>
 <p>And finally, to demonstrate that this post is R Markdown and not regular markdown, here’s Figure <a href="#fig:pie">1</a> from the example site that <code>blogdown</code> generates.</p>
 <pre class="r"><code>par(mar = c(0, 1, 0, 1))
 pie(
@@ -201,9 +201,9 @@ pie(
   init.angle = -50, border = NA
 )</code></pre>
 <div class="figure"><span id="fig:pie"></span>
-<img src="../../../../post/building-this-blog_files/figure-html/pie-1.png" alt="A fancy pie chart." width="672" />
+<img src="../../../../post/building-this-blog_files/figure-html/pie-1.png" alt="The first and last pie chart to appear on this blog" width="672" />
 <p class="caption">
-Figure 1: A fancy pie chart.
+Figure 1: The first and last pie chart to appear on this blog
 </p>
 </div>
 </div>
@@ -217,7 +217,18 @@ Figure 1: A fancy pie chart.
 
 </div>
     <div class="">
-        
+        <p>
+  Published
+  <time datetime="2017-05-24T21:49:57-07:00">
+    24 May 2017
+  </time>
+  
+    in <span itemprop="articleSection"><a href="../../../../categories/general/">general</a></span>
+  
+  
+    and tagged <a href="../../../../tags/automation/">automation</a>, <a href="../../../../tags/meta/">meta</a> and <a href="../../../../tags/travis-ci/">travis-ci</a>
+  
+</p>
 
         
 

@@ -6,17 +6,17 @@
     <description>Recent content in Posts on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 23 May 2017 21:49:57 -0700</lastBuildDate>
+    <lastBuildDate>Wed, 24 May 2017 21:49:57 -0700</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Using Travis-CI to Build Blogdown</title>
-      <link>/2017/05/23/using-travis-ci-to-build-blogdown/</link>
-      <pubDate>Tue, 23 May 2017 21:49:57 -0700</pubDate>
+      <title>Using Travis-CI to Build a Blogdown Site</title>
+      <link>/2017/05/24/using-travis-ci-to-build-a-blogdown-site/</link>
+      <pubDate>Wed, 24 May 2017 21:49:57 -0700</pubDate>
       
-      <guid>/2017/05/23/using-travis-ci-to-build-blogdown/</guid>
+      <guid>/2017/05/24/using-travis-ci-to-build-a-blogdown-site/</guid>
       <description>Over on the Crunch.io dev blog, I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I’d do the same for my personal blog, though with one twist: using R and the blogdown package on top of Hugo.
 The thread on this issue in the blogdown repository pointed to Yihui’s guide to building bookdown pages on Travis, as well as a project that had adapted that flow for blogdown.</description>
     </item>
