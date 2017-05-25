@@ -8,7 +8,7 @@ r_github_packages:
 before_script:
 - git config --global user.email "neal@crunch.io"
 - git config --global user.name "Neal Richardson"
-- R -e 'blogdown::install_hugo()'
+- R -e 'blogdown::install_hugo(version="0.20.7")'
 - git clone https://github.com/jeblister/kube.git ./themes/kube
 script:
 - R -e 'blogdown::build_site()'
