@@ -104,7 +104,7 @@
 
 
 <meta itemprop="dateModified" content="2017-05-24T21:49:57-07:00" />
-<meta itemprop="wordCount" content="1679">
+<meta itemprop="wordCount" content="1794">
 
 
 
@@ -161,10 +161,10 @@ git commit -m &quot;Initial commit&quot;</code></pre>
   - src</code></pre>
 <p>tells Travis only to build when I push to my <code>src</code> branch. I want to be free to make other branches in my repository and not have them trigger a build of my site—that could lead to very unexpected changes! Moreover, on success, Travis will be pushing to the <code>master</code> branch, and I don’t want that push to attempt a re-build of the site.</p>
 <p>Next, the YAML file directs the installation of the blogdown package from GitHub using the <code>r_github_packages</code> block. It’s not yet on CRAN, so GitHub is the way, and while you can (and others may) specify that it be installed via the DESCRIPTION file using some <code>devtools</code> special hooks, I’ve had success installing GitHub packages on Travis this way in the past, and it worked here too.</p>
-<p>I grouped the main action in .travis.yml into a <code>before_script</code> block and a <code>script</code> block, but that’s purely for aesthetics. The “before” block sets my GitHub user name and email—the <code>git commit</code> will need them—installs Hugo via blogdown, and then adds my Hugo theme. You could use the <code>blogdown::install_theme</code> function, but all you need it to do is checkout the theme repository to your “themes” directory, so I just do that directly.</p>
+<p>I grouped the main action in .travis.yml into a <code>before_script</code> block and a <code>script</code> block, but that’s purely for aesthetics. The “before” block sets my GitHub user name and email—the <code>git commit</code> will need them—installs Hugo via blogdown,<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> and then adds my Hugo theme. You could use the <code>blogdown::install_theme</code> function, but all you need it to do is checkout the theme repository to your “themes” directory, so I just do that directly.</p>
 <p>At that point, building the site is just <code>R -e 'blogdown::build_site()'</code>. That’s it.</p>
-<p>The last step is to commit the built site to a different branch, in this case “master”, and push that. Even though the Travis job has already cloned your repository from GitHub to start the build, it has only cloned the current branch, so <code>git checkout master</code> won’t work. To change branches, we have to do a fresh <code>git clone</code>.</p>
-<p>Note that the <code>clone</code> command involves a <code>GH_TOKEN</code> environment variable. That’s your API token—we’ll discuss that below.</p>
+<p>The last step is to commit the built site to a different branch, in this case “master”, and push that. Even though the Travis job has already cloned your repository from GitHub to start the build, it has only cloned the current branch, so <code>git checkout master</code> won’t work. To change branches, we have to do a fresh <code>git clone</code>. Note that the <code>clone</code> command involves a <code>GH_TOKEN</code> environment variable. That’s your API token—we’ll discuss that below.</p>
+<p>One other <a href="https://github.com/nealrichardson/nealrichardson.github.io/blob/src/.travis.yml#L19">quirk</a> I added to the YAML file was to write a .travis.yml file into the destination branch for the built site, reiterating the “only build on ‘src’ branch” command. This is because two lines above that, I <code>rm -rf</code>’d everything, so there was no .travis.yml file present on <code>master</code> branch telling Travis not to build from <code>master</code>.</p>
 <p>On the <code>git push</code>, I have the output redirected to <code>/dev/null</code>. I saw this suggested before when I was setting up my sites at work because without a quiet push, the Travis log would reveal the GitHub API token that was encrypted in the YAML file (see below). It turns out that this was a <a href="https://blog.travis-ci.com/2017-05-08-security-advisory">security vulnerability</a> that Travis has since fixed, but I’ve left the redirection in there for extra comfort.</p>
 </div>
 <div id="description" class="section level2">
@@ -186,7 +186,7 @@ git commit -m &quot;Initial commit&quot;</code></pre>
 <pre><code>travis encrypt GH_TOKEN=token --add</code></pre>
 <p>where <code>token</code> is the string copied from the GitHub page when the token was generated. The <code>--add</code> flag will add the result to the .travis.yml file for you.</p>
 <p>While clearly this step has to happen before you can proceed with your build, I put it last in this discussion because some of the steps outlined above have to happen first. You can’t run <code>travis encrypt --add</code> until you’ve enabled Travis on your repository (on travis-ci.org), and you have to have done <code>git remote add origin</code> so that your local repository points to the same project that Travis is expecting.</p>
-<p>Once you’ve done all this, commit and <code>git push</code> your blogdown code and Travis config. You can now <del>go to the Travis site and watch the build run</del> forget about it and trust that your site is being built for you—that’s the point of automating it!<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<p>Once you’ve done all this, commit and <code>git push</code> your blogdown code and Travis config. You can now <del>go to the Travis site and watch the build run</del> forget about it and trust that your site is being built for you—that’s the point of automating it!<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
 </div>
 <div id="conclusion" class="section level1">
 <h1>Conclusion</h1>
@@ -210,7 +210,8 @@ Figure 1: The first and last pie chart to appear on this blog
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>If the build fails, as in when you’re setting it up or adding a new dependency, Travis will notify you by email. No news is good news.<a href="#fnref1">↩</a></p></li>
+<li id="fn1"><p>I had to fix a specific version of Hugo to install after what was hopefully just a transient <a href="https://travis-ci.org/nealrichardson/nealrichardson.github.io/builds/235902865">failure to install on Travis</a>. It was previously working with the default “latest” version, but there was a Hugo release a couple of days ago, so maybe that caused some disturbance. You shouldn’t have to hard-code a version.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>If the build fails, as in when you’re setting it up or adding a new dependency, Travis will notify you by email. No news is good news.<a href="#fnref2">↩</a></p></li>
 </ol>
 </div>
 
