@@ -2,13 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>/2017/05/24/using-travis-ci-to-build-a-blogdown-site/</loc>
+    <loc>/2017/05/24/building-a-blogdown-site-with-travis-ci/</loc>
     <lastmod>2017-05-24T21:49:57-07:00</lastmod>
   </url>
   
   <url>
     <loc>/2017/05/22/this-is-a-blog/</loc>
     <lastmod>2017-05-22T21:11:48-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/about/</loc>
+    <lastmod>2017-05-01T21:48:51-07:00</lastmod>
   </url>
   
   <url>
