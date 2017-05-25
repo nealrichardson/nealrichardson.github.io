@@ -16,6 +16,7 @@ script:
 - cd OUTPUT
 - git rm -rf .
 - cp -r ../public/* .
+- echo -e "branches\n  only\n  - src" > .travis.yml
 - git add .
 - git commit -m "Updating built site" || true
 - git push origin master > /dev/null 2>&1 || true

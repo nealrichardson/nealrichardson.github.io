@@ -11,12 +11,12 @@ h1.title, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 body {
     /*color:#565656;*/
     font-family: Lato, sans-serif;
-    font-size: 18px;
+    font-size: 19px;
 }
 
 p {
     margin-bottom: 24px;
-    font-size: 18px;
+    font-size: 19px;
     font-weight: 100;
 }
 
@@ -35,8 +35,8 @@ a:hover {
 
 #hero h1 {
     font-size: 36px;
-    line-height: 1.25;
-    max-width: 900px;
+    line-height: 1.5;
+    max-width: 800px;
     margin-bottom: 0;
     color: #34699A;
     font-weight: 100;
@@ -44,8 +44,8 @@ a:hover {
 
 #hero p {
     padding:0;
-    font-size: 18px;
-    max-width: 900px;
+    font-size: 19px;
+    max-width: 800px;
     margin-top: 0;
 
 }
@@ -55,9 +55,14 @@ a:hover {
 
 #posts {
     text-align: left;
-    max-width: 900px;
+    max-width: 800px;
     margin-top: 0;
 
+}
+
+#posts h2 {
+    font-size: 24px;
+    line-height: 36px;
 }
 
 #posts h2 a {
@@ -94,7 +99,7 @@ ol, ol ol, ol ul, ul, ul ol, ul ul {
 time.post-time {
     /*color: #AAA;*/
     margin: auto;
-    max-width:900px;
+    max-width:800px;
     display:block;
     font-size:12px;
 }
@@ -106,13 +111,13 @@ time.post-time {
 blockquote[itemprop="description"] {
     font-style:normal;
     margin:auto;
-    max-width: 900px;
+    max-width: 800px;
     padding:0;
     border: none;
 }
 
 #post-box {
-    max-width: 900px;
+    max-width: 800px;
 }
 
 .h1, h1 {
@@ -122,11 +127,11 @@ blockquote[itemprop="description"] {
     padding-top: 9px;
 }
 .h2, h2 {
-    font-size: 22px;
+    font-size: 24px;
     /*color: #107f65;*/
 }
 .h3, h3 {
-    font-size: 18px;
+    font-size: 19px;
     /*color: #732082;*/
 }
 .h4, h4 {
@@ -139,7 +144,7 @@ p+h2, p+h3, p+h4 {
     margin-top: 0;}
 
 #post {
-    font-size: 18px;
+    font-size: 19px;
     line-height: 1.5;
     font-weight: 100;
 
@@ -192,4 +197,8 @@ p+h2, p+h3, p+h4 {
 
 #top {
     height: 60px;
+}
+
+time.post-time {
+    font-size: 14px;
 }

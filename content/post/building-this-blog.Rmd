@@ -1,13 +1,13 @@
 ---
-title: "Using Travis-CI to Build Blogdown"
+title: "Using Travis-CI to Build a Blogdown Site"
 description: "Automate the building and publishing of your R Markdown static site with Travis-CI and GitHub Pages."
-date: "2017-05-23T21:49:57-07:00"
+date: "2017-05-24T21:49:57-07:00"
 categories: ["general"]
 tags: ["travis-ci", "automation", "meta"]
 draft: false
 ---
 
-Over on the Crunch.io dev blog, I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I'd do the same for my personal blog, though with one twist: using R and the [blogdown](https://github.com/rstudio/blogdown) package on top of Hugo.  
+[Over on the Crunch.io dev blog](http://crunch.io/dev/blog/building-the-blog-on-travis/), I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I'd do the same for my personal blog, though with one twist: using R and the [blogdown](https://github.com/rstudio/blogdown) package on top of Hugo.  
 
 The thread on [this issue](https://github.com/rstudio/blogdown/issues/26) in the blogdown repository pointed to [Yihui's guide to building bookdown pages on Travis](https://bookdown.org/yihui/bookdown/github.html), as well as a project that had [adapted](https://github.com/curso-r/verao2017) that flow for `blogdown`. Both were helpful, and combined with my experience building other non-blogdown sites on Travis, I was able to simplify and improve on those examples. It was shockingly straightforward.
 
@@ -42,7 +42,7 @@ and then checked out `master` and pushed an empty README.md file up there, just 
 
 ## .travis.yml
 
-The .travis.yml file is where the action happens—it's what tells Travis what to do. The examples I found for using Travis to build bookdown or blogdown sites followed the model of putting "build" and "deploy" logic into Bash scripts, which the .travis.yml file makes executable ([which you could instead do through git](http://stackoverflow.com/a/38285462)) and then calls. I found this unnecessarily indirect. Travis treats the YAML file like a script anyway, so you can just enter the shell commands you want to run there. That way, you can look in one file to see everything that is happening.
+The .travis.yml file is where the action happens—it's what tells Travis what to do. The examples I found for using Travis to build bookdown or blogdown sites followed the model of putting "build" and "deploy" logic into Bash scripts, which the .travis.yml file makes executable and then calls. I found this unnecessarily indirect. Travis treats the YAML file like a script anyway, so you can just enter the shell commands you want to run there. That way, you can look in one file to see everything that is happening.
 
 [My .travis.yml](https://github.com/nealrichardson/nealrichardson.github.io/blob/src/.travis.yml) is grouped into a few sections. To start, it sets the language/container type to "R" and indicates that packages should be cached for faster repeat building. Second, this block
 
@@ -72,7 +72,7 @@ Because we're going to use an R language build on Travis, the job will expect th
 
 For Hugo projects, you want to .gitignore the "themes" directory because they aren't really part of your project; you add your customization of templates and stylesheets on top of a theme. I also like to ignore the "public" directory where the build static site gets written—the build on Travis will overwrite it anyway.
 
-By that logic, you may also want to ignore the `static/post` directory where blogdown appears to write generated images and other artifacts from the .Rmd code, and `*.html` from the `content/post` directory, which is the built version of the .Rmd files. I don't have enough experience with blogdown at this point to be sure, though.
+By that logic, you may also want to ignore the `static/post` directory where blogdown writes generated images and other artifacts from the .Rmd code, and `*.html` from the `content/post` directory, which is the built version of the .Rmd files. [I tried ignoring those artifacts](https://github.com/nealrichardson/nealrichardson.github.io/commit/8b11e195b6782ca791835bbbede54462ac14489e#diff-a084b794bc0759e7a6b77810e01874f2R3), and the site built fine on Travis without them, but I don't have enough experience with blogdown to recommend it as a best practice. If your R code is computationally intensive or relies on third-party services that may be down when your site gets built on Travis, *and* if having the cached versions checked in prevents running the R code again on Travis, maybe it's good to keep them.
 
 # Add GitHub API token
 
@@ -97,11 +97,11 @@ Once you've done all this, commit and `git push` your blogdown code and Travis c
 
 Given that `blogdown` is a relatively new tool, I expected that using it would show some rough edges, and that trying to build it on Travis would be challenging. It took me ten attempts to figure out the build automation for our Hugo blog at Crunch. I'd hoped I'd learned a few things about how to use Travis for static sites and could do better this time, but adding R to the mix was a complication.
 
-In the end, it was a breeze. I got the site built in only four commits this time, all trivially tweaking the setup to install blogdown itself. The complications I feared—having to install go and Hugo on top of a container configured to run R—were seamlessly handled by blogdown.
+In the end, it was a breeze. The only part I had to tinker with was installing blogdown itself. The complications I feared—having to install go and Hugo on top of a container configured to run R—were seamlessly handled by blogdown.
 
 And finally, to demonstrate that this post is R Markdown and not regular markdown, here's Figure \@ref(fig:pie) from the example site that `blogdown` generates.
 
-```{r pie, fig.cap='A fancy pie chart.', tidy=FALSE}
+```{r pie, fig.cap='The first and last pie chart to appear on this blog', tidy=FALSE}
 par(mar = c(0, 1, 0, 1))
 pie(
   c(280, 60, 20),
