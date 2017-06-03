@@ -1,7 +1,7 @@
 ---
 title: "Building a Blogdown Site with Travis-CI"
-description: "It's easy to automate the publishing of your R Markdown static site to GitHub Pages. Free yourself to focus on content, and let Travis handle the rest."
-date: "2017-05-24T21:49:57-07:00"
+description: "It's easy to automate the publishing of your R Markdown site to GitHub Pages. Free yourself to focus on content, and let Travis handle the rest."
+date: "2017-06-01T21:49:57-07:00"
 categories: ["general"]
 tags: ["travis-ci", "automation", "meta"]
 draft: false
@@ -9,15 +9,15 @@ draft: false
 
 [Over on the Crunch.io dev blog](http://crunch.io/dev/blog/building-the-blog-on-travis/), I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I'd do the same for my personal blog, though with one twist: using R and the [blogdown](https://github.com/rstudio/blogdown) package on top of Hugo.  
 
-The thread on [this issue](https://github.com/rstudio/blogdown/issues/26) in the blogdown repository pointed to [Yihui's guide to building bookdown pages on Travis](https://bookdown.org/yihui/bookdown/github.html), as well as a project that had [adapted](https://github.com/curso-r/verao2017) that flow for `blogdown`. Both were helpful, and combined with my experience building other non-blogdown sites on Travis, I was able to simplify and improve on those examples. It was shockingly straightforward.
+[This blogdown GitHub issue issue](https://github.com/rstudio/blogdown/issues/26) pointed to [Yihui's guide to building bookdown pages on Travis](https://bookdown.org/yihui/bookdown/github.html), as well as a project that had [adapted](https://github.com/curso-r/verao2017) that flow for `blogdown`. Both were helpful, and with my prior experience, I was able to build on those examples to come up with a simple workflow. It was shockingly straightforward.
 
-This post outlines the steps I took to automate the Hugo/blogdown build on Travis-CI. It starts from the point of having already installed blogdown locally, created the Hugo project, played around with themes and customization, and having something serving locally that's worth deploying. It assumes that you have a GitHub account and have used Travis before (surely you have continuous integration running on your code projects, right?).
+This post outlines the steps I took to automate the Hugo/blogdown build on Travis-CI. It starts from the point of having already installed blogdown locally, created the Hugo project, played around with themes and customization, and having something serving locally that's worth deploying. It assumes that you have a GitHub account and have used Travis before (surely you use continuous integration on all of your projects, right ;). If you're not at that point yet, the internet has lots of great resources to help you get started.
 
-There are three main steps: setting up your repository on GitHub and Travis-CI, adding the build script, and setting up your GitHub API token access.
+There are three main steps: setting up your repository on GitHub and Travis-CI, adding the build script, and setting up your GitHub API token access to connect it all.
 
 # Setup on GitHub, git, and Travis-CI
 
-First, we need to [create a new repository on GitHub](https://github.com/new). Then, initialize a git repository locally and link it with your new repo on GitHub:
+First, we need to [create a new repository on GitHub](https://github.com/new). Then, in your local directory where you've started your blogdown project, initialize a git repository and link it with your new repo on GitHub:
 
     git init
     git remote add origin git@github.com:nealrichardson/nealrichardson.github.io.git
@@ -26,9 +26,9 @@ of course, substituting in your user/organization name and repository name. (Git
 
 Next, go to [Travis](https://travis-ci.org/profile) and enable Travis to run on your new GitHub repository. You'll have to click the "sync" button in order for the new project to show in the list if you just created it.
 
-## User page vs. project page
+## About git branches: User page vs. project page
 
-For a typical repository on GitHub, the usual way GitHub Pages are supported is on a `gh-pages` branch, though there are some options. However, if this is your [user or organization page](https://help.github.com/articles/user-organization-and-project-pages/), the static site must be on `master` branch. So, I put my markdown and blogdown/Hugo code on a `src` branch, and will use Travis to build from that and push the generated site to `master`.
+For a typical repository on GitHub, the usual way GitHub Pages are supported is on a `gh-pages` branch, though there are some options. However, if this is your [user or organization page](https://help.github.com/articles/user-organization-and-project-pages/), as is the case for this blog, the static site must be on the `master` branch. That means my markdown and Hugo customizations need to be on a different branch. I opted to put them on a `src` branch, and will use Travis to build from that and push the generated site to `master`.
 
 Given that I already had started the project locally, and I'd done `git init`, I created the `src` branch before committing my initial blog code:
 
@@ -36,7 +36,7 @@ Given that I already had started the project locally, and I'd done `git init`, I
     git add .
     git commit -m "Initial commit"
 
-and then checked out `master` and pushed an empty README.md file up there, just so the branch would exist on GitHub. Travis will need it to exist in order to start pushing to it.
+and then checked out `master` and pushed an empty README.md file up there, just so the branch would exist on GitHub. Travis will need the branch to exist in order to start pushing to it.
 
 # Add some files
 
@@ -52,17 +52,17 @@ The .travis.yml file is where the action happens—it's what tells Travis what t
 
 tells Travis only to build when I push to my `src` branch. I want to be free to make other branches in my repository and not have them trigger a build of my site—that could lead to very unexpected changes! Moreover, on success, Travis will be pushing to the `master` branch, and I don't want that push to attempt a re-build of the site.
 
-Next, the YAML file directs the installation of the blogdown package from GitHub using the `r_github_packages` block. It's not yet on CRAN, so GitHub is the way, and while you can (and others may) specify that it be installed via the DESCRIPTION file using some `devtools` special hooks, I've had success installing GitHub packages on Travis this way in the past, and it worked here too.
+Next, the YAML file directs the installation of the blogdown package from GitHub using the `r_github_packages` block. It's not yet on CRAN, so GitHub is the way, and while you can specify that it be installed via the DESCRIPTION file using some `devtools` special "Remotes" hooks, I've had success installing GitHub packages on Travis this way in the past, and it worked here too.
 
-I grouped the main action in .travis.yml into a `before_script` block and a `script` block, but that's purely for aesthetics. The "before" block sets my GitHub user name and email—the `git commit` will need them—installs Hugo via blogdown,^[I had to fix a specific version of Hugo to install after what was hopefully just a transient [failure to install on Travis](https://travis-ci.org/nealrichardson/nealrichardson.github.io/builds/235902865). It was previously working with the default "latest" version, but there was a Hugo release a couple of days ago, so maybe that caused some disturbance. You shouldn't have to hard-code a version.] and then adds my Hugo theme. You could use the `blogdown::install_theme` function, but all you need it to do is checkout the theme repository to your "themes" directory, so I just do that directly.
+I grouped the main action in .travis.yml into a `before_script` block and a `script` block, but that's purely for aesthetics—it's all just a series of commands to be executed. The "before" block sets my GitHub user name and email—the `git commit` of the built site will need them—installs Hugo via blogdown,^[I had to fix a specific version of Hugo to install after what was hopefully just a transient [failure to install on Travis](https://travis-ci.org/nealrichardson/nealrichardson.github.io/builds/235902865). It was previously working with the default "latest" version, but there was a Hugo release a couple of days ago, so maybe that caused some disturbance. You shouldn't have to hard-code a version.] and then adds my Hugo theme. You could use the `blogdown::install_theme` function, but all you need it to do is checkout the theme repository to your "themes" directory, so I just do that directly.
 
-At that point, building the site is just `R -e 'blogdown::build_site()'`. That's it.
+At that point, building the site is just `R -e 'blogdown::build_site()'`. That's it. As I said in the beginning: shockingly simple.
 
 The last step is to commit the built site to a different branch, in this case "master", and push that. Even though the Travis job has already cloned your repository from GitHub to start the build, it has only cloned the current branch, so `git checkout master` won't work. To change branches, we have to do a fresh `git clone`. Note that the `clone` command involves a `GH_TOKEN` environment variable. That's your API token—we'll discuss that below.
 
-One other [quirk](https://github.com/nealrichardson/nealrichardson.github.io/blob/src/.travis.yml#L19) I added to the YAML file was to write a .travis.yml file into the destination branch for the built site, reiterating the "only build on 'src' branch" command. This is because two lines above that, I `rm -rf`'d everything, so there was no .travis.yml file present on `master` branch telling Travis not to build from `master`.   
+One other [quirk](https://github.com/nealrichardson/nealrichardson.github.io/blob/src/.travis.yml#L19) I added to the YAML file was to write a .travis.yml file into the destination branch for the built site, reiterating the "only build on 'src' branch" command. This is because two lines above that, I `rm -rf`'d everything, so there was no .travis.yml file present on `master` branch telling Travis not to try to build from `master`.   
 
-On the `git push`, I have the output redirected to `/dev/null`. I saw this suggested before when I was setting up my sites at work because without a quiet push, the Travis log would reveal the GitHub API token that was encrypted in the YAML file (see below). It turns out that this was a [security vulnerability](https://blog.travis-ci.com/2017-05-08-security-advisory) that Travis has since fixed, but I've left the redirection in there for extra comfort.
+On the `git push`, I have the output redirected to `/dev/null`, i.e. it should run without printing anything. I saw this suggested before when I was setting up my sites at work because without a quiet push, the Travis log would reveal the GitHub API token that was encrypted in the YAML file (see below). It turns out that this was a [security vulnerability](https://blog.travis-ci.com/2017-05-08-security-advisory) that Travis has since fixed, but I've left the silencing in there for extra comfort.
 
 ## DESCRIPTION
 
@@ -70,15 +70,15 @@ Because we're going to use an R language build on Travis, the job will expect th
 
 ## .gitignore
 
-For Hugo projects, you want to .gitignore the "themes" directory because they aren't really part of your project; you add your customization of templates and stylesheets on top of a theme. I also like to ignore the "public" directory where the build static site gets written—the build on Travis will overwrite it anyway.
+For Hugo projects, you want to [.gitignore](https://github.com/nealrichardson/nealrichardson.github.io/blob/src/.gitignore) the "themes" directory because they aren't really part of your project; you add your customization of templates and stylesheets on top of a theme. I also like to ignore the "public" directory where the build static site gets written—the build on Travis will overwrite it anyway.
 
 By that logic, you may also want to ignore the `static/post` directory where blogdown writes generated images and other artifacts from the .Rmd code, and `*.html` from the `content/post` directory, which is the built version of the .Rmd files. [I tried ignoring those artifacts](https://github.com/nealrichardson/nealrichardson.github.io/commit/8b11e195b6782ca791835bbbede54462ac14489e#diff-a084b794bc0759e7a6b77810e01874f2R3), and the site built fine on Travis without them, but I don't have enough experience with blogdown to recommend it as a best practice. If your R code is computationally intensive or relies on third-party services that may be down when your site gets built on Travis, *and* if having the cached versions checked in prevents running the R code again on Travis, maybe it's good to keep them.
 
 # Add GitHub API token
 
-As mentioned above, you need to [generate a GitHub API token](https://github.com/settings/tokens) so that your job on Travis is authorized to push. The page will give you a bunch of checkboxes for authorization scopes to give to the token, but you only need to select the `public_repo` scope.
+As mentioned above, you need to [generate a GitHub API token](https://github.com/settings/tokens) so that your job on Travis is authorized to push. When you do, you will given a bunch of checkboxes to define the authorization scope for the token, but you only need to select the `public_repo` scope.
 
-Token in hand, encrypt it and add it to your YAML file using Travis's Ruby library. To install that library,
+Token in hand (or clipboard), encrypt it and add it to your YAML file using Travis's Ruby library. To install that library,
 
     gem install travis
 
