@@ -18,7 +18,7 @@
       
       <guid>/2017/06/01/building-a-blogdown-site-with-travis-ci/</guid>
       <description>Over on the Crunch.io dev blog, I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I’d do the same for my personal blog, though with one twist: using R and the blogdown package on top of Hugo.
-This blogdown GitHub issue issue pointed to Yihui’s guide to building bookdown projects on Travis, as well as a project that had adapted that flow for blogdown.</description>
+This blogdown GitHub issue pointed to Yihui’s guide to building bookdown projects on Travis, as well as a project that had adapted that flow for blogdown.</description>
     </item>
     
     <item>
