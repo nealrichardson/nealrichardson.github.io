@@ -104,7 +104,7 @@
 
 
 <meta itemprop="dateModified" content="2017-06-01T21:49:57-07:00" />
-<meta itemprop="wordCount" content="1876">
+<meta itemprop="wordCount" content="1875">
 
 
 
@@ -130,7 +130,7 @@
 <div id="post" itemprop="articleBody">
 
     <p><a href="http://crunch.io/dev/blog/building-the-blog-on-travis/">Over on the Crunch.io dev blog</a>, I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I’d do the same for my personal blog, though with one twist: using R and the <a href="https://github.com/rstudio/blogdown">blogdown</a> package on top of Hugo.</p>
-<p><a href="https://github.com/rstudio/blogdown/issues/26">This blogdown GitHub issue issue</a> pointed to <a href="https://bookdown.org/yihui/bookdown/github.html">Yihui’s guide to building bookdown pages on Travis</a>, as well as a project that had <a href="https://github.com/curso-r/verao2017">adapted</a> that flow for <code>blogdown</code>. Both were helpful, and with my prior experience, I was able to build on those examples to come up with a simple workflow. It was shockingly straightforward.</p>
+<p><a href="https://github.com/rstudio/blogdown/issues/26">This blogdown GitHub issue issue</a> pointed to <a href="https://bookdown.org/yihui/bookdown/github.html">Yihui’s guide to building bookdown projects on Travis</a>, as well as a project that had <a href="https://github.com/curso-r/verao2017">adapted</a> that flow for <code>blogdown</code>. Both were helpful, and with my prior experience, I was able to build on those examples to come up with a simple workflow. It was shockingly straightforward.</p>
 <p>This post outlines the steps I took to automate the Hugo/blogdown build on Travis-CI. It starts from the point of having already installed blogdown locally, created the Hugo project, played around with themes and customization, and having something serving locally that’s worth deploying. It assumes that you have a GitHub account and have used Travis before (surely you use continuous integration on all of your projects, right ;). If you’re not at that point yet, the internet has lots of great resources to help you get started.</p>
 <p>There are three main steps: setting up your repository on GitHub and Travis-CI, adding the build script, and setting up your GitHub API token access to connect it all.</p>
 <div id="setup-on-github-git-and-travis-ci" class="section level1">
@@ -160,7 +160,7 @@ git commit -m &quot;Initial commit&quot;</code></pre>
   only:
   - src</code></pre>
 <p>tells Travis only to build when I push to my <code>src</code> branch. I want to be free to make other branches in my repository and not have them trigger a build of my site—that could lead to very unexpected changes! Moreover, on success, Travis will be pushing to the <code>master</code> branch, and I don’t want that push to attempt a re-build of the site.</p>
-<p>Next, the YAML file directs the installation of the blogdown package from GitHub using the <code>r_github_packages</code> block. It’s not yet on CRAN, so GitHub is the way, and while you can specify that it be installed via the DESCRIPTION file using some <code>devtools</code> special “Remotes” hooks, I’ve had success installing GitHub packages on Travis this way in the past, and it worked here too.</p>
+<p>Next, the YAML file directs the installation of the blogdown package from GitHub using the <code>r_github_packages</code> block. It’s not yet on CRAN, so GitHub is the way, and while you can specify that it be installed via the DESCRIPTION file using <code>devtools</code>’s special “Remotes” field, I’ve had success installing GitHub packages on Travis this way in the past, and it worked here too.</p>
 <p>I grouped the main action in .travis.yml into a <code>before_script</code> block and a <code>script</code> block, but that’s purely for aesthetics—it’s all just a series of commands to be executed. The “before” block sets my GitHub user name and email—the <code>git commit</code> of the built site will need them—installs Hugo via blogdown,<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> and then adds my Hugo theme. You could use the <code>blogdown::install_theme</code> function, but all you need it to do is checkout the theme repository to your “themes” directory, so I just do that directly.</p>
 <p>At that point, building the site is just <code>R -e 'blogdown::build_site()'</code>. That’s it. As I said in the beginning: shockingly simple.</p>
 <p>The last step is to commit the built site to a different branch, in this case “master”, and push that. Even though the Travis job has already cloned your repository from GitHub to start the build, it has only cloned the current branch, so <code>git checkout master</code> won’t work. To change branches, we have to do a fresh <code>git clone</code>. Note that the <code>clone</code> command involves a <code>GH_TOKEN</code> environment variable. That’s your API token—we’ll discuss that below.</p>
@@ -247,7 +247,7 @@ Figure 1: The first and last pie chart to appear on this blog
       <ul>
         <li><span>enpiar</span></li>
         <li>
-          <a href="../../../../blog/">Blog</a>
+          <a href="../../../../">Blog</a>
         </li>
       <li>
         <a href="https://github.com/nealrichardson/">GitHub</a>
