@@ -29,7 +29,7 @@ ignoreFiles = ["\\.Rmd$", "_files$", "_cache$"]
     highlightjsVersion = "9.10.0"
     highlightjsCDN = "//cdn.bootcss.com"
     highlightjsLang = ["r", "yaml"]
-    highlightjsTheme = "github"
+    highlightjsTheme = "color-brewer"
 
     [params.logo]
     url = "logo.png"
