@@ -8,6 +8,14 @@ h1.title, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     clear: both;
 }
 
+pre {
+    background: inherit;
+}
+
+code {
+    background: #FAFAFA
+}
+
 body {
     /*color:#565656;*/
     font-family: Lato, sans-serif;
@@ -17,7 +25,7 @@ body {
 p {
     margin-bottom: 24px;
     font-size: 19px;
-    font-weight: 100;
+    font-weight: 200;
 }
 
 a {
@@ -112,7 +120,10 @@ blockquote[itemprop="description"] {
     font-style:normal;
     margin:auto;
     max-width: 800px;
-    padding:0;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 0;
+    padding-right: 0;
     border: none;
 }
 
@@ -154,14 +165,26 @@ p+h2, p+h3, p+h4 {
     display:block;
 }
 
+figcaption p {
+    font-size: 14px;
+}
+
 .floating-right {
     float: right;
-    padding-left: 9px;
+    padding-left: 30px;
+    padding-top: 10px;
+    margin: 0 auto;
+}
+
+.halfwidth {
+    max-width: 400px;
 }
 
 .floating-left {
     float: left;
-    padding-right: 9px;
+    padding-right: 30px;
+    padding-top: 10px;
+    margin: 0 auto;
 }
 
 .centered-image img {

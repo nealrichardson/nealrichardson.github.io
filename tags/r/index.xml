@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on A Blog</title>
-    <link>/post/</link>
-    <description>Recent content in Posts on A Blog</description>
+    <title>R on A Blog</title>
+    <link>/tags/r/</link>
+    <description>Recent content in R on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 21 Jun 2017 21:49:57 -0700</lastBuildDate>
     
-	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -28,15 +28,6 @@
       <guid>/2017/06/01/building-a-blogdown-site-with-travis-ci/</guid>
       <description>Over on the Crunch.io dev blog, I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I’d do the same for my personal blog, though with one twist: using R and the blogdown package on top of Hugo.
 This blogdown GitHub issue pointed to Yihui’s guide to building bookdown projects on Travis, as well as a project that had adapted that flow for blogdown.</description>
-    </item>
-    
-    <item>
-      <title>This Is a Blog</title>
-      <link>/2017/05/22/this-is-a-blog/</link>
-      <pubDate>Mon, 22 May 2017 21:11:48 -0700</pubDate>
-      
-      <guid>/2017/05/22/this-is-a-blog/</guid>
-      <description>This page left intentionally blank.</description>
     </item>
     
   </channel>
