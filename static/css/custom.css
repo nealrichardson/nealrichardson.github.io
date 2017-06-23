@@ -165,14 +165,26 @@ p+h2, p+h3, p+h4 {
     display:block;
 }
 
+figcaption p {
+    font-size: 14px;
+}
+
 .floating-right {
     float: right;
-    padding-left: 9px;
+    padding-left: 30px;
+    padding-top: 10px;
+    margin: 0 auto;
+}
+
+.halfwidth {
+    max-width: 400px;
 }
 
 .floating-left {
     float: left;
-    padding-right: 9px;
+    padding-right: 30px;
+    padding-top: 10px;
+    margin: 0 auto;
 }
 
 .centered-image img {

@@ -9,9 +9,11 @@ draft: false
 
 I'm a big advocate of testing and test automation, both on [the team I lead](http://crunch.io/dev/) and in [my own projects](https://github.com/nealrichardson). Tests provide valuable evidence that your code works. Without tests, you're engaging in [faith-based development](https://twitter.com/enpiar/status/748082354455969796): you believe your code works because you believe in your own infallibility as a coder. Theology aside, as a practical matter, tests are liberating because they allow you to modify and extend your code without fear of breaking existing functionality. Unfortunately, testing code that communicates with remote services can be challenging. Dealing with authentication, bootstrapping server state, cleaning up objects that may get created during the test run, network flakiness, and other complications can make testing seem too costly to bother with.
 
-To solve these problems, I developed the [httptest](https://github.com/nealrichardson/httptest) package. The latest [2.0.0 CRAN release](https://cran.r-project.org/package=httptest) adds a range of new features that allow testing practically any request and response behavior without actually connecting to the remote service. It also includes a [vignette](https://github.com/nealrichardson/httptest/blob/master/vignettes/httptest.Rmd) that illustrates how to get started using the package. This post outlines a set of testing challenges, both common and esoteric, that `httptest` makes easy.
+To solve these problems, I developed the [httptest](https://github.com/nealrichardson/httptest) package for R. The latest [2.0.0 CRAN release](https://cran.r-project.org/package=httptest) adds a range of new features that allow testing practically any request and response behavior without actually connecting to the remote service. It also includes a [vignette](https://github.com/nealrichardson/httptest/blob/master/vignettes/httptest.Rmd) that illustrates how to get started using the package. Drawing from examples of several R packages that use `httptest` (and one that doesn't), this post outlines a set of testing challenges, both common and esoteric, that it makes easy.
 
 # The basics
+
+{{< figure src="https://charlespaolino.files.wordpress.com/2010/10/tin-can-1.jpg" class="floating-right halfwidth" attr="'Can you hear me now?'" attrlink="https://charlespaolino.com/tag/tin-can-and-string-telephone/">}}
 
 APIs provide a contract: if you make this request, the service will return this response. So writing an API client is all about making the right requests and handling the responses correctly. Even though these questions are the essentials that you'd want to have covered, without a testing setup like `httptest`, they can be challenging to test. `httptest` is designed not only to make testing requests and responses simple but also to make your tests easily readable.
 
@@ -70,6 +72,8 @@ The expected results themselves are strings, easily readable in your test code.
 
 ## 3. Can I handle the server's response?
 
+{{< figure src="https://img.memecdn.com/what-is-this_o_2856875.jpg" class="floating-right halfwidth" attr="'What Is This?'" attrlink="https://www.memecenter.com/fun/2856875/what-is-this">}}
+
 In a second context that the package provides, `with_mock_API`, HTTP requests are intercepted and mapped to local file paths, factoring in the request URL, query, and method. If the file exists, it is loaded and returned as the response; if it does not, an error with a message containing the request information is raised, just as in `without_internet`. By supplying mock files, we can test the behavior of our code that handles API responses.
 
 Check out the [package vignette]((https://github.com/nealrichardson/httptest/blob/master/vignettes/httptest.Rmd)) for a longer discussion of how to use `with_mock_API` and how to put mock files in the right place. For an abridged version, suppose we want to add tests to the popular `twitteR` package, which lacks a test suite. We can start by writing a basic test of the `getUser` function, like:
@@ -111,6 +115,8 @@ This next set of issues are either difficult, costly, or impossible to test even
 
 ## 4. Error handling
 
+{{< figure src="https://httpstatusdogs.com/img/400.jpg" class="floating-left halfwidth" attr="HTTP Status Dogs" attrlink="https://httpstatusdogs.com/400-bad-request">}}
+
 When you make an invalid API request, the server may return useful information about why your request was bad. Different APIs have different conventions for returning that information, however, so your code will probably need special logic for handling different server responses. You can include fast, networkless tests for your error handling code by first using `capture_requests` to record the server's response to an invalid (real) request, and then writing tests against that fixture.
 
 In the [pivotaltrackR](https://github.com/nealrichardson/pivotaltrackR/) package, a client for the Pivotal Tracker API, there's a mock test that makes an [invalid search query](https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/tests/testthat/test-stories.R#L66-L69):
@@ -124,7 +130,7 @@ with_mock_API({
 })
 ~~~
 
-According to the API documentation, "now" is not a valid date string—it should be "today". This hits the [captured response file](https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/tests/testthat/www.pivotaltracker.com/services/v5/projects/12345/stories-9daeb9.R) which contains a "response" object with a 400 Bad Request status, and the response content contains the error message "The date you requested could not be parsed". That response fixture was captured by doing
+According to the API documentation, "now" is not a valid date string—it should be "today". This request, in the `with_mock_API` context, hits the [captured response file](https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/tests/testthat/www.pivotaltracker.com/services/v5/projects/12345/stories-9daeb9.R) which contains a "response" object with a 400 Bad Request status, and the response content contains the error message "The date you requested could not be parsed". That response fixture was captured by doing
 
 ```r
 capture_requests(getStories(created="-5days..now"))
@@ -134,11 +140,13 @@ in an R session against the real Pivotal Tracker API using my authentication tok
 
 ## 5. Rare or difficult-to-trigger server behavior
 
+{{< figure src="https://httpstatusdogs.com/img/429.jpg" class="floating-right halfwidth" attr="HTTP Status Dogs" attrlink="https://httpstatusdogs.com/429-too-many-requests">}}
+
 APIs may behave differently in extreme circumstances. When handling large requests or a high volume of requests, some APIs respond by advising users that they should back off. This rate-limiting behavior needs to be handled by your code that communicates with the API, yet it is difficult to test against a real server: you may not know what threshold triggers the rate limiting; if you did, it would likely take a lot of requesting (i.e. time) to trigger the limit; and then if you manage to hit the limit, then you can't run anymore tests against the API!
 
 With `httptest`, you can create a fixture that has whatever HTTP response status code, headers, and content that you want, so you can make one that looks like what the API returns when it is pushing back. Using that, you can then test that your code handles that response as intended.
 
-In the [Crunch.io API](http://docs.crunch.io), a 503 response status is used when an operation requires moving a lot of data around before it can return a result. The server responds with a 503 status and includes a "Retry-After" header indicating when the client may try again and expect a result ready. [This code](https://github.com/Crunch-io/rcrunch/blob/d1b5cade5e7b0608ddc1ce5de1a576e2d3614d84/R/api.R#L105-L116) in the [crunch](https://github.com/Crunch-io/rcrunch) package handles all API requests and handles the server's responses appropriately. When it hits a 503 response on a `GET` request, it messages to the user that it's going to retry, waits the amount of time that the header recommends, then does a fresh `GET` on the request URL.
+In the [Crunch.io API](http://docs.crunch.io), when an operation requires moving a lot of data around before it can return a result, the server responds with a 503 status and includes a "Retry-After" header indicating when the client may try again and expect a result ready. [This code](https://github.com/Crunch-io/rcrunch/blob/d1b5cade5e7b0608ddc1ce5de1a576e2d3614d84/R/api.R#L105-L116) in the [crunch](https://github.com/Crunch-io/rcrunch) package handles all API requests and handles the server's responses appropriately. When it hits a 503 response on a `GET` request, it messages to the user that it's going to retry, waits the amount of time that the header recommends, then does a fresh `GET` on the request URL.
 
 The [test](https://github.com/Crunch-io/rcrunch/blob/d1b5cade5e7b0608ddc1ce5de1a576e2d3614d84/tests/testthat/test-api.R#L31-L35) relies on a [mock response](https://github.com/Crunch-io/rcrunch/blob/d1b5cade5e7b0608ddc1ce5de1a576e2d3614d84/tests/testthat/app.crunch.io/503.R) that is an `httr` "response" class object with a 503 `status_code`. So, a `GET` on that resource "returns" 503 status, which triggers the relevant API handler code, and does the retry:
 
@@ -185,6 +193,8 @@ Behind the scenes, however, two (mocked) requests are made. The first one hits [
 and the [second one](https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/tests/testthat/www.pivotaltracker.com/services/v5/projects/12345/stories-97adb9.json) has `"offset":3` and contains records 4 and 5. The mock file paths contain the hash of the query parameters in the requests made, which is how they are distinguished. I did create them from an actual API response, but because the fixtures are plain-text files I can see and edit, I could reduce the actual size down from the 100 results per page that the API paginates at to 3 per page so that the size of the test data is smaller. The code follows the correct logic, following what the server responds with.
 
 ## 7. Code that shouldn't make a request
+
+{{< figure src="http://cf.chucklesnetwork.com/items/8/3/5/2/3/original/what-if-silence-is-just-another-type-of-sound.jpg" class="floating-right halfwidth" attr="Conspiracy Keanu" attrlink="http://creatememe.chucklesnetwork.com/memes/83523/what-if-silence-is-just-another-type-of-sound/">}}
 
 Mocking API responses isn't the only thing you might want to do in order to test your code. Sometimes, the request that matters is the one you don't make. Here's a example of how `without_internet` can be used to assert that code that should not make network requests in fact does not. This is a simplified version of a test from the [httpcache](https://github.com/nealrichardson/httpcache) package, a library that implements a query cache for HTTP requests in R. The point of the query cache is that only the first time you make a certain GET request should it hit the remote API; subsequent requests should read from the cache and not make a request. The test first makes a request (artificially, using `with_fake_HTTP`, the third test context the package provides) to prime the cache.
 
