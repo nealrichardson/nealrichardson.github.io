@@ -17,7 +17,7 @@ code {
 }
 
 body {
-    /*color:#565656;*/
+    color: #182125;
     font-family: Lato, sans-serif;
     font-size: 19px;
 }
@@ -26,6 +26,10 @@ p {
     margin-bottom: 24px;
     font-size: 19px;
     font-weight: 200;
+}
+
+code.hljs {
+    color: #182125;
 }
 
 a {
@@ -44,7 +48,7 @@ a:hover {
 #hero h1 {
     font-size: 36px;
     line-height: 1.5;
-    max-width: 800px;
+    max-width: 740px;
     margin-bottom: 0;
     color: #34699A;
     font-weight: 100;
@@ -53,7 +57,7 @@ a:hover {
 #hero p {
     padding:0;
     font-size: 19px;
-    max-width: 800px;
+    max-width: 740px;
     margin-top: 0;
 
 }
@@ -63,7 +67,7 @@ a:hover {
 
 #posts {
     text-align: left;
-    max-width: 800px;
+    max-width: 740px;
     margin-top: 0;
 
 }
@@ -107,7 +111,7 @@ ol, ol ol, ol ul, ul, ul ol, ul ul {
 time.post-time {
     /*color: #AAA;*/
     margin: auto;
-    max-width:800px;
+    max-width:740px;
     display:block;
     font-size:12px;
 }
@@ -119,7 +123,7 @@ time.post-time {
 blockquote[itemprop="description"] {
     font-style:normal;
     margin:auto;
-    max-width: 800px;
+    max-width: 740px;
     padding-top: 20px;
     padding-bottom: 20px;
     padding-left: 0;
@@ -128,7 +132,7 @@ blockquote[itemprop="description"] {
 }
 
 #post-box {
-    max-width: 800px;
+    max-width: 740px;
 }
 
 .h1, h1 {
@@ -177,7 +181,7 @@ figcaption p {
 }
 
 .halfwidth {
-    max-width: 400px;
+    max-width: 370px;
 }
 
 .floating-left {
