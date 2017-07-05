@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>/2017/07/04/better-management-through-code/</loc>
+    <lastmod>2017-07-04T16:49:57-07:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/2017/06/21/7-hard-testing-problems-made-easy-by-httptest/</loc>
     <lastmod>2017-06-21T21:49:57-07:00</lastmod>
   </url>
@@ -23,13 +28,13 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2017-06-21T21:49:57-07:00</lastmod>
+    <lastmod>2017-07-04T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/automation/</loc>
-    <lastmod>2017-06-01T21:49:57-07:00</lastmod>
+    <lastmod>2017-07-04T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -57,6 +62,12 @@
   </url>
   
   <url>
+    <loc>/categories/management/</loc>
+    <lastmod>2017-07-04T16:49:57-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/meta/</loc>
     <lastmod>2017-06-01T21:49:57-07:00</lastmod>
     <priority>0</priority>
@@ -64,7 +75,13 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2017-06-21T21:49:57-07:00</lastmod>
+    <lastmod>2017-07-04T16:49:57-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/python/</loc>
+    <lastmod>2017-07-04T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -76,7 +93,7 @@
   
   <url>
     <loc>/tags/</loc>
-    <lastmod>2017-06-01T21:49:57-07:00</lastmod>
+    <lastmod>2017-07-04T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   

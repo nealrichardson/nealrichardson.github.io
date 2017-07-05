@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Automation on A Blog</title>
-    <link>/tags/automation/</link>
-    <description>Recent content in Automation on A Blog</description>
+    <title>Management on A Blog</title>
+    <link>/categories/management/</link>
+    <description>Recent content in Management on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 04 Jul 2017 16:49:57 -0700</lastBuildDate>
     
-	<atom:link href="/tags/automation/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/categories/management/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,16 +18,6 @@
       
       <guid>/2017/07/04/better-management-through-code/</guid>
       <description>At Crunch, I lead both engineering and product management. Over the last few years, what that entails has changed greatly. How I spent my day when we were getting started, with a team of four developers and zero users, is very different from how I spend my time now with 16 on the team and thousands of users around the world. In fact, my day-to-day has evolved through several phases as we&amp;rsquo;ve grown, and each phase has come with its own challenges and learning opportunities—or rather, challenges that are learning opportunities.</description>
-    </item>
-    
-    <item>
-      <title>Building a Blogdown Site with Travis-CI</title>
-      <link>/2017/06/01/building-a-blogdown-site-with-travis-ci/</link>
-      <pubDate>Thu, 01 Jun 2017 21:49:57 -0700</pubDate>
-      
-      <guid>/2017/06/01/building-a-blogdown-site-with-travis-ci/</guid>
-      <description>Over on the Crunch.io dev blog, I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I’d do the same for my personal blog, though with one twist: using R and the blogdown package on top of Hugo.
-This blogdown GitHub issue pointed to Yihui’s guide to building bookdown projects on Travis, as well as a project that had adapted that flow for blogdown.</description>
     </item>
     
   </channel>

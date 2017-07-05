@@ -6,7 +6,7 @@
     <description>Recent content in Tags on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 01 Jun 2017 21:49:57 -0700</lastBuildDate>
+    <lastBuildDate>Tue, 04 Jul 2017 16:49:57 -0700</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>Automation</title>
       <link>/tags/automation/</link>
-      <pubDate>Thu, 01 Jun 2017 21:49:57 -0700</pubDate>
+      <pubDate>Tue, 04 Jul 2017 16:49:57 -0700</pubDate>
       
       <guid>/tags/automation/</guid>
       <description></description>
@@ -35,6 +35,15 @@
       <pubDate>Thu, 01 Jun 2017 21:49:57 -0700</pubDate>
       
       <guid>/tags/meta/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Python</title>
+      <link>/tags/python/</link>
+      <pubDate>Tue, 04 Jul 2017 16:49:57 -0700</pubDate>
+      
+      <guid>/tags/python/</guid>
       <description></description>
     </item>
     
