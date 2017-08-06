@@ -6,10 +6,20 @@
     <description>Recent content on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 04 Jul 2017 16:49:57 -0700</lastBuildDate>
+    <lastBuildDate>Sat, 05 Aug 2017 21:49:57 -0700</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Should You Add a Package Dependency?</title>
+      <link>/2017/08/05/should-you-add-a-package-dependency/</link>
+      <pubDate>Sat, 05 Aug 2017 21:49:57 -0700</pubDate>
+      
+      <guid>/2017/08/05/should-you-add-a-package-dependency/</guid>
+      <description>At Crunch, we’ve recently hired an “R Team” to build out our package offerings beyond what I could write in my spare time. It’s been great to have more resources to dedicate to our R tools, and it’s been particularly fun for me because now I get to have package design debates with other smart humans, not just inside my head.
+In one such debate, we discussed when it was appropriate to add a new dependency to a package.</description>
+    </item>
     
     <item>
       <title>Better Management Through Code</title>

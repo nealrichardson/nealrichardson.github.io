@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Code on A Blog</title>
-    <link>/categories/code/</link>
-    <description>Recent content in Code on A Blog</description>
+    <title>Dependencies on A Blog</title>
+    <link>/tags/dependencies/</link>
+    <description>Recent content in Dependencies on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 05 Aug 2017 21:49:57 -0700</lastBuildDate>
     
-	<atom:link href="/categories/code/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/dependencies/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,15 +19,6 @@
       <guid>/2017/08/05/should-you-add-a-package-dependency/</guid>
       <description>At Crunch, we’ve recently hired an “R Team” to build out our package offerings beyond what I could write in my spare time. It’s been great to have more resources to dedicate to our R tools, and it’s been particularly fun for me because now I get to have package design debates with other smart humans, not just inside my head.
 In one such debate, we discussed when it was appropriate to add a new dependency to a package.</description>
-    </item>
-    
-    <item>
-      <title>7 Hard Testing Problems Made Easy By httptest</title>
-      <link>/2017/06/21/7-hard-testing-problems-made-easy-by-httptest/</link>
-      <pubDate>Wed, 21 Jun 2017 21:49:57 -0700</pubDate>
-      
-      <guid>/2017/06/21/7-hard-testing-problems-made-easy-by-httptest/</guid>
-      <description>I&amp;rsquo;m a big advocate of testing and test automation, both on the team I lead and in my own projects. Tests provide valuable evidence that your code works. Without tests, you&amp;rsquo;re engaging in faith-based development: you believe your code works because you believe in your own infallibility as a coder. Theology aside, as a practical matter, tests are liberating because they allow you to modify and extend your code without fear of breaking existing functionality.</description>
     </item>
     
   </channel>

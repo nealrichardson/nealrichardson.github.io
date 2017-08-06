@@ -21,6 +21,15 @@
     </item>
     
     <item>
+      <title>Dependencies</title>
+      <link>/tags/dependencies/</link>
+      <pubDate>Sat, 05 Aug 2017 21:49:57 -0700</pubDate>
+      
+      <guid>/tags/dependencies/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Httptest</title>
       <link>/tags/httptest/</link>
       <pubDate>Wed, 21 Jun 2017 21:49:57 -0700</pubDate>
@@ -39,6 +48,15 @@
     </item>
     
     <item>
+      <title>Packages</title>
+      <link>/tags/packages/</link>
+      <pubDate>Sat, 05 Aug 2017 21:49:57 -0700</pubDate>
+      
+      <guid>/tags/packages/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Python</title>
       <link>/tags/python/</link>
       <pubDate>Tue, 04 Jul 2017 16:49:57 -0700</pubDate>
@@ -50,7 +68,7 @@
     <item>
       <title>R</title>
       <link>/tags/r/</link>
-      <pubDate>Wed, 21 Jun 2017 21:49:57 -0700</pubDate>
+      <pubDate>Sat, 05 Aug 2017 21:49:57 -0700</pubDate>
       
       <guid>/tags/r/</guid>
       <description></description>
