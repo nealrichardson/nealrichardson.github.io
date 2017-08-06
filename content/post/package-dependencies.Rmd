@@ -1,0 +1,168 @@
+---
+title: "Should You Add a Package Dependency?"
+description: "When you're writing an R package, you're writing software, and your decision to depend on another library should be made carefully. Here are some ways to use R itself to get more information about the cost of adding a dependency to your package."
+date: "2017-08-05T21:49:57-07:00"
+categories: ["code"]
+tags: ["R", "packages", "dependencies"]
+draft: false
+---
+
+At Crunch, we've recently hired an "R Team" to build out our package offerings beyond what I could write [in my spare time](../../../07/04/better-management-through-code/). It's been great to have more resources to dedicate to our R tools, and it's been particularly fun for me because now I get to have package design debates with other smart humans, not just inside my head.
+
+In one such debate, we discussed when it was appropriate to add a new dependency to a package. When you're scripting and doing data analysis on your computer, and there's a library out there that solves a problem you're working on, by all means use it. But, when you're doing package development, you're writing software, software that you're asking other people to install and run on their computers. The standard is different.
+
+In software, adding a new library isn't free (or, it's [free as in puppy](http://www.linux-mag.com/id/1678/)). There's a cost-benefit calculus to do, and while the benefits of using a function from another package may be clear, the costs are harder to pin down. In addition to installation time and bandwidth, the more dependencies you add, the more you risk exposing your users to version mismatches among packages, and the more you create opportunities for changes in someone else's code to break yours. While that may seem like hyperbolic risk aversion, [crazy things do happen](https://arstechnica.com/information-technology/2016/03/rage-quit-coder-unpublished-17-lines-of-javascript-and-broke-the-internet/) in software development from time to time.
+
+Of course, if you're trying to do something specialized and there's a library that's the standard in that space, you shouldn't reinvent the wheel. But, much of what we do in R is general data manipulation—data comes in one format and needs to get reshaped into some other structure—and while there are many utility libraries to make that easier, there's also a lot built into R itself that's quite powerful.
+
+After our discussion, I found myself wondering a few things. How could I better determine the cost of a new library? Not all dependencies are equal, and in fact even the number of new dependencies the library brings might not just be one (itself). It could be greater than one if the new package has its own dependencies it brings along. Or, it could actually be zero—you may already depend on it indirectly, through something you explicitly depend on—in which case the debate is moot.
+
+It turns out that you can get quite a bit of information about packages and their dependencies from within R itself by querying CRAN's package database. By doing a little exploration in that data, you can make a more informed judgment about whether adding a new dependency is potentially costly or really not a big deal.  
+
+# Analyzing CRAN packages within R
+
+The recently added `tools::CRAN_package_db` function returns a data.frame of information about the [packages on CRAN](https://cran.r-project.org/web/packages/available_packages_by_name.html). It has a row for each package and columns for all of the possible fields in the DESCRIPTION file of a package.
+
+```{r eval=FALSE}
+cran <- tools::CRAN_package_db()
+dim(cran)
+```
+
+```{r echo=FALSE}
+load("cran-package-db.RData")
+dim(cran)
+```
+
+## Parsing package dependency fields
+
+The "Depends" and "Import" columns are string lists of packages (or R itself), comma-separated, sometimes with spaces too (and sometimes with newlines), and sometimes with versions specified. As is, they're not pretty:
+
+```{r}
+head(cran[, c("Package", "Depends", "Imports")])
+```
+
+In order to collect the set of packages that a given package depends on, we need to turn those strings into lists (vectors) of package names. Here's a function that does that: splits each element on comma, and for each of those, trims whitespace, version specifications, and superfluous content.
+
+```{r}
+parsePackages <- function (x) {
+    lapply(strsplit(x, ","), function (pkgs) {
+        ## Strip whitespace
+        pkgs <- gsub("[ \n]", "", pkgs)
+        ## Remove version specifications, in parentheses
+        pkgs <- gsub("\\(.*$", "", pkgs)
+        ## Ignore NA for when the field was empty, and exclude "R" because duh
+        return(setdiff(na.omit(pkgs), "R"))
+    })
+}
+
+parsePackages(head(cran$Depends))
+```
+
+Now, to get a complete sense of the dependencies of a package, we need to combine both the "Depends" and "Imports" fields. We could `paste` the string columns together and call `parsePackages` on that result, but this looked like an excellent opportunity to use `mapply`. Unlike the other `*apply` functions in R, `mapply` takes as its first argument a function to map over some data structures of the same length. In this case, for each row in the package list, we want the union of the packages in "Depends" and "Imports". So, we can map the `union` function over them:
+
+```{r}
+deps <- mapply(union,
+    x=parsePackages(cran$Depends),
+    y=parsePackages(cran$Imports))
+names(deps) <- cran$Package
+
+head(deps)
+```
+
+Now we have a named list where for each package, the contents are every package listed in either Depends or Imports in the package DESCRIPTION.
+
+## Finding all dependencies
+
+```{r echo=FALSE}
+blogdown::shortcode("figure", src='"/img/yo-dawg-deps.png"', class="floating-right halfwidth")
+```
+
+That's great, but we want to know the complete set of package dependencies. Each direct dependency may have its own dependencies, and so on. We can solve this with a short function that takes a package name, looks up its dependencies, looks up the dependencies of those, and keeps tracing back through dependencies until no new ones are added.
+
+```{r}
+findDependencies <- function (pkg) {
+    out <- c()
+    newdeps <- deps[[pkg]]
+    while (length(newdeps)) {
+        out <- c(out, newdeps)
+        newdeps <- setdiff(unlist(deps[newdeps]), unlist(out))
+    }
+    return(out)
+}
+```
+
+So, for example, the [crunch](https://github.com/Crunch-io/rcrunch) package, the subject of our discussion at work, formally lists these five dependencies
+
+```{r}
+cran[cran$Package == "crunch", c("Depends", "Imports")]
+deps$crunch
+```
+
+but tracing through all of its dependencies' dependencies, actually requires five others.
+
+```{r}
+crunch <- findDependencies("crunch")
+crunch
+```
+
+## Counting the true number of new dependencies
+
+Already with this information, we can make more informed decisions about whether it is expensive to add a certain dependency. In this example, if a contributor to `crunch` wanted to import a hashing function from the `digest` package, or wanted to define a class with `R6`, there's no additional cost because we already depend on it—just not directly.
+
+What about another package? Suppose someone wanted to use a function from [purrr](http://purrr.tidyverse.org/) instead of one of the `*apply` functions that are a part of R. What is the impact on our total dependency count?
+
+```{r}
+purrr <- findDependencies("purrr")
+setdiff(purrr, crunch)
+intersect(purrr, crunch)
+```
+
+Adding that one dependency actually adds a total of six packages (itself and five others) to our total dependency load, though one of those, `utils`, is part of the standard R installation. The only shared dependency between the two packages is `methods`, also a part of R itself.
+
+## Weighing the costs
+
+Not all packages are alike, of course. They can vary in size, complexity, and stability. How should we interpret this number of potential new dependencies?
+
+The CRAN package database accessible in R doesn't give information on size or complexity of the code, and in terms of stability, you could look at the "Published" field to see how recently updated the packages are. But, a single date alone is hard to interpret: a recent update could mean that the package is undergoing rapid development and is risky to depend on, or it could mean that it is actively being supported and bugs are getting fixed. Or it could mean that you caught the developer on the one day a year they push updates.
+
+The best proxy for complexity that I see in the CRAN database is the "NeedsCompilation" field. If something needs to compile C or FORTRAN code in order to install, it's usually slower to install, and you run into the possibility of platform and compiler differences across systems. CRAN does a very good job of ensuring that packages are able to run on a wide range of platforms, but the most common reason I've had a package fail to install for me was because the C compilation step couldn't find a header file it needed, or it expected a different compiler.
+
+So what about these new potential dependencies?
+
+```{r}
+table(cran$NeedsCompilation[cran$Package %in% c("purrr", purrr)])
+```
+
+It appears that four of the five package dependencies (those that aren't built in to R itself) require compilation, so by this measure, the complexity of the dependencies is relatively high.
+
+## Prevalence of the new packages
+
+Another question you might want to consider is how likely it is that the new packages you're adding might already be present on your users' systems. If you believe that most of your users already have the one you want to add, you might be less concerned about its costs and risks.
+
+I'm not going to dive into that analysis here, but a few options come to mind. First, you could do a similar dependency tracing using the "Reverse depends" and "Reverse imports" columns of the CRAN database. These columns indicate packages that depend on the package in question, rather than packages on which it depends. You could collect those for the prospective package, and if you find that there are lots of others that depend on it, you may think it is more likely to be found on your users' systems already.
+
+Second, you could look at package download counts and try to infer whether the package you want to depend on is popular. The [cranlogs](https://github.com/metacran/cranlogs) package provides an interface to RStudio's CRAN mirror download logs. It's not complete—there are many CRAN mirrors—but it can give you a data point.
+
+What you'd really like to know is how likely it is that someone who has installed your package has also installed the other package, and I don't know where you'd get that kind of individual-level data. One interesting approach along these lines was in [David Robinson's talk at the R NYC conference this year](http://varianceexplained.org/r/nyr-conference/). He looked at Stack Overflow questions and answers and did some analysis of which packages were most likely to appear together. Something like that could be useful information... if your package is popular enough to be asked about on Stack Overflow a lot.
+
+# No dependencies were harmed in the making of this post
+
+You may have noticed that I did not load any external libraries in this post. That's partly because I'm a dinosaur who did most of his heavy data analysis in R a few years ago, before the emergence of the so-called "[tidyverse](http://tidyverse.org/)". I learned how R works as a language, both the good and the bad, and I'm comfortable working with those tools.
+
+However, I also did it to prove a point: R is great at manipulating data structures and doing simple analyses just using what comes built-in. A few basic regular expressions, some set operations, and a dash of functional programming, and we got the data into a shape where we could easily answer the questions at hand.
+
+<!-- Following on the `purrr` example from above: is it bad design, or at a minimum just really strange, that the signature for `mapply` puts the function first and mixes title-case, all-caps, and dot-separated argument names:
+
+```
+mapply <- function (FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE)
+```
+
+while `sapply`, like the other `*apply`s, puts the data first and function second, but has "simplify" lower-cased as an argument?
+
+```
+sapply <- function (X, FUN, ..., simplify = TRUE, USE.NAMES = TRUE)
+```
+
+Absolutely. Should you instead use `purrr` in your analysis work so that you have a more standardized interface to this kind of functional programming? Feel free. But if you're moving data around inside a function in your package, and an `lapply` or `vapply` would do the trick, you should think twice about reaching for an external library and requiring all of your package users to install it and its dependencies. The standard is different when you're asking other people to run your code on their machines. -->
+
+If the package on which you want to depend is core to the functionality that your package provides, you should use it. But if you're adding it just to make your life a little easier as a developer, consider sacrificing your convenience for the good of your users. Reasonable people may disagree on where the threshold is for deciding it is worth adding the new dependency, but with more information on the costs associated, you can make a better decision.

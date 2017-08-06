@@ -1,4 +1,6 @@
 public/*
+blogdown/*
 themes/*
 content/post/*.html
 static/post/*_files/*
+*.DS_Store*
