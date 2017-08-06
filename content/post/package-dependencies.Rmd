@@ -5,6 +5,7 @@ date: "2017-08-05T21:49:57-07:00"
 categories: ["code"]
 tags: ["R", "packages", "dependencies"]
 draft: false
+images: ["/img/yo-dawg-deps.png"]
 ---
 
 At Crunch, we've recently hired an "R Team" to build out our package offerings beyond what I could write [in my spare time](../../../07/04/better-management-through-code/). It's been great to have more resources to dedicate to our R tools, and it's been particularly fun for me because now I get to have package design debates with other smart humans, not just inside my head.
