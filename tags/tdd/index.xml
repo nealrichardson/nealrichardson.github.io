@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Packages on A Blog</title>
-    <link>/tags/packages/</link>
-    <description>Recent content in Packages on A Blog</description>
+    <title>Tdd on A Blog</title>
+    <link>/tags/tdd/</link>
+    <description>Recent content in Tdd on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 11 Aug 2017 16:49:57 -0700</lastBuildDate>
     
-	<atom:link href="/tags/packages/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/tdd/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,16 +18,6 @@
       
       <guid>/2017/08/11/one-hour-package/</guid>
       <description>At Crunch, I occasionally pick up small coding projects to help with project management. Recently, I wanted a way to get automated reporting on our open issues in Usersnap, a service embedded in our web application that allows users to report bugs from within the app. My thought was to set up a cron job to report daily summaries in our Slack channel on things like the number of reports created, resolved, and so on, so that we could make sure that bug reports were being addressed quickly.</description>
-    </item>
-    
-    <item>
-      <title>Should You Add a Package Dependency?</title>
-      <link>/2017/08/05/should-you-add-a-package-dependency/</link>
-      <pubDate>Sat, 05 Aug 2017 21:49:57 -0700</pubDate>
-      
-      <guid>/2017/08/05/should-you-add-a-package-dependency/</guid>
-      <description>At Crunch, we’ve recently hired an “R Team” to build out our package offerings beyond what I could write in my spare time. It’s been great to have more resources to dedicate to our R tools, and it’s been particularly fun for me because now I get to have package design debates with other smart humans, not just inside my head.
-In one such debate, we discussed when it was appropriate to add a new dependency to a package.</description>
     </item>
     
   </channel>

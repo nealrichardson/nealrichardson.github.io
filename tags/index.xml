@@ -32,7 +32,7 @@
     <item>
       <title>Httptest</title>
       <link>/tags/httptest/</link>
-      <pubDate>Wed, 21 Jun 2017 21:49:57 -0700</pubDate>
+      <pubDate>Fri, 11 Aug 2017 16:49:57 -0700</pubDate>
       
       <guid>/tags/httptest/</guid>
       <description></description>
@@ -50,7 +50,7 @@
     <item>
       <title>Packages</title>
       <link>/tags/packages/</link>
-      <pubDate>Sat, 05 Aug 2017 21:49:57 -0700</pubDate>
+      <pubDate>Fri, 11 Aug 2017 16:49:57 -0700</pubDate>
       
       <guid>/tags/packages/</guid>
       <description></description>
@@ -68,9 +68,18 @@
     <item>
       <title>R</title>
       <link>/tags/r/</link>
-      <pubDate>Sat, 05 Aug 2017 21:49:57 -0700</pubDate>
+      <pubDate>Fri, 11 Aug 2017 16:49:57 -0700</pubDate>
       
       <guid>/tags/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tdd</title>
+      <link>/tags/tdd/</link>
+      <pubDate>Fri, 11 Aug 2017 16:49:57 -0700</pubDate>
+      
+      <guid>/tags/tdd/</guid>
       <description></description>
     </item>
     
