@@ -102,9 +102,6 @@ a:hover {
 .list-item {
     margin-bottom: 18px;
 }
-ol, ol ol, ol ul, ul, ul ol, ul ul {
-    margin:0;
-}
 
 .button.outline {
     color:#0B88A8;
