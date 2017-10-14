@@ -100,14 +100,14 @@
 
 <p>Testing code and packages that communicate with remote servers can be painful. Dealing with authentication, bootstrapping server state, cleaning up objects that may get created during the test run, network flakiness, and other complications can make testing seem too costly to bother with. But it doesn’t need to be that hard. The <code>httptest</code> package enables one to test all of the logic on the R sides of the API in your package without requiring access to the remote service.</p>
 <p>Importantly, <code>httptest</code> provides three test <strong>contexts</strong> that mock the network connection in different ways, and it offers additional <strong>expectations</strong> to assert that HTTP requests were–or were not–made. The package also includes a context for recording the responses of real requests and storing them as fixtures that you can later load in a test run. Using these tools, one can test that code is making the intended requests and that it handles the expected responses correctly, all without depending on a connection to a remote API.</p>
-<p>This package bridges the gap between two others: (1) <a href="https://github.com/r-lib/testthat">testthat</a>, which provides a useful (<a href="https://github.com/r-lib/testthat/blob/master/R/test-that.R#L171">and fun</a>) framework for unit testing in R but doesn’t come with tools for testing across web APIs; and (2) <a href="https://github.com/r-lib/httr">httr</a>, which <a href="https://github.com/r-lib/httr/blob/master/R/httr.r#L1">makes working with HTTP in R easy</a> but doesn’t make it simple to test the code that uses it. <code>httptest</code> brings the fun and simplicity together.</p>
+<p>This package bridges the gap between two others: (1) <a href="http://testthat.r-lib.org/">testthat</a>, which provides a useful (<a href="https://github.com/r-lib/testthat/blob/master/R/test-that.R#L171">and fun</a>) framework for unit testing in R but doesn’t come with tools for testing across web APIs; and (2) <a href="http://httr.r-lib.org/">httr</a>, which <a href="https://github.com/r-lib/httr/blob/master/R/httr.r#L1">makes working with HTTP in R easy</a> but doesn’t make it simple to test the code that uses it. <code>httptest</code> brings the fun and simplicity together.</p>
 <div id="installing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installing" class="anchor"></a>Installing</h2>
 <p><code>httptest</code> can be installed from CRAN with</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"httptest"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"httptest"</span>)</code></pre></div>
 <p>The pre-release version of the package can be pulled from GitHub using the <a href="https://github.com/hadley/devtools">devtools</a> package:</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
 devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"nealrichardson/httptest"</span>)</code></pre></div>
 </div>
 <div id="using" class="section level2">
@@ -126,7 +126,7 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <p>The package includes three test contexts, which you wrap around test code that would otherwise make network requests.</p>
 <ul>
 <li>
-<strong><code><a href="reference/without_internet.html">without_internet()</a></code></strong> converts HTTP requests made through either <code>httr</code> functions or the <code>download.file</code> function in the base <code>utils</code> package into errors that print the request method, URL, and body payload, if provided. This is useful for asserting that a function call would make a correctly-formed HTTP request, as well as for asserting that a function does not make a request (because if it did, it would raise an error in this context).</li>
+<strong><code><a href="reference/without_internet.html">without_internet()</a></code></strong> converts HTTP requests made through <code>httr</code> request functions into errors that print the request method, URL, and body payload, if provided. This is useful for asserting that a function call would make a correctly-formed HTTP request, as well as for asserting that a function does not make a request (because if it did, it would raise an error in this context).</li>
 <li>
 <strong><code><a href="reference/with_fake_HTTP.html">with_fake_HTTP()</a></code></strong> raises a “message” instead of an “error”, and HTTP requests return a “response”-class object. Like <code>without_internet</code>, it allows you to assert that the correct requests were (or were not) made, but since it doesn’t cause the code to exit with an error, you can test code in functions that comes after requests, provided that it doesn’t expect a particular response to each request.</li>
 <li>
@@ -158,9 +158,9 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <a href="#other-tools" class="anchor"></a>Other tools</h3>
 <ul>
 <li>
-<strong>skip_if_disconnected()</strong> skips following tests if you don’t have a working internet connection or can’t reach a given URL. This is useful for preventing spurious failures when doing integration tests with a real API.</li>
+<strong><code><a href="reference/skip_if_disconnected.html">skip_if_disconnected()</a></code></strong> skips following tests if you don’t have a working internet connection or can’t reach a given URL. This is useful for preventing spurious failures when doing integration tests with a real API.</li>
 <li>
-<strong>public()</strong> is another wrapper around test code that will cause tests to fail if they call functions that aren’t “exported” in the package’s namespace. Nothing HTTP specific about it, but it’s something that I’ve found useful for preventing accidentally releasing a package without documenting and exporting new functions. While you can use “examples” in the man pages for ensuring that functions you’re documenting are exported, code that communicates with remote APIs may not be easily set up to run in a help page example. This context allows you to make those assertions within your test suite.</li>
+<strong><code><a href="reference/public.html">public()</a></code></strong> is another wrapper around test code that will cause tests to fail if they call functions that aren’t “exported” in the package’s namespace. Nothing HTTP specific about it, but it’s something that I’ve found useful for preventing accidentally releasing a package without documenting and exporting new functions. While you can use “examples” in the man pages for ensuring that functions you’re documenting are exported, code that communicates with remote APIs may not be easily set up to run in a help page example. This context allows you to make those assertions within your test suite.</li>
 </ul>
 </div>
 <div id="faq" class="section level3">
@@ -169,7 +169,7 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <div id="where-are-my-mocks-recorded" class="section level4">
 <h4 class="hasAnchor">
 <a href="#where-are-my-mocks-recorded" class="anchor"></a>Where are my mocks recorded?</h4>
-<p><strong>Q.</strong> I’m using <code>capture_requests</code> but when I try to run tests with those fixtures in <code>with_mock_API</code>, the tests are erroring and printing the request URLs. Why aren’t the tests finding the mocks?</p>
+<p><strong>Q.</strong> I’m using <code><a href="reference/capture_requests.html">capture_requests()</a></code> but when I try to run tests with those fixtures in <code><a href="reference/with_mock_API.html">with_mock_API()</a></code>, the tests are erroring and printing the request URLs. Why aren’t the tests finding the mocks?</p>
 <p><strong>A.</strong> First, make sure that your recorded request files are where you think they are and where your tests think they should be. When recording fixtures, keep in mind that the destination path for <code>capture_requests</code> is relative to the current working directory of the process. If you’re running <code>capture_requests</code> within a test suite in an installed package, the working directory may not be the same as your code repository. So either record the requests in an interactive session, or you may have to specify an absolute path if you want to record when running package tests.</p>
 <p>If you don’t see the captured request files, try specifying <code>verbose = TRUE</code> when calling <code>capture_requests</code> or <code>start_capturing</code>, and it will message the absolute path of the files as it writes them.</p>
 <p>Second, once you see where your mock files are, make sure that you’ve placed the mock directories at the same level of directory nesting as your <code>test-*.R</code> files, or if you want them somewhere else, that you’ve set <code>.mockPaths</code> appropriately.</p>
@@ -177,7 +177,7 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <div id="how-do-i-fix-non-portable-file-paths" class="section level4">
 <h4 class="hasAnchor">
 <a href="#how-do-i-fix-non-portable-file-paths" class="anchor"></a>How do I fix “non-portable file paths”?</h4>
-<p><strong>Q.</strong> I have tests working nicely with <code>with_mock_API</code> but <code>R CMD build</code> and <code>R CMD check</code> warn that my package has “non-portable file paths”. How do I make legal file paths that my code and tests will recognize?</p>
+<p><strong>Q.</strong> I have tests working nicely with <code><a href="reference/with_mock_API.html">with_mock_API()</a></code> but <code>R CMD build</code> and <code>R CMD check</code> warn that my package has “non-portable file paths”. How do I make legal file paths that my code and tests will recognize?</p>
 <p><strong>A.</strong> Generally, this error means that there are file paths are longer than 100 characters. Depending on how long your URLs are, there are a few ways to save on characters without compromising readability of your code and tests. First, if you have your tests inside a <code>tests/testthat/</code> directory, and your fixture files inside that, you can save 9 characters by moving the fixtures up to <code>tests/</code> and setting <code><a href="reference/mockPaths.html">.mockPaths("../")</a></code>.</p>
 <p>If you need to save more, look for places where your URLs contain segments that perhaps could be (or already are) configurable settings. For example, if all of your API endpoints sit beneath <code>https://language.googleapis.com/v1/</code>, you could define that in your package as <code>options(mypackage.api="https://language.googleapis.com/v1/")</code>, construct your URLs relative to that in the code, and then in your tests, set something different, such as <code>options(mypackage.api="api/")</code>. That way, all mocked requests would have a path starting with “api/” rather than “language.googleapis.com/v1/”, saving you (in this case) another 23 characters.</p>
 <p>You may also be able to economize on other parts of the file paths. If you’ve recorded requests and your file paths contain long entity ids like “1495480537a3c1bf58486b7e544ce83d”, depending on how you access the API in your code, you may be able to simply replace that id with something shorter, like “1”. The mocks are just files, disconnected from a real server and API, so you can rename them and munge them as needed.</p>
@@ -185,30 +185,30 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <div id="how-do-i-switch-between-mocking-and-real-requests" class="section level4">
 <h4 class="hasAnchor">
 <a href="#how-do-i-switch-between-mocking-and-real-requests" class="anchor"></a>How do I switch between mocking and real requests?</h4>
-<p><strong>Q.</strong> I’d like to run my mocked tests sometimes against the real API, perhaps to turn them into integration tests, or perhaps to use the same test code to record the mocks that I’ll later use. How can I do this without copying the contents of the tests inside the <code>with_mock_API</code> blocks?</p>
-<p><strong>A.</strong> One way to do this is to set <code>with_mock_API</code> to another function in your test file (or in <code>helper.R</code> if you want it to run for all test files). So</p>
-<pre><code><a href="reference/with_mock_API.html">with_mock_API({
-    a &lt;- GET("https://httpbin.org/get")
-    print(a)
-})</a></code></pre>
+<p><strong>Q.</strong> I’d like to run my mocked tests sometimes against the real API, perhaps to turn them into integration tests, or perhaps to use the same test code to record the mocks that I’ll later use. How can I do this without copying the contents of the tests inside the <code><a href="reference/with_mock_API.html">with_mock_API()</a></code> blocks?</p>
+<p><strong>A.</strong> One way to do this is to set <code><a href="reference/with_mock_API.html">with_mock_API()</a></code> to another function in your test file (or in <code>helper.R</code> if you want it to run for all test files). So</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/with_mock_API.html">with_mock_API</a></span>({
+    a &lt;-<span class="st"> </span><span class="kw">GET</span>(<span class="st">"https://httpbin.org/get"</span>)
+    <span class="kw">print</span>(a)
+})</code></pre></div>
 <p>looks for the mock file, but</p>
-<pre><code>with_mock_API &lt;- force
-with_mock_API({
-    a &lt;- GET("https://httpbin.org/get")
-    print(a)
-})</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">with_mock_API &lt;-<span class="st"> </span>force
+<span class="kw"><a href="reference/with_mock_API.html">with_mock_API</a></span>({
+    a &lt;-<span class="st"> </span><span class="kw">GET</span>(<span class="st">"https://httpbin.org/get"</span>)
+    <span class="kw">print</span>(a)
+})</code></pre></div>
 <p>just evaluates the code with no mocking and makes the request, and</p>
-<pre><code>with_mock_API &lt;- capture_requests
-with_mock_API({
-    a &lt;- GET("https://httpbin.org/get")
-    print(a)
-})</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">with_mock_API &lt;-<span class="st"> </span>capture_requests
+<span class="kw"><a href="reference/with_mock_API.html">with_mock_API</a></span>({
+    a &lt;-<span class="st"> </span><span class="kw">GET</span>(<span class="st">"https://httpbin.org/get"</span>)
+    <span class="kw">print</span>(a)
+})</code></pre></div>
 <p>would make the request and record the response as a mock file. You could control this behavior with environment variables by adding something like</p>
-<pre><code>if (Sys.getenv("MOCK_BYPASS") == "true") {
-    with_mock_api &lt;- force
-} else if (Sys.getenv("MOCK_BYPASS") == "capture") {
-    with_mock_api &lt;- capture_requests
-}</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="kw">Sys.getenv</span>(<span class="st">"MOCK_BYPASS"</span>) <span class="op">==</span><span class="st"> "true"</span>) {
+    with_mock_api &lt;-<span class="st"> </span>force
+} <span class="cf">else</span> <span class="cf">if</span> (<span class="kw">Sys.getenv</span>(<span class="st">"MOCK_BYPASS"</span>) <span class="op">==</span><span class="st"> "capture"</span>) {
+    with_mock_api &lt;-<span class="st"> </span>capture_requests
+}</code></pre></div>
 <p>to your <code>helper.R</code>.</p>
 </div>
 </div>
@@ -216,7 +216,7 @@ with_mock_API({
 <div id="contributing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#contributing" class="anchor"></a>Contributing</h2>
-<p>Suggestions and pull requests are more than welcome. This package was initially pulled together from test setup code I’d written and copied around among three different packages. While the code here has been well used and hashed out over a couple of years of working with them, I have naturally focused on features that have been helpful for working with specific APIs. The concepts provided here are generally useful, but some details or conveniences for working with other APIs may be missing. In particular, the package privileges “Content-Type: application/json” in several places.</p>
+<p>Suggestions and pull requests are more than welcome. This package was initially pulled together from test setup code I’d written and copied around among three different packages. While the code here has been well used and hashed out over a couple of years of working with them, I have naturally focused on features that have been helpful for working with specific APIs. The concepts provided here are generally useful, but some details or conveniences for working with other APIs may be missing. In particular, the package privileges <code>"Content-Type: application/json"</code> in several places.</p>
 </div>
 <div id="for-developers" class="section level2">
 <h2 class="hasAnchor">
