@@ -228,4 +228,4 @@ This tells us that our cache is working as expected: we can get results from cac
 
 # What about when...
 
-There's more that `httptest` can do, and even more that it can grow to support. Check it out, and if you encounter features of an API that could be better supported or mocked by `httptest`, please [make an issue on GitHub](https://github.com/nealrichardson/pivotaltrackR/issues)!
+There's more that `httptest` can do, and even more that it can grow to support. Check it out, and if you encounter features of an API that could be better supported or mocked by `httptest`, please [make an issue on GitHub](https://github.com/nealrichardson/httptest/issues)!
