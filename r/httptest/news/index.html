@@ -23,7 +23,7 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
+  <link href="../extra.css" rel="stylesheet">
   
 <meta property="og:title" content="All news" />
 
@@ -62,11 +62,14 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">httptest</a>
+      <a class="navbar-brand" href="../index.html">enpiar</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">httptest</a>
+</li>
+<li>
   <a href="../articles/httptest.html">Get Started</a>
 </li>
 <li>
@@ -132,7 +135,7 @@
 <h2 class="hasAnchor">
 <a href="#httptest-2-2-0" class="anchor"></a>httptest 2.2.0</h2>
 <ul>
-<li>Add redacting functions (<code>redact_auth</code>, <code>redact_cookies</code>, <code>redact_HTTP_auth</code>, <code>redact_headers</code>, <code>within_body_text</code>) that can be specified in <code>capture_requests</code> so that sensitive information like tokens and ids can be purged from recorded response files. The default redacting function is <code>redact_auth</code>, which wraps several of them. See the <a href="https://github.com/nealrichardson/httptest/blob/master/inst/doc/redacting.md">vignette</a> for more.</li>
+<li>Add redacting functions (<code>redact_auth</code>, <code>redact_cookies</code>, <code>redact_HTTP_auth</code>, <code>redact_headers</code>, <code>within_body_text</code>) that can be specified in <code>capture_requests</code> so that sensitive information like tokens and ids can be purged from recorded response files. The default redacting function is <code>redact_auth</code>, which wraps several of them. See the <code><a href="https://cran.rstudio.com/web/packages/httptest/vignettes/redacting.html">vignette("redacting", package="httptest")</a></code> <a href="https://github.com/nealrichardson/httptest/blob/master/inst/doc/redacting.md"><code><a href="https://cran.rstudio.com/web/packages/httptest/vignettes/redacting.html">vignette("redacting", package="httptest")</a></code></a> for more.</li>
 <li>When loading a JSON mock response, the current “request” object is now included in the response returned, as is the case with real responses.</li>
 <li>Remove the file size limitation for mock files loaded in <code>with_mock_API</code>
 </li>

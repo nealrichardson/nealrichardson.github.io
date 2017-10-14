@@ -1,0 +1,7 @@
+urls:
+  reference: http://enpiar.com/r/httptest/reference
+  article: http://enpiar.com/r/httptest/articles
+articles:
+  httptest: httptest.html
+  redacting: redacting.html
+
