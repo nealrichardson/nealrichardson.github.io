@@ -87,6 +87,7 @@ ga('send', 'pageview');
 <link href='//cdn.bootcss.com/highlight.js/9.10.0/styles/color-brewer.min.css' rel='stylesheet' type='text/css'>
 
 
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
 <div class="show-sm">
     <div id="nav-toggle-box">
@@ -97,17 +98,29 @@ ga('send', 'pageview');
   </div>
   <div class="hide-sm" id="top">
     <div id="top-brand">
-        <a href="../../../../">All posts</img></a>
+        enpiar
     </div>
     <nav id="top-nav-main">
       <ul>
-       
-       
-    <li><a href="../../../../about/" >About</a></li>
-    
+          
+          
+              <li><a href="../../../../about/" >About</a></li>
+          
+              <li><a href="../../../../" >Blog</a></li>
+          
+              <li><a href="../../../../r/" >Code</a></li>
+          
       </ul>
     </nav>
-    
+    <nav id="top-nav-extra">
+      <ul>
+          
+              <li><a href="https://github.com/nealrichardson"><span class="fa fa-github fa-lg"></span></a></li>
+          
+              <li><a href="https://twitter.com/enpiar"><span class="fa fa-twitter fa-lg"></span></a></li>
+          
+      </ul>
+    </nav>
   </div>
  </header>
   <main>
@@ -129,15 +142,9 @@ ga('send', 'pageview');
     
 <blockquote itemprop="description">Testing code that communicates with remote APIs can be challenging, but it doesn't have to be. The 'httptest' package for R makes testing HTTP code simple. Here are some examples of scenarios that are easily testable using httptest.</blockquote>
 
-<time class="post-time"><span class="icon">
-  <i class="fa fa-clock-o" aria-hidden="true"></i>
-</span>
-
+<time class="post-time">
    <span datetime="2017-06-21T21:49:57-07:00">21 Jun 2017</span>
 
-<span class="icon">
- <i class="fa fa-pencil" aria-hidden="true"></i>
-</span>
 </time>
 </div>
 <div id="post-box">
@@ -147,7 +154,7 @@ ga('send', 'pageview');
 
 <p>I&rsquo;m a big advocate of testing and test automation, both on <a href="http://crunch.io/dev/">the team I lead</a> and in <a href="https://github.com/nealrichardson">my own projects</a>. Tests provide valuable evidence that your code works. Without tests, you&rsquo;re engaging in <a href="https://twitter.com/enpiar/status/748082354455969796">faith-based development</a>: you believe your code works because you believe in your own infallibility as a coder. Theology aside, as a practical matter, tests are liberating because they allow you to modify and extend your code without fear of breaking existing functionality. Unfortunately, testing code that communicates with remote services can be challenging. Dealing with authentication, bootstrapping server state, cleaning up objects that may get created during the test run, network flakiness, and other complications can make testing seem too costly to bother with.</p>
 
-<p>To solve these problems, I developed the <a href="https://github.com/nealrichardson/httptest">httptest</a> package for R. The latest <a href="https://cran.r-project.org/package=httptest">2.0.0 CRAN release</a> adds a range of new features that allow testing practically any request and response behavior without actually connecting to the remote service. It also includes a <a href="https://github.com/nealrichardson/httptest/blob/master/vignettes/httptest.Rmd">vignette</a> that illustrates how to get started using the package. Drawing from examples of several R packages that use <code>httptest</code> (and one that doesn&rsquo;t), this post outlines a set of testing challenges, both common and esoteric, that it makes easy.</p>
+<p>To solve these problems, I developed the <a href="http://enpiar.com/r/httptest/">httptest</a> package for R. The latest <a href="https://cran.r-project.org/package=httptest">2.0.0 CRAN release</a> adds a range of new features that allow testing practically any request and response behavior without actually connecting to the remote service. It also includes a <a href="http://enpiar.com/r/httptest/articles/httptest.html">vignette</a> that illustrates how to get started using the package. Drawing from examples of several R packages that use <code>httptest</code> (and one that doesn&rsquo;t), this post outlines a set of testing challenges, both common and esoteric, that it makes easy.</p>
 
 <h1 id="the-basics">The basics</h1>
 
@@ -242,7 +249,7 @@ an error with a message containing the request information is raised. Together w
 
 <p>In a second context that the package provides, <code>with_mock_API</code>, HTTP requests are intercepted and mapped to local file paths, factoring in the request URL, query, and method. If the file exists, it is loaded and returned as the response; if it does not, an error with a message containing the request information is raised, just as in <code>without_internet</code>. By supplying mock files, we can test the behavior of our code that handles API responses.</p>
 
-<p>Check out the <a href="(https://github.com/nealrichardson/httptest/blob/master/vignettes/httptest.Rmd)">package vignette</a> for a longer discussion of how to use <code>with_mock_API</code> and how to put mock files in the right place. For an abridged version, suppose we want to add tests to the popular <code>twitteR</code> package, which lacks a test suite. We can start by writing a basic test of the <code>getUser</code> function, like:</p>
+<p>Check out the <a href="http://enpiar.com/r/httptest/articles/httptest.html">package vignette</a> for a longer discussion of how to use <code>with_mock_API</code> and how to put mock files in the right place. For an abridged version, suppose we want to add tests to the popular <code>twitteR</code> package, which lacks a test suite. We can start by writing a basic test of the <code>getUser</code> function, like:</p>
 
 <pre><code class="language-r">with_mock_API({
     test_that(&quot;We can get a user object&quot;, {
@@ -339,7 +346,7 @@ an error with a message containing the request information is raised. Together w
 
 <p>With <code>httptest</code>, you can create a fixture that has whatever HTTP response status code, headers, and content that you want, so you can make one that looks like what the API returns when it is pushing back. Using that, you can then test that your code handles that response as intended.</p>
 
-<p>In the <a href="http://docs.crunch.io">Crunch.io API</a>, when an operation requires moving a lot of data around before it can return a result, the server responds with a 503 status and includes a &ldquo;Retry-After&rdquo; header indicating when the client may try again and expect a result ready. <a href="https://github.com/Crunch-io/rcrunch/blob/d1b5cade5e7b0608ddc1ce5de1a576e2d3614d84/R/api.R#L105-L116">This code</a> in the <a href="https://github.com/Crunch-io/rcrunch">crunch</a> package handles all API requests and handles the server&rsquo;s responses appropriately. When it hits a 503 response on a <code>GET</code> request, it messages to the user that it&rsquo;s going to retry, waits the amount of time that the header recommends, then does a fresh <code>GET</code> on the request URL.</p>
+<p>In the <a href="http://docs.crunch.io">Crunch.io API</a>, when an operation requires moving a lot of data around before it can return a result, the server responds with a 503 status and includes a &ldquo;Retry-After&rdquo; header indicating when the client may try again and expect a result ready. <a href="https://github.com/Crunch-io/rcrunch/blob/d1b5cade5e7b0608ddc1ce5de1a576e2d3614d84/R/api.R#L105-L116">This code</a> in the <a href="http://crunch.io/r/crunch/">crunch</a> package handles all API requests and handles the server&rsquo;s responses appropriately. When it hits a 503 response on a <code>GET</code> request, it messages to the user that it&rsquo;s going to retry, waits the amount of time that the header recommends, then does a fresh <code>GET</code> on the request URL.</p>
 
 <p>The <a href="https://github.com/Crunch-io/rcrunch/blob/d1b5cade5e7b0608ddc1ce5de1a576e2d3614d84/tests/testthat/test-api.R#L31-L35">test</a> relies on a <a href="https://github.com/Crunch-io/rcrunch/blob/d1b5cade5e7b0608ddc1ce5de1a576e2d3614d84/tests/testthat/app.crunch.io/503.R">mock response</a> that is an <code>httr</code> &ldquo;response&rdquo; class object with a 503 <code>status_code</code>. So, a <code>GET</code> on that resource &ldquo;returns&rdquo; 503 status, which triggers the relevant API handler code, and does the retry:</p>
 
@@ -402,7 +409,7 @@ an error with a message containing the request information is raised. Together w
 </figure>
 
 
-<p>Mocking API responses isn&rsquo;t the only thing you might want to do in order to test your code. Sometimes, the request that matters is the one you don&rsquo;t make. Here&rsquo;s a example of how <code>without_internet</code> can be used to assert that code that should not make network requests in fact does not. This is a simplified version of a test from the <a href="https://github.com/nealrichardson/httpcache">httpcache</a> package, a library that implements a query cache for HTTP requests in R. The point of the query cache is that only the first time you make a certain GET request should it hit the remote API; subsequent requests should read from the cache and not make a request. The test first makes a request (artificially, using <code>with_fake_HTTP</code>, the third test context the package provides) to prime the cache.</p>
+<p>Mocking API responses isn&rsquo;t the only thing you might want to do in order to test your code. Sometimes, the request that matters is the one you don&rsquo;t make. Here&rsquo;s a example of how <code>without_internet</code> can be used to assert that code that should not make network requests in fact does not. This is a simplified version of a test from the <a href="http://enpiar.com/r/httpcache/">httpcache</a> package, a library that implements a query cache for HTTP requests in R. The point of the query cache is that only the first time you make a certain GET request should it hit the remote API; subsequent requests should read from the cache and not make a request. The test first makes a request (artificially, using <code>with_fake_HTTP</code>, the third test context the package provides) to prime the cache.</p>
 
 <pre><code class="language-r">with_fake_HTTP({
     test_that(&quot;Cache gets set on GET&quot;, {

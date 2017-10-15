@@ -203,6 +203,11 @@ figcaption p {
     width: 154px;
 }
 
+#top-brand {
+    font-size: 19px;
+    font-weight: 200;
+}
+
 #nav-toggle-brand {
     width: 180px;
     margin: auto;
@@ -210,8 +215,9 @@ figcaption p {
 
 #top #top-nav-extra span, #top #top-nav-extra a {
     border: none;
-    text-transform: uppercase;
-    /*color: #888;*/
+    padding: 0 8px;
+    color: #408AB4;
+    font-size: 25px;
 }
 
 #top #top-nav-extra span:hover, #top #top-nav-extra a:hover {
@@ -220,6 +226,8 @@ figcaption p {
 
 #top #top-nav-main a {
     color: #408AB4;
+    font-size: 19px;
+    font-weight: 200;
 }
 
 #top #top-nav-main a:hover {
@@ -227,9 +235,14 @@ figcaption p {
 }
 
 #top {
-    height: 60px;
+    height: 50px;
+    background: #f8f8f8
 }
 
 time.post-time {
     font-size: 14px;
+}
+
+.button.round {
+    border-radius: 0;
 }

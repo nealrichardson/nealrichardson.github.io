@@ -89,6 +89,7 @@ ga('send', 'pageview');
 <link href='//cdn.bootcss.com/highlight.js/9.10.0/styles/color-brewer.min.css' rel='stylesheet' type='text/css'>
 
 
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
 <div class="show-sm">
     <div id="nav-toggle-box">
@@ -99,17 +100,29 @@ ga('send', 'pageview');
   </div>
   <div class="hide-sm" id="top">
     <div id="top-brand">
-        <a href="../../../../">All posts</img></a>
+        enpiar
     </div>
     <nav id="top-nav-main">
       <ul>
-       
-       
-    <li><a href="../../../../about/" >About</a></li>
-    
+          
+          
+              <li><a href="../../../../about/" >About</a></li>
+          
+              <li><a href="../../../../" >Blog</a></li>
+          
+              <li><a href="../../../../r/" >Code</a></li>
+          
       </ul>
     </nav>
-    
+    <nav id="top-nav-extra">
+      <ul>
+          
+              <li><a href="https://github.com/nealrichardson"><span class="fa fa-github fa-lg"></span></a></li>
+          
+              <li><a href="https://twitter.com/enpiar"><span class="fa fa-twitter fa-lg"></span></a></li>
+          
+      </ul>
+    </nav>
   </div>
  </header>
   <main>
@@ -133,15 +146,9 @@ ga('send', 'pageview');
     
 <blockquote itemprop="description">When you're writing an R package, you're writing software, and your decision to depend on another library should be made carefully. Here are some ways to use R itself to get more information about the cost of adding a dependency to your package.</blockquote>
 
-<time class="post-time"><span class="icon">
-  <i class="fa fa-clock-o" aria-hidden="true"></i>
-</span>
-
+<time class="post-time">
    <span datetime="2017-08-05T21:49:57-07:00">5 Aug 2017</span>
 
-<span class="icon">
- <i class="fa fa-pencil" aria-hidden="true"></i>
-</span>
 </time>
 </div>
 <div id="post-box">
@@ -253,7 +260,7 @@ head(deps)</code></pre>
     }
     return(out)
 }</code></pre>
-<p>So, for example, the <a href="https://github.com/Crunch-io/rcrunch">crunch</a> package, the subject of our discussion at work, formally lists these five dependencies</p>
+<p>So, for example, the <a href="http://crunch.io/r/crunch/">crunch</a> package, the subject of our discussion at work, formally lists these five dependencies</p>
 <pre class="r"><code>cran[cran$Package == &quot;crunch&quot;, c(&quot;Depends&quot;, &quot;Imports&quot;)]</code></pre>
 <pre><code>##           Depends
 ## 1792 R (&gt;= 3.0.0)
@@ -302,19 +309,6 @@ setdiff(purrr, crunch)</code></pre>
 <h1>No dependencies were harmed in the making of this post</h1>
 <p>You may have noticed that I did not load any external libraries in this post. That’s partly because I’m a dinosaur who did most of his heavy data analysis in R a few years ago, before the emergence of the so-called “<a href="http://tidyverse.org/">tidyverse</a>”. I learned how R works as a language, both the good and the bad, and I’m comfortable working with those tools.</p>
 <p>However, I also did it to prove a point: R is great at manipulating data structures and doing simple analyses just using what comes built-in. A few basic regular expressions, some set operations, and a dash of functional programming, and we got the data into a shape where we could easily answer the questions at hand.</p>
-<!-- Following on the `purrr` example from above: is it bad design, or at a minimum just really strange, that the signature for `mapply` puts the function first and mixes title-case, all-caps, and dot-separated argument names:
-
-```
-mapply <- function (FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE)
-```
-
-while `sapply`, like the other `*apply`s, puts the data first and function second, but has "simplify" lower-cased as an argument?
-
-```
-sapply <- function (X, FUN, ..., simplify = TRUE, USE.NAMES = TRUE)
-```
-
-Absolutely. Should you instead use `purrr` in your analysis work so that you have a more standardized interface to this kind of functional programming? Feel free. But if you're moving data around inside a function in your package, and an `lapply` or `vapply` would do the trick, you should think twice about reaching for an external library and requiring all of your package users to install it and its dependencies. The standard is different when you're asking other people to run your code on their machines. -->
 <p>If the package on which you want to depend is core to the functionality that your package provides, you should use it. But if you’re adding it just to make your life a little easier as a developer, consider sacrificing your convenience for the good of your users. Reasonable people may disagree on where the threshold is for deciding it is worth adding the new dependency, but with more information on the costs associated, you can make a better decision.</p>
 </div>
 
