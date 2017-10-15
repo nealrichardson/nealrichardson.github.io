@@ -28,7 +28,7 @@
 <meta property="og:title" content="Context manager to temporarily turn cache off if it is on — uncached" />
 
 <meta property="og:description" content="If you don't want to store the response of a GET request in the cache,
-wrap it in uncached()``. It will neither read from nor write to cache. However,uncached` will not invalidate cache records, if present." />
+wrap it in uncached(). It will neither read from nor write to cache." />
 
 
 <!-- mathjax -->
@@ -97,7 +97,7 @@ wrap it in uncached()``. It will neither read from nor write to cache. However,u
 
     
     <p>If you don't want to store the response of a GET request in the cache,
-wrap it in <code>uncached()``. It will neither read from nor write to cache. However,</code>uncached` will not invalidate cache records, if present.</p>
+wrap it in <code>uncached()</code>. It will neither read from nor write to cache.</p>
     
 
     <pre class="usage"><span class='fu'>uncached</span>(<span class='no'>...</span>)</pre>
@@ -115,10 +115,15 @@ wrap it in <code>uncached()``. It will neither read from nor write to cache. How
 
     <p>Whatever ... returns.</p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p><code>uncached</code> will not invalidate cache records, if present. It only ignores
+them.</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>uncached</span>(<span class='fu'><a href='cached-http-verbs.html'>GET</a></span>(<span class='st'>"http://httpbin.org/get"</span>))</div><div class='output co'>#&gt; Response [http://httpbin.org/get]
-#&gt;   Date: 2017-10-15 04:28
+#&gt;   Date: 2017-10-15 05:02
 #&gt;   Status: 200
 #&gt;   Content-Type: application/json
 #&gt;   Size: 326 B
@@ -140,6 +145,8 @@ wrap it in <code>uncached()``. It will neither read from nor write to cache. How
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

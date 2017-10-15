@@ -84,7 +84,7 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(httpcache)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(a &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cached-http-verbs.html">GET</a></span>(<span class="st">"http://httpbin.org/get"</span>))</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.031   0.004   0.375</code></pre>
+##   0.028   0.002   0.442</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(b &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cached-http-verbs.html">GET</a></span>(<span class="st">"http://httpbin.org/get"</span>))</code></pre></div>
 <pre><code>##    user  system elapsed 
 ##       0       0       0</code></pre>
@@ -101,10 +101,10 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">clearCache</span>()
 <span class="kw"><a href="../reference/startLog.html">startLog</a></span>()
 a &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cached-http-verbs.html">GET</a></span>(<span class="st">"http://httpbin.org/get"</span>)</code></pre></div>
-<pre><code>## 2017-10-14T21:28:36.221 HTTP GET http://httpbin.org/get 200 326 0 0 0 0 0.091 0.091
-## 2017-10-14T21:28:36.221 CACHE SET http://httpbin.org/get</code></pre>
+<pre><code>## 2017-10-14T22:02:47.896 HTTP GET http://httpbin.org/get 200 326 0 0 0 0 0.159 0.159
+## 2017-10-14T22:02:47.897 CACHE SET http://httpbin.org/get</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cached-http-verbs.html">GET</a></span>(<span class="st">"http://httpbin.org/get"</span>)</code></pre></div>
-<pre><code>## 2017-10-14T21:28:36.222 CACHE HIT http://httpbin.org/get</code></pre>
+<pre><code>## 2017-10-14T22:02:47.898 CACHE HIT http://httpbin.org/get</code></pre>
 <p>Notice how the first request results in an “HTTP GET” and a “CACHE SET”, while the second one gets a “CACHE HIT” and does not touch “HTTP”. From this log output, we can conclude that the query cache is working.</p>
 <div id="log-analysis" class="section level3">
 <h3 class="hasAnchor">
