@@ -92,7 +92,7 @@ findDependencies <- function (pkg) {
 }
 ```
 
-So, for example, the [crunch](https://github.com/Crunch-io/rcrunch) package, the subject of our discussion at work, formally lists these five dependencies
+So, for example, the [crunch](http://crunch.io/r/crunch/) package, the subject of our discussion at work, formally lists these five dependencies
 
 ```{r}
 cran[cran$Package == "crunch", c("Depends", "Imports")]
@@ -151,19 +151,5 @@ What you'd really like to know is how likely it is that someone who has installe
 You may have noticed that I did not load any external libraries in this post. That's partly because I'm a dinosaur who did most of his heavy data analysis in R a few years ago, before the emergence of the so-called "[tidyverse](http://tidyverse.org/)". I learned how R works as a language, both the good and the bad, and I'm comfortable working with those tools.
 
 However, I also did it to prove a point: R is great at manipulating data structures and doing simple analyses just using what comes built-in. A few basic regular expressions, some set operations, and a dash of functional programming, and we got the data into a shape where we could easily answer the questions at hand.
-
-<!-- Following on the `purrr` example from above: is it bad design, or at a minimum just really strange, that the signature for `mapply` puts the function first and mixes title-case, all-caps, and dot-separated argument names:
-
-```
-mapply <- function (FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE)
-```
-
-while `sapply`, like the other `*apply`s, puts the data first and function second, but has "simplify" lower-cased as an argument?
-
-```
-sapply <- function (X, FUN, ..., simplify = TRUE, USE.NAMES = TRUE)
-```
-
-Absolutely. Should you instead use `purrr` in your analysis work so that you have a more standardized interface to this kind of functional programming? Feel free. But if you're moving data around inside a function in your package, and an `lapply` or `vapply` would do the trick, you should think twice about reaching for an external library and requiring all of your package users to install it and its dependencies. The standard is different when you're asking other people to run your code on their machines. -->
 
 If the package on which you want to depend is core to the functionality that your package provides, you should use it. But if you're adding it just to make your life a little easier as a developer, consider sacrificing your convenience for the good of your users. Reasonable people may disagree on where the threshold is for deciding it is worth adding the new dependency, but with more information on the costs associated, you can make a better decision.

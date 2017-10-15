@@ -11,14 +11,21 @@ ignoreFiles = ["\\.Rmd$", "_files$", "_cache$"]
     post = "/:year/:month/:day/:slug/"
 
 [[menu.main]]
+    name = "Blog"
+    url = "/"
+[[menu.main]]
+    name = "Code"
+    url = "/r/"
+[[menu.main]]
     name = "About"
     url = "/about/"
-# [[menu.main]]
-#     name = "GitHub"
-#     url = "https://github.com/rstudio/blogdown"
-# [[menu.main]]
-#     name = "Twitter"
-#     url = "https://twitter.com/rstudio"
+
+[[menu.social]]
+    name = "fa-github fa-lg"
+    url = "https://github.com/nealrichardson"
+[[menu.social]]
+    name = "fa-twitter fa-lg"
+    url = "https://twitter.com/enpiar"
 
 [params]
     description = "A website built through Hugo and blogdown."

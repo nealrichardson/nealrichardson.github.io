@@ -8,21 +8,21 @@
   </div>
   <div class="hide-sm" id="top">
     <div id="top-brand">
-        <a href="/">All posts</img></a>
+        enpiar
     </div>
     <nav id="top-nav-main">
       <ul>
-       {{ $currentPage := . }}
-       {{ range .Site.Menus.main }}
-    <li><a href="{{ .URL }}" {{if  $currentPage.IsMenuCurrent "main" . }} class="active"{{end}}>{{ .Name }}</a></li>
-    {{end}}
+          {{ $currentPage := . }}
+          {{ range .Site.Menus.main }}
+              <li><a href="{{ .URL }}" {{if  $currentPage.IsMenuCurrent "main" . }} class="active"{{end}}>{{ .Name }}</a></li>
+          {{end}}
       </ul>
     </nav>
-    <!-- <nav id="top-nav-extra">
+    <nav id="top-nav-extra">
       <ul>
-        <li>
-          <a href="https://github.com/nealrichardson/">GitHub</a>
-        </li>
+          {{ range .Site.Menus.social }}
+              <li><a href="{{ .URL }}"><span class="fa {{ .Name }}"></span></a></li>
+          {{end}}
       </ul>
-    </nav> -->
+    </nav>
   </div>
