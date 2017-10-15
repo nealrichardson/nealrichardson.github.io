@@ -12,7 +12,7 @@ At [Crunch](http://crunch.io/), I occasionally pick up small [coding projects to
 
 {{< figure src="/img/fotomat.jpg" class="floating-right halfwidth" attr="Wikimedia Commons" attrlink="https://commons.wikimedia.org/wiki/File:This_is_a_typical_drive-up_Fotomat_booth..jpg">}}
 
-Given that I don't have much time to code, and that I've been working on [tools to make working with APIs easier](https://github.com/nealrichardson/httptest), I wanted to challenge myself: how quickly could I write an R package for a new API? In addition to getting the job done, I set a few additional requirements: the package must have full test coverage, be fully documented, and pass `R CMD check`—that is, it must be complete enough for [CRAN](https://cran.r-project.org/) submission.
+Given that I don't have much time to code, and that I've been working on [tools to make working with APIs easier](http://enpiar.com/r/httptest/), I wanted to challenge myself: how quickly could I write an R package for a new API? In addition to getting the job done, I set a few additional requirements: the package must have full test coverage, be fully documented, and pass `R CMD check`—that is, it must be complete enough for [CRAN](https://cran.r-project.org/) submission.
 
 Just to make it interesting, it turns out that the API I set out to tackle is neither documented nor even officially acknowledged. When I asked Usersnap about their API, they responded that they "currently do not offer API access." Clearly, though, there was an API behind their web application, so I was going to have to infer how the API works by examining how their app uses their unpublished API. It reminded me of my days in grad school collecting data by scraping Brazilian government websites, so with a touch of nostalgia, I embraced the challenge.
 
@@ -20,9 +20,9 @@ Despite the obstacles, from start to finish, it took me an hour between generati
 
 # Tools
 
-We'll need a few R packages to move forward. A couple merit highlighting here; the rest I'll mention in the discussion below. First, when dealing with HTTP APIs in R, the [httr](https://github.com/r-pkg/httr) package is essential. It handles requests and responses and lets you focus on how to translate your (users') intuitions about the data you're accessing into sensible R functions and objects.
+We'll need a few R packages to move forward. A couple merit highlighting here; the rest I'll mention in the discussion below. First, when dealing with HTTP APIs in R, the [httr](http://httr.r-lib.org/) package is essential. It handles requests and responses and lets you focus on how to translate your (users') intuitions about the data you're accessing into sensible R functions and objects.
 
-Next, we'll need some tools for writing tests. [Testing is especially important](https://t.co/IljRyeTIsj) when writing packages. The [testthat](https://github.com/hadley/testthat) package is the current standard for R package test suites, but it lacks some useful tools for working with remote APIs. To make it easy to test API packages, I wrote [httptest](https://github.com/nealrichardson/httptest), which extends `testthat`. As we'll see below, `httptest` allowed me to get test coverage for all of the lines of code I wrote and enabled me to run the tests quickly and without complication on public continuous-integration services (Travis-CI and Appveyor).
+Next, we'll need some tools for writing tests. [Testing is especially important](https://t.co/IljRyeTIsj) when writing packages. The [testthat](http://testthat.r-lib.org/) package is the current standard for R package test suites, but it lacks some useful tools for working with remote APIs. To make it easy to test API packages, I wrote [httptest](http://enpiar.com/r/httptest/), which extends `testthat`. As we'll see below, `httptest` allowed me to get test coverage for all of the lines of code I wrote and enabled me to run the tests quickly and without complication on public continuous-integration services (Travis-CI and Appveyor).
 
 ## Step 1: Set up the package skeleton
 
@@ -165,13 +165,13 @@ length(reps) # Should be 10
 reps[[1]]    # Inspect one
 ```
 
-After tweaking to make sure that the response looked as expected (my first attempt didn't return only the `$data` element of the response object, so `length` was not 10), I repeated the `getReports` query but wrapped in `httptest`'s [capture_requests](https://github.com/nealrichardson/httptest/blob/master/inst/doc/httptest.md#recording-mocks-with-capture_requests) context, which records the responses from real API requests as fixtures that you can use in tests.
+After tweaking to make sure that the response looked as expected (my first attempt didn't return only the `$data` element of the response object, so `length` was not 10), I repeated the `getReports` query but wrapped in `httptest`'s [capture_requests](http://enpiar.com/r/httptest/articles/httptest.html#recording-mocks-with-capture_requests) context, which records the responses from real API requests as fixtures that you can use in tests.
 
 ```r
 reps <- capture_requests(getReports())
 ```
 
-Now we can write tests around that fixture using the [with_mock_API](https://github.com/nealrichardson/httptest/blob/master/inst/doc/httptest.md#the-with_mock_api-context) context, and we can iterate on the R code and tests as needed, all without hitting the actual API or making any potentially expensive network requests. In [tests/testthat/test-get-reports.R](https://github.com/nealrichardson/useRsnap/blob/8c2662de5e726ad99e5985b92b97ef5b092c5e0a/tests/testthat/test-get-reports.R),
+Now we can write tests around that fixture using the [with_mock_API](http://enpiar.com/r/httptest/articles/httptest.html#the-with_mock_api-context) context, and we can iterate on the R code and tests as needed, all without hitting the actual API or making any potentially expensive network requests. In [tests/testthat/test-get-reports.R](https://github.com/nealrichardson/useRsnap/blob/8c2662de5e726ad99e5985b92b97ef5b092c5e0a/tests/testthat/test-get-reports.R),
 
 ```r
 context("Get reports")
