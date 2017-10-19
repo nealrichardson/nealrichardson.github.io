@@ -29,10 +29,10 @@
 
 <meta property="og:description" content="without_internet simulates the situation when any network request will
 fail, as in when you are without an internet connection. Any HTTP request
-through the verb functions in httr, or utils::download.file(), will raise
+through the verb functions in httr will raise
 an error. The error message raised has a well-defined shape, made of three
 elements, separated by space: (1) the request
-method (e.g. "GET", or for downloading, "DOWNLOAD"); (2) the request URL; and
+method (e.g. "GET"); (2) the request URL; and
 (3) the request body, if present. The verb-expectation functions,
 such as expect_GET() and expect_POST(), look for this shape." />
 
@@ -134,10 +134,10 @@ such as expect_GET() and expect_POST(), look for this shape." />
     
     <p><code>without_internet</code> simulates the situation when any network request will
 fail, as in when you are without an internet connection. Any HTTP request
-through the verb functions in <code>httr</code>, or <code><a href='http://www.rdocumentation.org/packages/utils/topics/download.file'>utils::download.file()</a></code>, will raise
+through the verb functions in <code>httr</code> will raise
 an error. The error message raised has a well-defined shape, made of three
 elements, separated by space: (1) the request
-method (e.g. "GET", or for downloading, "DOWNLOAD"); (2) the request URL; and
+method (e.g. "GET"); (2) the request URL; and
 (3) the request body, if present. The verb-expectation functions,
 such as <code><a href='expect-verb.html'>expect_GET()</a></code> and <code>expect_POST()</code>, look for this shape.</p>
     
