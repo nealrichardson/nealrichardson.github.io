@@ -142,6 +142,8 @@ responses that <code><a href='capture_requests.html'>capture_requests()</a></cod
 
 <span class='fu'>redact_HTTP_auth</span>(<span class='no'>response</span>)
 
+<span class='fu'>redact_oauth</span>(<span class='no'>response</span>)
+
 <span class='fu'>within_body_text</span>(<span class='no'>FUN</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -178,9 +180,11 @@ themselves are redacting functions, while <code>redact_headers()</code> and
     <p><code>redact_cookies()</code> removes cookies from 'httr' <code>response</code> objects.
 <code>redact_headers()</code> lets you target selected request and response headers for
 redaction. <code>redact_HTTP_auth()</code> removes <code>username:password</code>-based HTTP auth
-credentials. <code>redact_auth()</code> is a convenience wrapper around them for a
-useful default redactor in <code><a href='capture_requests.html'>capture_requests()</a></code>.
-    <code>within_body_text()</code></p>
+credentials. <code>redact_oauth()</code> removes the OAuth 'Token' object that 'httr'
+sticks in the request object. <code>redact_auth()</code> is a convenience wrapper around
+them for a useful default redactor in <code><a href='capture_requests.html'>capture_requests()</a></code>.
+    <code>within_body_text()</code> lets you manipulate the text of the response body
+and manages the parsing of the raw (binary) data in the 'response' object.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
