@@ -158,7 +158,12 @@ requests.</p>
 <span class='fu'><a href='with_fake_HTTP.html'>with_fake_HTTP</a></span>({
     <span class='fu'>expect_header</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/httr/topics/GET'>GET</a></span>(<span class='st'>"http://example.com"</span>, <span class='kw'>config</span><span class='kw'>=</span><span class='fu'><a href='http://www.rdocumentation.org/packages/httr/topics/add_headers'>add_headers</a></span>(<span class='kw'>Accept</span><span class='kw'>=</span><span class='st'>"image/png"</span>)),
         <span class='st'>"Accept: image/png"</span>)
-})</div><div class='output co'>#&gt; <span class='message'>GET http://example.com</span></div><div class='output co'>#&gt; NULL</div></pre>
+})</div><div class='output co'>#&gt; <span class='message'>GET http://example.com</span></div><div class='output co'>#&gt; Response [http://example.com]
+#&gt;   Date: NULL
+#&gt;   Status: 200
+#&gt;   Content-Type: &lt;unknown&gt;
+#&gt;   Size: 4 B
+#&gt; &lt;BINARY BODY&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

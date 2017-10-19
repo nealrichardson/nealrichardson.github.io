@@ -209,7 +209,6 @@ up the mocks.</p>
     <span class='fu'>GET</span>(<span class='st'>"http://httpbin.org"</span>)
     <span class='fu'>GET</span>(<span class='st'>"http://httpbin.org/response-headers"</span>,
         <span class='kw'>query</span><span class='kw'>=</span><span class='fu'>list</span>(<span class='kw'>`Content-Type`</span><span class='kw'>=</span><span class='st'>"application/json"</span>))
-    <span class='kw pkg'>utils</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/utils/topics/download.file'>download.file</a></span>(<span class='st'>"http://httpbin.org/gzip"</span>, <span class='fu'>tempfile</span>())
 })
 <span class='co'># Or:</span>
 <span class='fu'>start_capturing</span>()
@@ -217,7 +216,6 @@ up the mocks.</p>
 <span class='fu'>GET</span>(<span class='st'>"http://httpbin.org"</span>)
 <span class='fu'>GET</span>(<span class='st'>"http://httpbin.org/response-headers"</span>,
     <span class='kw'>query</span><span class='kw'>=</span><span class='fu'>list</span>(<span class='kw'>`Content-Type`</span><span class='kw'>=</span><span class='st'>"application/json"</span>))
-<span class='kw pkg'>utils</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/utils/topics/download.file'>download.file</a></span>(<span class='st'>"http://httpbin.org/gzip"</span>, <span class='fu'>tempfile</span>())
 <span class='fu'>stop_capturing</span>()
 <span class='co'># }</span></pre>
   </div>

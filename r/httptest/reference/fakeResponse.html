@@ -135,9 +135,7 @@ by a real request.</p>
     
 
     <pre class="usage"><span class='fu'>fakeResponse</span>(<span class='no'>request</span>, <span class='kw'>verb</span> <span class='kw'>=</span> <span class='st'>"GET"</span>, <span class='kw'>status_code</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>headers</span> <span class='kw'>=</span> <span class='fu'>list</span>(),
-  <span class='kw'>content</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
-
-<span class='fu'>fakeDownload</span>(<span class='no'>url</span>, <span class='no'>destfile</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>content</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -168,26 +166,11 @@ as response content with Content-Type: application/json. If no <code>content</co
 is provided, and if the <code>status_code</code> is not 204 No Content, the
 <code>url</code> will be set as the response content with Content-Type: text/plain.</p></td>
     </tr>
-    <tr>
-      <th>url</th>
-      <td><p>For <code>fakeDownload</code>, a path to a file that exists.</p></td>
-    </tr>
-    <tr>
-      <th>destfile</th>
-      <td><p>For <code>fakeDownload</code>, character file path to "download"
-to. <code>fakeDownload</code> will copy the file at <code>url</code> to this path.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Additional arguments for <code>fakeDownload</code></p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The fake verbs return a 'httr' response class object.
-<code>fakeDownload</code> returns 0, the success code returned by
-<code><a href='http://www.rdocumentation.org/packages/utils/topics/download.file'>utils::download.file()</a></code>.</p>
+    <p>An 'httr' response class object.</p>
     
 
   </div>
