@@ -5,12 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> • httptest</title>
+<title>httptest: A Test Environment for HTTP Requests in R • httptest</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="">
+<meta property="og:title" content="httptest: A Test Environment for HTTP Requests in R">
+<meta property="og:description" content="Testing code and packages that communicate with remote servers can be painful, but it doesn’t need to be. The httptest package lets you test R code that constructs API requests and handles their responses, all without requiring access to the remote service during the test run. This makes tests easy to write and fast to run. This vignette covers some of the core features of the ‘httptest’ package, focusing on how to mock HTTP responses, how to make other assertions about requests, and how to record real requests for future use as mocks.">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -92,18 +93,13 @@
       </header><div class="row">
   <div class="col-md-9">
     <div class="page-header toc-ignore">
-      <h1></h1>
+      <h1>httptest: A Test Environment for HTTP Requests in R</h1>
             
           </div>
 
     
     
 <div class="contents">
-<!--
-%\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{httptest: A Test Environment for HTTP Requests in R}
-%\VignetteEncoding{UTF-8}
--->
 <div id="httptest-a-test-environment-for-http-requests-in-r" class="section level1">
 <h1 class="hasAnchor">
 <a href="#httptest-a-test-environment-for-http-requests-in-r" class="anchor"></a>httptest: A Test Environment for HTTP Requests in R</h1>
