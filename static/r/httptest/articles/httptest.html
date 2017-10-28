@@ -100,13 +100,9 @@
     
     
 <div class="contents">
-<div id="httptest-a-test-environment-for-http-requests-in-r" class="section level1">
-<h1 class="hasAnchor">
-<a href="#httptest-a-test-environment-for-http-requests-in-r" class="anchor"></a>httptest: A Test Environment for HTTP Requests in R</h1>
 <p>Testing code and packages that communicate with remote servers can be painful. Dealing with authentication, bootstrapping server state, cleaning up objects that may get created during the test run, network flakiness, and other complications can make testing seem too costly to bother with. But it doesn’t need to be that hard. The <code>httptest</code> package lets you test R code that constructs API requests and handles their responses, all without requiring access to the remote service during the test run. This makes tests easy to write and fast to run.</p>
 <p><code>httptest</code> sits on top of the <a href="http://testthat.r-lib.org/">testthat</a> package and provides test <strong>contexts</strong> that mock the network connection. These let you supply mock API responses for some requests and allow you to assert that HTTP requests were—or were not—made using custom <strong>expectation</strong> functions. The package further includes tools for recording the responses of real requests and storing them as fixtures that you can later load in a test run. Taken together, <code>httptest</code> lets you test that your code is making the intended requests and that it handles the expected responses correctly without depending on a connection to a remote API.</p>
 <p>This vignette covers some of the core features of the <code>httptest</code> package, focusing on how to mock HTTP responses, how to make other assertions about requests, and how to record real requests for future use as mocks. Note that <code>httptest</code> requires the <code>testthat</code> package, and it follows the testing conventions and interfaces defined there, extending them with some additional wrappers and expectations. If you’re not familiar with <code>testthat</code>, see the <a href="http://r-pkgs.had.co.nz/tests.html">“Testing” chapter</a> chapter of Hadley Wickham’s <em>R Packages</em> book. Furthermore, <code>httptest</code> is designed for use with packages that rely on the <a href="http://httr.r-lib.org/">httr</a> requests library—it is a bridge between <code>httr</code> and <code>testthat</code>.</p>
-</div>
 <div id="the-with_mock_api-context" class="section level1">
 <h1 class="hasAnchor">
 <a href="#the-with_mock_api-context" class="anchor"></a>The <code>with_mock_API</code> context</h1>
@@ -329,8 +325,7 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#httptest-a-test-environment-for-http-requests-in-r">httptest: A Test Environment for HTTP Requests in R</a></li>
-      <li>
+<li>
 <a href="#the-with_mock_api-context">The <code>with_mock_API</code> context</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#example">Example</a></li>
       </ul>

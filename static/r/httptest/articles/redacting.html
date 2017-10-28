@@ -100,9 +100,6 @@
     
     
 <div class="contents">
-<div id="redacting-sensitive-information-from-recorded-requests" class="section level1">
-<h1 class="hasAnchor">
-<a href="#redacting-sensitive-information-from-recorded-requests" class="anchor"></a>Redacting Sensitive Information from Recorded Requests</h1>
 <p><code>httptest</code> makes it easy for you to write tests that don’t require a network connection. With <code><a href="../reference/capture_requests.html">capture_requests()</a></code>, you can record responses from real requests so that you can use them later in tests. A further benefit of testing with mocks is that you don’t have to deal with authentication and authorization on the server in your tests—you don’t need to supply real login credentials for your test suite to run. You can have full test coverage of your code, both on public continuous-integration services like Travis-CI and when you submit packages to CRAN, all without having to publish secret tokens or passwords.</p>
 <p>It is important to ensure that the mocks you include in your test suite do not inadvertently reveal private information as well. For many requests and responses, the default behavior of <code>capture_requests</code> is to write out only the response body, which makes for clean, easy-to-read test fixtures. For other responses, however—those returning non-JSON content or an error status—it writes a <code>.R</code> file containing a <code>httr</code> “response” object. This response contains all of the headers and cookies that the server returns, and it also has a copy of your “request” object, with the headers, tokens, and other configuration you sent to the server. If not addressed, this would mean that you might be exposing your personal credentials publicly.</p>
 <p>Starting in version 2.2.0, <code>httptest</code> provides a framework for sanitizing the responses that <code>capture_requests</code> records. By default, it redacts the standard ways that auth credentials are passed in requests: cookies, authorization headers, and basic HTTP auth. The framework is extensible and allows you to specify custom redaction policies that match how your API accepts and returns sensitive information. Common redacting functions are configurable and natural to adapt to your needs, while the workflow also supports custom redacting functions that can alter the recorded requests however you want, including altering the response content and URL.</p>
@@ -212,7 +209,6 @@ s[[<span class="dv">1</span>]]<span class="op">$</span>project_id
 <p>So whenever you record requests from within your test setup, the redaction is automatically applied.</p>
 </div>
 </div>
-</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -220,13 +216,9 @@ s[[<span class="dv">1</span>]]<span class="op">$</span>project_id
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li>
-<a href="#redacting-sensitive-information-from-recorded-requests">Redacting Sensitive Information from Recorded Requests</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#default-redact-standard-auth-methods">Default: redact standard auth methods</a></li>
       <li><a href="#handling-other-auth-methods">Handling other auth methods</a></li>
       <li><a href="#writing-custom-redacting-functions">Writing custom redacting functions</a></li>
-      </ul>
-</li>
       </ul>
 </div>
       </div>
