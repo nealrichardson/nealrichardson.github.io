@@ -5,7 +5,7 @@ date: "2017-08-11T16:49:57-07:00"
 categories: ["code"]
 tags: ["httptest", "R", "tdd", "packages"]
 draft: false
-images: ["/img/fotomat.jpg"]
+images: ["http://enpiar.com/img/fotomat.jpg"]
 ---
 
 At [Crunch](http://crunch.io/), I occasionally pick up small [coding projects to help with project management](../../../07/04/better-management-through-code/). Recently, I wanted a way to get automated reporting on our open issues in [Usersnap](http://usersnap.com/), a service embedded in our web application that allows users to report bugs from within the app. My thought was to set up a cron job to report daily summaries in our Slack channel on things like the number of reports created, resolved, and so on, so that we could make sure that bug reports were being addressed quickly.
