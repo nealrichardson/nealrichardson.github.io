@@ -3,7 +3,7 @@ title: "Building a Blogdown Site with Travis-CI"
 description: "It's easy to automate the publishing of your R Markdown site to GitHub Pages. Free yourself to focus on content, and let Travis handle the rest."
 date: "2017-06-01T21:49:57-07:00"
 categories: ["general"]
-tags: ["travis-ci", "automation", "meta", "R"]
+tags: ["travis-ci", "automation", "meta", "R", "website"]
 draft: false
 ---
 
