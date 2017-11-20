@@ -1,7 +1,7 @@
 ---
 title: "Getting Down with pkgdown"
-description: ""
-date: "2017-11-07T16:49:57-07:00"
+description: "Building a beautiful website for your R :package: is a great way to improve its documentation, usability, and visibility. The 'pkgdown' package makes it easy to build your site, particularly if you follow these conventions."
+date: "2017-11-21T16:49:57-07:00"
 categories: ["code"]
 tags: ["R", "packages", "website"]
 draft: false
@@ -10,15 +10,15 @@ images: []
 
 [`pkgdown`](http://hadley.github.io/pkgdown/) is an incredibly powerful tool for building beautiful websites for R packages. With `pkgdown` and services like [GitHub Pages](https://pages.github.com/), deploying a package website is so simple and straightforward that I'm starting to see it as an essential part of writing a package. What's more, I've found that the act of preparing a package website has led me to improve the package itself, particularly the readability and usefulness of its documentation.
 
-I say "incredibly" powerful in the most literal sense---I could not believe how much `pkgdown` does with so little required of its user. `pkgdown` draws its power by relying on [conventions](https://en.wikipedia.org/wiki/Convention_over_configuration) of how R packages are structured. Some of these conventions are inherent to R packages, particularly what CRAN deems as acceptable. Others, however, are less obvious.
+I say "incredibly" powerful in the most literal sense---I could not believe how much `pkgdown` does with so little required of its user. `pkgdown` draws its power by relying on [conventions](https://en.wikipedia.org/wiki/Convention_over_configuration) of how R packages are structured. Some of these conventions are inherent to R packages, particularly what CRAN deems as acceptable. Others, however, are less obvious. If you're closely tracking the [best practices for package development](http://r-pkgs.had.co.nz/), you're may be following most of these conventions already. But best practices evolve, and if you're adding `pkgdown` to a package that is a year or two old, you may find that you need to tweak some details to make it work smoothly.
 
-This post distills my experiences in setting up a few pkgdown sites recently and exposes some of the features of `pkgdown` that I discovered along the way. While `pkgdown` does have basic documentation, whenever I hit something that didn't work quite like I expected, I found that the best way to figure out what was happening was to read the source. My intent here is to capture what I learned [RTFS'ing](http://catb.org/jargon/html/R/RTFS.html) and share with you (and with my future self, who surely will have forgotten all of this).
+This post distills my experiences in setting up a few pkgdown sites recently and exposes some of the features of `pkgdown` that I discovered along the way. While `pkgdown` does have basic documentation, whenever I hit something that didn't work quite like I expected, or if I wanted to move beyond the default behavior, I found that the best way to figure out what was happening was to read the source. My intent here is to capture what I learned [RTFS'ing](http://catb.org/jargon/html/R/RTFS.html) and share with you (and with my future self, who surely will have forgotten all of this).
 
 # 1. Install `pkgdown`
 
-If you don't have `pkgdown` already, you'll need to install it. It's not currently on CRAN, so to get it, run `devtools::install_packages("hadley/pkgdown")`. Then go make a cup of coffee or something---there's lots of dependencies to install, so it may take several minutes.
+If you don't have `pkgdown` already, you'll need to install it. It's not currently on CRAN, so to get it, run `devtools::install_packages("hadley/pkgdown")`. Then go make a cup of coffee or something---there are lots of dependencies to install, so it may take several minutes. That's an observation, not a complaint: you'll have a beautiful website before your coffee gets cold.
 
-If you need coffee brewing inspiration, here's a suggestion:
+If you need coffee-brewing inspiration, here's a suggestion:
 
 {{< youtube AtD8u9oSG4A >}}
 
@@ -56,7 +56,7 @@ For sensibly named files, the quoting is unnecessary, and you won't see it in [g
 
 In the navbar, you can play around with ordering of entries, positioning groups of menu items in "left" or "right", and nesting menus. Note that you're not limited to just links to things in your pkgdown site---your navbar menu can include whatever you want. So, for example, if you have a personal or company website you want to link to, you can.
 
-One other customization I like to do to the navbar is to remove index.html from links so that they're prettier in the browser. That is, you see `you.github.io/yourpkg/` instead of `you.github.io/yourpkg/index.html`. Doing this does mean that if you preview your site locally by opening it as a file in your web browser, those links won't work directly, but they do work fine when served by a web server. It's a slight inconvenience for development but worth it for the end user experience, in my opinion. If you find it annoying to work with, just do it last, after you're done customizing your site locally.
+One other customization I like to do to the navbar is to remove index.html from links so that they're prettier in the browser. That is, you see `you.github.io/yourpkg/` instead of `you.github.io/yourpkg/index.html`. Doing this does mean that if you preview your site locally by opening it as a file in your web browser (which is what `pkgdown` does in an interactive session, including in RStudio), those links won't work directly, but they do work fine when served by a web server. It's a slight inconvenience for development but worth it for the end user experience, in my opinion. If you find it annoying to work with, just do it last, after you're done customizing your site locally.
 
 Note that the default navbar YAML relies on a few conventions. If you have a [NEWS.md](https://github.com/hadley/pkgdown/blob/ad1b1dfb12871919e06a2aa7e366ec0980af2714/R/navbar.R#L82-L87) file at the top level of your package, it will be parsed and a link to it added to the navbar. If you have a [vignette with the same name as the package](https://github.com/hadley/pkgdown/blob/ad1b1dfb12871919e06a2aa7e366ec0980af2714/R/navbar.R#L55-L64), you'll get a "Get started" link in the navbar. If you don't have those initially and you want to add them later, you can recreate the YAML template, or you can just edit your `_pkgdown.yml` to add links to them.
 
@@ -66,7 +66,7 @@ Now that you have the site basically set up, browse through it and make sure the
 
 ## Edit man pages
 
-Look at the "reference" index page and the various help pages and see how things are translated and displayed on the web. For me, this was an area where I could spend lots of time. I tend to write the roxygen docstrings when I write functions but seldom review how they're rendered as man pages. Sure, I could look at the HTML help files within the R package itself without `pkgdown`, or even preview the PDF version of your package manual---I'm sure everyone does `R CMD Rd2pdf man/` all the time, right? But some things stand out more clearly as needing refinement when viewed in the context of your website.
+Look at the "reference" index page and the various help pages and see how things are translated and displayed on the web. For me, this was an area where I could spend lots of time. I tend to write the roxygen docstrings when I write functions but seldom review how they're rendered as man pages. Sure, I could look at the HTML help files within the R package itself without `pkgdown`, or even preview the PDF version of the package manual---I'm sure everyone does `R CMD Rd2pdf man/` all the time, right? But some things stand out more clearly as needing refinement when viewed in the context of your website.
 
 In addition to general content, a few features of the help pages are worth special attention. First, check out the "title" and "description" of each man page. The title is the top line of your roxygen block, and the description is the first paragraph after that. You'll see the titles displayed on the `reference/index.html` page of your pkgdown site, and if you're like me, you'll probably immediately notice inconsistencies in how you title the man pages: capitalization, length, verb tense, etc.
 
@@ -74,9 +74,9 @@ The description distinction in roxygen is subtle---the first paragraph of text b
 
 Finally, note the names of the help pages themselves. You'll see them as the entries in the "reference" section of your `_pkgdown.yml`. These are the .Rd file names, which will be translated into .html files. That is, these will define URLs on your website. Review these carefully. Your URLs are an API---once you put content on the internet at that location, others can bookmark or share links to it. If you change those file names, you're breaking the API contract and those links won't work anymore. So, choose them wisely.
 
-If you have file names you want to make prettier---and if you have some autogenerated ones like `as.environment-MyClass-method.html`, you should---specify an alternative file name in the roxygen docstrings using the `@rdname` tag. See the discussion of `@rdname` [here](http://r-pkgs.had.co.nz/man.html#multiple-man) for more about how to use this feature.
+If you have file names you want to make prettier---and if you have some autogenerated ones like `as.environment-MyClass-method.html`, you should---specify an alternative file name in the roxygen docstrings using the `@rdname` tag. See the discussion of `@rdname` [here](http://r-pkgs.had.co.nz/man.html#multiple-man) for more.
 
-## Autolinking
+## Facilitate autolinking
 
 One of the delightful features of `pkgdown` is that it automatically links and cross-references code across your website, including to other packages. [This page](http://hadley.github.io/pkgdown/articles/test/highlight.html) illustrates the autolinking in practice.
 
@@ -95,9 +95,49 @@ Then, if your package is on CRAN, submit a new release so that others who instal
 
 After this, whenever anyone (including yourself in another package) builds a pkgdown site that references your package, theirs will include links back to your website.
 
-## Syntax highlighting
+## Check vignette metadata
 
-If you're using R Markdown for your vignettes, you'll see that your code chunks get appropriate R syntax highlighting, which makes them easier to read (and prettier). If you have other files, such as README.md, that are raw markdown, and you have R code blocks in them, you can still get the syntax highlighting if you mark them inside triple backticks with "r" specified like
+I had to do some updating of my vignettes to make them work correctly with `pkgdown`, specifically in their "front matter": the metadata at the top of the file. If your package is new and you're following the current [best practices](http://r-pkgs.had.co.nz/vignettes.html) for writing vignettes, you may be most of the way there already.
+
+I was using R Markdown and building the vignettes with [knitr](https://yihui.name/knitr/), but not _à la mode_, which uses the [rmarkdown](https://github.com/rstudio/rmarkdown) package on top of [pandoc](http://pandoc.org/). For example, in [httptest](http://enpiar.com/r/httptest), the main vignette started like this:
+
+```latex
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{httptest: A Test Environment for HTTP Requests in R}
+%\VignetteEncoding{UTF-8}
+-->
+
+# httptest: A Test Environment for HTTP Requests in R
+
+...
+```
+
+The new way, which `pkgdown` prefers, [uses YAML front matter](http://r-pkgs.had.co.nz/vignettes.html#vignette-metadata) and indicates that it should render with the `rmarkdown` package.
+
+```yaml
+---
+title: "httptest: A Test Environment for HTTP Requests in R"
+description: "This vignette covers the core features of the httptest package, focusing on how to mock HTTP responses, how to make assertions about requests, and how to record real requests for future use as mocks."
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{httptest: A Test Environment for HTTP Requests in R}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+...
+```
+
+This YAML front matter allows for additional fields. The `rmarkdown::html_vignette` default template will make use of "author" and "date" fields, though in the context of a package vignette, those might not be relevant. `rmarkdown` will also take your `title:` and add it as a `<h1>` header in your HTML (built) vignette, so you don't need to duplicate it in the body of your vignette, as I had previously (though you do still need to duplicate it, or at least provide something, in the `\VignetteIndexEntry` field).
+
+I also included a `description:` field, which may look familiar to `blogdown` (or pure Hugo) users. If/when this pull request is accepted (or today, if you use my fork of `pkgdown`), this field will be used to generate meta tags in the HTML pages of your pkgdown site, such that when you share a link to the vignette on a social media platform or in a Slack channel, a nice preview will be generated.
+
+One caveat: for this to work correctly, you'll need to make sure you have [pandoc installed](http://pandoc.org/installing.html). If pandoc is not present, `knitr` will fall back to using the older `markdown` library, which does not handle the YAML metadata the same way. Notably, the `title:` is not printed as a header in your vignette. Unfortunately, `pkgdown` suppresses the warnings that `knitr` makes about pandoc not being available, so this won't be obvious unless you build your vignettes directly. Better to make sure that you have a good version of pandoc installed before proceeding.
+
+## Check syntax highlighting
+
+If you're using R Markdown for your vignettes, you'll see that your code chunks get appropriate R syntax highlighting, which makes them easier to read (and prettier). If you have other files, such as README.md, that are raw Markdown, and you have R code blocks in them, you can still get the syntax highlighting if you mark them inside triple backticks with "r" specified like
 
 <pre><code class="hljs">
   ```r
@@ -105,13 +145,11 @@ If you're using R Markdown for your vignettes, you'll see that your code chunks 
   ```
 </code></pre>
 
-## Vignette front matter
+## Provide a logo
 
-* vignette front matter; pandoc
+Finally, `pkgdown` does some fun things with your package's logo, if it has one. (Does an R package truly exist if it doesn't have hexagonal stickers with its logo?) For one, it will attempt to turn it into a favicon, the small image displayed next to the page title in your browser's tab. For another (again pending this PR or available on this fork/branch), it will use it as a preview image on Twitter/Slack/etc., as in:
 
-## Logo
-
-Finally, `pkgdown` does some fun things with your package's logo, if it has one. (Does an R package truly exist if it doesn't have hexagonal stickers with its logo?) For one, it will attempt to turn it into a favicon, the small image displayed next to the page title in your browser's tab.
+{{< figure src="/img/crunch-pkgdown-open-graph.png" >}}
 
 To include a logo, you can drop a `logo.png` file at the top level of your repository (alongside `DESCRIPTION` et al.), and don't forget to add it to your `.Rbuildignore`. `pkgdown` will [also](https://github.com/hadley/pkgdown/blob/ad1b1dfb12871919e06a2aa7e366ec0980af2714/R/build-logo.R#L28) look for a logo in the `man/figures` directory, but unless you have a compelling reason to put it there, I like it at the top level and excluded in `.Rbuildignore` so that the built package stays lighter---your R package users won't benefit from including the .png in the build.
 
