@@ -21,6 +21,14 @@ code {
     background: #FAFAFA
 }
 
+a code {
+    color: #408AB4;
+}
+
+a:hover code {
+    color: #65C6C4;
+}
+
 body {
     color: #182125;
     font-family: Lato, sans-serif;

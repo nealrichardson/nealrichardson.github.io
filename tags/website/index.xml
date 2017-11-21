@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Website on A Blog</title>
+    <link>/tags/website/</link>
+    <description>Recent content in Website on A Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 21 Nov 2017 16:49:57 -0700</lastBuildDate>
+    
+	<atom:link href="/tags/website/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Getting Down with pkgdown</title>
+      <link>/2017/11/21/getting-down-with-pkgdown/</link>
+      <pubDate>Tue, 21 Nov 2017 16:49:57 -0700</pubDate>
+      
+      <guid>/2017/11/21/getting-down-with-pkgdown/</guid>
+      <description>pkgdown is an incredibly powerful tool for building beautiful websites for R packages. With pkgdown and services like GitHub Pages, deploying a package website is so simple and straightforward that I&amp;rsquo;m starting to see it as an essential part of writing a package. What&amp;rsquo;s more, I&amp;rsquo;ve found that the act of preparing a package website has led me to improve the package itself, particularly the readability and usefulness of its documentation.</description>
+    </item>
+    
+    <item>
+      <title>Building a Blogdown Site with Travis-CI</title>
+      <link>/2017/06/01/building-a-blogdown-site-with-travis-ci/</link>
+      <pubDate>Thu, 01 Jun 2017 21:49:57 -0700</pubDate>
+      
+      <guid>/2017/06/01/building-a-blogdown-site-with-travis-ci/</guid>
+      <description>Over on the Crunch.io dev blog, I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I’d do the same for my personal blog, though with one twist: using R and the blogdown package on top of Hugo.
+This blogdown GitHub issue pointed to Yihui’s guide to building bookdown projects on Travis, as well as a project that had adapted that flow for blogdown.</description>
+    </item>
+    
+  </channel>
+</rss>

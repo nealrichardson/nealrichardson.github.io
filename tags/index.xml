@@ -50,7 +50,7 @@
     <item>
       <title>Packages</title>
       <link>/tags/packages/</link>
-      <pubDate>Fri, 11 Aug 2017 16:49:57 -0700</pubDate>
+      <pubDate>Tue, 21 Nov 2017 16:49:57 -0700</pubDate>
       
       <guid>/tags/packages/</guid>
       <description></description>
@@ -68,7 +68,7 @@
     <item>
       <title>R</title>
       <link>/tags/r/</link>
-      <pubDate>Fri, 20 Oct 2017 09:00:57 -0700</pubDate>
+      <pubDate>Tue, 21 Nov 2017 16:49:57 -0700</pubDate>
       
       <guid>/tags/r/</guid>
       <description></description>
@@ -98,6 +98,15 @@
       <pubDate>Thu, 01 Jun 2017 21:49:57 -0700</pubDate>
       
       <guid>/tags/travis-ci/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Website</title>
+      <link>/tags/website/</link>
+      <pubDate>Tue, 21 Nov 2017 16:49:57 -0700</pubDate>
+      
+      <guid>/tags/website/</guid>
       <description></description>
     </item>
     

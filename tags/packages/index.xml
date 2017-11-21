@@ -6,10 +6,19 @@
     <description>Recent content in Packages on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 11 Aug 2017 16:49:57 -0700</lastBuildDate>
+    <lastBuildDate>Tue, 21 Nov 2017 16:49:57 -0700</lastBuildDate>
     
 	<atom:link href="/tags/packages/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Getting Down with pkgdown</title>
+      <link>/2017/11/21/getting-down-with-pkgdown/</link>
+      <pubDate>Tue, 21 Nov 2017 16:49:57 -0700</pubDate>
+      
+      <guid>/2017/11/21/getting-down-with-pkgdown/</guid>
+      <description>pkgdown is an incredibly powerful tool for building beautiful websites for R packages. With pkgdown and services like GitHub Pages, deploying a package website is so simple and straightforward that I&amp;rsquo;m starting to see it as an essential part of writing a package. What&amp;rsquo;s more, I&amp;rsquo;ve found that the act of preparing a package website has led me to improve the package itself, particularly the readability and usefulness of its documentation.</description>
+    </item>
     
     <item>
       <title>One-Hour Package</title>
