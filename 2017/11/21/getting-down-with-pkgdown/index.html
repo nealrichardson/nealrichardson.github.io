@@ -135,7 +135,7 @@ ga('send', 'pageview');
 
 
 
-<meta itemprop="keywords" content="code,general,management,automation,dependencies,httptest,meta,packages,python,r,tdd,testing,travis-ci,website," />
+<meta itemprop="keywords" content="code,general,management,automation,cran,dependencies,httptest,meta,packages,python,r,tdd,testing,travis-ci,website," />
 
 <div id="hero">
     <h1 itemprop="headline">  Getting Down with pkgdown</h1>
@@ -156,7 +156,7 @@ ga('send', 'pageview');
 
 <p>I say &ldquo;incredibly&rdquo; powerful in the most literal sense&mdash;I could not believe how much <code>pkgdown</code> does with so little required of its user. <code>pkgdown</code> draws its power by relying on <a href="https://en.wikipedia.org/wiki/Convention_over_configuration">conventions</a> of how R packages are structured. Some of these conventions are inherent to R packages, particularly what CRAN deems as acceptable. Others, however, are less obvious. If you&rsquo;re closely tracking the <a href="http://r-pkgs.had.co.nz/">best practices for package development</a>, you&rsquo;re may be following most of these conventions already. But best practices evolve, and if you&rsquo;re adding <code>pkgdown</code> to a package that is a year or two old, you may find that you need to tweak some details to make it work smoothly.</p>
 
-<p>This post distills my experiences in setting up a few pkgdown sites recently and exposes some of the features of <code>pkgdown</code> that I discovered along the way. While <code>pkgdown</code> does have basic documentation, whenever I hit something that didn&rsquo;t work quite like I expected, or if I wanted to move beyond the default behavior, I found that the best way to figure out what was happening was to read the source. My intent here is to capture what I learned <a href="http://catb.org/jargon/html/R/RTFS.html">RTFS&rsquo;ing</a>, including links to the relevant source code, and share with you (and with my future self, who surely will have forgotten all of this).</p>
+<p>This post distills my experiences in setting up a <a href="http://enpiar.com/r/httptest/">few</a> <a href="http://enpiar.com/r/httpcache/">pkgdown</a> <a href="http://crunch.io/r/crplyr/">sites</a> recently and exposes some of the features of <code>pkgdown</code> that I discovered along the way. While <code>pkgdown</code> does have basic documentation, whenever I hit something that didn&rsquo;t work quite like I expected, or if I wanted to move beyond the default behavior, I found that the best way to figure out what was happening was to read the source. My intent here is to capture what I learned <a href="http://catb.org/jargon/html/R/RTFS.html">RTFS&rsquo;ing</a>, including links to the relevant source code, and share with you (and with my future self, who surely will have forgotten all of this).</p>
 
 <h1 id="1-install-pkgdown">1. Install <code>pkgdown</code></h1>
 
@@ -360,6 +360,8 @@ vignette: &gt;
     <hr>
     <ul>
       
+      
+        <li><a href="/2017/11/21/back-to-the-future/">Back to the Future</a> &ndash; 4 minutes
       
         <li><a href="/2017/10/20/httptest-2.3.2-released/">httptest 2.3.2 Released</a> &ndash; 3 minutes
       
