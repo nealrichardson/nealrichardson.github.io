@@ -136,10 +136,11 @@ This turns
 
 ```
 OMG.R_isFun <- function () {
-    return(data.frame(
+    data.frame(
         snake_case = c("A", "A_B", "ABC", NA),
         stringsAsFactors = TRUE
-    )$snake[-1])
+    ) -> data.frame
+    data.frame[, , drop = FALSE]$snake[-1]
 }
 ```
 
@@ -147,10 +148,11 @@ into something like
 
 ```r
 OMG.R_isFun <- function () {
-    return(data.frame(
+    data.frame(
         snake_case = c("A", "A_B", "ABC", NA),
         stringsAsFactors = TRUE
-    )$snake[-1])
+    ) -> data.frame
+    data.frame[, , drop = FALSE]$snake[-1]
 }
 ```
 
