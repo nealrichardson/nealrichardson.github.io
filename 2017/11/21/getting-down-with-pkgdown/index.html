@@ -131,7 +131,7 @@ ga('send', 'pageview');
 
 
 <meta itemprop="dateModified" content="2017-11-21T16:49:57-07:00" />
-<meta itemprop="wordCount" content="2548">
+<meta itemprop="wordCount" content="2562">
 
 
 
@@ -279,20 +279,22 @@ vignette: &gt;
 <p>This turns</p>
 
 <pre><code>OMG.R_isFun &lt;- function () {
-    return(data.frame(
+    data.frame(
         snake_case = c(&quot;A&quot;, &quot;A_B&quot;, &quot;ABC&quot;, NA),
         stringsAsFactors = TRUE
-    )$snake[-1])
+    ) -&gt; data.frame
+    data.frame[, , drop = FALSE]$snake[-1]
 }
 </code></pre>
 
 <p>into something like</p>
 
 <pre><code class="language-r">OMG.R_isFun &lt;- function () {
-    return(data.frame(
+    data.frame(
         snake_case = c(&quot;A&quot;, &quot;A_B&quot;, &quot;ABC&quot;, NA),
         stringsAsFactors = TRUE
-    )$snake[-1])
+    ) -&gt; data.frame
+    data.frame[, , drop = FALSE]$snake[-1]
 }
 </code></pre>
 
