@@ -7,11 +7,6 @@
   </url>
   
   <url>
-    <loc>/2017/11/21/back-to-the-future/</loc>
-    <lastmod>2017-11-21T16:49:57-07:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/2017/11/21/getting-down-with-pkgdown/</loc>
     <lastmod>2017-11-21T16:49:57-07:00</lastmod>
   </url>
@@ -75,12 +70,6 @@
   
   <url>
     <loc>/categories/code/</loc>
-    <lastmod>2017-11-21T16:49:57-07:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/cran/</loc>
     <lastmod>2017-11-21T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
