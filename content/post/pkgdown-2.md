@@ -1,59 +1,100 @@
 ---
-title: "Integrating a pkgdown Site with Your Personal Site"
+title: "Integrating pkgdown with Your Personal Website"
 description: ""
-date: "2017-12-10T16:49:57-07:00"
+date: "2017-12-16T16:49:57-07:00"
 categories: ["code"]
-tags: ["R", "packages", "website"]
+tags: ["R", "packages", "website", "hugo", "blogdown"]
 draft: true
-images: []
+images: ["http://enpiar.com/img/css_is_awesome_mug.jpg"]
 ---
 
 Publishing a website for your R package is simple with 'pkgdown'. [As I recently discussed](http://enpiar.com/2017/11/21/getting-down-with-pkgdown/), you can build a basic site and host it on GitHub Pages with just a handful of commands and clicks.
 
 That's a great start, but why stop there? If you have a personal website or blog, it would be nice to have your package page mesh with it---that is, it should fit with your "brand". Your personal site has a style (font, color, layout, etc.), and ideally your pkgdown site should match it. If you have a custom domain name for your website, it would be great to serve your pkgdown site under the same domain, rather than the default `username.github.io/pkgname` GitHub Pages convention. And if you have more than one R package with a website, they should all have a coherent presentation.
 
-All of this is possible with `pkgdown`, and while it requires getting your hands a little dirtier in code, it's not terribly challenging. Below, I'll walk through my experience doing this with [my personal packages](http://enpiar.com/r/) and [at work](http://crunch.io/r/). The general approach is that we will (1) add custom CSS to the pkgdown site to make it appear like our personal site, and then (2) copy the built pkgdown site into the source for our personal site.
+All of this is possible with `pkgdown`, and while it requires getting your hands a little dirtier in code, it's not terribly challenging. Below, I'll walk through my experience doing this with [my personal packages](http://enpiar.com/r/) and [at work](http://crunch.io/r/).
 
 A caveat: IANAWD (I am not a web developer). I can't claim that this is the "right" way to do any of this. All I can say is that it worked for me, and the code is minimally invasive.
 
 # Basics of customizing pkgdown
 
-`pkgdown` provides several ways for customizing the appearance of the built site. First, you can provide the name of a [bootswatch](https://bootswatch.com/) template in your `_pkgdown.yml`, [like this](https://github.com/hadley/pkgdown/blob/081639735104a03c01527f568a99f0ef7351433d/_pkgdown.yml#L3-L5) and that will reskin the site. This is a good place to start.
+`pkgdown` provides several ways for customizing the appearance of the built site. First, you can provide the name of a [bootswatch](https://bootswatch.com/) template in your `_pkgdown.yml`, [like this](https://github.com/hadley/pkgdown/blob/081639735104a03c01527f568a99f0ef7351433d/_pkgdown.yml#L3-L5), and that will reskin the site. This is a good place to start.
 
-{{< figure src="/img/css_is_awesome_mug.jpg" class="floating-right halfwidth" attr="Truth" attrlink="https://www.zazzle.com/css_is_awesome_mug-168113658720373401">}}
-
-For finer-grained control, you can put any custom CSS you want in a `pkgdown/extra.css` file, and it will override any other styles on the page (provided that you have an appropriately specific selector---more below). To explore and interactively tweak the CSS on the page, I like to open up the dev console in the browser and use trial and error to find the right appearance, then copy into `extra.css`. Here's some references on how to use the browser dev tools in [Chrome](https://developers.google.com/web/tools/chrome-devtools/inspect-styles/) and [Firefox](https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector/How_to/Examine_and_edit_CSS).
+For finer-grained control, you can put any custom CSS you want in a `pkgdown/extra.css` file, and it will override any other styles on the page (provided that you have an appropriately specific selector---more below).
 
 For even more custom rendering, you could supply alternate HTML templates, as described [here](https://github.com/hadley/pkgdown/blob/081639735104a03c01527f568a99f0ef7351433d/R/build.r#L119-L139). This may be individual template files, or even a template package, which is what the [tidyverse packages](https://github.com/tidyverse/tidytemplate) do. However, the docs say "These settings are currently recommended for advanced users only," which I interpret to mean that if your name is not Hadley, beware.
 
-From my experience, you can get pretty far with just adding CSS over the existing templates, so it's probably not worth wading into the HTML templates.
+From my experience, you can get pretty far with just adding CSS over the existing templates, so it's probably not worth wading into the HTML templates. I'll discuss my experience adding CSS to `pkgdown` below.
 
 # Integrating with your site
 
-
+The general approach is that we will (1) add custom CSS to the pkgdown site to make it appear like our personal site, and then (2) copy the built pkgdown site into the source for our personal site, so that when we deploy our personal site, our pkgdown site goes with it.
 
 ## Consistent branding
 
-css (import url, custom stuff to make the class names match (could put that a few places)
+To get our website styles to match, we first bring in the CSS from our personal site to our pkgdown site, and then we do some fine tuning to make sure that the styles we want match the elements on the page. The first step is very straightforward: CSS has an `@import` statement that lets you dynamically load a CSS file from within another. No copy-and-paste needed---just need the URL to point at.
+
+For my personal site, I saw on its `index.html` that there were several `.css` files it loaded. It turned out that two of them were most useful: one had the font declarations, and the other all of the custom styles I had added on top of the base theme (the equivalent to `pkgdown/extra.css`, but for Hugo). I added imports for those two files into my `extra.css`:
 
 ```css
 @import url("http://enpiar.com/css/font.css");
 @import url("http://enpiar.com/css/custom.css");
 ```
 
-specific selectors
+That got the basics like font and some colors. If my personal site had been using a Bootstrap theme (as `pkgdown` does), I may have been closer to done just with those imports. Because the CSS class names would have been consistent between the two sites (both using the Bootstrap framework), the right styles would have been applied.
+
+Instead, I had to do some exploration of the pkgdown site markup, figure out how to identify elements on the page there, and then add CSS classes to `pkgdown/extra.css` (after the `@import` statements). These styles overrode the defaults in `pkgdown` or Bootstrap with styles that matched my personal site. In a few cases (notably, the navbar), it was easier (and more visually appealing) to edit the style of my personal site to make it align more closely with the pkgdown site.
+
+This styling involved a bit of exploration and iteration. To examine and interactively tweak the CSS on the page, I like to open up the dev console in the browser and use trial and error to find the right appearance, then copy into `extra.css`. Here's some references on how to use the browser dev tools in [Chrome](https://developers.google.com/web/tools/chrome-devtools/inspect-styles/) and [Firefox](https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector/How_to/Examine_and_edit_CSS).
+
+{{< figure src="/img/css_is_awesome_mug.jpg" class="floating-left halfwidth" attr="Truth" attrlink="https://www.zazzle.com/css_is_awesome_mug-168113658720373401">}}
+
+As for how to use CSS, Google around. I'm not the one to teach good CSS skills. From an attempt of mine at making a passable website template at work:
+
+> &lt;npr&gt; now it’s just getting worse
+
+> &lt;mike&gt; welcome to css!
+
+My approach for learning how to make something look decent on the web is finding examples I like on other websites, opening up the browser inspector, seeing what styles are applied there, and then turning on and off the styles in the inspector to see what exactly they do. Then copy what worked.
+
+That said, I didn't have to do any advanced CSS to make the sites line up. [I didn't have to add much CSS at all](https://github.com/nealrichardson/httptest/blob/39da46541306d79f14fa9bd4d6401b932f8bd7e2/pkgdown/extra.css), and most of what is there is basic font size/weight definitions to match the personal site style---and in some cases to deviate from it slightly in order to keep the pkgdown site looking sharp. Stuff like this:
+
+```css
+body {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    font-size: 19px;
+    font-weight: 200;
+}
+```
+
+The trickiest parts were finding the right selector to specify to override some Bootstrap theme defaults, but that could usually just be copied straight from the browser inspector.
+
+{{< figure src="/img/browser-inspector.png" class="centered-image bordered-image">}}
 
 ## Site header
 
-can add to your pkgdown header common nav
+[In my previous post](http://enpiar.com/2017/11/21/getting-down-with-pkgdown/), I discussed how you can add links to anything you want to your pkgdown site navbar by editing the `_pkgdown.yml`. You could add links to parts of your personal site, even arrange it to mirror how your personal site organizes header links.
 
-(http://enpiar.com/2017/11/21/getting-down-with-pkgdown/)
+I personally didn't do much make the personal site and pkgdown site navbars be the same. I wanted to keep the standard navbar arrangement (Get Started, Reference, Articles, News) for the pkgdown site and didn't want that on the personal site, so I just worked to make the style consistent even if the links weren't.
+
+The one thing I did do add was a link back to the personal site, using the "home" icon and placing it at top right, next to the usual GitHub link:
+
+```yaml
+right:
+- icon: fa-github fa-lg
+  href: https://github.com/nealrichardson/httptest
+- icon: fa-home fa-lg
+  href: http://enpiar.com
+```
 
 ## Add to your site
 
 Both of the websites I've integrated pkgdown sites with are built by [Hugo](http://gohugo.io/): one via [blogdown](https://bookdown.org/yihui/blogdown/) and one not, so the process I'll describe is oriented to how Hugo works. I can't speak to how you'd do this with Jekyll or other static-site generators, but I would imagine that something similar would work there.
 
-Hugo uses a [folder named "static"](https://gohugo.io/content-management/static-files/#readout) for containing extra CSS, JavaScript, and image files. A file put in e.g. `static/css/custom.css` in the source code will be included at `css/custom.css` in the built site. We can exploit this feature and copy our built pkgdown site wholesale into the `static` directory, so when our Hugo site is built ([automated](http://enpiar.com/2017/06/01/building-a-blogdown-site-with-travis-ci/), [of course](http://crunch.io/dev/blog/building-the-blog-on-travis/)).
+Hugo uses a [folder named "static"](https://gohugo.io/content-management/static-files/#readout) for containing extra CSS, JavaScript, and image files. A file put in e.g. `static/css/custom.css` in the source code will be included at `css/custom.css` in the built site. _We can exploit this feature and copy our built pkgdown site wholesale into the `static` directory_, so when our Hugo site is built and deployed ([automated](http://enpiar.com/2017/06/01/building-a-blogdown-site-with-travis-ci/), [of course](http://crunch.io/dev/blog/building-the-blog-on-travis/)), our pkgdown site is too.
+
+Assume you have your Hugo website repository checked out in a directory called `mysite`, alongside your R package repository, and you want to host your pkgdown site at `yourdomain.com/r/mypkg`, this would build the site and insert it in the right location:
 
 ```bash
 R -e 'pkgdown::build_site()'
@@ -61,9 +102,19 @@ rm -rf ../mysite/static/r/mypkg
 cp -r docs/. ../mysite/static/r/mypkg
 ```
 
-build and put in static/ dir; add link or page that links to it in the hugo site
+You should `rm` the old version of the site before you `cp` in the new, just so you get a clean build every time (though of course you wouldn't need to `rm` the first time).
+
+If you don't want to shell out to do this, you can, of course, accomplish the building and moving from within R:
+
+```r
+path <- "../mysite/static/r/mypkg"
+unlink(path, recursive=TRUE)
+pkgdown::build_site(path=path)
+```
 
 # Handling multiple packages
+
+I have several R packages and I'd like them all to have consistent style. At first, I thought that that's a problem that not many people have and thus not worth discussing here: most R users don't write packages at all, let alone multiple packages. But, looking at packages on CRAN using the [tools::CRAN_package_db()](https://www.rdocumentation.org/link/CRAN_package_db?package=tools) function, at the time of writing there are over 2,000 package maintainers with more than one package:
 
 ```r
 cran <- tools::CRAN_package_db()
@@ -72,31 +123,62 @@ table(m > 1)
 
 ## FALSE  TRUE
 ##  5151  2008
-
-head(sort(m, decreasing=TRUE))
-
-## Scott Chamberlain <myrmecocystus@gmail.com>
-##                                          65
-##          Dirk Eddelbuettel <edd@debian.org>
-##                                          52
-##           Jeroen Ooms <jeroen@berkeley.edu>
-##                                          33
-##         Hadley Wickham <hadley@rstudio.com>
-##                                          32
-##    Thomas J. Leeper <thosjleeper@gmail.com>
-##                                          31
-##       Gábor Csárdi <csardi.gabor@gmail.com>
-##                                          30
 ```
+
+If you were to include packages that are hosted elsewhere (Bioconductor, GitHub, etc.), that number would be higher. So, for those thousands of you out there with multiple packages to style and incorporate into your website, here's how I did it.
 
 ## CSS
 
-The CSS part is trivial for every package after your first one: import url from your first site.
+The CSS part is trivial for every package after your first one: `@import url` from your first site's `extra.css`. You've worked out all of the imports, classes, and styles there, so bring it over to your new pkgdown site.
 
-Again, IANAWD, and this approach
+For example, the second pkgdown site I did was for [httpcache](http://enpiar.com/r/httpcache), and its `pkgdown/extra.css` is just
+
+```css
+@import url("http://enpiar.com/r/httptest/extra.css");
+```
+
+that is, the `extra.css` file from `httptest`, the first one I built. Again, IANAWD, but this approach was uncomplicated for me---and dead simple.
 
 ## Site directory
 
-# Using Travis-CI
+As you get more code and packages on your website, it's good to provide links to them from the rest of the site. You can achieve this by customizing the navbar in all of your pkgdown sites and your main website, but it may also be nice to have index-like page listing your packages. In my case, because I had placed my pkgdown sites in an `r` directory (http://enpiar.com/r/httptest, http://enpiar.com/r/httpcache), the URL structure implied that http://enpiar.com/r/ would exist.
 
-(make its own blog post?)
+We can again exploit a feature of Hugo to create this index page. Hugo's [content management](http://gohugo.io/content-management/organization/) works by organizing pages within "sections", i.e. directories. Each section can have an `_index.md` file that provides content for the index page of the section, regardless of how many other pages are in the section.
+
+So, I [created a `content/r/_index.md` page](https://raw.githubusercontent.com/nealrichardson/nealrichardson.github.io/a4d4b59caf1908df980413bd317bd7522efc4bbf/content/r/_index.md) with some Markdown content, containing links to the pkgdown sites and some other work. It doesn't matter that `/r/httptest` doesn't exist in the Hugo section (instead, it's in `static/`)---the links work.
+
+To make sure this renders correctly, you'll want to make sure that the default `list.html` template---the one that index pages use---in your Hugo theme includes `{{.Content}}`, which is the Markdown body. Many themes don't because the standard use of an index page is to list the pages within the section, which looks like this:
+
+```html
+<ul id="posts">
+{{ range .Paginator.Pages.ByWeight }}
+    {{ partial "page-summary" . }}
+{{ end }}
+    <section>{{ partial "pagination" .}}</section>
+</ul>
+```
+
+My theme didn't include `.Content` in the default template, so I overrode it for the `r/` section. To do this, the easiest way to start is to copy the default from your theme (found at the path `themes/your-theme-name/layouts/_default/list.html`) to `layouts/r/list.html` and then tweak it. Delete the list of pages from the template and add in a `<p>{{.Content}}</p>` or something, adjusting as desired.
+
+[Here's mine](https://raw.githubusercontent.com/nealrichardson/nealrichardson.github.io/a4d4b59caf1908df980413bd317bd7522efc4bbf/layouts/r/list.html#). I added one other fun element to it: a list of recent blog posts about R. This template block does that:
+
+```html
+<h3>Recent R blog posts:</h3>
+<ul>
+{{ range first 5 (where .Site.Pages ".Params.tags" "intersect" .Params.feed_tags) }}
+    <li><a href="{{ .Permalink }}">{{ .Title | emojify }}</a>
+{{ end }}
+</ul>
+```
+
+In addition to not being a web developer, I am also not a Hugo expert, so I can't justify all of the specifics of why certain things are quoted or in parentheses; this was the fruit of trial and (much) error (and googling). Basically, it looks at `.Site.Pages`, that is, all pages and not those from the current "section" (which is empty), filters them based on their "tags", and displays links to the first five of them. The tag filtering compares the `tags: []` list from the front matter of the blog posts with the `feed_tags` front matter field I added to `content/r/_index.md`:
+
+```yaml
+feed_tags = ["r", "R"]
+```
+
+For some reason (my Hugo ignorance, no doubt), I didn't figure out how to just inline that `["r", "R"]` into the `where` statement, but it worked when reading from the index page front matter.
+
+The result looks like [this](http://enpiar.com/r/):
+
+{{< figure src="/img/enpiar-r-index.png" class="centered-image bordered-image">}}

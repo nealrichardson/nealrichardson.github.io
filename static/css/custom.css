@@ -205,6 +205,11 @@ figcaption p {
 
 .centered-image img {
     margin: 0 auto;
+    max-width: 90%
+}
+
+.bordered-image img {
+    border: 1px solid #565656;
 }
 
 #top-brand img {
