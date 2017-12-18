@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Website on A Blog</title>
-    <link>/tags/website/</link>
-    <description>Recent content in Website on A Blog</description>
+    <title>Blogdown on A Blog</title>
+    <link>/tags/blogdown/</link>
+    <description>Recent content in Blogdown on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 18 Dec 2017 16:49:57 -0700</lastBuildDate>
     
-	<atom:link href="/tags/website/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/blogdown/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,15 +19,6 @@
       <guid>/2017/12/18/integrating-pkgdown-with-your-personal-website/</guid>
       <description>Publishing a website for your R package is simple with pkgdown. As I recently discussed, you can build a basic site and host it on GitHub Pages with just a handful of commands and clicks.
 That&amp;rsquo;s a great start, but why stop there? If you have a personal website or blog, it would be nice to have your package page mesh with it&amp;mdash;that is, it should fit with your &amp;ldquo;brand&amp;rdquo;.</description>
-    </item>
-    
-    <item>
-      <title>Getting Down with pkgdown</title>
-      <link>/2017/11/21/getting-down-with-pkgdown/</link>
-      <pubDate>Tue, 21 Nov 2017 16:49:57 -0700</pubDate>
-      
-      <guid>/2017/11/21/getting-down-with-pkgdown/</guid>
-      <description>pkgdown is an incredibly powerful tool for building beautiful websites for R packages. With pkgdown and services like GitHub Pages, deploying a package website is so simple and straightforward that I&amp;rsquo;m starting to see it as an essential part of writing a package. What&amp;rsquo;s more, I&amp;rsquo;ve found that the act of preparing a package website has led me to improve the package itself, particularly the readability and usefulness of its documentation.</description>
     </item>
     
     <item>

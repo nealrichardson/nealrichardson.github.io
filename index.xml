@@ -6,10 +6,20 @@
     <description>Recent content on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 21 Nov 2017 16:49:57 -0700</lastBuildDate>
+    <lastBuildDate>Mon, 18 Dec 2017 16:49:57 -0700</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Integrating &#39;pkgdown&#39; with Your Personal Website</title>
+      <link>/2017/12/18/integrating-pkgdown-with-your-personal-website/</link>
+      <pubDate>Mon, 18 Dec 2017 16:49:57 -0700</pubDate>
+      
+      <guid>/2017/12/18/integrating-pkgdown-with-your-personal-website/</guid>
+      <description>Publishing a website for your R package is simple with pkgdown. As I recently discussed, you can build a basic site and host it on GitHub Pages with just a handful of commands and clicks.
+That&amp;rsquo;s a great start, but why stop there? If you have a personal website or blog, it would be nice to have your package page mesh with it&amp;mdash;that is, it should fit with your &amp;ldquo;brand&amp;rdquo;.</description>
+    </item>
     
     <item>
       <title>Getting Down with pkgdown</title>

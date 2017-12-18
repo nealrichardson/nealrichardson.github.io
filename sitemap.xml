@@ -7,6 +7,11 @@
   </url>
   
   <url>
+    <loc>/2017/12/18/integrating-pkgdown-with-your-personal-website/</loc>
+    <lastmod>2017-12-18T16:49:57-07:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/2017/11/21/getting-down-with-pkgdown/</loc>
     <lastmod>2017-11-21T16:49:57-07:00</lastmod>
   </url>
@@ -53,7 +58,7 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2017-11-21T16:49:57-07:00</lastmod>
+    <lastmod>2017-12-18T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -64,13 +69,19 @@
   </url>
   
   <url>
+    <loc>/tags/blogdown/</loc>
+    <lastmod>2017-12-18T16:49:57-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/categories/code/</loc>
-    <lastmod>2017-11-21T16:49:57-07:00</lastmod>
+    <lastmod>2017-12-18T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -93,6 +104,12 @@
   </url>
   
   <url>
+    <loc>/tags/hugo/</loc>
+    <lastmod>2017-12-18T16:49:57-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/categories/management/</loc>
     <lastmod>2017-07-04T16:49:57-07:00</lastmod>
     <priority>0</priority>
@@ -106,13 +123,13 @@
   
   <url>
     <loc>/tags/packages/</loc>
-    <lastmod>2017-11-21T16:49:57-07:00</lastmod>
+    <lastmod>2017-12-18T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2017-11-21T16:49:57-07:00</lastmod>
+    <lastmod>2017-12-18T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -124,7 +141,7 @@
   
   <url>
     <loc>/tags/r/</loc>
-    <lastmod>2017-11-21T16:49:57-07:00</lastmod>
+    <lastmod>2017-12-18T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -154,7 +171,7 @@
   
   <url>
     <loc>/tags/website/</loc>
-    <lastmod>2017-11-21T16:49:57-07:00</lastmod>
+    <lastmod>2017-12-18T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   

@@ -149,22 +149,17 @@ blockquote[itemprop="description"] {
 
 .h1, h1 {
     font-size: 26px;
-    /*color: #565656;*/
-    font-weight: 100;
+    font-weight: 400;
     padding-top: 9px;
 }
 .h2, h2 {
     font-size: 24px;
-    /*color: #107f65;*/
 }
 .h3, h3 {
     font-size: 19px;
-    /*color: #732082;*/
 }
 .h4, h4 {
     font-size: 16px;
-    /*color: #888;*/
-    /*font-weight: bold;*/
 }
 
 p+h2, p+h3, p+h4 {
@@ -205,6 +200,11 @@ figcaption p {
 
 .centered-image img {
     margin: 0 auto;
+    max-width: 90%
+}
+
+.bordered-image img {
+    border: 1px solid #565656;
 }
 
 #top-brand img {
