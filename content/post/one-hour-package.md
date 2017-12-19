@@ -24,7 +24,7 @@ We'll need a few R packages to move forward. A couple merit highlighting here; t
 
 Next, we'll need some tools for writing tests. [Testing is especially important](https://t.co/IljRyeTIsj) when writing packages. The [testthat](http://testthat.r-lib.org/) package is the current standard for R package test suites, but it lacks some useful tools for working with remote APIs. To make it easy to test API packages, I wrote [httptest](http://enpiar.com/r/httptest/), which extends `testthat`. As we'll see below, `httptest` allowed me to get test coverage for all of the lines of code I wrote and enabled me to run the tests quickly and without complication on public continuous-integration services (Travis-CI and Appveyor).
 
-## Step 1: Set up the package skeleton
+# Step 1: Set up the package skeleton
 
 The first step is to set up some basic scaffolding for the R package. Base R has a `package.skeleton` function that I don't find particularly useful. There are some helpers in the `devtools` package as well, but for simplicity, I like the [skeletor](https://github.com/nealrichardson/skeletor) package skeleton generator. With just one line of code, it sets everything up for using GitHub, Travis-CI, Codecov.io, and Appveyor, gives you a basic test suite setup, and includes helpful instructions for things like how to write a package "Description" that will pass muster with CRAN.
 
@@ -34,7 +34,7 @@ So, make the skeleton and open up the files in your preferred editor or IDE:
     cd useRsnap
     atom .
 
-## Step 2: Add general API wrappers
+# Step 2: Add general API wrappers
 
 Our next step is to create [R/api.R](https://github.com/nealrichardson/useRsnap/blob/8c2662de5e726ad99e5985b92b97ef5b092c5e0a/R/api.R) and drop in a few boilerplate functions, which we'll extend as needed. It's brief: only 33 lines long including comments, with five functions, three of which are one-liners. The core functions, through which every request and response for every API endpoint will go, include
 
@@ -47,13 +47,13 @@ By centralizing this logic, it will be cheaper to implement each new API endpoin
 
 Since these functions build in the configuration needed to make requests of the API, I'll describe them in more detail in the next section.
 
-## Step 3: Work out authentication and other configuration
+# Step 3: Work out authentication and other configuration
 
 Most APIs require authentication; many also need a project ID or similar to be specified in the request as well. We need to determine what those configuration parameters are, how package users will supply them, and how to incorporate them into requests.
 
 If the API is well documented, it will be clear what parameters a user needs to supply and how you should supply them. Particularly friendly APIs also give you an easy way to create an API token with limited authorization scope, which you can pass in with your requests from R.
 
-### Don't try this at home
+## Don't try this at home
 
 In this case, with no documentation available and no official way to request an API token, I had to do some guessing. The project ID was easy to identify—it was even in the browser URL—but authentication was trickier. Watching the network panel in the inspector of my web browser when I used the Usersnap web app, I looked at the requests made to see what they were doing and how they included authentication. It was clear that authentication was being sent in a cookie, but there were many cookies being sent with each request, so it was unclear which was the operative one.
 
@@ -61,7 +61,7 @@ Ultimately, I watched the inspector closely as I logged in again and saw that my
 
 A better solution might have been to implement the same authentication requests that the browser made, so that you'd essentially prompt your R user for a username and password and authenticate the same way. But, I was using Google Account OAuth with Usersnap, and while that's possible to do with `httr`, it wasn't something I wanted to mess with—not with the limited time I had for writing the API client. Perhaps later.
 
-### How should users supply their credentials to the R session?
+## How should users supply their credentials to the R session?
 
 Once we know what credentials are required to authenticate, we need to determine how package users will provide them. There are a few alternatives: set them as `options` and thereby be able to specify them in your `.Rprofile`; set them as environment variables; or some configuration file format. Security-wise, there's really not much difference. And, from the perspective of bootstrapping a new package, it's not an architecturally significant decision: it's easy to support multiple ways of specifying these parameters should you decide you want to do something different in the future. So, just pick one.
 
@@ -74,7 +74,7 @@ options(usersnap.project="some-project-slug",
 
 sets them, either in your current session, or for all sessions if you put it in your `.Rprofile`.
 
-### Including configuration in requests
+## Including configuration in requests
 
 The next step is to integrate these parameters into our boilerplate functions. In this API, it appeared that the "project" was built into the request URLs, so the URL-constructing utility looks like:
 
@@ -136,7 +136,7 @@ Note that this is mostly boilerplate code at this point. The only real customiza
 
 While we don't strictly need a generic requesting function and a generic response handler to start working on our first methods, they will help us as we go forward. They give us a place to put our common API logic, so the cost of adding each additional API endpoint wrapper stays low. Plus, they help encapsulate our code and keep the complexities of the API and of HTTP separated from our R object space as much as possible.
 
-## Step 4: Pick an endpoint
+# Step 4: Pick an endpoint
 
 Now, with the core infrastructure in place, let's pick our first endpoint and write a wrapper for it. The one I was most interested in was the "reports" list so that I could get a catalog of recently opened issues. This is the first view you see when you open up a project in Usersnap's web interface.
 
@@ -188,7 +188,7 @@ Note that this test says there's only 3 records, not the 10 from my fixture. To 
 
 We can add a few more tests from here, but we're basically done with code—we have a function that returns a list of report entries in our R session. That's enough of an API wrapper to start writing my daily cron job summarizing our support tickets.
 
-## Step 5: Document and wrap up
+# Step 5: Document and wrap up
 
 At this point, we've set up the skeleton for the package, worked out authentication and configuration for the API, added the core functions through which all requests will go, and added the first method that we're going to expose to our package users. It's been about 40 minutes at this point. We'll spend the next 20 minutes on documentation and polishing.
 

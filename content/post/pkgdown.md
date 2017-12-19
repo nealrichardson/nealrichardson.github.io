@@ -12,7 +12,7 @@ images: []
 
 I say "incredibly" powerful in the most literal sense---I could not believe how much `pkgdown` does with so little required of its user. `pkgdown` draws its power by relying on [conventions](https://en.wikipedia.org/wiki/Convention_over_configuration) of how R packages are structured. Some of these conventions are inherent to R packages, particularly what CRAN deems as acceptable. Others, however, are less obvious. If you're closely tracking the [best practices for package development](http://r-pkgs.had.co.nz/), you're may be following most of these conventions already. But best practices evolve, and if you're adding `pkgdown` to a package that is a year or two old, you may find that you need to tweak some details to make it work smoothly.
 
-This post distills my experiences in setting up a few pkgdown sites recently and exposes some of the features of `pkgdown` that I discovered along the way. While `pkgdown` does have basic documentation, whenever I hit something that didn't work quite like I expected, or if I wanted to move beyond the default behavior, I found that the best way to figure out what was happening was to read the source. My intent here is to capture what I learned [RTFS'ing](http://catb.org/jargon/html/R/RTFS.html), including links to the relevant source code, and share with you (and with my future self, who surely will have forgotten all of this).
+This post distills my experiences in setting up a [few](http://enpiar.com/r/httptest/) [pkgdown](http://enpiar.com/r/httpcache/) [sites](http://crunch.io/r/crplyr/) recently and exposes some of the features of `pkgdown` that I discovered along the way. While `pkgdown` does have basic documentation, whenever I hit something that didn't work quite like I expected, or if I wanted to move beyond the default behavior, I found that the best way to figure out what was happening was to read the source. My intent here is to capture what I learned [RTFS'ing](http://catb.org/jargon/html/R/RTFS.html), including links to the relevant source code, and share with you (and with my future self, who surely will have forgotten all of this).
 
 # 1. Install `pkgdown`
 
@@ -173,7 +173,7 @@ After this, whenever anyone (including yourself in another package) builds a pkg
 
 Finally, `pkgdown` does some fun things with your package's logo, if it has one. (Does an R package truly exist if it doesn't have hexagonal stickers?) For one, it will attempt to turn it into a favicon, the small image displayed next to the page title in your browser's tab. For another (again pending [this PR](https://github.com/hadley/pkgdown/pull/438) or available on [this fork/branch](https://github.com/nealrichardson/pkgdown/tree/dev)), it will use it as a preview image on Twitter/Slack/etc., as in:
 
-{{< figure src="/img/crunch-pkgdown-open-graph.png" >}}
+{{< figure src="/img/crunch-pkgdown-open-graph.png" class="centered-image">}}
 
 To include a logo, you can drop a `logo.png` file at the top level of your repository (alongside `DESCRIPTION` et al.), and don't forget to add it to your `.Rbuildignore`. `pkgdown` will [also](https://github.com/hadley/pkgdown/blob/ad1b1dfb12871919e06a2aa7e366ec0980af2714/R/build-logo.R#L28) look for a logo in the `man/figures` directory, but unless you have a compelling reason to put it there, I like it at the top level and excluded in `.Rbuildignore` so that the built package stays lighter---your R package users won't benefit from including the .png in the build.
 
