@@ -8,7 +8,7 @@ draft: false
 images: ["http://enpiar.com/img/css_is_awesome_mug.jpg"]
 ---
 
-Publishing a website for your R package is simple with [`pkgdown`](http://hadley.github.io/pkgdown/). [As I recently discussed](http://enpiar.com/2017/11/21/getting-down-with-pkgdown/), you can build a basic site and host it on GitHub Pages with just a handful of commands and clicks.
+Publishing a website for your R package is simple with [`pkgdown`](http://pkgdown.r-lib.org/). [As I recently discussed](http://enpiar.com/2017/11/21/getting-down-with-pkgdown/), you can build a basic site and host it on GitHub Pages with just a handful of commands and clicks.
 
 That's a great start, but why stop there? If you have a personal website or blog, it would be nice to have your package page mesh with it---that is, it should fit with your "brand". Your personal site has a style (font, color, layout, etc.), and ideally your pkgdown site should match it. If you have a custom domain name for your website, it would be great to serve your pkgdown site under the same domain, rather than the default `username.github.io/pkgname` GitHub Pages convention. And if you have more than one R package with a website, they should all have a coherent presentation.
 

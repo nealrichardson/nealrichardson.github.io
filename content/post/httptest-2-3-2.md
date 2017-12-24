@@ -7,7 +7,7 @@ tags: ["httptest", "R", "testing"]
 draft: false
 ---
 
-The 2.3.2 release of [httptest](https://enpiar.com/r/httptest/) has just been published on [CRAN](https://cran.r-project.org/package=httptest). Since the 2.0.0 release in June, several key additions have been made. See the [NEWS](https://enpiar.com/r/httptest/news/) for the full list. If you follow those links, you'll see the first new "feature": `httptest` now has a proper website, using the [pkgdown](http://hadley.github.io/pkgdown/) site generator!
+The 2.3.2 release of [httptest](https://enpiar.com/r/httptest/) has just been published on [CRAN](https://cran.r-project.org/package=httptest). Since the 2.0.0 release in June, several key additions have been made. See the [NEWS](https://enpiar.com/r/httptest/news/) for the full list. If you follow those links, you'll see the first new "feature": `httptest` now has a proper website, using the [pkgdown](http://pkgdown.r-lib.org/) site generator!
 
 In terms of functionality, the biggest change has been the addition of a framework for "redacting", or removing sensitive information like tokens and ids from test fixtures. While most API responses recorded by `capture_requests` wouldn't contain your authentication credentials---the default "simplified" behavior writes out only the JSON response bodies---I more than once had to edit files by hand to remove cookies and tokens. I even had to sanitize code pushed to GitHub that contained secret tokens and needed to reset API tokens elsewhere. After watching others struggle with the same issue, it was time to implement a solution.
 

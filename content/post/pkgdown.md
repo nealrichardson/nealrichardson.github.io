@@ -8,7 +8,7 @@ draft: false
 images: []
 ---
 
-[`pkgdown`](http://hadley.github.io/pkgdown/) is an incredibly powerful tool for building beautiful websites for R packages. With `pkgdown` and services like [GitHub Pages](https://pages.github.com/), deploying a package website is so simple and straightforward that I'm starting to see it as an essential part of writing a package. What's more, I've found that the act of preparing a package website has led me to improve the package itself, particularly the readability and usefulness of its documentation.
+[`pkgdown`](http://pkgdown.r-lib.org/) is an incredibly powerful tool for building beautiful websites for R packages. With `pkgdown` and services like [GitHub Pages](https://pages.github.com/), deploying a package website is so simple and straightforward that I'm starting to see it as an essential part of writing a package. What's more, I've found that the act of preparing a package website has led me to improve the package itself, particularly the readability and usefulness of its documentation.
 
 I say "incredibly" powerful in the most literal sense---I could not believe how much `pkgdown` does with so little required of its user. `pkgdown` draws its power by relying on [conventions](https://en.wikipedia.org/wiki/Convention_over_configuration) of how R packages are structured. Some of these conventions are inherent to R packages, particularly what CRAN deems as acceptable. Others, however, are less obvious. If you're closely tracking the [best practices for package development](http://r-pkgs.had.co.nz/), you're may be following most of these conventions already. But best practices evolve, and if you're adding `pkgdown` to a package that is a year or two old, you may find that you need to tweak some details to make it work smoothly.
 
@@ -26,7 +26,7 @@ If you need coffee-brewing inspiration, here's a suggestion:
 
 At this point, you could run `pkgdown::build_site()` and probably get a functioning website. In fact, give it a try and see what you get.
 
-Generally, you won't want to stop here. The first step in customizing your site is to create the YAML file that `pkgdown` uses for configuration: `_pkgdown.yml`. The package does provide some initial [template generating functions](http://hadley.github.io/pkgdown/reference/templates.html), but they don't actually create the .yml file---they print to the screen. We can solve that by using `sink()` to send the output to the file.
+Generally, you won't want to stop here. The first step in customizing your site is to create the YAML file that `pkgdown` uses for configuration: `_pkgdown.yml`. The package does provide some initial [template generating functions](http://pkgdown.r-lib.org/reference/templates.html), but they don't actually create the .yml file---they print to the screen. We can solve that by using `sink()` to send the output to the file.
 
 ```r
 library(pkgdown)
@@ -38,7 +38,7 @@ sink()
 
 You could throw `template_articles()`, the third template function, in there for good measure, if you've got multiple vignettes in your package and want to customize the display of `articles/index.html`. I personally didn't bother because by default, there is no link to that page anywhere that I can find.
 
-Now that you have a basic YAML file, you can start customizing it. The docs for [`build_site()`](http://hadley.github.io/pkgdown/reference/build_site.html) give an overview of what is possible, and you can get pretty far with trial-and-error and by looking at other `pkgdown` sites. The [site for pkgdown itself](https://github.com/hadley/pkgdown/blob/master/_pkgdown.yml) is a good place to start; [dplyr](https://github.com/tidyverse/dplyr/blob/master/_pkgdown.yml) has a more complex, customized one; my [httptest](https://github.com/nealrichardson/httptest/blob/master/_pkgdown.yml) package is somewhere in the middle.
+Now that you have a basic YAML file, you can start customizing it. The docs for [`build_site()`](http://pkgdown.r-lib.org/reference/build_site.html) give an overview of what is possible, and you can get pretty far with trial-and-error and by looking at other `pkgdown` sites. The [site for pkgdown itself](https://github.com/hadley/pkgdown/blob/master/_pkgdown.yml) is a good place to start; [dplyr](https://github.com/tidyverse/dplyr/blob/master/_pkgdown.yml) has a more complex, customized one; my [httptest](https://github.com/nealrichardson/httptest/blob/master/_pkgdown.yml) package is somewhere in the middle.
 
 The big thing you'll want to do is organize the "reference" (the help pages), grouping by topic and ordering them sensibly. [By default](https://github.com/hadley/pkgdown/blob/081639735104a03c01527f568a99f0ef7351433d/R/build-reference-index.R#L86), all exported, non-internal (that's `@keywords internal` in [roxygen](https://github.com/klutometis/roxygen)-speak) functions are included in the index, but you don't have to list them all. Any function you omit from the index in the YAML just won't appear in the index page, but it will still exist as a page on your site, so you can cross-reference to it.
 
@@ -78,7 +78,7 @@ If you have file names you want to make prettier---and if you have some autogene
 
 ## Facilitate autolinking
 
-One of the delightful features of `pkgdown` is that it automatically links and cross-references code across your website, including to other packages. [This page](http://hadley.github.io/pkgdown/articles/test/highlight.html) illustrates the autolinking in practice.
+One of the delightful features of `pkgdown` is that it automatically links and cross-references code across your website, including to other packages. [This page](http://pkgdown.r-lib.org/articles/test/highlight.html) illustrates the autolinking in practice.
 
 Functions noted like `fun()` or `?fun` get auto-linked; however, just writing `fun` doesn't generate a link. (No fun!) Prior to using `pkgdown`, I usually would just refer to a function by name, no `()`, so I found that I needed to go through my README.md and NEWS.md and massage them, adding the calling parentheses so that links would be generated.
 
@@ -164,7 +164,7 @@ When `pkgdown` links to functions in other packages, by default it constructs a 
 
 In order for this to work, you have to add your website URL in two places:
 
-1. `_pkgdown.yml`, under the `url:` field, as [documented](http://hadley.github.io/pkgdown/reference/build_site.html#yaml-config)
+1. `_pkgdown.yml`, under the `url:` field, as [documented](http://pkgdown.r-lib.org/reference/build_site.html#yaml-config)
 2. the package's `DESCRIPTION` file, under the `URL:` field; if you already have a URL there (say, to your package's GitHub repository), you can add a second URL to your pkgdown site, separated by a comma
 
 Then, if your package is on CRAN, submit a new release so that others who install your package will have the URL field reference. (Be sure to deploy your pkgdown site before submitting---`R CMD check` will warn that the URL does not exist and CRAN will reject your submission.)
