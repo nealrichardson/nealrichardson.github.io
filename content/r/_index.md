@@ -8,11 +8,13 @@ feed_tags = ["r", "R"]
 
 Here are a few R packages that I've published to [CRAN](https://cran.r-project.org/):
 
--   [httptest](/r/httptest/): A Test Environment for HTTP Requests in R
+-   [httptest](/r/httptest/): A Test Environment for HTTP Requests
 
 -   [httpcache](/r/httpcache/): Query Cache for HTTP Clients
 
--   [skeletor](https://github.com/nealrichardson/skeletor): An R Package Skeleton Generator
+-   [skeletor](https://github.com/nealrichardson/skeletor): A Package Skeleton Generator
+
+-   [pivotaltrackR](/r/pivotaltrackR/): A Client for the [Pivotal Tracker](https://www.pivotaltracker.com/) [API](https://www.pivotaltracker.com/help/api/rest/v5)
 
 -   [crunch, crplyr, crunchy](http://crunch.io/r/): Several packages to facilitate working with the [Crunch](http://crunch.io/) data platform.
 
