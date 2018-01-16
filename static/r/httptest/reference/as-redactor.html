@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return something that looks enough like an httr 'response' — fakeResponse • httptest</title>
+<title>Wrap a redacting expression as a proper function — as.redactor • httptest</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,14 +25,14 @@
 <script src="../pkgdown.js"></script>
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Return something that looks enough like an httr 'response' — fakeResponse" />
+<meta property="og:title" content="Wrap a redacting expression as a proper function — as.redactor" />
 
-<meta property="og:description" content="These functions allow mocking of HTTP requests without requiring an internet
-connection or server to run against. Their return shape is a 'httr'
-"response" class object that should behave like a real response generated
-by a real request." />
-
-
+<meta property="og:description" content="Redactors take a response as their first argument, and some take additional
+arguments: redact_headers(), for example, requires that you specify
+headers. This function allows you to take a simplified expression via a
+formula, similar to what purrr does, so that you can provide the function
+to capture_requests()." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -91,6 +91,9 @@ by a real request." />
       <a href="../articles/redacting.html">Redacting Sensitive Information</a>
     </li>
     <li>
+      <a href="../articles/vignettes.html">Using with Vignettes</a>
+    </li>
+    <li>
       <a href="../index.html#faq">FAQ</a>
     </li>
   </ul>
@@ -124,53 +127,42 @@ by a real request." />
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return something that looks enough like an httr 'response'</h1>
+    <h1>Wrap a redacting expression as a proper function</h1>
     </div>
 
     
-    <p>These functions allow mocking of HTTP requests without requiring an internet
-connection or server to run against. Their return shape is a 'httr'
-"response" class object that should behave like a real response generated
-by a real request.</p>
+    <p>Redactors take a <code>response</code> as their first argument, and some take additional
+arguments: <code>redact_headers()</code>, for example, requires that you specify
+<code>headers</code>. This function allows you to take a simplified expression via a
+formula, similar to what <code>purrr</code> does, so that you can provide the function
+to <code><a href='capture_requests.html'>capture_requests()</a></code>.</p>
     
 
-    <pre class="usage"><span class='fu'>fakeResponse</span>(<span class='no'>request</span>, <span class='kw'>verb</span> <span class='kw'>=</span> <span class='st'>"GET"</span>, <span class='kw'>status_code</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>headers</span> <span class='kw'>=</span> <span class='fu'>list</span>(),
-  <span class='kw'>content</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>as.redactor</span>(<span class='no'>fmla</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>request</th>
-      <td><p>An 'httr' <code>request</code>-class object. A character URL is also
-accepted, for which a fake request object will be created, using the <code>verb</code>
-argument as well. This behavior is deprecated.</p></td>
-    </tr>
-    <tr>
-      <th>verb</th>
-      <td><p>Character name for the HTTP verb. Default is "GET". This argument
-is deprecated; instead you should pass in a <code>request</code></p></td>
-    </tr>
-    <tr>
-      <th>status_code</th>
-      <td><p>Integer HTTP response status</p></td>
-    </tr>
-    <tr>
-      <th>headers</th>
-      <td><p>Optional list of additional response headers to return</p></td>
-    </tr>
-    <tr>
-      <th>content</th>
-      <td><p>If supplied, a JSON-serializable list that will be returned
-as response content with Content-Type: application/json. If no <code>content</code>
-is provided, and if the <code>status_code</code> is not 204 No Content, the
-<code>url</code> will be set as the response content with Content-Type: text/plain.</p></td>
+      <th>expr</th>
+      <td><p>Partial expression to turn into a function of <code>response</code></p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An 'httr' response class object.</p>
+    <p>A <code>function</code>.</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>For example, <code>as.redactor(~ redact_headers(., "X-Custom-Header"))</code> is equivalent
+to <code>function (response) redact_headers(response, "X-Custom-Header")</code>. This
+allows you to do
+<code><a href='set_redactor.html'>set_redactor(~ redact_headers(., "X-Custom-Header"))</a></code>.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p><code><a href='capture_requests.html'>capture_requests()</a></code></p>
     
 
   </div>
@@ -180,6 +172,10 @@ is provided, and if the <code>status_code</code> is not 204 No Content, the
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#see-also">See also</a></li>
           </ul>
 
   </div>

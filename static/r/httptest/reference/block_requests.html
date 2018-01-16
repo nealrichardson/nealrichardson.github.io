@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert a request to a mock file path — buildMockURL • httptest</title>
+<title>Block HTTP requests — block_requests • httptest</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,12 +25,12 @@
 <script src="../pkgdown.js"></script>
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Convert a request to a mock file path — buildMockURL" />
+<meta property="og:title" content="Block HTTP requests — block_requests" />
 
-<meta property="og:description" content="Requests are translated to mock file paths according to several rules that
-incorporate the request method, URL, query parameters, and body." />
-
-
+<meta property="og:description" content="This function intercepts HTTP requests made through httr and raises an
+informative error instead. It is what without_internet() does, minus the
+automatic disabling of mocking when the context finishes." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -89,6 +89,9 @@ incorporate the request method, URL, query parameters, and body." />
       <a href="../articles/redacting.html">Redacting Sensitive Information</a>
     </li>
     <li>
+      <a href="../articles/vignettes.html">Using with Vignettes</a>
+    </li>
+    <li>
       <a href="../index.html#faq">FAQ</a>
     </li>
   </ul>
@@ -122,76 +125,36 @@ incorporate the request method, URL, query parameters, and body." />
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert a request to a mock file path</h1>
+    <h1>Block HTTP requests</h1>
     </div>
 
     
-    <p>Requests are translated to mock file paths according to several rules that
-incorporate the request method, URL, query parameters, and body.</p>
+    <p>This function intercepts HTTP requests made through <code>httr</code> and raises an
+informative error instead. It is what <code><a href='without_internet.html'>without_internet()</a></code> does, minus the
+automatic disabling of mocking when the context finishes.</p>
     
 
-    <pre class="usage"><span class='fu'>buildMockURL</span>(<span class='no'>req</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"GET"</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>req</th>
-      <td><p>A <code>request</code> object, or a character "URL" to convert</p></td>
-    </tr>
-    <tr>
-      <th>method</th>
-      <td><p>character HTTP method. If <code>req</code> is a 'request' object,
-its request method will override this argument</p></td>
-    </tr>
-    </table>
-    
+    <pre class="usage"><span class='fu'>block_requests</span>()</pre>
+        
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A file path and name, with .json extension. The file may or may not
-exist: existence is not a concern of this function.</p>
+    <p>Nothing; called for its side effects.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>First, the URL is modified in two ways in order to allow it to map to a
-local file system. All mock files have the request protocol such as "http://"
-removed from the URL, and they also have a file extension appended. In an
-HTTP API, a "directory" itself is a resource,
-so the extension allows distinguishing directories and files in the file
-system. That is, a mocked <code>GET("http://example.com/api/")</code> may read a
-"example.com/api.json" file, while
-<code>GET("http://example.com/api/object1/")</code> reads "example.com/api/object1.json".</p>
-<p>The extension also gives information on content type. Two extensions are
-currently supported: (1) .json and (2) .R. JSON mocks can be stored in .json
-files, and when they are loaded by <code><a href='with_mock_API.html'>with_mock_API()</a></code>, relevant request
-metadata (headers, status code, etc.) are inferred. If your API doesn't
-return JSON, or if you want to simulate requests with other behavior (201
-Location response, or 400 Bad Request, for example), you can store full
-<code>response</code> objects in .R files that <code>with_mock_API</code> will <code>source</code> to load.
-Any request can be stored as a .R mock, but the .json mocks offer a
-simplified, more readable alternative. (<code><a href='capture_requests.html'>capture_requests()</a></code> will record
-simplified .json files where appropriate and .R mocks otherwise by default.)</p>
-<p>Second, if the request URL contains a query string, it will be popped off,
-hashed by <code><a href='http://www.rdocumentation.org/packages/digest/topics/digest'>digest::digest()</a></code>, and the first six characters appended to the
-file being read. For example, <code>GET("api/object1/?a=1")</code> reads
-"api/object1-b64371.json". Third, request bodies are similarly hashed and
-appended. Finally, if a request method other than GET is used it will be
-appended to the end of the end of the file name. For example,
-<code>POST("api/object1/?a=1")</code> reads "api/object1-b64371-POST.json".</p>
-<p>This function is exported so that other packages can construct similar mock
-behaviors or override specific requests at a higher level than
-<code>with_mock_API</code> mocks.</p>
+    <p>Note that you in order to resume normal request behavior, you will need to
+call <code><a href='stop_mocking.html'>stop_mocking()</a></code> yourself---this function does not clean up after itself
+as 'without_internet` does.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='with_mock_API.html'>with_mock_API()</a></code> <code><a href='capture_requests.html'>capture_requests()</a></code></p>
+    <p><code><a href='without_internet.html'>without_internet()</a></code> <code><a href='stop_mocking.html'>stop_mocking()</a></code> <code><a href='use_mock_api.html'>use_mock_api()</a></code></p>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
 

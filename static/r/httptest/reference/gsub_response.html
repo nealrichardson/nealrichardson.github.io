@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Make all HTTP requests raise an error — without_internet • httptest</title>
+<title>Find and replace within a 'response' or 'request' — gsub_response • httptest</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,11 +25,14 @@
 <script src="../pkgdown.js"></script>
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Make all HTTP requests raise an error — without_internet" />
+<meta property="og:title" content="Find and replace within a 'response' or 'request' — gsub_response" />
 
-<meta property="og:description" content="without_internet simulates the situation when any network request will
-fail, as in when you are without an internet connection. Any HTTP request
-through the verb functions in httr will raise an error." />
+<meta property="og:description" content="These functions pass their arguments to base::gsub() in order to find and
+replace string patterns (regular expressions) within request or response
+objects. gsub_request() replaces in the request URL and any request body
+fields; gsub_response() replaces in the response URL, the response body,
+and it calls gsub_request() on the request object found within the
+response." />
 <meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -125,51 +128,67 @@ through the verb functions in httr will raise an error." />
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Make all HTTP requests raise an error</h1>
+    <h1>Find and replace within a 'response' or 'request'</h1>
     </div>
 
     
-    <p><code>without_internet</code> simulates the situation when any network request will
-fail, as in when you are without an internet connection. Any HTTP request
-through the verb functions in <code>httr</code> will raise an error.</p>
+    <p>These functions pass their arguments to <code><a href='http://www.rdocumentation.org/packages/base/topics/grep'>base::gsub()</a></code> in order to find and
+replace string patterns (regular expressions) within <code>request</code> or <code>response</code>
+objects. <code>gsub_request()</code> replaces in the request URL and any request body
+fields; <code>gsub_response()</code> replaces in the response URL, the response body,
+and it calls <code>gsub_request()</code> on the <code>request</code> object found within the
+<code>response</code>.</p>
     
 
-    <pre class="usage"><span class='fu'>without_internet</span>(<span class='no'>expr</span>)</pre>
+    <pre class="usage"><span class='fu'>gsub_response</span>(<span class='no'>response</span>, <span class='no'>pattern</span>, <span class='no'>replacement</span>, <span class='no'>...</span>)
+
+<span class='fu'>gsub_request</span>(<span class='no'>request</span>, <span class='no'>pattern</span>, <span class='no'>replacement</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>expr</th>
-      <td><p>Code to run inside the mock context</p></td>
+      <th>response</th>
+      <td><p>An 'httr' <code>response</code> object to sanitize.</p></td>
+    </tr>
+    <tr>
+      <th>pattern</th>
+      <td><p>From <code><a href='http://www.rdocumentation.org/packages/base/topics/grep'>base::gsub()</a></code>: "character string containing a regular
+expression (or character string for <code>fixed = TRUE</code>) to be matched in the
+given character vector." Passed to <code>gsub()</code>. See the docs for <code>gsub()</code> for
+further details.</p></td>
+    </tr>
+    <tr>
+      <th>replacement</th>
+      <td><p>A replacement for the matched pattern, possibly including
+regular expression backreferences. Passed to <code>gsub()</code>. See the docs for
+<code>gsub()</code> for further details.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Additional logical arguments passed to <code>gsub()</code>: <code>ignore.case</code>,
+<code>perl</code>, <code>fixed</code>, and <code>useBytes</code> are the possible options.</p></td>
+    </tr>
+    <tr>
+      <th>request</th>
+      <td><p>An 'httr' <code>request</code> object to sanitize.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The result of <code>expr</code></p>
+    <p>A <code>request</code> or <code>response</code> object, same as was passed in, with the
+pattern replaced in the URLs and bodies.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The error message raised has a well-defined shape, made of three
-elements, separated by space: (1) the request
-method (e.g. "GET"); (2) the request URL; and
-(3) the request body, if present. The verb-expectation functions,
-such as <code><a href='expect_verb.html'>expect_GET()</a></code> and <code>expect_POST()</code>, look for this shape.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <p><code><a href='block_requests.html'>block_requests()</a></code> to enable mocking on its own (not in a context)</p>
+    <p>Note that, unlike <code>gsub()</code>, the first argument of the function is <code>request</code>
+or <code>response</code>,
+not <code>pattern</code>, while the equivalent argument in <code>gsub()</code>, "<code>x</code>", is placed
+third. This difference is to maintain consistency with the other redactor
+functions in <code>httptest</code>, which all take <code>response</code> as the first argument.</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>without_internet</span>({
-    <span class='fu'>expect_error</span>(<span class='kw pkg'>httr</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/httr/topics/GET'>GET</a></span>(<span class='st'>"http://httpbin.org/get"</span>),
-        <span class='st'>"GET http://httpbin.org/get"</span>)
-    <span class='fu'>expect_error</span>(<span class='kw pkg'>httr</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/httr/topics/PUT'>PUT</a></span>(<span class='st'>"http://httpbin.org/put"</span>,
-        <span class='kw'>body</span><span class='kw'>=</span><span class='st'>'{"a":1}'</span>),
-        <span class='st'>'PUT http://httpbin.org/put {"a":1}'</span>, <span class='kw'>fixed</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-})</div><div class='output co'>#&gt; NULL</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -179,11 +198,7 @@ such as <code><a href='expect_verb.html'>expect_GET()</a></code> and <code>expec
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>

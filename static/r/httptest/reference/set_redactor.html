@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Make all HTTP requests raise an error — without_internet • httptest</title>
+<title>Set a response redactor — set_redactor • httptest</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,11 +25,14 @@
 <script src="../pkgdown.js"></script>
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Make all HTTP requests raise an error — without_internet" />
+<meta property="og:title" content="Set a response redactor — set_redactor" />
 
-<meta property="og:description" content="without_internet simulates the situation when any network request will
-fail, as in when you are without an internet connection. Any HTTP request
-through the verb functions in httr will raise an error." />
+<meta property="og:description" content="A redactor is a function that alters the response content being written
+out in the capture_requests() context, allowing you to remove sensitive
+values, such as authentication tokens,
+as well as any other modification or truncation of the response body. By
+default, the redact_auth() function will be used to purge standard
+auth methods, but set_redactor() allows you to provide a different one." />
 <meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -125,51 +128,59 @@ through the verb functions in httr will raise an error." />
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Make all HTTP requests raise an error</h1>
+    <h1>Set a response redactor</h1>
     </div>
 
     
-    <p><code>without_internet</code> simulates the situation when any network request will
-fail, as in when you are without an internet connection. Any HTTP request
-through the verb functions in <code>httr</code> will raise an error.</p>
+    <p>A redactor is a function that alters the response content being written
+out in the <code><a href='capture_requests.html'>capture_requests()</a></code> context, allowing you to remove sensitive
+values, such as authentication tokens,
+as well as any other modification or truncation of the response body. By
+default, the <code><a href='redact.html'>redact_auth()</a></code> function will be used to purge standard
+auth methods, but <code>set_redactor()</code> allows you to provide a different one.</p>
     
 
-    <pre class="usage"><span class='fu'>without_internet</span>(<span class='no'>expr</span>)</pre>
+    <pre class="usage"><span class='fu'>set_redactor</span>(<span class='no'>FUN</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>expr</th>
-      <td><p>Code to run inside the mock context</p></td>
+      <th>FUN</th>
+      <td><p>A function or expression that modifies <code>response</code> objects.
+Specifically, a valid input is one of:</p><ul>
+<li><p>A function taking a single argument, the <code>response</code>, and returning a valid
+<code>response</code> object.</p></li>
+<li><p>A formula as shorthand for an anonymous function with <code>.</code> as the
+"response" argument, as in the <code>purrr</code> package. That is, instead of
+<code>function (response) redact_headers(response, "X-Custom-Header")</code>, you can
+use <code>~ redact_headers(., "X-Custom-Header")</code></p></li>
+<li><p>A list of redacting functions/formulas, which will be executed
+in sequence on the response</p></li>
+<li><p><code>NULL</code>, to override the default <code><a href='redact.html'>redact_auth()</a></code>.</p></li>
+</ul></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The result of <code>expr</code></p>
+    <p>Invisibly, the redacting function, validated and perhaps modified.
+Formulas and function lists are turned into proper functions. <code>NULL</code> as input
+returns the <code>force()</code> function.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The error message raised has a well-defined shape, made of three
-elements, separated by space: (1) the request
-method (e.g. "GET"); (2) the request URL; and
-(3) the request body, if present. The verb-expectation functions,
-such as <code><a href='expect_verb.html'>expect_GET()</a></code> and <code>expect_POST()</code>, look for this shape.</p>
+    <p>Alternatively, you can put a redacting function in <code>inst/httptest/redact.R</code>
+in your package, and
+any time your package is loaded (as in when running tests or building
+vignettes), the function will be used automatically.</p>
+<p>For further details on how to redact responses, see <code><a href='../articles/redacting.html'>vignette("redacting")</a></code>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='block_requests.html'>block_requests()</a></code> to enable mocking on its own (not in a context)</p>
+    <p><code><a href='set_requester.html'>set_requester()</a></code></p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>without_internet</span>({
-    <span class='fu'>expect_error</span>(<span class='kw pkg'>httr</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/httr/topics/GET'>GET</a></span>(<span class='st'>"http://httpbin.org/get"</span>),
-        <span class='st'>"GET http://httpbin.org/get"</span>)
-    <span class='fu'>expect_error</span>(<span class='kw pkg'>httr</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/httr/topics/PUT'>PUT</a></span>(<span class='st'>"http://httpbin.org/put"</span>,
-        <span class='kw'>body</span><span class='kw'>=</span><span class='st'>'{"a":1}'</span>),
-        <span class='st'>'PUT http://httpbin.org/put {"a":1}'</span>, <span class='kw'>fixed</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-})</div><div class='output co'>#&gt; NULL</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -181,9 +192,7 @@ such as <code><a href='expect_verb.html'>expect_GET()</a></code> and <code>expec
       <li><a href="#details">Details</a></li>
 
       <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>

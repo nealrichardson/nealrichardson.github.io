@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Make all HTTP requests raise an error — without_internet • httptest</title>
+<title>Set mocking/capturing state for a vignette — start_vignette • httptest</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,11 +25,11 @@
 <script src="../pkgdown.js"></script>
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Make all HTTP requests raise an error — without_internet" />
+<meta property="og:title" content="Set mocking/capturing state for a vignette — start_vignette" />
 
-<meta property="og:description" content="without_internet simulates the situation when any network request will
-fail, as in when you are without an internet connection. Any HTTP request
-through the verb functions in httr will raise an error." />
+<meta property="og:description" content="Use start_vignette() to either use previously recorded responses or capture
+real responses for future use, depending on the value of the RECORD
+environment variable." />
 <meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -125,51 +125,61 @@ through the verb functions in httr will raise an error." />
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Make all HTTP requests raise an error</h1>
+    <h1>Set mocking/capturing state for a vignette</h1>
     </div>
 
     
-    <p><code>without_internet</code> simulates the situation when any network request will
-fail, as in when you are without an internet connection. Any HTTP request
-through the verb functions in <code>httr</code> will raise an error.</p>
+    <p>Use <code>start_vignette()</code> to either use previously recorded responses or capture
+real responses for future use, depending on the value of the <code>RECORD</code>
+environment variable.</p>
     
 
-    <pre class="usage"><span class='fu'>without_internet</span>(<span class='no'>expr</span>)</pre>
+    <pre class="usage"><span class='fu'>start_vignette</span>(<span class='no'>path</span>, <span class='no'>...</span>)
+
+<span class='fu'>end_vignette</span>()</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>expr</th>
-      <td><p>Code to run inside the mock context</p></td>
+      <th>path</th>
+      <td><p>Root file path for the mocks for this vignette. A good idea is
+to use the file name of the vignette itself.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Optional arguments passed to <code><a href='capture_requests.html'>start_capturing()</a></code></p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The result of <code>expr</code></p>
+    <p>Nothing; called for its side effect of starting/ending
+response recording or mocking.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The error message raised has a well-defined shape, made of three
-elements, separated by space: (1) the request
-method (e.g. "GET"); (2) the request URL; and
-(3) the request body, if present. The verb-expectation functions,
-such as <code><a href='expect_verb.html'>expect_GET()</a></code> and <code>expect_POST()</code>, look for this shape.</p>
+    <p>In a vignette or other R Markdown or Sweave document, place
+<code>start_vignette()</code> in an R code block at the beginning,
+before the first API request is made, and put
+<code>end_vignette()</code> in a R code chunk at the end. You may
+want to make those R code chunks have <code>echo=FALSE</code> in order to hide the fact
+that you're calling them.</p>
+<p>The behavior changes based on the existence of the <code>path</code> directory. The
+first time you build the vignette, the directory won't exist yet, so it will
+make real requests and record them inside of <code>path</code>. On subsequent runs, the
+mocks will be used. To record fresh responses from the server, delete the
+<code>path</code> directory, and the responses will be recorded again the next time the
+vignette runs.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='block_requests.html'>block_requests()</a></code> to enable mocking on its own (not in a context)</p>
+    <p><code><a href='capture_requests.html'>start_capturing()</a></code> for how requests are recorded; <code><a href='use_mock_api.html'>use_mock_api()</a></code>
+for how previously recorded requests are loaded; <code><a href='change_state.html'>change_state()</a></code> for how to
+handle recorded requests when the server state is changing;
+<code><a href='../articles/vignettes.html'>vignette("vignettes", package="httptest")</a></code> for an overview of all</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>without_internet</span>({
-    <span class='fu'>expect_error</span>(<span class='kw pkg'>httr</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/httr/topics/GET'>GET</a></span>(<span class='st'>"http://httpbin.org/get"</span>),
-        <span class='st'>"GET http://httpbin.org/get"</span>)
-    <span class='fu'>expect_error</span>(<span class='kw pkg'>httr</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/httr/topics/PUT'>PUT</a></span>(<span class='st'>"http://httpbin.org/put"</span>,
-        <span class='kw'>body</span><span class='kw'>=</span><span class='st'>'{"a":1}'</span>),
-        <span class='st'>'PUT http://httpbin.org/put {"a":1}'</span>, <span class='kw'>fixed</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
-})</div><div class='output co'>#&gt; NULL</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -181,9 +191,7 @@ such as <code><a href='expect_verb.html'>expect_GET()</a></code> and <code>expec
       <li><a href="#details">Details</a></li>
 
       <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>

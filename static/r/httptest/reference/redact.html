@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Remove sensitive content from HTTP responses — redact • httptest</title>
+<title>Remove sensitive content from HTTP responses — redact_cookies • httptest</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,14 +25,13 @@
 <script src="../pkgdown.js"></script>
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Remove sensitive content from HTTP responses — redact" />
+<meta property="og:title" content="Remove sensitive content from HTTP responses — redact_cookies" />
 
 <meta property="og:description" content="When recording requests for use as test fixtures, you don't want to include
 secrets like authentication tokens and personal ids. These functions provide
 a means for redacting this kind of content, or anything you want, from
 responses that capture_requests() saves." />
-
-
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -91,6 +90,9 @@ responses that capture_requests() saves." />
       <a href="../articles/redacting.html">Redacting Sensitive Information</a>
     </li>
     <li>
+      <a href="../articles/vignettes.html">Using with Vignettes</a>
+    </li>
+    <li>
       <a href="../index.html#faq">FAQ</a>
     </li>
   </ul>
@@ -134,25 +136,24 @@ a means for redacting this kind of content, or anything you want, from
 responses that <code><a href='capture_requests.html'>capture_requests()</a></code> saves.</p>
     
 
-    <pre class="usage"><span class='fu'>redact_auth</span>(<span class='no'>response</span>)
+    <pre class="usage"><span class='fu'>redact_cookies</span>(<span class='no'>response</span>)
 
-<span class='fu'>redact_cookies</span>(<span class='no'>response</span>)
+<span class='fu'>redact_headers</span>(<span class='no'>response</span>, <span class='kw'>headers</span> <span class='kw'>=</span> <span class='fu'>c</span>())
 
-<span class='fu'>redact_headers</span>(<span class='kw'>headers</span> <span class='kw'>=</span> <span class='fu'>c</span>())
-
-<span class='fu'>redact_HTTP_auth</span>(<span class='no'>response</span>)
+<span class='fu'>redact_http_auth</span>(<span class='no'>response</span>)
 
 <span class='fu'>redact_oauth</span>(<span class='no'>response</span>)
 
-<span class='fu'>within_body_text</span>(<span class='no'>FUN</span>)</pre>
+<span class='fu'>within_body_text</span>(<span class='no'>response</span>, <span class='no'>FUN</span>)
+
+<span class='fu'>redact_auth</span>(<span class='no'>response</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>response</th>
-      <td><p>An 'httr' <code>response</code> object to sanitize. Redacting functions
-should take as their only argument a response object.</p></td>
+      <td><p>An 'httr' <code>response</code> object to sanitize.</p></td>
     </tr>
     <tr>
       <th>headers</th>
@@ -170,16 +171,14 @@ be applied to the text of the response's "content".</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Redacting functions must return a well-formed 'httr' <code>response</code>
-object. <code>redact_auth()</code>, <code>redact_HTTP_auth()</code>, and <code>redact_cookies()</code>
-themselves are redacting functions, while <code>redact_headers()</code> and
-<code>within_body_text()</code> return redacting functions.</p>
+    <p>All redacting functions return a well-formed 'httr' <code>response</code>
+object.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>redact_cookies()</code> removes cookies from 'httr' <code>response</code> objects.
 <code>redact_headers()</code> lets you target selected request and response headers for
-redaction. <code>redact_HTTP_auth()</code> removes <code>username:password</code>-based HTTP auth
+redaction. <code>redact_http_auth()</code> removes <code>username:password</code>-based HTTP auth
 credentials. <code>redact_oauth()</code> removes the OAuth 'Token' object that 'httr'
 sticks in the request object. <code>redact_auth()</code> is a convenience wrapper around
 them for a useful default redactor in <code><a href='capture_requests.html'>capture_requests()</a></code>.
@@ -188,7 +187,7 @@ and manages the parsing of the raw (binary) data in the 'response' object.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='http://enpiar.com/r/httptest/articles/redacting.html'>vignette("redacting", package="httptest")</a></code> for a detailed discussion of what these functions do and how to customize them.</p>
+    <p><code><a href='../articles/redacting.html'>vignette("redacting", package="httptest")</a></code> for a detailed discussion of what these functions do and how to customize them. <code><a href='gsub_response.html'>gsub_response()</a></code> is another redactor.</p>
     
 
   </div>
