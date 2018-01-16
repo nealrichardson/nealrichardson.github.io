@@ -28,8 +28,7 @@
 <meta property="og:title" content="Skip tests that need an internet connection if you don't have one — skip_if_disconnected" />
 
 <meta property="og:description" content="Temporary connection trouble shouldn't fail your build." />
-
-
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -86,6 +85,9 @@
     </li>
     <li>
       <a href="../articles/redacting.html">Redacting Sensitive Information</a>
+    </li>
+    <li>
+      <a href="../articles/vignettes.html">Using with Vignettes</a>
     </li>
     <li>
       <a href="../index.html#faq">FAQ</a>
@@ -152,7 +154,7 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Note that if you call this from inside one of the mock contexts, it will
-follow the mock's behavior. That is, inside <code><a href='with_fake_HTTP.html'>with_fake_HTTP()</a></code>,
+follow the mock's behavior. That is, inside <code><a href='with_fake_http.html'>with_fake_http()</a></code>,
 the check will pass and the following tests will run, but inside
 <code><a href='without_internet.html'>without_internet()</a></code>, the following tests will be skipped.</p>
     

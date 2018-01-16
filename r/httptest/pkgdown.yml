@@ -4,4 +4,5 @@ urls:
 articles:
   httptest: httptest.html
   redacting: redacting.html
+  vignettes: vignettes.html
 

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Set an alternate directory or directories for mock API fixtures — .mockPaths • httptest</title>
+<title>Set an alternate directory for mock API fixtures — .mockPaths • httptest</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,15 +25,12 @@
 <script src="../pkgdown.js"></script>
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Set an alternate directory or directories for mock API fixtures — .mockPaths" />
+<meta property="og:title" content="Set an alternate directory for mock API fixtures — .mockPaths" />
 
-<meta property="og:description" content="By default, with_mock_API will look for mocks relative to the current
+<meta property="og:description" content="By default, with_mock_api will look for mocks relative to the current
 working directory (the test directory). If you want to look in other places,
-you can call .mockPaths to add directories to the search path. It works
-like base::.libPaths(): any directories you specify will be added to the
-list and searched first. The default directory will be searched last." />
-
-
+you can call .mockPaths to add directories to the search path." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -92,6 +89,9 @@ list and searched first. The default directory will be searched last." />
       <a href="../articles/redacting.html">Redacting Sensitive Information</a>
     </li>
     <li>
+      <a href="../articles/vignettes.html">Using with Vignettes</a>
+    </li>
+    <li>
       <a href="../index.html#faq">FAQ</a>
     </li>
   </ul>
@@ -125,15 +125,13 @@ list and searched first. The default directory will be searched last." />
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Set an alternate directory or directories for mock API fixtures</h1>
+    <h1>Set an alternate directory for mock API fixtures</h1>
     </div>
 
     
-    <p>By default, <code>with_mock_API</code> will look for mocks relative to the current
+    <p>By default, <code>with_mock_api</code> will look for mocks relative to the current
 working directory (the test directory). If you want to look in other places,
-you can call <code>.mockPaths</code> to add directories to the search path. It works
-like <code><a href='http://www.rdocumentation.org/packages/base/topics/libPaths'>base::.libPaths()</a></code>: any directories you specify will be added to the
-list and searched first. The default directory will be searched last.</p>
+you can call <code>.mockPaths</code> to add directories to the search path.</p>
     
 
     <pre class="usage"><span class='fu'>.mockPaths</span>(<span class='no'>new</span>)</pre>
@@ -156,7 +154,11 @@ invisibly.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>For finer-grained control, or to completely override the default behavior
+    <p>It works like <code><a href='http://www.rdocumentation.org/packages/base/topics/libPaths'>base::.libPaths()</a></code>: any directories you specify will be added
+to the list and searched first. The default directory will be searched last.
+Only unique values are kept: if you provide a path that is already found in
+<code>.mockPaths</code>, the result effectively moves that path to the first position.</p>
+<p>For finer-grained control, or to completely override the default behavior
 of searching in the current working directory, you can set the option
 "httptest.mock.paths" directly.</p>
     

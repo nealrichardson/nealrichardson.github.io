@@ -29,8 +29,7 @@
 
 <meta property="og:description" content="If httr makes HTTP easy and testthat makes testing fun,
 httptest makes testing your code that uses HTTP a simple pleasure." />
-
-
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -89,6 +88,9 @@ httptest makes testing your code that uses HTTP a simple pleasure." />
       <a href="../articles/redacting.html">Redacting Sensitive Information</a>
     </li>
     <li>
+      <a href="../articles/vignettes.html">Using with Vignettes</a>
+    </li>
+    <li>
       <a href="../index.html#faq">FAQ</a>
     </li>
   </ul>
@@ -135,19 +137,19 @@ httptest makes testing your code that uses HTTP a simple pleasure." />
 
     <p>The <code>httptest</code> package lets you test R code that wraps an API without
 requiring access to the remote service. It provides three test <strong>contexts</strong>
-that mock the network connection in different ways. <code><a href='with_mock_API.html'>with_mock_API()</a></code> lets
+that mock the network connection in different ways. <code><a href='with_mock_api.html'>with_mock_api()</a></code> lets
 you provide custom fixtures as responses to requests, stored as plain-text
 files in your test directory. <code><a href='without_internet.html'>without_internet()</a></code> converts HTTP requests
 into errors that print the request method, URL, and body payload, if
 provided, allowing you to assert that a function call would make a
 correctly-formed HTTP request or assert that a function does not make a
 request (because if it did, it would raise an error in this context).
-<code><a href='with_fake_HTTP.html'>with_fake_HTTP()</a></code> raises a "message" instead of an "error", and HTTP
+<code><a href='with_fake_http.html'>with_fake_http()</a></code> raises a "message" instead of an "error", and HTTP
 requests return a "response"-class object. Like <code>without_internet</code>, it allows
 you to assert that the correct requests were (or were not) made, but it
 doesn't cause the code to exit with an error.
     <code>httptest</code> offers additional <strong>expectations</strong> to assert that HTTP requests
-were--or were not--made. <code><a href='expect-verb.html'>expect_GET()</a></code>, <code>expect_PUT()</code>, <code>expect_PATCH()</code>,
+were---or were not---made. <code><a href='expect_verb.html'>expect_GET()</a></code>, <code>expect_PUT()</code>, <code>expect_PATCH()</code>,
 <code>expect_POST()</code>, and <code>expect_DELETE()</code> assert that the specified HTTP request
 is made within one of the test contexts. They catch the error or message
 raised by the mocked HTTP service and check that the request URL and optional
@@ -157,13 +159,29 @@ asserts that no error or message from a mocked HTTP service is raised.
 request header. <code><a href='expect_json_equivalent.html'>expect_json_equivalent()</a></code> checks that two R objects would
 generate equivalent JSON, taking into account how JSON objects are unordered
 whereas R named lists are ordered.</p>
+<p>For an overview of testing with <code>httptest</code>, see <code><a href='../articles/httptest.html'>vignette("httptest")</a></code>.</p>
 <p>The package also includes <code><a href='capture_requests.html'>capture_requests()</a></code>, a context that collects the
 responses from requests you make and stores them as mock files. This enables
 you to perform a series of requests against a live server once and then build
-your test suite using those mocks, running your tests in <code>with_mock_API</code>.</p>
-<p>Using these tools, you can test that code is making the intended requests and
-that it handles the expected responses correctly, all without depending on a
-connection to a remote API during the test run.</p>
+your test suite using those mocks, running your tests in <code>with_mock_api</code>.</p>
+<p>When recording requests, by default <code>httptest</code> looks for and redacts the
+standard ways that auth credentials are passed in requests. This prevents you
+from accidentally publishing your personal tokens. The redacting behavior is
+fully customizable, either by providing a <code>function (response) {...}</code> to
+<code><a href='set_redactor.html'>set_redactor()</a></code>, or by placing a function in your package's
+<code>inst/httptest/redact.R</code> that will be used automatically any time you record
+requests with your package loaded. See <code><a href='../articles/redacting.html'>vignette("redacting")</a></code> for details.
+    <code>httptest</code> also enables you to write package vignettes and other R Markdown
+documents that communicate with a remote API. By adding as little as
+<code><a href='start_vignette.html'>start_vignette()</a></code> to the beginning of your vignette, you can safely record
+API responses from a live session, using your secret credentials. These API
+responses are scrubbed of sensitive personal information and stored in a
+subfolder in your <code>vignettes</code> directory. Subsequent vignette builds,
+including on continuous-integration services, CRAN, and your package users'
+computers, use these recorded responses, allowing the document to regenerate
+without a network connection or API credentials. To record fresh API
+responses, delete the subfolder of cached responses and re-run. See
+<code><a href='../articles/vignettes.html'>vignette("vignettes")</a></code> for more discussion and links to examples.</p>
     
 
   </div>
