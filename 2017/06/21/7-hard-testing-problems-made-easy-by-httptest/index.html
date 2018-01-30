@@ -16,7 +16,7 @@
   
   
 
-    
+  
 
   <meta name="author" content="">
 
@@ -180,7 +180,7 @@ ga('send', 'pageview');
 
 <h2 id="1-am-i-making-the-right-request">1. Am I making the right request?</h2>
 
-<p><code>httptest</code> provides three test <strong>contexts</strong>—&rdquo;with&rdquo;-style functions that you wrap around other code you want to execute—that mock the network connection in different ways. One context, <code>without_internet</code>, simulates the situation when any network request will
+<p><code>httptest</code> provides three test <strong>contexts</strong>&mdash;&ldquo;with&rdquo;-style functions that you wrap around other code you want to execute&mdash;that mock the network connection in different ways. One context, <code>without_internet</code>, simulates the situation when any network request will
 fail, as in when you are without an internet connection. Any HTTP request will raise
 an error with a message containing the request information is raised. Together with the package&rsquo;s custom <strong>expectation</strong> functions, you can make assertions about the HTTP requests made in those contexts. The verb-expectation functions, such as <code>expect_GET</code> and <code>expect_POST</code>, look for the formatted error message that <code>without_internet</code> raises.</p>
 
@@ -247,11 +247,11 @@ an error with a message containing the request information is raised. Together w
 </figure>
 
 
-<p>In a second context that the package provides, <code>with_mock_API</code>, HTTP requests are intercepted and mapped to local file paths, factoring in the request URL, query, and method. If the file exists, it is loaded and returned as the response; if it does not, an error with a message containing the request information is raised, just as in <code>without_internet</code>. By supplying mock files, we can test the behavior of our code that handles API responses.</p>
+<p>In a second context that the package provides, <code>with_mock_api</code>, HTTP requests are intercepted and mapped to local file paths, factoring in the request URL, query, and method. If the file exists, it is loaded and returned as the response; if it does not, an error with a message containing the request information is raised, just as in <code>without_internet</code>. By supplying mock files, we can test the behavior of our code that handles API responses.</p>
 
-<p>Check out the <a href="http://enpiar.com/r/httptest/articles/httptest.html">package vignette</a> for a longer discussion of how to use <code>with_mock_API</code> and how to put mock files in the right place. For an abridged version, suppose we want to add tests to the popular <code>twitteR</code> package, which lacks a test suite. We can start by writing a basic test of the <code>getUser</code> function, like:</p>
+<p>Check out the <a href="http://enpiar.com/r/httptest/articles/httptest.html">package vignette</a> for a longer discussion of how to use <code>with_mock_api</code> and how to put mock files in the right place. For an abridged version, suppose we want to add tests to the popular <code>twitteR</code> package, which lacks a test suite. We can start by writing a basic test of the <code>getUser</code> function, like:</p>
 
-<pre><code class="language-r">with_mock_API({
+<pre><code class="language-r">with_mock_api({
     test_that(&quot;We can get a user object&quot;, {
         user &lt;- getUser(&quot;twitterdev&quot;)
     })
@@ -307,7 +307,7 @@ an error with a message containing the request information is raised. Together w
 
 <p>In the <a href="https://github.com/nealrichardson/pivotaltrackR/">pivotaltrackR</a> package, a client for the Pivotal Tracker API, there&rsquo;s a mock test that makes an <a href="https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/tests/testthat/test-stories.R#L66-L69">invalid search query</a>:</p>
 
-<pre><code class="language-r">with_mock_API({
+<pre><code class="language-r">with_mock_api({
     test_that(&quot;Bad request error handling&quot;, {
         expect_error(getStories(created=&quot;-5days..now&quot;),
             &quot;The date you requested could not be parsed&quot;)
@@ -315,7 +315,7 @@ an error with a message containing the request information is raised. Together w
 })
 </code></pre>
 
-<p>According to the API documentation, &ldquo;now&rdquo; is not a valid date string—it should be &ldquo;today&rdquo;. This request, in the <code>with_mock_API</code> context, hits the <a href="https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/tests/testthat/www.pivotaltracker.com/services/v5/projects/12345/stories-9daeb9.R">captured response file</a> which contains a &ldquo;response&rdquo; object with a 400 Bad Request status, and the response content contains the error message &ldquo;The date you requested could not be parsed&rdquo;. That response fixture was captured by doing</p>
+<p>According to the API documentation, &ldquo;now&rdquo; is not a valid date string&mdash;it should be &ldquo;today&rdquo;. This request, in the <code>with_mock_api</code> context, hits the <a href="https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/tests/testthat/www.pivotaltracker.com/services/v5/projects/12345/stories-9daeb9.R">captured response file</a> which contains a &ldquo;response&rdquo; object with a 400 Bad Request status, and the response content contains the error message &ldquo;The date you requested could not be parsed&rdquo;. That response fixture was captured by doing</p>
 
 <pre><code class="language-r">capture_requests(getStories(created=&quot;-5days..now&quot;))
 </code></pre>
@@ -350,7 +350,7 @@ an error with a message containing the request information is raised. Together w
 
 <p>The <a href="https://github.com/Crunch-io/rcrunch/blob/d1b5cade5e7b0608ddc1ce5de1a576e2d3614d84/tests/testthat/test-api.R#L31-L35">test</a> relies on a <a href="https://github.com/Crunch-io/rcrunch/blob/d1b5cade5e7b0608ddc1ce5de1a576e2d3614d84/tests/testthat/app.crunch.io/503.R">mock response</a> that is an <code>httr</code> &ldquo;response&rdquo; class object with a 503 <code>status_code</code>. So, a <code>GET</code> on that resource &ldquo;returns&rdquo; 503 status, which triggers the relevant API handler code, and does the retry:</p>
 
-<pre><code class="language-r">with_mock_API({
+<pre><code class="language-r">with_mock_api({
     test_that(&quot;503 on GET with Retry-After is handled&quot;, {
         expect_message(resp &lt;- crGET(&quot;https://app.crunch.io/503/&quot;),
             &quot;This request is taking longer than expected. Please stand by...&quot;)
@@ -359,13 +359,13 @@ an error with a message containing the request information is raised. Together w
 })
 </code></pre>
 
-<p>The 503 fixture object was created not from a real server response—it&rsquo;s hard to trigger—but rather by constructing the object that was needed in R. You can also dump out a regular, successful &ldquo;response&rdquo; object and then edit the .R fixture file to give it a different status code and headers—it&rsquo;s just a text file.</p>
+<p>The 503 fixture object was created not from a real server response&mdash;it&rsquo;s hard to trigger&mdash;but rather by constructing the object that was needed in R. You can also dump out a regular, successful &ldquo;response&rdquo; object and then edit the .R fixture file to give it a different status code and headers&mdash;it&rsquo;s just a text file.</p>
 
 <h2 id="6-pagination">6. Pagination</h2>
 
 <p>Many APIs paginate the responses of queries that could yield potentially large responses. Your code may want to conceal that API detail from its users and collect the results from all &ldquo;pages&rdquo; and return them together. <code>httptest</code> easily lets you test functions that makes multiple requests because you can provide mock responses for each request, which allows the rest of your code to proceed evaluating using the mocks.</p>
 
-<p>The <code>pivotaltrackR</code> package deals with pagination in this way. The API defines a convention for wrapping paginated responses in an <a href="https://www.pivotaltracker.com/help/api#Paginating_List_Responses">&ldquo;envelope&rdquo;</a> object that returns information about the page size, the total number of responses, and where you are in the list. The <a href="https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/R/api.R#L44-L59">R code</a> that wraps that API steps through the paginated responses as needed to collect them all. That way, the R user can just call <code>getStories</code> and will get all of the stories that match the query, without having to think about—or even be aware of—the API&rsquo;s pagination behavior.</p>
+<p>The <code>pivotaltrackR</code> package deals with pagination in this way. The API defines a convention for wrapping paginated responses in an <a href="https://www.pivotaltracker.com/help/api#Paginating_List_Responses">&ldquo;envelope&rdquo;</a> object that returns information about the page size, the total number of responses, and where you are in the list. The <a href="https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/R/api.R#L44-L59">R code</a> that wraps that API steps through the paginated responses as needed to collect them all. That way, the R user can just call <code>getStories</code> and will get all of the stories that match the query, without having to think about&mdash;or even be aware of&mdash;the API&rsquo;s pagination behavior.</p>
 
 <p>And because the R code that the package user needs is simple, the <a href="https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/tests/testthat/test-stories.R#L77-L80">test</a> for this looks simple:</p>
 
@@ -409,9 +409,9 @@ an error with a message containing the request information is raised. Together w
 </figure>
 
 
-<p>Mocking API responses isn&rsquo;t the only thing you might want to do in order to test your code. Sometimes, the request that matters is the one you don&rsquo;t make. Here&rsquo;s a example of how <code>without_internet</code> can be used to assert that code that should not make network requests in fact does not. This is a simplified version of a test from the <a href="http://enpiar.com/r/httpcache/">httpcache</a> package, a library that implements a query cache for HTTP requests in R. The point of the query cache is that only the first time you make a certain GET request should it hit the remote API; subsequent requests should read from the cache and not make a request. The test first makes a request (artificially, using <code>with_fake_HTTP</code>, the third test context the package provides) to prime the cache.</p>
+<p>Mocking API responses isn&rsquo;t the only thing you might want to do in order to test your code. Sometimes, the request that matters is the one you don&rsquo;t make. Here&rsquo;s a example of how <code>without_internet</code> can be used to assert that code that should not make network requests in fact does not. This is a simplified version of a test from the <a href="http://enpiar.com/r/httpcache/">httpcache</a> package, a library that implements a query cache for HTTP requests in R. The point of the query cache is that only the first time you make a certain GET request should it hit the remote API; subsequent requests should read from the cache and not make a request. The test first makes a request (artificially, using <code>with_fake_http</code>, the third test context the package provides) to prime the cache.</p>
 
-<pre><code class="language-r">with_fake_HTTP({
+<pre><code class="language-r">with_fake_http({
     test_that(&quot;Cache gets set on GET&quot;, {
         expect_length(cacheKeys(), 0)
         expect_GET(a &lt;- GET(&quot;https://app.crunch.io/api/&quot;),
