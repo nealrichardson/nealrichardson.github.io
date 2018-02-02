@@ -6,10 +6,20 @@
     <description>Recent content in Code on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 18 Dec 2017 16:49:57 -0700</lastBuildDate>
+    <lastBuildDate>Thu, 01 Feb 2018 16:49:57 -0700</lastBuildDate>
     
 	<atom:link href="/categories/code/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Back to the Future</title>
+      <link>/2018/02/01/back-to-the-future/</link>
+      <pubDate>Thu, 01 Feb 2018 16:49:57 -0700</pubDate>
+      
+      <guid>/2018/02/01/back-to-the-future/</guid>
+      <description>When you submit a package update to CRAN, they ask you to check some boxes confirming that you&amp;rsquo;ve done your due diligence on your submission: that it passes its checks. One confirmation is that you&amp;rsquo;ve addressed any failures on the CRAN package check page, which looks like this.
+  Hey, all passing today!   This page is a window into one of the key features of CRAN: it runs continuous-integration tests of your package against multiple versions of R, on multiple operating systems, with the current version of your dependencies.</description>
+    </item>
     
     <item>
       <title>Integrating &#39;pkgdown&#39; with Your Personal Website</title>
