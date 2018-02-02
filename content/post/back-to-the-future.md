@@ -5,7 +5,7 @@ date: "2018-02-01T16:49:57-07:00"
 categories: ["code"]
 tags: ["R", "packages", "CRAN"]
 draft: false
-images: []
+images: ["http://enpiar.com/img/bttf-cover.png"]
 ---
 
 When you submit a package update to CRAN, they ask you to check some boxes confirming that you've done your due diligence on your submission: that it passes its checks. One confirmation is that you've addressed any failures on the CRAN package check page, which looks [like this](https://cran.r-project.org/web/checks/check_results_httptest.html).
