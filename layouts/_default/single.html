@@ -14,7 +14,7 @@
 <div id="post-box">
 <div id="post" itemprop="articleBody">
 
-    {{.Content | safeHTML}}
+    {{ partial "anchored-h-tags.html" .Content }}
 
 </div>
     <div class="">
