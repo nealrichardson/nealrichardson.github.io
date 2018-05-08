@@ -164,7 +164,7 @@ ga('send', 'pageview');
 
 <p>A caveat: IANAWD (I am not a web developer). I can&rsquo;t claim that this is the &ldquo;right&rdquo; way to do any of this. All I can say is that it worked for me, and the code is minimally invasive.</p>
 
-<h1 id="the-basics-of-styling-pkgdown">The basics of styling pkgdown</h1>
+<a class="headline-anchor" href="#the-basics-of-styling-pkgdown"><h1 id="the-basics-of-styling-pkgdown">The basics of styling pkgdown</a> </h1>
 
 <p><code>pkgdown</code> provides several ways for customizing the appearance. First, you can provide the name of a <a href="https://bootswatch.com/">bootswatch</a> template in your <code>_pkgdown.yml</code>, <a href="https://github.com/hadley/pkgdown/blob/081639735104a03c01527f568a99f0ef7351433d/_pkgdown.yml#L3-L5">like this</a>, and that will reskin the site. This is a good place to start.</p>
 
@@ -172,11 +172,11 @@ ga('send', 'pageview');
 
 <p>For even more custom rendering, you could supply alternate HTML templates, as described <a href="https://github.com/hadley/pkgdown/blob/081639735104a03c01527f568a99f0ef7351433d/R/build.r#L119-L139">here</a>. This may be individual template files, or even a template package, which is what the <a href="https://github.com/tidyverse/tidytemplate">tidyverse packages</a> do. However, the <a href="https://github.com/r-lib/pkgdown/blob/081639735104a03c01527f568a99f0ef7351433d/R/build.r#L137">docs</a> say &ldquo;These settings are currently recommended for advanced users only.&rdquo; I interpret this to mean that if your name is not Hadley, beware. From my experience, you can get pretty far with just adding CSS over the existing templates, so for most, it&rsquo;s probably not worth wading into the HTML templates.</p>
 
-<h1 id="integrating-with-your-site">Integrating with your site</h1>
+<a class="headline-anchor" href="#integrating-with-your-site"><h1 id="integrating-with-your-site">Integrating with your site</a> </h1>
 
 <p>The general approach I took with my sites was to (1) add custom CSS to the pkgdown site to make it appear like my personal site, and then (2) copy the built pkgdown site into the source for the personal site, so that when it is deployed, the pkgdown site goes with it, hosted on my domain.</p>
 
-<h2 id="consistent-branding">Consistent branding</h2>
+<a class="headline-anchor" href="#consistent-branding"><h2 id="consistent-branding">Consistent branding</a> </h2>
 
 <p>To get the website styles to match, you need to bring in the CSS from the personal site to the pkgdown site, and then do some fine tuning to make sure that the styles you want match the elements on the page.</p>
 
@@ -241,7 +241,7 @@ ga('send', 'pageview');
 
 <p>Speaking of Bootstrap: I suspect that if my personal site had been using a <a href="https://themes.gohugo.io/tags/bootstrap/">Bootstrap theme</a>, the CSS imports alone may have been enough to style the pkgdown site, and I wouldn&rsquo;t have had to mess with the inspector and custom CSS. Because <code>pkgdown</code> uses Bootstrap, if my site also used Bootstrap, the CSS class names would have been consistent between the two sites, and the right styles should have been applied naturally.</p>
 
-<h2 id="site-header">Site header</h2>
+<a class="headline-anchor" href="#site-header"><h2 id="site-header">Site header</a> </h2>
 
 <p><a href="http://enpiar.com/2017/11/21/getting-down-with-pkgdown/">In my previous post</a>, I discussed how you can add links to anything you want to your pkgdown site navbar by editing the <code>_pkgdown.yml</code>. You could add links to parts of your personal site, even arrange it to mirror how your personal site organizes header links.</p>
 
@@ -256,7 +256,7 @@ ga('send', 'pageview');
   href: http://enpiar.com
 </code></pre>
 
-<h2 id="add-to-your-personal-site">Add to your personal site</h2>
+<a class="headline-anchor" href="#add-to-your-personal-site"><h2 id="add-to-your-personal-site">Add to your personal site</a> </h2>
 
 <p>Both of the websites with which I&rsquo;ve integrated pkgdown sites are built by <a href="http://gohugo.io/">Hugo</a>: one via <a href="https://bookdown.org/yihui/blogdown/">blogdown</a> and one not, so the process I&rsquo;ll describe is oriented to how Hugo works. I can&rsquo;t speak to how you&rsquo;d do this with Jekyll or other static-site generators, but I would imagine that something similar would work there.</p>
 
@@ -280,7 +280,7 @@ unlink(path, recursive=TRUE)
 pkgdown::build_site(path=path)
 </code></pre>
 
-<h1 id="handling-multiple-packages">Handling multiple packages</h1>
+<a class="headline-anchor" href="#handling-multiple-packages"><h1 id="handling-multiple-packages">Handling multiple packages</a> </h1>
 
 <p>I have several R packages and I wanted them all to have consistent style. At first, I thought that that&rsquo;s a problem that not many people have and thus not worth discussing here: most R users don&rsquo;t write packages at all, let alone multiple packages. But, looking at the <a href="https://www.rdocumentation.org/link/CRAN_package_db?package=tools">CRAN package database</a>, at the time of writing there are over 2,000 package maintainers with more than one package:</p>
 
@@ -294,7 +294,7 @@ table(m &gt; 1)
 
 <p>If you were to include packages that are hosted elsewhere (Bioconductor, GitHub, etc.), that number would be higher. So, for those thousands of you out there with multiple packages to style and incorporate into your website, here&rsquo;s how I did it.</p>
 
-<h2 id="css">CSS</h2>
+<a class="headline-anchor" href="#css"><h2 id="css">CSS</a> </h2>
 
 <p>The CSS part is trivial for every package after your first one: <code>@import url</code> from your first site&rsquo;s <code>extra.css</code>. You&rsquo;ve worked out all of the imports, classes, and styles there, so bring it over to your new pkgdown site.</p>
 
@@ -305,7 +305,7 @@ table(m &gt; 1)
 
 <p>that is, it imports the <code>extra.css</code> file from <code>httptest</code>, the first one I built. Again, IANAWD, but this approach was uncomplicated for me&mdash;and dead simple.</p>
 
-<h2 id="site-directory">Site directory</h2>
+<a class="headline-anchor" href="#site-directory"><h2 id="site-directory">Site directory</a> </h2>
 
 <p>As you get more code and packages on your website, it&rsquo;s good to provide links to them from the rest of the site. You can achieve this by customizing the navbar in all of your pkgdown sites and your main website, but it may also be nice to have index-like page listing your packages. In my case, because I had placed my pkgdown sites in an <code>r</code> directory (<a href="http://enpiar.com/r/httptest">http://enpiar.com/r/httptest</a>, <a href="http://enpiar.com/r/httpcache">http://enpiar.com/r/httpcache</a>), the URL structure implied that <a href="http://enpiar.com/r/">http://enpiar.com/r/</a> would exist and that it might have some sort of listing or overview.</p>
 
@@ -347,9 +347,10 @@ table(m &gt; 1)
 
 <p>We have a page on the personal site with links to all of the pkgdown sites, plus a dynamically generated list of recent R blog posts from the personal site, seamlessly appearing together. Magic!</p>
 
-<h1 id="want-more">Want more?</h1>
+<a class="headline-anchor" href="#want-more"><h1 id="want-more">Want more?</a> </h1>
 
 <p>With these minor extensions, I&rsquo;ve made it so every pkgdown site I make has an appearance that is consistent with this blog&rsquo;s style, and I&rsquo;ve plugged them into my personal site. I&rsquo;ve stopped there, but if you&rsquo;re a better web designer (or have more time to play around with CSS), there&rsquo;s certainly more that you can do to enhance your pkgdown site and integrate it with your other websites.</p>
+
 
 
 </div>
@@ -378,7 +379,7 @@ table(m &gt; 1)
     <ul>
       
       
-        <li><a href="/2018/04/25/turbocharging-readr/">Turbocharging &#39;readr&#39;</a> &ndash; 13 minutes
+        <li><a href="/2018/04/25/turbocharging-readr/">Turbocharging &#39;readr&#39;</a> &ndash; 15 minutes
       
         <li><a href="/2018/02/01/back-to-the-future/">Back to the Future</a> &ndash; 11 minutes
       

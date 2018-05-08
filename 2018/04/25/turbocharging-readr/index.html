@@ -133,7 +133,7 @@ ga('send', 'pageview');
 
 
 <meta itemprop="dateModified" content="2018-04-25T21:49:57-07:00" />
-<meta itemprop="wordCount" content="2753">
+<meta itemprop="wordCount" content="3063">
 
   <meta itemprop="image" content="http://enpiar.com/img/star-wars-light-speed.gif">
 
@@ -164,7 +164,7 @@ ga('send', 'pageview');
 
 <p>This post shares some of the insights I learned about <code>readr</code> and some tactics for squeezing more performance out of it. The <code>readr</code> package is fast, and by incorporating knowledge about the data structure and the questions we want to answer, we can selectively read the parts of the files we care about to make it load even faster.</p>
 
-<h1 id="the-data-source-aws-elastic-load-balancer">The data source: AWS Elastic Load Balancer</h1>
+<a class="headline-anchor" href="#the-data-source-aws-elastic-load-balancer"><h1 id="the-data-source-aws-elastic-load-balancer">The data source: AWS Elastic Load Balancer</a> </h1>
 
 <p>Amazon Web Services provides the <a href="https://aws.amazon.com/elasticloadbalancing/">Elastic Load Balancing</a> (ELB) service for distributing HTTP traffic across multiple servers. Load balancer logs have nice properties for understanding how our platform is performing. While they don&rsquo;t have the richness of detail that web server logs or Google Analytics might provide, they give a complete view of how our API is responding at the service boundary. We once had issues where clients reported timeouts, but the web server logs showed no problems. It turned out that the load balancer was timing out the requests; the server was successfully completing its work, only too late. The load balancer logs, though, confirmed the user reports and gave us evidence for how to resolve the issue.</p>
 
@@ -195,7 +195,7 @@ read.elb &lt;- function (file, ...) {
 }
 </code></pre>
 
-<h1 id="the-readr-package">The <code>readr</code> package</h1>
+<a class="headline-anchor" href="#the-readr-package"><h1 id="the-readr-package">The <code>readr</code> package</a> </h1>
 
 
 <figure class="floating-left">
@@ -243,7 +243,7 @@ microbenchmark(read.elb(f), read_elb(f), times=25)
 
 <p>Being able to read the week&rsquo;s data in 7 minutes is much better, but it&rsquo;s still not interactive speed. It&rsquo;s long enough for me to go do something else while I wait for it to run, and then forget that I was running something on the log server until much later. Plus, 7 minutes still seemed inefficient to load what amounted to only about 15 million rows of data. There had to be some way to optimize further.</p>
 
-<h2 id="specify-column-schema">Specify column schema</h2>
+<a class="headline-anchor" href="#specify-column-schema"><h2 id="specify-column-schema">Specify column schema</a> </h2>
 
 <p>Since I had to read the <code>readr</code> docs to learn how to adapt my old function to use <code>read_delim()</code>, I saw that there was a convenient way to specify the types of the data in each column of the file. I&rsquo;m generally too cynical to trust that any data file I&rsquo;ve found is coded in an internally consistent way&mdash;to paraphrase Jean-Paul Sartre, hell is other people&rsquo;s data&mdash;so I generally let the reader sniff and then correct any miscoding in R. In this case, however, I trusted well enough that the ELB would write consistent data.</p>
 
@@ -283,7 +283,7 @@ microbenchmark(read.elb2(f), read_elb2(f), times=25)
 
 <p>Interestingly, the base R version was significantly <em>slower</em> than without the type declarations. My guess, though I didn&rsquo;t confirm, is that specifying <code>&quot;POSIXct&quot;</code> for the timestamp column made it do more expensive work than it did without the specification (and in fact, the timestamp column is returned as <code>character</code> by default, unlike the simple <code>readr</code> version that correctly guesses the type).</p>
 
-<h2 id="select-columns">Select columns</h2>
+<a class="headline-anchor" href="#select-columns"><h2 id="select-columns">Select columns</a> </h2>
 
 <p>Specifying the schema didn&rsquo;t really give us much for this file, but while reading the docs about column types, I noticed that there was an option to skip columns. Given that I only cared about a couple of the columns in the dataset, I wondered whether skipping columns would save some time.</p>
 
@@ -342,7 +342,7 @@ microbenchmark(read.elb2(f), read_elb2(f), times=25)
 
 <p>My hunch, again unconfirmed, is that we&rsquo;re saving time by not allocating memory for the other columns, some of which, particularly &ldquo;user_agent&rdquo;, are large character vectors with lots of distinct values.</p>
 
-<h2 id="raw-row-filtering">Raw row filtering</h2>
+<a class="headline-anchor" href="#raw-row-filtering"><h2 id="raw-row-filtering">Raw row filtering</a> </h2>
 
 <p>Two and a half minutes is pretty good, but it still seemed excessive. For analyzing large log files, my first tool usually is <code>grep</code> at the command line, often combined with some <code>find</code> search for log files and piping that file list to it. For example, if I want to know how many 504 Gateway Timeout responses there were, I can search for this pattern in a directory of log files:</p>
 
@@ -475,7 +475,43 @@ microbenchmark(read.elb2(f), read_elb2(f), times=25)
 
 <p>A few final notes. First, I tried a version using the <a href="https://github.com/r-lib/processx"><code>processx</code></a> package for managing external processes, but the overhead it added eroded the filtering benefits: the direct <code>system2</code> call was notably faster. Second, I suspect that this code isn&rsquo;t platform-independent; I knew <code>egrep</code> was on my log server, so that wasn&rsquo;t a concern for me, but if you&rsquo;re looking to use this pattern on Windows, you may need to adapt the code or install a tool.</p>
 
-<h2 id="conclusion-turbocharging-readr">Conclusion: Turbocharging readr</h2>
+<a class="headline-anchor" href="#update-il-y-a-une-pipe"><h2 id="update-il-y-a-une-pipe">Update: <em>il y a une pipe!</em></a> </h2>
+
+<p>After this was first published, <a href="https://twitter.com/jimhester_/status/993172484458508289">Jim Hester pointed out</a> that you could use the <code>pipe()</code> connection as an input and that would save having to read the standard output into an R object and <code>paste()</code>ing it together.</p>
+
+<p>I made a <code>read_elb5()</code> version that replaced the <code>line_filter</code> block with this much simpler code:</p>
+
+<pre><code class="language-r">if (!is.null(line_filter)) {
+    cmd &lt;- paste(&quot;egrep&quot;, shQuote(line_filter), file)
+    file &lt;- pipe(cmd)
+}
+</code></pre>
+
+<p>I found an even bigger log file (230 MB) than the one I&rsquo;d been benchmarking with before, and I repeated the <code>&quot;POST &quot;</code> search. Even though the file was bigger, there were fewer <code>POST</code> requests, only 16 percent. Because there were fewer lines being read in, the <code>paste(system2(...))</code> version was a bit faster than in the benchmark with the log file used throughout this post. The <code>pipe()</code> version, though, was nearly twice as fast as that:</p>
+
+<pre><code class="language-r">##  Unit: milliseconds
+##                              expr      min       lq     mean   median
+## read_elb4(f, line_filter=&quot;POST &quot;) 612.9062 623.6136 693.2473 641.7480
+## read_elb5(f, line_filter=&quot;POST &quot;) 327.5515 343.9537 380.7328 350.2193
+##       uq       max neval
+## 724.7104 1027.4293    25
+## 440.5271  477.9381    25
+</code></pre>
+
+<p>Under 400 milliseconds to read in 16,000 rows of log data, already filtered to the set I want to consider. <code>pipe()</code> it is!</p>
+
+<p>One other observation: pipe or no pipe, doing the filtering before the data hits R is much faster than filtering it in R. For comparison, here&rsquo;s benchmarking of calling <code>grep</code> to find the <code>POST</code> requests in the full <code>data.frame</code> (roughly 100,000 rows) read in without any filtering:</p>
+
+<pre><code class="language-r">##  Unit: seconds
+##                       expr      min       lq     mean   median       uq
+## grep(&quot;^POST &quot;, df$request) 7.991233 9.218501 9.532355 9.644332 9.881512
+##      max neval
+## 10.83446    25
+</code></pre>
+
+<p>That is, even after spending several seconds to read in all of the data, it&rsquo;s another 9-10 seconds to identify which rows to keep. If you can skip that work, why not?</p>
+
+<a class="headline-anchor" href="#conclusion-turbocharging-readr"><h2 id="conclusion-turbocharging-readr">Conclusion: Turbocharging readr</a> </h2>
 
 
 <figure class="floating-left">
@@ -509,7 +545,7 @@ read.table(), at least when specifying colClasses.</li>
 
 <p>These benchmarks were done on R 3.4.2. It would be interesting to replicate these benchmarks on the new R release and see if that core R improvement closes the performance gap between <code>base</code> and <code>readr</code> functions.</p>
 
-<h1 id="the-elbr-package">The &lsquo;elbr&rsquo; package</h1>
+<a class="headline-anchor" href="#the-elbr-package"><h1 id="the-elbr-package">The &lsquo;elbr&rsquo; package</a> </h1>
 
 <p>I&rsquo;ve incorporated these insights into the new <code>elbr</code> package, available <a href="https://github.com/nealrichardson/elbr">on GitHub</a> now. The package is more than a single file reader: it provides a <code>dplyr</code> interface to the entire directory of log files, allowing you to <code>select</code>, <code>filter</code>, and aggregate over multiple files as if you were querying a single database. It does so as efficiently as possible, only reading and returning the minimum necessary from each file and binding together the results into a single table. This allows you to work with log data much larger than can fit comfortably into memory, without needing to set up an external database or even thinking much about the file system.</p>
 
@@ -534,6 +570,7 @@ read.table(), at least when specifying colClasses.</li>
 <p>Having a large dataset effectively sharded across multiple text files seems like a common enough problem, but I was surprised that in my (admittedly cursory) search for existing R packages, I didn&rsquo;t find one that provided a <code>dplyr</code>-like interface over them. (Maybe a friendly reader will point me at the relevant packages.)</p>
 
 <p>Perhaps if you have data like this, you just put it in a proper database and forget about it. But I didn&rsquo;t feel like installing another system dependency and setting up an ETL process just to get a little more insight from these logs, particularly when it seemed like base R (or even some hard-earned <code>bash</code> skills) got me most of the way to what I wanted. Plus, I enjoyed the opportunity to explore <code>readr</code> and play some more with tidy evaluation.</p>
+
 
 
 </div>

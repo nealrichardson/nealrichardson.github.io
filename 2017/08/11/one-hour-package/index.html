@@ -182,13 +182,13 @@ ga('send', 'pageview');
 
 <p>Despite the obstacles, from start to finish, it took me an hour between generating the package skeleton and getting passing builds on <a href="https://travis-ci.org/">Travis-CI</a> and <a href="https://www.appveyor.com/">Appveyor</a> with <a href="https://codecov.io/gh/nealrichardson/useRsnap">100 percent line coverage</a>. I&rsquo;ve written a few public <a href="https://github.com/Crunch-io/rcrunch">API</a> <a href="https://nealrichardson/pivotaltrackR">client</a> <a href="https://github.com/nealrichardson/useRsnap">packages</a> now, and in the process have worked out a good system that gets them started quickly and makes them easy to both test and extend. This approach worked well here too, and in the discussion below, I&rsquo;ll show you how. There are code snippets inline, but it may be easier to get a more complete picture of the project by <a href="https://github.com/nealrichardson/useRsnap">browsing it on GitHub</a>.</p>
 
-<h1 id="tools">Tools</h1>
+<a class="headline-anchor" href="#tools"><h1 id="tools">Tools</a> </h1>
 
 <p>We&rsquo;ll need a few R packages to move forward. A couple merit highlighting here; the rest I&rsquo;ll mention in the discussion below. First, when dealing with HTTP APIs in R, the <a href="http://httr.r-lib.org/">httr</a> package is essential. It handles requests and responses and lets you focus on how to translate your (users&rsquo;) intuitions about the data you&rsquo;re accessing into sensible R functions and objects.</p>
 
 <p>Next, we&rsquo;ll need some tools for writing tests. <a href="https://t.co/IljRyeTIsj">Testing is especially important</a> when writing packages. The <a href="http://testthat.r-lib.org/">testthat</a> package is the current standard for R package test suites, but it lacks some useful tools for working with remote APIs. To make it easy to test API packages, I wrote <a href="http://enpiar.com/r/httptest/">httptest</a>, which extends <code>testthat</code>. As we&rsquo;ll see below, <code>httptest</code> allowed me to get test coverage for all of the lines of code I wrote and enabled me to run the tests quickly and without complication on public continuous-integration services (Travis-CI and Appveyor).</p>
 
-<h1 id="step-1-set-up-the-package-skeleton">Step 1: Set up the package skeleton</h1>
+<a class="headline-anchor" href="#step-1-set-up-the-package-skeleton"><h1 id="step-1-set-up-the-package-skeleton">Step 1: Set up the package skeleton</a> </h1>
 
 <p>The first step is to set up some basic scaffolding for the R package. Base R has a <code>package.skeleton</code> function that I don&rsquo;t find particularly useful. There are some helpers in the <code>devtools</code> package as well, but for simplicity, I like the <a href="https://github.com/nealrichardson/skeletor">skeletor</a> package skeleton generator. With just one line of code, it sets everything up for using GitHub, Travis-CI, Codecov.io, and Appveyor, gives you a basic test suite setup, and includes helpful instructions for things like how to write a package &ldquo;Description&rdquo; that will pass muster with CRAN.</p>
 
@@ -199,7 +199,7 @@ cd useRsnap
 atom .
 </code></pre>
 
-<h1 id="step-2-add-general-api-wrappers">Step 2: Add general API wrappers</h1>
+<a class="headline-anchor" href="#step-2-add-general-api-wrappers"><h1 id="step-2-add-general-api-wrappers">Step 2: Add general API wrappers</a> </h1>
 
 <p>Our next step is to create <a href="https://github.com/nealrichardson/useRsnap/blob/8c2662de5e726ad99e5985b92b97ef5b092c5e0a/R/api.R">R/api.R</a> and drop in a few boilerplate functions, which we&rsquo;ll extend as needed. It&rsquo;s brief: only 33 lines long including comments, with five functions, three of which are one-liners. The core functions, through which every request and response for every API endpoint will go, include</p>
 
@@ -214,13 +214,13 @@ atom .
 
 <p>Since these functions build in the configuration needed to make requests of the API, I&rsquo;ll describe them in more detail in the next section.</p>
 
-<h1 id="step-3-work-out-authentication-and-other-configuration">Step 3: Work out authentication and other configuration</h1>
+<a class="headline-anchor" href="#step-3-work-out-authentication-and-other-configuration"><h1 id="step-3-work-out-authentication-and-other-configuration">Step 3: Work out authentication and other configuration</a> </h1>
 
 <p>Most APIs require authentication; many also need a project ID or similar to be specified in the request as well. We need to determine what those configuration parameters are, how package users will supply them, and how to incorporate them into requests.</p>
 
 <p>If the API is well documented, it will be clear what parameters a user needs to supply and how you should supply them. Particularly friendly APIs also give you an easy way to create an API token with limited authorization scope, which you can pass in with your requests from R.</p>
 
-<h2 id="don-t-try-this-at-home">Don&rsquo;t try this at home</h2>
+<a class="headline-anchor" href="#don-t-try-this-at-home"><h2 id="don-t-try-this-at-home">Don&rsquo;t try this at home</a> </h2>
 
 <p>In this case, with no documentation available and no official way to request an API token, I had to do some guessing. The project ID was easy to identify&mdash;it was even in the browser URL&mdash;but authentication was trickier. Watching the network panel in the inspector of my web browser when I used the Usersnap web app, I looked at the requests made to see what they were doing and how they included authentication. It was clear that authentication was being sent in a cookie, but there were many cookies being sent with each request, so it was unclear which was the operative one.</p>
 
@@ -228,7 +228,7 @@ atom .
 
 <p>A better solution might have been to implement the same authentication requests that the browser made, so that you&rsquo;d essentially prompt your R user for a username and password and authenticate the same way. But, I was using Google Account OAuth with Usersnap, and while that&rsquo;s possible to do with <code>httr</code>, it wasn&rsquo;t something I wanted to mess with&mdash;not with the limited time I had for writing the API client. Perhaps later.</p>
 
-<h2 id="how-should-users-supply-their-credentials-to-the-r-session">How should users supply their credentials to the R session?</h2>
+<a class="headline-anchor" href="#how-should-users-supply-their-credentials-to-the-r-session"><h2 id="how-should-users-supply-their-credentials-to-the-r-session">How should users supply their credentials to the R session?</a> </h2>
 
 <p>Once we know what credentials are required to authenticate, we need to determine how package users will provide them. There are a few alternatives: set them as <code>options</code> and thereby be able to specify them in your <code>.Rprofile</code>; set them as environment variables; or some configuration file format. Security-wise, there&rsquo;s really not much difference. And, from the perspective of bootstrapping a new package, it&rsquo;s not an architecturally significant decision: it&rsquo;s easy to support multiple ways of specifying these parameters should you decide you want to do something different in the future. So, just pick one.</p>
 
@@ -240,7 +240,7 @@ atom .
 
 <p>sets them, either in your current session, or for all sessions if you put it in your <code>.Rprofile</code>.</p>
 
-<h2 id="including-configuration-in-requests">Including configuration in requests</h2>
+<a class="headline-anchor" href="#including-configuration-in-requests"><h2 id="including-configuration-in-requests">Including configuration in requests</a> </h2>
 
 <p>The next step is to integrate these parameters into our boilerplate functions. In this API, it appeared that the &ldquo;project&rdquo; was built into the request URLs, so the URL-constructing utility looks like:</p>
 
@@ -298,7 +298,7 @@ handleUSResponse &lt;- function (resp) {
 
 <p>While we don&rsquo;t strictly need a generic requesting function and a generic response handler to start working on our first methods, they will help us as we go forward. They give us a place to put our common API logic, so the cost of adding each additional API endpoint wrapper stays low. Plus, they help encapsulate our code and keep the complexities of the API and of HTTP separated from our R object space as much as possible.</p>
 
-<h1 id="step-4-pick-an-endpoint">Step 4: Pick an endpoint</h1>
+<a class="headline-anchor" href="#step-4-pick-an-endpoint"><h1 id="step-4-pick-an-endpoint">Step 4: Pick an endpoint</a> </h1>
 
 <p>Now, with the core infrastructure in place, let&rsquo;s pick our first endpoint and write a wrapper for it. The one I was most interested in was the &ldquo;reports&rdquo; list so that I could get a catalog of recently opened issues. This is the first view you see when you open up a project in Usersnap&rsquo;s web interface.</p>
 
@@ -346,7 +346,7 @@ with_mock_api({
 
 <p>We can add a few more tests from here, but we&rsquo;re basically done with code&mdash;we have a function that returns a list of report entries in our R session. That&rsquo;s enough of an API wrapper to start writing my daily cron job summarizing our support tickets.</p>
 
-<h1 id="step-5-document-and-wrap-up">Step 5: Document and wrap up</h1>
+<a class="headline-anchor" href="#step-5-document-and-wrap-up"><h1 id="step-5-document-and-wrap-up">Step 5: Document and wrap up</a> </h1>
 
 <p>At this point, we&rsquo;ve set up the skeleton for the package, worked out authentication and configuration for the API, added the core functions through which all requests will go, and added the first method that we&rsquo;re going to expose to our package users. It&rsquo;s been about 40 minutes at this point. We&rsquo;ll spend the next 20 minutes on documentation and polishing.</p>
 
@@ -371,13 +371,14 @@ with_mock_api({
 
 <p>Finally, there&rsquo;s some source control and continuous integration setup, which might take you 30 seconds if you know where to go and what to click and type. Fortunately, the <code>skeletor</code> package skeleton puts <a href="https://github.com/nealrichardson/skeletor/blob/master/inst/pkg/README.md#how-to-finish-setting-up-your-new-package">instructions in your README</a> for how to <code>git init</code> and set up your repository on GitHub, Travis-CI, and Appveyor. Follow the instructions, <code>git add .</code>, <code>git commit</code>, and <code>git push</code>. Then we&rsquo;re done.</p>
 
-<h1 id="lean-and-extensible">Lean and extensible</h1>
+<a class="headline-anchor" href="#lean-and-extensible"><h1 id="lean-and-extensible">Lean and extensible</a> </h1>
 
 <p>So, we&rsquo;ve made a basic package that provides an API client in R, even doing so without any API documentation for support. And it&rsquo;s fully tested.</p>
 
 <p>Sure, it&rsquo;s bare: it only really supports a single endpoint. But I only needed the one endpoint to make my reporting job work. Any other endpoints or options to this one can be added when they&rsquo;re needed and not sooner, following the <a href="https://martinfowler.com/bliki/Yagni.html">YAGNI principle</a>.</p>
 
 <p>But even though the package doesn&rsquo;t do much yet, the framework established for making requests and handling responses will make it easy to add more endpoint methods when we need to. And the testing setup makes it simple to make incremental improvements. Indeed, I found it simple to extend <code>getReports</code> to <a href="https://github.com/nealrichardson/useRsnap/commit/bec1472d8f6396270bf675b7cb6fa0a26d9daf7a">query by &ldquo;open&rdquo; or &ldquo;closed&rdquo; state</a> when I needed to access the closed reports list. So, you can use the package and quickly extend it when you need.</p>
+
 
 
 </div>
@@ -406,7 +407,7 @@ with_mock_api({
     <ul>
       
       
-        <li><a href="/2018/04/25/turbocharging-readr/">Turbocharging &#39;readr&#39;</a> &ndash; 13 minutes
+        <li><a href="/2018/04/25/turbocharging-readr/">Turbocharging &#39;readr&#39;</a> &ndash; 15 minutes
       
         <li><a href="/2018/02/01/back-to-the-future/">Back to the Future</a> &ndash; 11 minutes
       

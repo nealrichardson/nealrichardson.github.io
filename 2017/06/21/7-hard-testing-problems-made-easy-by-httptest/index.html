@@ -156,7 +156,7 @@ ga('send', 'pageview');
 
 <p>To solve these problems, I developed the <a href="http://enpiar.com/r/httptest/">httptest</a> package for R. The latest <a href="https://cran.r-project.org/package=httptest">2.0.0 CRAN release</a> adds a range of new features that allow testing practically any request and response behavior without actually connecting to the remote service. It also includes a <a href="http://enpiar.com/r/httptest/articles/httptest.html">vignette</a> that illustrates how to get started using the package. Drawing from examples of several R packages that use <code>httptest</code> (and one that doesn&rsquo;t), this post outlines a set of testing challenges, both common and esoteric, that it makes easy.</p>
 
-<h1 id="the-basics">The basics</h1>
+<a class="headline-anchor" href="#the-basics"><h1 id="the-basics">The basics</a> </h1>
 
 
 <figure class="floating-right halfwidth">
@@ -178,7 +178,7 @@ ga('send', 'pageview');
 
 <p>APIs provide a contract: if you make this request, the service will return this response. So writing an API client is all about making the right requests and handling the responses correctly. Even though these questions are the essentials that you&rsquo;d want to have covered, without a testing setup like <code>httptest</code>, they can be challenging to test. <code>httptest</code> is designed not only to make testing requests and responses simple but also to make your tests easily readable.</p>
 
-<h2 id="1-am-i-making-the-right-request">1. Am I making the right request?</h2>
+<a class="headline-anchor" href="#1-am-i-making-the-right-request"><h2 id="1-am-i-making-the-right-request">1. Am I making the right request?</a> </h2>
 
 <p><code>httptest</code> provides three test <strong>contexts</strong>&mdash;&ldquo;with&rdquo;-style functions that you wrap around other code you want to execute&mdash;that mock the network connection in different ways. One context, <code>without_internet</code>, simulates the situation when any network request will
 fail, as in when you are without an internet connection. Any HTTP request will raise
@@ -202,7 +202,7 @@ an error with a message containing the request information is raised. Together w
 })
 </code></pre>
 
-<h2 id="2-does-my-request-have-the-right-payload">2. Does my request have the right payload?</h2>
+<a class="headline-anchor" href="#2-does-my-request-have-the-right-payload"><h2 id="2-does-my-request-have-the-right-payload">2. Does my request have the right payload?</a> </h2>
 
 <p>The <code>expect_VERB</code> expectations also allow you to assert that your request include the expected query parameters:</p>
 
@@ -227,7 +227,7 @@ an error with a message containing the request information is raised. Together w
 
 <p>The expected results themselves are strings, easily readable in your test code.</p>
 
-<h2 id="3-can-i-handle-the-server-s-response">3. Can I handle the server&rsquo;s response?</h2>
+<a class="headline-anchor" href="#3-can-i-handle-the-server-s-response"><h2 id="3-can-i-handle-the-server-s-response">3. Can I handle the server&rsquo;s response?</a> </h2>
 
 
 <figure class="floating-right halfwidth">
@@ -277,13 +277,13 @@ an error with a message containing the request information is raised. Together w
 
 <p>We can also record real server responses with the <code>capture_requests</code> context, which writes the responses as files in the correct location so that they can be used in future test runs. We&rsquo;ll give an example of that below.</p>
 
-<h1 id="harder-problems">Harder problems</h1>
+<a class="headline-anchor" href="#harder-problems"><h1 id="harder-problems">Harder problems</a> </h1>
 
 <p>You can test this basic request and response handling without <code>httptest</code> if you point your tests at a real live server. However, running against a real server, while useful for integration testing, has some limitations. You may likely need to authenticate with the API, which means that in order to run your tests, one needs access to an API token, and perhaps even <em>your</em> API token. This complicates (though does not make impossible) running tests on a continuous integration platform. You may also have to worry about API rate limiting, which could cause spurious test failures. Another big concern is what is stored on the server: do you need some state to exist in order to run your tests, and can others alter that state and disrupt you? Lastly, it&rsquo;s slow to connect to a remote server, which makes you <a href="http://www.draconianoverlord.com/pages/first-principles.html#the-speed-of-your-tdd-cycle-is-the-primary-driver-of-productivity">less productive</a> when you&rsquo;re writing code and running the tests as you go.</p>
 
 <p>This next set of issues are either difficult, costly, or impossible to test even with a real API to connect to, but <code>httptest</code> lets you ensure that your code does the right thing even in these cases.</p>
 
-<h2 id="4-error-handling">4. Error handling</h2>
+<a class="headline-anchor" href="#4-error-handling"><h2 id="4-error-handling">4. Error handling</a> </h2>
 
 
 <figure class="floating-left halfwidth">
@@ -322,7 +322,7 @@ an error with a message containing the request information is raised. Together w
 
 <p>in an R session against the real Pivotal Tracker API using my authentication token, then sanitizing the response to remove sensitive information. This lets us exercise the <a href="https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/R/api.R#L24-L33">lines of code in our API handler</a> that deal with 400 Bad Request responses.</p>
 
-<h2 id="5-rare-or-difficult-to-trigger-server-behavior">5. Rare or difficult-to-trigger server behavior</h2>
+<a class="headline-anchor" href="#5-rare-or-difficult-to-trigger-server-behavior"><h2 id="5-rare-or-difficult-to-trigger-server-behavior">5. Rare or difficult-to-trigger server behavior</a> </h2>
 
 
 <figure class="floating-right halfwidth">
@@ -361,7 +361,7 @@ an error with a message containing the request information is raised. Together w
 
 <p>The 503 fixture object was created not from a real server response&mdash;it&rsquo;s hard to trigger&mdash;but rather by constructing the object that was needed in R. You can also dump out a regular, successful &ldquo;response&rdquo; object and then edit the .R fixture file to give it a different status code and headers&mdash;it&rsquo;s just a text file.</p>
 
-<h2 id="6-pagination">6. Pagination</h2>
+<a class="headline-anchor" href="#6-pagination"><h2 id="6-pagination">6. Pagination</a> </h2>
 
 <p>Many APIs paginate the responses of queries that could yield potentially large responses. Your code may want to conceal that API detail from its users and collect the results from all &ldquo;pages&rdquo; and return them together. <code>httptest</code> easily lets you test functions that makes multiple requests because you can provide mock responses for each request, which allows the rest of your code to proceed evaluating using the mocks.</p>
 
@@ -389,7 +389,7 @@ an error with a message containing the request information is raised. Together w
 
 <p>and the <a href="https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/tests/testthat/www.pivotaltracker.com/services/v5/projects/12345/stories-97adb9.json">second one</a> has <code>&quot;offset&quot;:3</code> and contains records 4 and 5. The mock file paths contain the hash of the query parameters in the requests made, which is how they are distinguished. I did create them from an actual API response, but because the fixtures are plain-text files I can see and edit, I could reduce the actual size down from the 100 results per page that the API paginates at to 3 per page so that the size of the test data is smaller. The code follows the correct logic, following what the server responds with.</p>
 
-<h2 id="7-code-that-shouldn-t-make-a-request">7. Code that shouldn&rsquo;t make a request</h2>
+<a class="headline-anchor" href="#7-code-that-shouldn-t-make-a-request"><h2 id="7-code-that-shouldn-t-make-a-request">7. Code that shouldn&rsquo;t make a request</a> </h2>
 
 
 <figure class="floating-right halfwidth">
@@ -438,9 +438,10 @@ an error with a message containing the request information is raised. Together w
 
 <p>This tells us that our cache is working as expected: we can get results from cache and we don&rsquo;t make a (potentially expensive) network request more than once.</p>
 
-<h1 id="what-about-when">What about when&hellip;</h1>
+<a class="headline-anchor" href="#what-about-when"><h1 id="what-about-when">What about when&hellip;</a> </h1>
 
 <p>There&rsquo;s more that <code>httptest</code> can do, and even more that it can grow to support. Check it out, and if you encounter features of an API that could be better supported or mocked by <code>httptest</code>, please <a href="https://github.com/nealrichardson/httptest/issues">make an issue on GitHub</a>!</p>
+
 
 
 </div>
@@ -469,7 +470,7 @@ an error with a message containing the request information is raised. Together w
     <ul>
       
       
-        <li><a href="/2018/04/25/turbocharging-readr/">Turbocharging &#39;readr&#39;</a> &ndash; 13 minutes
+        <li><a href="/2018/04/25/turbocharging-readr/">Turbocharging &#39;readr&#39;</a> &ndash; 15 minutes
       
         <li><a href="/2018/02/01/back-to-the-future/">Back to the Future</a> &ndash; 11 minutes
       
