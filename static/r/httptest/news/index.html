@@ -26,8 +26,6 @@
   <link href="../extra.css" rel="stylesheet">
   
 <meta property="og:title" content="All news" />
-
-
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -86,6 +84,9 @@
       <a href="../articles/redacting.html">Redacting Sensitive Information</a>
     </li>
     <li>
+      <a href="../articles/vignettes.html">Using with Vignettes</a>
+    </li>
+    <li>
       <a href="../index.html#faq">FAQ</a>
     </li>
   </ul>
@@ -124,27 +125,67 @@
     </div>
 
     <div class="contents">
-    <div id="httptest-2-3-2" class="section level2">
+    <div id="httptest-3-0-0" class="section level1">
+<h1 class="hasAnchor">
+<a href="#httptest-3-0-0" class="anchor"></a>httptest 3.0.0</h1>
+<div id="major-features" class="section level2">
 <h2 class="hasAnchor">
-<a href="#httptest-2-3-2" class="anchor"></a>httptest 2.3.2</h2>
+<a href="#major-features" class="anchor"></a>Major features</h2>
+<ul>
+<li>Write vignettes and other R Markdown documents that communicate with a remote API using <code>httptest</code>. Add a code chunk at the beginning of the document including <code><a href="../reference/start_vignette.html">start_vignette()</a></code>. The first time you run the document, the real API responses are recorded to a subfolder in your <code>vignettes</code> directory. Subsequent vignette builds use these recorded responses, allowing the document to regenerate without a network connection or API credentials. If your document needs to handle changes of server state, as when you make an API request that creates a record on the server, add a call to <code><a href="../reference/change_state.html">change_state()</a></code>. See <code><a href="../articles/vignettes.html">vignette("vignettes")</a></code> for more discussion and links to examples.</li>
+<li>Packages can now have a default redacting function, such that whenever the package is loaded, <code><a href="../reference/capture_requests.html">capture_requests()</a></code> will apply that function to any responses it records. This ensures that you never forget to sanitize your API responses if you need to use a custom function. To take advantage of this feature, put a <code>function (response) {...}</code> in a file at <code>inst/httptest/redact.R</code> in your package. See the updated <code><a href="../articles/redacting.html">vignette("redacting", package="httptest")</a></code> for more.</li>
+<li>You can also now provide a function to preprocess mock requests. This can be particularly for shortening URLs—and thus the mock file paths—because of CRAN-mandated constraints on file path lengths (“non-portable file paths”). This machinery works very similar to redacting responses when recording them, except it operates on <code>request</code> objects inside of <code><a href="../reference/with_mock_api.html">with_mock_api()</a></code>. To use it, either pass a <code>function (request) {...}</code> to <code><a href="../reference/set_requester.html">set_requester()</a></code> in your R session, or to define one for the package, put a <code>function (request) {...}</code> in a file at <code>inst/httptest/request.R</code>. <code><a href="../reference/gsub_response.html">gsub_request()</a></code> is particularly useful here. <code><a href="../articles/redacting.html">vignette("redacting", package="httptest")</a></code> has further details.</li>
+</ul>
+</div>
+<div id="other-big-changes-and-enhancements" class="section level2">
+<h2 class="hasAnchor">
+<a href="#other-big-changes-and-enhancements" class="anchor"></a>Other big changes and enhancements</h2>
+<ul>
+<li>Standardize exported functions on <code>snake_case</code> rather than <code>camelCase</code> to better align with <code>httr</code> and <code>testthat</code> (except for <code><a href="../reference/mockPaths.html">.mockPaths()</a></code>, which follows <code><a href="http://www.rdocumentation.org/packages/base/topics/libPaths">base::.libPaths()</a></code>). Exported functions that have been renamed have retained their old aliases in this release, but they are to be deprecated.</li>
+<li>
+<code><a href="../reference/use_mock_api.html">use_mock_api()</a></code> and <code><a href="../reference/block_requests.html">block_requests()</a></code> enable the request altering behavior of <code><a href="../reference/with_mock_api.html">with_mock_api()</a></code> and <code><a href="../reference/without_internet.html">without_internet()</a></code>, respectively, without the enclosing context. (<code>use_mock_api</code> is called inside <code><a href="../reference/start_vignette.html">start_vignette()</a></code>.) To turn off mocking, call <code><a href="../reference/stop_mocking.html">stop_mocking()</a></code>.</li>
+<li>Internal change: mocking contexts no longer use <code><a href="http://www.rdocumentation.org/packages/testthat/topics/with_mock">testthat::with_mock()</a></code> and instead use <code>trace()</code>.</li>
+<li>
+<code><a href="../reference/capture_requests.html">capture_requests()</a></code>/<code><a href="../reference/capture_requests.html">start_capturing()</a></code> now allow you to call <code><a href="../reference/mockPaths.html">.mockPaths()</a></code> while actively recording so that you can record server state changes to a different mock “layer”. Previously, the recording path was fixed when the context was initialized.</li>
+<li>The <code>redact</code> argument to <code><a href="../reference/capture_requests.html">capture_requests()</a></code>/<code><a href="../reference/capture_requests.html">start_capturing()</a></code> is deprecated in favor of <code><a href="../reference/set_redactor.html">set_redactor()</a></code>. This function can take a <code>function (response) {...}</code>; a formula as shorthand for an anonymous function with <code>.</code> as the “response” argument, as in the <a href="purrr.tidyverse.org"><code>purrr</code></a> package; a list of functions that will be chained together; or <code>NULL</code> to disable the default <code><a href="../reference/redact.html">redact_auth()</a></code>.</li>
+<li>
+<code>redact_headers()</code> and <code>within_body_text()</code> no longer return redacting functions. Instead, they take <code>response</code> as their first argument. This makes them more natural to use and chain together in custom redacting functions. To instead return a function as before, see <code><a href="../reference/as-redactor.html">as.redactor()</a></code>.</li>
+<li>
+<code><a href="../reference/gsub_response.html">gsub_response()</a></code> is a new redactor that does regular-expression replacement (via <code><a href="http://www.rdocumentation.org/packages/base/topics/grep">base::gsub()</a></code>) within a response’s body text and URL.</li>
+<li>
+<code><a href="../reference/mockPaths.html">.mockPaths()</a></code> only keeps unique path values, consistent with <code><a href="http://www.rdocumentation.org/packages/base/topics/libPaths">base::.libPaths()</a></code>.</li>
+<li>Option <code>"httptest.verbose"</code> to govern some extra debug messaging (automatically turned off by <code><a href="../reference/start_vignette.html">start_vignette()</a></code>)</li>
+<li>Fix a bug where <code>write_disk</code> responses that were recorded in one location and moved to another directory could not be loaded</li>
+</ul>
+<div id="httptest-2-3-4" class="section level3">
+<h3 class="hasAnchor">
+<a href="#httptest-2-3-4" class="anchor"></a>httptest 2.3.4</h3>
+<ul>
+<li>Ensure forward compatibility with a <a href="https://github.com/wch/r-source/commit/62fced00949b9a261034d24789175b205f7fa866">change</a> in <code>deparse()</code> in the development version of R (r73699).</li>
+</ul>
+</div>
+<div id="httptest-2-3-2" class="section level3">
+<h3 class="hasAnchor">
+<a href="#httptest-2-3-2" class="anchor"></a>httptest 2.3.2</h3>
 <ul>
 <li>Add <code>redact_oauth()</code> to purge <code><a href="http://www.rdocumentation.org/packages/httr/topics/Token-class">httr::Token()</a></code> objects from requests (<a href="https://github.com/nealrichardson/httptest/issues/9">#9</a>). <code>redact_oauth()</code> is built in to <code><a href="../reference/redact.html">redact_auth()</a></code>, the default redactor, so no action is required to start using it.</li>
 </ul>
 </div>
-    <div id="httptest-2-3-0" class="section level2">
+</div>
+<div id="httptest-2-3-0" class="section level2">
 <h2 class="hasAnchor">
 <a href="#httptest-2-3-0" class="anchor"></a>httptest 2.3.0</h2>
 <ul>
 <li>Remove support for mocking <code><a href="http://www.rdocumentation.org/packages/utils/topics/download.file">utils::download.file()</a></code>, as <code>testthat</code> no longer permits it. Use <code><a href="http://www.rdocumentation.org/packages/httr/topics/GET">httr::GET(url, config=write_disk(filename))</a></code> instead, which <code>httptest</code> now more robustly supports in <code><a href="../reference/capture_requests.html">capture_requests()</a></code>.</li>
 </ul>
 </div>
-    <div id="httptest-2-2-0" class="section level2">
+<div id="httptest-2-2-0" class="section level2">
 <h2 class="hasAnchor">
 <a href="#httptest-2-2-0" class="anchor"></a>httptest 2.2.0</h2>
 <ul>
-<li>Add redacting functions (<code><a href="../reference/redact.html">redact_auth()</a></code>, <code>redact_cookies()</code>, <code>redact_HTTP_auth()</code>, <code>redact_headers()</code>, <code>within_body_text()</code>) that can be specified in <code><a href="../reference/capture_requests.html">capture_requests()</a></code> so that sensitive information like tokens and ids can be purged from recorded response files. The default redacting function is <code><a href="../reference/redact.html">redact_auth()</a></code>, which wraps several of them. See <code><a href="http://enpiar.com/r/httptest/articles/redacting.html">vignette("redacting", package="httptest")</a></code> for more.</li>
+<li>Add redacting functions (<code><a href="../reference/redact.html">redact_auth()</a></code>, <code>redact_cookies()</code>, <code>redact_http_auth()</code>, <code>redact_headers()</code>, <code>within_body_text()</code>) that can be specified in <code><a href="../reference/capture_requests.html">capture_requests()</a></code> so that sensitive information like tokens and ids can be purged from recorded response files. The default redacting function is <code><a href="../reference/redact.html">redact_auth()</a></code>, which wraps several of them. See <code><a href="../articles/redacting.html">vignette("redacting", package="httptest")</a></code> for more.</li>
 <li>When loading a JSON mock response, the current “request” object is now included in the response returned, as is the case with real responses.</li>
-<li>Remove the file size limitation for mock files loaded in <code><a href="../reference/with_mock_API.html">with_mock_API()</a></code>
+<li>Remove the file size limitation for mock files loaded in <code><a href="../reference/with_mock_api.html">with_mock_api()</a></code>
 </li>
 <li>
 <code><a href="../reference/skip_if_disconnected.html">skip_if_disconnected()</a></code> now also wraps <code><a href="http://www.rdocumentation.org/packages/testthat/topics/skip">testthat::skip_on_cran()</a></code> so that tests that require a real network connection don’t cause a flaky test failure on CRAN</li>
@@ -157,26 +198,27 @@
 </ul>
 </div>
 </div>
-    <div id="httptest-2-1-0" class="section level2">
+<div id="httptest-2-1-0" class="section level2">
 <h2 class="hasAnchor">
 <a href="#httptest-2-1-0" class="anchor"></a>httptest 2.1.0</h2>
 <ul>
 <li>
-<code><a href="../reference/with_mock_API.html">with_mock_API()</a></code> and <code><a href="../reference/without_internet.html">without_internet()</a></code> handle multipart and urlencoded form data in mocked HTTP requests.</li>
+<code><a href="../reference/with_mock_api.html">with_mock_api()</a></code> and <code><a href="../reference/without_internet.html">without_internet()</a></code> handle multipart and urlencoded form data in mocked HTTP requests.</li>
 <li>
-<code><a href="../reference/buildMockURL.html">buildMockURL()</a></code> escapes URL characters that are not valid in file names on all R platforms (which <code>R CMD check</code> would warn about).</li>
+<code><a href="../reference/build_mock_url.html">buildMockURL()</a></code> escapes URL characters that are not valid in file names on all R platforms (which <code>R CMD check</code> would warn about).</li>
 <li>
 <code><a href="../reference/capture_requests.html">capture_requests()</a></code> now has a <code>verbose</code> argument, which, if <code>TRUE</code>, prints a message with the file path where each captured request is written.</li>
 <li>
 <code><a href="../reference/capture_requests.html">capture_requests()</a></code> takes the first element in <code><a href="../reference/mockPaths.html">.mockPaths()</a></code> as its default “path” argument. The default is unchanged since <code><a href="../reference/mockPaths.html">.mockPaths()</a></code> by default returns the current working directory, just as the “path” default was, but if you set a different mock path for reading mocks, <code><a href="../reference/capture_requests.html">capture_requests()</a></code> will write there as well.</li>
 </ul>
 </div>
+</div>
     <div id="httptest-2-0-0" class="section level1">
 <h1 class="hasAnchor">
 <a href="#httptest-2-0-0" class="anchor"></a>httptest 2.0.0</h1>
 <ul>
 <li>
-<code><a href="../reference/capture_requests.html">capture_requests()</a></code> now writes non-JSON-content-type and non-200-status responses as full “response” objects in .R files. <code><a href="../reference/with_mock_API.html">with_mock_API()</a></code> now looks for .R mocks if a .json mock isn’t found. This allows all requests and all responses, not just JSON content, to be mocked.</li>
+<code><a href="../reference/capture_requests.html">capture_requests()</a></code> now writes non-JSON-content-type and non-200-status responses as full “response” objects in .R files. <code><a href="../reference/with_mock_api.html">with_mock_api()</a></code> now looks for .R mocks if a .json mock isn’t found. This allows all requests and all responses, not just JSON content, to be mocked.</li>
 <li>New <code><a href="../reference/mockPaths.html">.mockPaths()</a></code> function, in the model of <code>.libPaths()</code>, which allows you to specify alternate directories in which to search for mock API responses.</li>
 <li>Documentation enriched and <code><a href="../articles/httptest.html">vignette("httptest")</a></code> added.</li>
 </ul>
@@ -189,23 +231,23 @@
 <code><a href="../reference/with_trace.html">with_trace()</a></code> convenience wrapper around <code>trace</code>/<code>untrace</code>
 </li>
 <li>
-<code>mockDownload()</code> now processes request URLs as <code>mockRequest()</code> does</li>
+<code>mockDownload()</code> now processes request URLs as <code>mock_request()</code> does</li>
 </ul>
 </div>
 <div id="httptest-1-2-0" class="section level2">
 <h2 class="hasAnchor">
 <a href="#httptest-1-2-0" class="anchor"></a>httptest 1.2.0</h2>
 <ul>
-<li>Add support in <code><a href="../reference/with_mock_API.html">with_mock_API()</a></code> for loading request fixtures for all HTTP verbs, not only GET (<a href="https://github.com/nealrichardson/httptest/pull/4">#4</a>). Include request body in the mock file path hashing.</li>
+<li>Add support in <code><a href="../reference/with_mock_api.html">with_mock_api()</a></code> for loading request fixtures for all HTTP verbs, not only GET (<a href="https://github.com/nealrichardson/httptest/pull/4">#4</a>). Include request body in the mock file path hashing.</li>
 <li>
-<code><a href="../reference/buildMockURL.html">buildMockURL()</a></code> can accept either a ‘request’ object or a character URL</li>
+<code><a href="../reference/build_mock_url.html">buildMockURL()</a></code> can accept either a ‘request’ object or a character URL</li>
 <li>Bump mock payload max size up to 128K</li>
 </ul>
 <div id="httptest-1-1-2" class="section level3">
 <h3 class="hasAnchor">
 <a href="#httptest-1-1-2" class="anchor"></a>httptest 1.1.2</h3>
 <ul>
-<li>Support full URLs, not just file paths, in <code><a href="../reference/with_mock_API.html">with_mock_API()</a></code> (<a href="https://github.com/nealrichardson/httptest/issues/1">#1</a>)</li>
+<li>Support full URLs, not just file paths, in <code><a href="../reference/with_mock_api.html">with_mock_api()</a></code> (<a href="https://github.com/nealrichardson/httptest/issues/1">#1</a>)</li>
 </ul>
 </div>
 </div>
@@ -215,7 +257,7 @@
 <ul>
 <li>
 <code><a href="../reference/expect_header.html">expect_header()</a></code> to assert that a HTTP request has a header</li>
-<li>Always prune the leading “:///” that appears in <code><a href="../reference/with_mock_API.html">with_mock_API()</a></code> if the URL has a querystring</li>
+<li>Always prune the leading “:///” that appears in <code><a href="../reference/with_mock_api.html">with_mock_api()</a></code> if the URL has a querystring</li>
 </ul>
 </div>
 </div>
@@ -233,10 +275,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#httptest-2-3-2">2.3.2</a></li>
-        <li><a href="#httptest-2-3-0">2.3.0</a></li>
-        <li><a href="#httptest-2-2-0">2.2.0</a></li>
-        <li><a href="#httptest-2-1-0">2.1.0</a></li>
+        <li><a href="#httptest-3-0-0">3.0.0</a></li>
         <li><a href="#httptest-2-0-0">2.0.0</a></li>
         <li><a href="#httptest-1-0-0">1.0.0</a></li>
       </ul>

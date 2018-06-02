@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert a request to a mock file path — buildMockURL • httptest</title>
+<title>Wrap a redacting expression as a proper function — as.redactor • httptest</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,12 +25,14 @@
 <script src="../pkgdown.js"></script>
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Convert a request to a mock file path — buildMockURL" />
+<meta property="og:title" content="Wrap a redacting expression as a proper function — as.redactor" />
 
-<meta property="og:description" content="Requests are translated to mock file paths according to several rules that
-incorporate the request method, URL, query parameters, and body." />
-
-
+<meta property="og:description" content="Redactors take a response as their first argument, and some take additional
+arguments: redact_headers(), for example, requires that you specify
+headers. This function allows you to take a simplified expression via a
+formula, similar to what purrr does, so that you can provide the function
+to capture_requests()." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -89,6 +91,9 @@ incorporate the request method, URL, query parameters, and body." />
       <a href="../articles/redacting.html">Redacting Sensitive Information</a>
     </li>
     <li>
+      <a href="../articles/vignettes.html">Using with Vignettes</a>
+    </li>
+    <li>
       <a href="../index.html#faq">FAQ</a>
     </li>
   </ul>
@@ -122,69 +127,42 @@ incorporate the request method, URL, query parameters, and body." />
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert a request to a mock file path</h1>
+    <h1>Wrap a redacting expression as a proper function</h1>
     </div>
 
     
-    <p>Requests are translated to mock file paths according to several rules that
-incorporate the request method, URL, query parameters, and body.</p>
+    <p>Redactors take a <code>response</code> as their first argument, and some take additional
+arguments: <code>redact_headers()</code>, for example, requires that you specify
+<code>headers</code>. This function allows you to take a simplified expression via a
+formula, similar to what <code>purrr</code> does, so that you can provide the function
+to <code><a href='capture_requests.html'>capture_requests()</a></code>.</p>
     
 
-    <pre class="usage"><span class='fu'>buildMockURL</span>(<span class='no'>req</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"GET"</span>)</pre>
+    <pre class="usage"><span class='fu'>as.redactor</span>(<span class='no'>fmla</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>req</th>
-      <td><p>A <code>request</code> object, or a character "URL" to convert</p></td>
-    </tr>
-    <tr>
-      <th>method</th>
-      <td><p>character HTTP method. If <code>req</code> is a 'request' object,
-its request method will override this argument</p></td>
+      <th>expr</th>
+      <td><p>Partial expression to turn into a function of <code>response</code></p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A file path and name, with .json extension. The file may or may not
-exist: existence is not a concern of this function.</p>
+    <p>A <code>function</code>.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>First, the URL is modified in two ways in order to allow it to map to a
-local file system. All mock files have the request protocol such as "http://"
-removed from the URL, and they also have a file extension appended. In an
-HTTP API, a "directory" itself is a resource,
-so the extension allows distinguishing directories and files in the file
-system. That is, a mocked <code>GET("http://example.com/api/")</code> may read a
-"example.com/api.json" file, while
-<code>GET("http://example.com/api/object1/")</code> reads "example.com/api/object1.json".</p>
-<p>The extension also gives information on content type. Two extensions are
-currently supported: (1) .json and (2) .R. JSON mocks can be stored in .json
-files, and when they are loaded by <code><a href='with_mock_API.html'>with_mock_API()</a></code>, relevant request
-metadata (headers, status code, etc.) are inferred. If your API doesn't
-return JSON, or if you want to simulate requests with other behavior (201
-Location response, or 400 Bad Request, for example), you can store full
-<code>response</code> objects in .R files that <code>with_mock_API</code> will <code>source</code> to load.
-Any request can be stored as a .R mock, but the .json mocks offer a
-simplified, more readable alternative. (<code><a href='capture_requests.html'>capture_requests()</a></code> will record
-simplified .json files where appropriate and .R mocks otherwise by default.)</p>
-<p>Second, if the request URL contains a query string, it will be popped off,
-hashed by <code><a href='http://www.rdocumentation.org/packages/digest/topics/digest'>digest::digest()</a></code>, and the first six characters appended to the
-file being read. For example, <code>GET("api/object1/?a=1")</code> reads
-"api/object1-b64371.json". Third, request bodies are similarly hashed and
-appended. Finally, if a request method other than GET is used it will be
-appended to the end of the end of the file name. For example,
-<code>POST("api/object1/?a=1")</code> reads "api/object1-b64371-POST.json".</p>
-<p>This function is exported so that other packages can construct similar mock
-behaviors or override specific requests at a higher level than
-<code>with_mock_API</code> mocks.</p>
+    <p>For example, <code>as.redactor(~ redact_headers(., "X-Custom-Header"))</code> is equivalent
+to <code>function (response) redact_headers(response, "X-Custom-Header")</code>. This
+allows you to do
+<code><a href='set_redactor.html'>set_redactor(~ redact_headers(., "X-Custom-Header"))</a></code>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='with_mock_API.html'>with_mock_API()</a></code> <code><a href='capture_requests.html'>capture_requests()</a></code></p>
+    <p><code><a href='capture_requests.html'>capture_requests()</a></code></p>
     
 
   </div>

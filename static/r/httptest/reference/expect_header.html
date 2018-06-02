@@ -30,8 +30,7 @@
 <meta property="og:description" content="This expectation checks that a HTTP header (and potentially header value)
 is present in a request. It works by inspecting the request object and
 raising warnings that are caught by testthat::expect_warning()." />
-
-
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -88,6 +87,9 @@ raising warnings that are caught by testthat::expect_warning()." />
     </li>
     <li>
       <a href="../articles/redacting.html">Redacting Sensitive Information</a>
+    </li>
+    <li>
+      <a href="../articles/vignettes.html">Using with Vignettes</a>
     </li>
     <li>
       <a href="../index.html#faq">FAQ</a>
@@ -155,11 +157,11 @@ requests.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>httr</span>)
-<span class='fu'><a href='with_fake_HTTP.html'>with_fake_HTTP</a></span>({
+<span class='fu'><a href='with_fake_http.html'>with_fake_http</a></span>({
     <span class='fu'>expect_header</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/httr/topics/GET'>GET</a></span>(<span class='st'>"http://example.com"</span>, <span class='kw'>config</span><span class='kw'>=</span><span class='fu'><a href='http://www.rdocumentation.org/packages/httr/topics/add_headers'>add_headers</a></span>(<span class='kw'>Accept</span><span class='kw'>=</span><span class='st'>"image/png"</span>)),
         <span class='st'>"Accept: image/png"</span>)
 })</div><div class='output co'>#&gt; <span class='message'>GET http://example.com</span></div><div class='output co'>#&gt; Response [http://example.com]
-#&gt;   Date: NULL
+#&gt;   Date: 2018-01-15 22:05
 #&gt;   Status: 200
 #&gt;   Content-Type: &lt;unknown&gt;
 #&gt;   Size: 4 B

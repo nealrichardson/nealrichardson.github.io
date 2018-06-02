@@ -12,7 +12,7 @@ At [Crunch](http://crunch.io/), I occasionally pick up small [coding projects to
 
 {{< figure src="/img/fotomat.jpg" class="floating-right halfwidth" attr="Wikimedia Commons" attrlink="https://commons.wikimedia.org/wiki/File:This_is_a_typical_drive-up_Fotomat_booth..jpg">}}
 
-Given that I don't have much time to code, and that I've been working on [tools to make working with APIs easier](http://enpiar.com/r/httptest/), I wanted to challenge myself: how quickly could I write an R package for a new API? In addition to getting the job done, I set a few additional requirements: the package must have full test coverage, be fully documented, and pass `R CMD check`—that is, it must be complete enough for [CRAN](https://cran.r-project.org/) submission.
+Given that I don't have much time to code, and that I've been working on [tools to make working with APIs easier](http://enpiar.com/r/httptest/), I wanted to challenge myself: how quickly could I write an R package for a new API? In addition to getting the job done, I set a few additional requirements: the package must have full test coverage, be fully documented, and pass `R CMD check`---that is, it must be complete enough for [CRAN](https://cran.r-project.org/) submission.
 
 Just to make it interesting, it turns out that the API I set out to tackle is neither documented nor even officially acknowledged. When I asked Usersnap about their API, they responded that they "currently do not offer API access." Clearly, though, there was an API behind their web application, so I was going to have to infer how the API works by examining how their app uses their unpublished API. It reminded me of my days in grad school collecting data by scraping Brazilian government websites, so with a touch of nostalgia, I embraced the challenge.
 
@@ -55,17 +55,17 @@ If the API is well documented, it will be clear what parameters a user needs to 
 
 ## Don't try this at home
 
-In this case, with no documentation available and no official way to request an API token, I had to do some guessing. The project ID was easy to identify—it was even in the browser URL—but authentication was trickier. Watching the network panel in the inspector of my web browser when I used the Usersnap web app, I looked at the requests made to see what they were doing and how they included authentication. It was clear that authentication was being sent in a cookie, but there were many cookies being sent with each request, so it was unclear which was the operative one.
+In this case, with no documentation available and no official way to request an API token, I had to do some guessing. The project ID was easy to identify---it was even in the browser URL---but authentication was trickier. Watching the network panel in the inspector of my web browser when I used the Usersnap web app, I looked at the requests made to see what they were doing and how they included authentication. It was clear that authentication was being sent in a cookie, but there were many cookies being sent with each request, so it was unclear which was the operative one.
 
 Ultimately, I watched the inspector closely as I logged in again and saw that my authentication request responded with a `Set-Cookie` header containing one key: "bugrep". That must be the auth cookie. So I copied it from the console and used that in my R session, as if it were a proper API access token. Some crude testing confirmed that I got a success response from the API when I included it in a request.
 
-A better solution might have been to implement the same authentication requests that the browser made, so that you'd essentially prompt your R user for a username and password and authenticate the same way. But, I was using Google Account OAuth with Usersnap, and while that's possible to do with `httr`, it wasn't something I wanted to mess with—not with the limited time I had for writing the API client. Perhaps later.
+A better solution might have been to implement the same authentication requests that the browser made, so that you'd essentially prompt your R user for a username and password and authenticate the same way. But, I was using Google Account OAuth with Usersnap, and while that's possible to do with `httr`, it wasn't something I wanted to mess with---not with the limited time I had for writing the API client. Perhaps later.
 
 ## How should users supply their credentials to the R session?
 
 Once we know what credentials are required to authenticate, we need to determine how package users will provide them. There are a few alternatives: set them as `options` and thereby be able to specify them in your `.Rprofile`; set them as environment variables; or some configuration file format. Security-wise, there's really not much difference. And, from the perspective of bootstrapping a new package, it's not an architecturally significant decision: it's easy to support multiple ways of specifying these parameters should you decide you want to do something different in the future. So, just pick one.
 
-I opted for `options` purely out of convenience, both for me as a package developer and for ease of setting them as a user—no special setting and loading functions are required. We need two options, which I namespaced as "usersnap.project" and "usersnap.cookie", so
+I opted for `options` purely out of convenience, both for me as a package developer and for ease of setting them as a user---no special setting and loading functions are required. We need two options, which I namespaced as "usersnap.project" and "usersnap.cookie", so
 
 ```r
 options(usersnap.project="some-project-slug",
@@ -171,12 +171,12 @@ After tweaking to make sure that the response looked as expected (my first attem
 reps <- capture_requests(getReports())
 ```
 
-Now we can write tests around that fixture using the [with_mock_API](http://enpiar.com/r/httptest/articles/httptest.html#the-with_mock_api-context) context, and we can iterate on the R code and tests as needed, all without hitting the actual API or making any potentially expensive network requests. In [tests/testthat/test-get-reports.R](https://github.com/nealrichardson/useRsnap/blob/8c2662de5e726ad99e5985b92b97ef5b092c5e0a/tests/testthat/test-get-reports.R),
+Now we can write tests around that fixture using the [with_mock_api](http://enpiar.com/r/httptest/articles/httptest.html#the-with_mock_api-context) context, and we can iterate on the R code and tests as needed, all without hitting the actual API or making any potentially expensive network requests. In [tests/testthat/test-get-reports.R](https://github.com/nealrichardson/useRsnap/blob/8c2662de5e726ad99e5985b92b97ef5b092c5e0a/tests/testthat/test-get-reports.R),
 
 ```r
 context("Get reports")
 
-with_mock_API({
+with_mock_api({
     test_that("Get reports", {
         reps <- getReports()
         expect_length(reps, 3)
@@ -186,7 +186,7 @@ with_mock_API({
 
 Note that this test says there's only 3 records, not the 10 from my fixture. To save on file size, I deleted the other seven from the recorded mock. It's a plain text file, so I could massage it as needed.
 
-We can add a few more tests from here, but we're basically done with code—we have a function that returns a list of report entries in our R session. That's enough of an API wrapper to start writing my daily cron job summarizing our support tickets.
+We can add a few more tests from here, but we're basically done with code---we have a function that returns a list of report entries in our R session. That's enough of an API wrapper to start writing my daily cron job summarizing our support tickets.
 
 # Step 5: Document and wrap up
 

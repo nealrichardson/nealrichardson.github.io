@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Collect API Responses as Mock Files — capture_requests • httptest</title>
+<title>Record API responses as mock files — capture_requests • httptest</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,16 +25,13 @@
 <script src="../pkgdown.js"></script>
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Collect API Responses as Mock Files — capture_requests" />
+<meta property="og:title" content="Record API responses as mock files — capture_requests" />
 
 <meta property="og:description" content="capture_requests is a context that collects the responses from requests
 you make and stores them as mock files. This enables you to perform a series
 of requests against a live server once and then build your test suite using
-those mocks, running your tests in with_mock_API().
-start_capturing and stop_capturing allow you to turn on/off request
-recording for more convenient use in an interactive session." />
-
-
+those mocks, running your tests in with_mock_api()." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -93,6 +90,9 @@ recording for more convenient use in an interactive session." />
       <a href="../articles/redacting.html">Redacting Sensitive Information</a>
     </li>
     <li>
+      <a href="../articles/vignettes.html">Using with Vignettes</a>
+    </li>
+    <li>
       <a href="../index.html#faq">FAQ</a>
     </li>
   </ul>
@@ -126,23 +126,19 @@ recording for more convenient use in an interactive session." />
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Collect API Responses as Mock Files</h1>
+    <h1>Record API responses as mock files</h1>
     </div>
 
     
     <p><code>capture_requests</code> is a context that collects the responses from requests
 you make and stores them as mock files. This enables you to perform a series
 of requests against a live server once and then build your test suite using
-those mocks, running your tests in <code><a href='with_mock_API.html'>with_mock_API()</a></code>.
-<code>start_capturing</code> and <code>stop_capturing</code> allow you to turn on/off request
-recording for more convenient use in an interactive session.</p>
+those mocks, running your tests in <code><a href='with_mock_api.html'>with_mock_api()</a></code>.</p>
     
 
-    <pre class="usage"><span class='fu'>capture_requests</span>(<span class='no'>expr</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='mockPaths.html'>.mockPaths</a></span>()[<span class='fl'>1</span>], <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>redact</span> <span class='kw'>=</span> <span class='no'>redact_auth</span>)
+    <pre class="usage"><span class='fu'>capture_requests</span>(<span class='no'>expr</span>, <span class='no'>path</span>, <span class='no'>...</span>)
 
-<span class='fu'>start_capturing</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='fu'><a href='mockPaths.html'>.mockPaths</a></span>()[<span class='fl'>1</span>], <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>redact</span> <span class='kw'>=</span> <span class='no'>redact_auth</span>)
+<span class='fu'>start_capturing</span>(<span class='no'>path</span>, <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>redact</span>)
 
 <span class='fu'>stop_capturing</span>()</pre>
     
@@ -158,6 +154,10 @@ recording for more convenient use in an interactive session.</p>
       <td><p>Where to save the mock files. Default is the first directory in
 <code><a href='mockPaths.html'>.mockPaths()</a></code>, which if not otherwise specified is the current working
 directory.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Arguments passed through <code>capture_requests</code> to <code>start_capturing</code></p></td>
     </tr>
     <tr>
       <th>simplify</th>
@@ -176,11 +176,8 @@ files being written in the expected location. Default is <code>FALSE</code>.</p>
     <tr>
       <th>redact</th>
       <td><p>function to run to purge sensitive strings from the recorded
-response objects. It should take a <code>response</code>-class object as its argument
-and should return a cleansed <code>response</code> object. This allows you to remove
-certain request and response contents, such as authentication tokens, from
-the mocks that get written out. See <code><a href='redact.html'>redact_auth()</a></code>, the default, for more
-details.</p></td>
+response objects. This argument is deprecated: use <code><a href='set_redactor.html'>set_redactor()</a></code> or a
+package redactor instead. See <code><a href='../articles/redacting.html'>vignette("redacting")</a></code> for more details.</p></td>
     </tr>
     </table>
     
@@ -192,7 +189,9 @@ it is called for its side effects.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Mocks stored by this context are written out as plain-text files, either with
+    <p><code>start_capturing</code> and <code>stop_capturing</code> allow you to turn on/off request
+recording for more convenient use in an interactive session.</p>
+<p>Mocks stored by this context are written out as plain-text files, either with
 extension <code>.json</code> if the request returned JSON content or with extension <code>.R</code>
 otherwise. The <code>.R</code> files contain syntax that when executed recreates the
 <code>httr</code> "response" object. By storing fixtures as plain-text files, you can

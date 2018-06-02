@@ -19,7 +19,7 @@ APIs provide a contract: if you make this request, the service will return this 
 
 ## 1. Am I making the right request?
 
-`httptest` provides three test **contexts**—"with"-style functions that you wrap around other code you want to execute—that mock the network connection in different ways. One context, `without_internet`, simulates the situation when any network request will
+`httptest` provides three test **contexts**---"with"-style functions that you wrap around other code you want to execute---that mock the network connection in different ways. One context, `without_internet`, simulates the situation when any network request will
 fail, as in when you are without an internet connection. Any HTTP request will raise
 an error with a message containing the request information is raised. Together with the package's custom **expectation** functions, you can make assertions about the HTTP requests made in those contexts. The verb-expectation functions, such as `expect_GET` and `expect_POST`, look for the formatted error message that `without_internet` raises.
 
@@ -74,12 +74,12 @@ The expected results themselves are strings, easily readable in your test code.
 
 {{< figure src="https://img.memecdn.com/what-is-this_o_2856875.jpg" class="floating-right halfwidth" attr="'What Is This?'" attrlink="https://www.memecenter.com/fun/2856875/what-is-this">}}
 
-In a second context that the package provides, `with_mock_API`, HTTP requests are intercepted and mapped to local file paths, factoring in the request URL, query, and method. If the file exists, it is loaded and returned as the response; if it does not, an error with a message containing the request information is raised, just as in `without_internet`. By supplying mock files, we can test the behavior of our code that handles API responses.
+In a second context that the package provides, `with_mock_api`, HTTP requests are intercepted and mapped to local file paths, factoring in the request URL, query, and method. If the file exists, it is loaded and returned as the response; if it does not, an error with a message containing the request information is raised, just as in `without_internet`. By supplying mock files, we can test the behavior of our code that handles API responses.
 
-Check out the [package vignette](http://enpiar.com/r/httptest/articles/httptest.html) for a longer discussion of how to use `with_mock_API` and how to put mock files in the right place. For an abridged version, suppose we want to add tests to the popular `twitteR` package, which lacks a test suite. We can start by writing a basic test of the `getUser` function, like:
+Check out the [package vignette](http://enpiar.com/r/httptest/articles/httptest.html) for a longer discussion of how to use `with_mock_api` and how to put mock files in the right place. For an abridged version, suppose we want to add tests to the popular `twitteR` package, which lacks a test suite. We can start by writing a basic test of the `getUser` function, like:
 
 ```r
-with_mock_API({
+with_mock_api({
     test_that("We can get a user object", {
         user <- getUser("twitterdev")
     })
@@ -122,7 +122,7 @@ When you make an invalid API request, the server may return useful information a
 In the [pivotaltrackR](https://github.com/nealrichardson/pivotaltrackR/) package, a client for the Pivotal Tracker API, there's a mock test that makes an [invalid search query](https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/tests/testthat/test-stories.R#L66-L69):
 
 ~~~r
-with_mock_API({
+with_mock_api({
     test_that("Bad request error handling", {
         expect_error(getStories(created="-5days..now"),
             "The date you requested could not be parsed")
@@ -130,7 +130,7 @@ with_mock_API({
 })
 ~~~
 
-According to the API documentation, "now" is not a valid date string—it should be "today". This request, in the `with_mock_API` context, hits the [captured response file](https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/tests/testthat/www.pivotaltracker.com/services/v5/projects/12345/stories-9daeb9.R) which contains a "response" object with a 400 Bad Request status, and the response content contains the error message "The date you requested could not be parsed". That response fixture was captured by doing
+According to the API documentation, "now" is not a valid date string---it should be "today". This request, in the `with_mock_api` context, hits the [captured response file](https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/tests/testthat/www.pivotaltracker.com/services/v5/projects/12345/stories-9daeb9.R) which contains a "response" object with a 400 Bad Request status, and the response content contains the error message "The date you requested could not be parsed". That response fixture was captured by doing
 
 ```r
 capture_requests(getStories(created="-5days..now"))
@@ -151,7 +151,7 @@ In the [Crunch.io API](http://docs.crunch.io), when an operation requires moving
 The [test](https://github.com/Crunch-io/rcrunch/blob/d1b5cade5e7b0608ddc1ce5de1a576e2d3614d84/tests/testthat/test-api.R#L31-L35) relies on a [mock response](https://github.com/Crunch-io/rcrunch/blob/d1b5cade5e7b0608ddc1ce5de1a576e2d3614d84/tests/testthat/app.crunch.io/503.R) that is an `httr` "response" class object with a 503 `status_code`. So, a `GET` on that resource "returns" 503 status, which triggers the relevant API handler code, and does the retry:
 
 ```r
-with_mock_API({
+with_mock_api({
     test_that("503 on GET with Retry-After is handled", {
         expect_message(resp <- crGET("https://app.crunch.io/503/"),
             "This request is taking longer than expected. Please stand by...")
@@ -160,13 +160,13 @@ with_mock_API({
 })
 ```
 
-The 503 fixture object was created not from a real server response—it's hard to trigger—but rather by constructing the object that was needed in R. You can also dump out a regular, successful "response" object and then edit the .R fixture file to give it a different status code and headers—it's just a text file.
+The 503 fixture object was created not from a real server response---it's hard to trigger---but rather by constructing the object that was needed in R. You can also dump out a regular, successful "response" object and then edit the .R fixture file to give it a different status code and headers---it's just a text file.
 
 ## 6. Pagination
 
 Many APIs paginate the responses of queries that could yield potentially large responses. Your code may want to conceal that API detail from its users and collect the results from all "pages" and return them together. `httptest` easily lets you test functions that makes multiple requests because you can provide mock responses for each request, which allows the rest of your code to proceed evaluating using the mocks.
 
-The `pivotaltrackR` package deals with pagination in this way. The API defines a convention for wrapping paginated responses in an ["envelope"](https://www.pivotaltracker.com/help/api#Paginating_List_Responses) object that returns information about the page size, the total number of responses, and where you are in the list. The [R code](https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/R/api.R#L44-L59) that wraps that API steps through the paginated responses as needed to collect them all. That way, the R user can just call `getStories` and will get all of the stories that match the query, without having to think about—or even be aware of—the API's pagination behavior.
+The `pivotaltrackR` package deals with pagination in this way. The API defines a convention for wrapping paginated responses in an ["envelope"](https://www.pivotaltracker.com/help/api#Paginating_List_Responses) object that returns information about the page size, the total number of responses, and where you are in the list. The [R code](https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/R/api.R#L44-L59) that wraps that API steps through the paginated responses as needed to collect them all. That way, the R user can just call `getStories` and will get all of the stories that match the query, without having to think about---or even be aware of---the API's pagination behavior.
 
 And because the R code that the package user needs is simple, the [test](https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/tests/testthat/test-stories.R#L77-L80) for this looks simple:
 
@@ -196,10 +196,10 @@ and the [second one](https://github.com/nealrichardson/pivotaltrackR/blob/0852ae
 
 {{< figure src="http://cf.chucklesnetwork.com/items/8/3/5/2/3/original/what-if-silence-is-just-another-type-of-sound.jpg" class="floating-right halfwidth" attr="Conspiracy Keanu" attrlink="http://creatememe.chucklesnetwork.com/memes/83523/what-if-silence-is-just-another-type-of-sound/">}}
 
-Mocking API responses isn't the only thing you might want to do in order to test your code. Sometimes, the request that matters is the one you don't make. Here's a example of how `without_internet` can be used to assert that code that should not make network requests in fact does not. This is a simplified version of a test from the [httpcache](http://enpiar.com/r/httpcache/) package, a library that implements a query cache for HTTP requests in R. The point of the query cache is that only the first time you make a certain GET request should it hit the remote API; subsequent requests should read from the cache and not make a request. The test first makes a request (artificially, using `with_fake_HTTP`, the third test context the package provides) to prime the cache.
+Mocking API responses isn't the only thing you might want to do in order to test your code. Sometimes, the request that matters is the one you don't make. Here's a example of how `without_internet` can be used to assert that code that should not make network requests in fact does not. This is a simplified version of a test from the [httpcache](http://enpiar.com/r/httpcache/) package, a library that implements a query cache for HTTP requests in R. The point of the query cache is that only the first time you make a certain GET request should it hit the remote API; subsequent requests should read from the cache and not make a request. The test first makes a request (artificially, using `with_fake_http`, the third test context the package provides) to prime the cache.
 
 ```r
-with_fake_HTTP({
+with_fake_http({
     test_that("Cache gets set on GET", {
         expect_length(cacheKeys(), 0)
         expect_GET(a <- GET("https://app.crunch.io/api/"),

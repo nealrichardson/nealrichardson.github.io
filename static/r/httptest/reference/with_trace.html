@@ -28,8 +28,7 @@
 <meta property="og:title" content="Wrapper around 'trace' to untrace when finished — with_trace" />
 
 <meta property="og:description" content="Wrapper around 'trace' to untrace when finished" />
-
-
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -86,6 +85,9 @@
     </li>
     <li>
       <a href="../articles/redacting.html">Redacting Sensitive Information</a>
+    </li>
+    <li>
+      <a href="../articles/vignettes.html">Using with Vignettes</a>
     </li>
     <li>
       <a href="../index.html#faq">FAQ</a>
@@ -149,7 +151,7 @@ Default is <code>FALSE</code>; note that in <code>trace</code>, the default is <
     <tr>
       <th>...</th>
       <td><p>Additional arguments to pass to <code>trace</code>. At minimum, must include
-either <code>tracer</code> and <code>at</code>, or <code>exit</code>.</p></td>
+either <code>tracer</code> or <code>exit</code>.</p></td>
     </tr>
     <tr>
       <th>expr</th>

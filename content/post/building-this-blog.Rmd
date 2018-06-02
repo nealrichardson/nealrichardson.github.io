@@ -42,7 +42,7 @@ and then checked out `master` and pushed an empty README.md file up there, just 
 
 ## .travis.yml
 
-The .travis.yml file is where the action happens—it's what tells Travis what to do. The examples I found for using Travis to build bookdown or blogdown sites followed the model of putting "build" and "deploy" logic into Bash scripts, which the .travis.yml file makes executable and then calls. I found this unnecessarily indirect. Travis treats the YAML file like a script anyway, so you can just enter the shell commands you want to run there. That way, you can look in one file to see everything that is happening.
+The .travis.yml file is where the action happens---it's what tells Travis what to do. The examples I found for using Travis to build bookdown or blogdown sites followed the model of putting "build" and "deploy" logic into Bash scripts, which the .travis.yml file makes executable and then calls. I found this unnecessarily indirect. Travis treats the YAML file like a script anyway, so you can just enter the shell commands you want to run there. That way, you can look in one file to see everything that is happening.
 
 [My .travis.yml](https://github.com/nealrichardson/nealrichardson.github.io/blob/src/.travis.yml) is grouped into a few sections. To start, it sets the language/container type to "R" and indicates that packages should be cached for faster repeat building. Second, this block
 
@@ -50,15 +50,15 @@ The .travis.yml file is where the action happens—it's what tells Travis what t
       only:
       - src
 
-tells Travis only to build when I push to my `src` branch. I want to be free to make other branches in my repository and not have them trigger a build of my site—that could lead to very unexpected changes! Moreover, on success, Travis will be pushing to the `master` branch, and I don't want that push to attempt a re-build of the site.
+tells Travis only to build when I push to my `src` branch. I want to be free to make other branches in my repository and not have them trigger a build of my site---that could lead to very unexpected changes! Moreover, on success, Travis will be pushing to the `master` branch, and I don't want that push to attempt a re-build of the site.
 
 Next, the YAML file directs the installation of the blogdown package from GitHub using the `r_github_packages` block. It's not yet on CRAN, so GitHub is the way, and while you can specify that it be installed via the DESCRIPTION file using `devtools`'s special "Remotes" field, I've had success installing GitHub packages on Travis this way in the past, and it worked here too.
 
-I grouped the main action in .travis.yml into a `before_script` block and a `script` block, but that's purely for aesthetics—it's all just a series of commands to be executed. The "before" block sets my GitHub user name and email—the `git commit` of the built site will need them—installs Hugo via blogdown,^[I had to fix a specific version of Hugo to install after what was hopefully just a transient [failure to install on Travis](https://travis-ci.org/nealrichardson/nealrichardson.github.io/builds/235902865). It was previously working with the default "latest" version, but there was a Hugo release a couple of days ago, so maybe that caused some disturbance. You shouldn't have to hard-code a version.] and then adds my Hugo theme. You could use the `blogdown::install_theme` function, but all you need it to do is checkout the theme repository to your "themes" directory, so I just do that directly.
+I grouped the main action in .travis.yml into a `before_script` block and a `script` block, but that's purely for aesthetics---it's all just a series of commands to be executed. The "before" block sets my GitHub user name and email---the `git commit` of the built site will need them---installs Hugo via blogdown,^[I had to fix a specific version of Hugo to install after what was hopefully just a transient [failure to install on Travis](https://travis-ci.org/nealrichardson/nealrichardson.github.io/builds/235902865). It was previously working with the default "latest" version, but there was a Hugo release a couple of days ago, so maybe that caused some disturbance. You shouldn't have to hard-code a version.] and then adds my Hugo theme. You could use the `blogdown::install_theme` function, but all you need it to do is checkout the theme repository to your "themes" directory, so I just do that directly.
 
 At that point, building the site is just `R -e 'blogdown::build_site()'`. That's it. As I said in the beginning: shockingly simple.
 
-The last step is to commit the built site to a different branch, in this case "master", and push that. Even though the Travis job has already cloned your repository from GitHub to start the build, it has only cloned the current branch, so `git checkout master` won't work. To change branches, we have to do a fresh `git clone`. Note that the `clone` command involves a `GH_TOKEN` environment variable. That's your API token—we'll discuss that below.
+The last step is to commit the built site to a different branch, in this case "master", and push that. Even though the Travis job has already cloned your repository from GitHub to start the build, it has only cloned the current branch, so `git checkout master` won't work. To change branches, we have to do a fresh `git clone`. Note that the `clone` command involves a `GH_TOKEN` environment variable. That's your API token---we'll discuss that below.
 
 One other [quirk](https://github.com/nealrichardson/nealrichardson.github.io/blob/src/.travis.yml#L19) I added to the YAML file was to write a .travis.yml file into the destination branch for the built site, reiterating the "only build on 'src' branch" command. This is because two lines above that, I `rm -rf`'d everything, so there was no .travis.yml file present on `master` branch telling Travis not to try to build from `master`. (*Update 7/4/2017: if you have a domain name pointing at your site and you `rm -rf` everything, you'll also need to [rewrite the "CNAME" file](https://github.com/nealrichardson/nealrichardson.github.io/commit/79785d41516f78bb397f35c5a062c63d97f3bb39) too.*)
 
@@ -70,7 +70,7 @@ Because we're going to use an R language build on Travis, the job will expect th
 
 ## .gitignore
 
-For Hugo projects, you want to [.gitignore](https://github.com/nealrichardson/nealrichardson.github.io/blob/src/.gitignore) the "themes" directory because they aren't really part of your project; you add your customization of templates and stylesheets on top of a theme. I also like to ignore the "public" directory where the build static site gets written—the build on Travis will overwrite it anyway.
+For Hugo projects, you want to [.gitignore](https://github.com/nealrichardson/nealrichardson.github.io/blob/src/.gitignore) the "themes" directory because they aren't really part of your project; you add your customization of templates and stylesheets on top of a theme. I also like to ignore the "public" directory where the build static site gets written---the build on Travis will overwrite it anyway.
 
 By that logic, you may also want to ignore the `static/post` directory where blogdown writes generated images and other artifacts from the .Rmd code, and `*.html` from the `content/post` directory, which is the built version of the .Rmd files. [I tried ignoring those artifacts](https://github.com/nealrichardson/nealrichardson.github.io/commit/8b11e195b6782ca791835bbbede54462ac14489e#diff-a084b794bc0759e7a6b77810e01874f2R3), and the site built fine on Travis without them, but I don't have enough experience with blogdown to recommend it as a best practice. If your R code is computationally intensive or relies on third-party services that may be down when your site gets built on Travis, *and* if having the cached versions checked in prevents running the R code again on Travis, maybe it's good to keep them.
 
@@ -91,13 +91,13 @@ where `token` is the string copied from the GitHub page when the token was gener
 
 While clearly this step has to happen before you can proceed with your build, I put it last in this discussion because some of the steps outlined above have to happen first. You can't run `travis encrypt --add` until you've enabled Travis on your repository (on travis-ci.org), and you have to have done `git remote add origin` so that your local repository points to the same project that Travis is expecting.
 
-Once you've done all this, commit and `git push` your blogdown code and Travis config. You can now ~~go to the Travis site and watch the build run~~ forget about it and trust that your site is being built for you—that's the point of automating it!^[If the build fails, as in when you're setting it up or adding a new dependency, Travis will notify you by email. No news is good news.]
+Once you've done all this, commit and `git push` your blogdown code and Travis config. You can now ~~go to the Travis site and watch the build run~~ forget about it and trust that your site is being built for you---that's the point of automating it!^[If the build fails, as in when you're setting it up or adding a new dependency, Travis will notify you by email. No news is good news.]
 
 # Conclusion
 
 Given that `blogdown` is a relatively new tool, I expected that using it would show some rough edges, and that trying to build it on Travis would be challenging. It took me ten attempts to figure out the build automation for our Hugo blog at Crunch. I'd hoped I'd learned a few things about how to use Travis for static sites and could do better this time, but adding R to the mix was a complication.
 
-In the end, it was a breeze. The only part I had to tinker with was installing blogdown itself. The complications I feared—having to install go and Hugo on top of a container configured to run R—were seamlessly handled by blogdown.
+In the end, it was a breeze. The only part I had to tinker with was installing blogdown itself. The complications I feared---having to install go and Hugo on top of a container configured to run R---were seamlessly handled by blogdown.
 
 And finally, to demonstrate that this post is R Markdown and not regular markdown, here's Figure \@ref(fig:pie) from the example site that `blogdown` generates.
 

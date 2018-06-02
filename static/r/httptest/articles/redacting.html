@@ -5,13 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Redacting Sensitive Information from Recorded Requests • httptest</title>
+<title>Redacting and Modifying Recorded Requests • httptest</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Redacting Sensitive Information from Recorded Requests">
-<meta property="og:description" content="httptest makes it easy for you to record responses from real requests so that you can use them later in tests. It is important to ensure that the mocks you include in your test suite do not inadvertently reveal private information, such as tokens and ids. The package provides a framework for sanitizing the responses that capture_requests records. By default, it redacts the standard ways that auth credentials are passed in requests, but it is fully extensible.">
+<meta property="og:title" content="Redacting and Modifying Recorded Requests">
+<meta property="og:description" content="httptest provides a framework for sanitizing mocks recorded from real requests so that your tests don’t reveal private tokens. By default, it redacts standard auth credentials, and it is extensible so that you can modify the responses however you want.">
+<meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -60,6 +61,9 @@
       <a href="../articles/redacting.html">Redacting Sensitive Information</a>
     </li>
     <li>
+      <a href="../articles/vignettes.html">Using with Vignettes</a>
+    </li>
+    <li>
       <a href="../index.html#faq">FAQ</a>
     </li>
   </ul>
@@ -93,7 +97,7 @@
       </header><div class="row">
   <div class="col-md-9">
     <div class="page-header toc-ignore">
-      <h1>Redacting Sensitive Information from Recorded Requests</h1>
+      <h1>Redacting and Modifying Recorded Requests</h1>
             
           </div>
 
@@ -102,7 +106,7 @@
 <div class="contents">
 <p><code>httptest</code> makes it easy for you to write tests that don’t require a network connection. With <code><a href="../reference/capture_requests.html">capture_requests()</a></code>, you can record responses from real requests so that you can use them later in tests. A further benefit of testing with mocks is that you don’t have to deal with authentication and authorization on the server in your tests—you don’t need to supply real login credentials for your test suite to run. You can have full test coverage of your code, both on public continuous-integration services like Travis-CI and when you submit packages to CRAN, all without having to publish secret tokens or passwords.</p>
 <p>It is important to ensure that the mocks you include in your test suite do not inadvertently reveal private information as well. For many requests and responses, the default behavior of <code>capture_requests</code> is to write out only the response body, which makes for clean, easy-to-read test fixtures. For other responses, however—those returning non-JSON content or an error status—it writes a <code>.R</code> file containing a <code>httr</code> “response” object. This response contains all of the headers and cookies that the server returns, and it also has a copy of your “request” object, with the headers, tokens, and other configuration you sent to the server. If not addressed, this would mean that you might be exposing your personal credentials publicly.</p>
-<p>Starting in version 2.2.0, <code>httptest</code> provides a framework for sanitizing the responses that <code>capture_requests</code> records. By default, it redacts the standard ways that auth credentials are passed in requests: cookies, authorization headers, and basic HTTP auth. The framework is extensible and allows you to specify custom redaction policies that match how your API accepts and returns sensitive information. Common redacting functions are configurable and natural to adapt to your needs, while the workflow also supports custom redacting functions that can alter the recorded requests however you want, including altering the response content and URL.</p>
+<p><code>httptest</code> provides a framework for sanitizing the responses that <code>capture_requests</code> records. By default, it redacts the standard ways that auth credentials are passed in requests: cookies, authorization headers, basic HTTP auth, and OAuth. The framework is extensible and allows you to specify custom redaction policies that match how your API accepts and returns sensitive information. Common redacting functions are configurable and natural to adapt to your needs, while the workflow also supports custom redacting functions that can alter the recorded requests however you want, including altering the response content and URL.</p>
 <div id="default-redact-standard-auth-methods" class="section level2">
 <h2 class="hasAnchor">
 <a href="#default-redact-standard-auth-methods" class="anchor"></a>Default: redact standard auth methods</h2>
@@ -116,10 +120,9 @@ real_resp<span class="op">$</span>request<span class="op">$</span>options<span c
 
 ## [1] "token=12345"</code></pre></div>
 <p>But when we load that recorded response in tests later, the cookie won’t appear because it was redacted:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/with_mock_API.html">with_mock_API</a></span>({
-    alt_resp &lt;-<span class="st"> </span><span class="kw">GET</span>(<span class="st">"http://httpbin.org/cookies"</span>, <span class="kw">set_cookies</span>(<span class="dt">token=</span><span class="st">"12345"</span>))
-})
-alt_resp<span class="op">$</span>request<span class="op">$</span>options<span class="op">$</span>cookie
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mockfile &lt;-<span class="st"> "httpbin.org/cookies.R"</span>
+mock &lt;-<span class="st"> </span><span class="kw">source</span>(mockfile)<span class="op">$</span>value
+mock<span class="op">$</span>request<span class="op">$</span>options<span class="op">$</span>cookie
 
 ## [1] "REDACTED"</code></pre></div>
 <p>(Side note: the example uses the <code>simplify=FALSE</code> option to <code>capture_requests</code> for illustration purposes. With the default <code>simplify=TRUE</code>, only the response body would be written to a mock file because this particular GET request returns JSON content. Thus, there would be no cookie present anyway. <code>simplify=FALSE</code> forces <code>capture_requests</code> to write the verbose .R response object file for every request, not just those that don’t return JSON content.)</p>
@@ -128,14 +131,28 @@ alt_resp<span class="op">$</span>request<span class="op">$</span>options<span cl
 <h2 class="hasAnchor">
 <a href="#handling-other-auth-methods" class="anchor"></a>Handling other auth methods</h2>
 <p>Some APIs use other methods for passing credentials. For example, the <a href="https://www.pivotaltracker.com/help/api">API for Pivotal Tracker</a>, the agile project management tool, uses a “X-TrackerToken” request header for passing an API token. Our standard redactor doesn’t know about this header, so by default, this token would be written in our recorded responses.</p>
-<p>So, in the <a href="https://github.com/nealrichardson/pivotaltrackR">pivotaltrackR</a> package, which wraps this API, if we want to record mocks to use in tests with this API, we need to tell <code>capture_requests</code> to scrub its special header. To do this, we’ll set <code>redact=redact_headers("X-TrackerToken")</code> in the capture call.</p>
+<p>So, in the <a href="http://enpiar.com/r/pivotaltrackR/">pivotaltrackR</a> package, which wraps this API, if we want to record mocks to use in tests with this API, we need to tell <code>capture_requests</code> to scrub its special header. To do this, we’ll use <code><a href="../reference/set_redactor.html">set_redactor()</a></code> to supply a custom function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/set_redactor.html">set_redactor</a></span>(<span class="op">~</span><span class="st"> </span><span class="kw">redact_headers</span>(., <span class="st">"X-TrackerToken"</span>))</code></pre></div>
+<p>Note the formula shorthand: this follows the syntax in the <a href="purrr.tidyverse.org"><code>purrr</code></a> package for defining anonymous functions. It is equivalent to <code>function (response) redact_headers(response, "X-TrackerToken")</code>.</p>
+<p>Valid inputs to <code><a href="../reference/set_redactor.html">set_redactor()</a></code> include:</p>
+<ul>
+<li>A function taking a single argument, the <code>response</code>, and returning a valid <code>response</code> object</li>
+<li>A formula as shorthand for an anonymous function with <code>.</code> as the “response” argument</li>
+<li>A list of redacting functions/formulas, which will be executed in sequence on the response</li>
+<li>
+<code>NULL</code>, to override the default <code><a href="../reference/redact.html">redact_auth()</a></code> and do no redacting</li>
+</ul>
 <p>To illustrate, here’s a recording of a GET on the <code>stories/</code> endpoint. We can see that the real token is included in the “X-TrackerToken” header in the real request:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(httptest)
 <span class="kw">library</span>(pivotaltrackR)
-<span class="kw">options</span>(<span class="dt">pivotal.project=</span><span class="st">"my-project-name"</span>, <span class="dt">pivotal.token=</span><span class="st">"8fe3452ac4e3"</span>)
+<span class="kw">options</span>(
+    <span class="dt">pivotal.project=</span><span class="st">"my-project-name"</span>,
+    <span class="dt">pivotal.token=</span><span class="st">"8fe3452ac4e3"</span>
+)
 
-<span class="kw"><a href="../reference/capture_requests.html">capture_requests</a></span>(<span class="dt">redact=</span><span class="kw">redact_headers</span>(<span class="st">"X-TrackerToken"</span>), <span class="dt">simplify=</span><span class="ot">FALSE</span>, {
-    active_stories &lt;-<span class="st"> </span><span class="kw">getStories</span>(<span class="dt">state=</span><span class="st">"started"</span>)
+<span class="kw"><a href="../reference/set_redactor.html">set_redactor</a></span>(<span class="op">~</span><span class="st"> </span><span class="kw">redact_headers</span>(., <span class="st">"X-TrackerToken"</span>))
+<span class="kw"><a href="../reference/capture_requests.html">capture_requests</a></span>(<span class="dt">simplify=</span><span class="ot">FALSE</span>, {
+    active_stories &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/pivotaltrackR/topics/getStories">getStories</a></span>(<span class="dt">state=</span><span class="st">"started"</span>)
 })
 active_stories<span class="op">$</span>request<span class="op">$</span>headers
 
@@ -145,7 +162,7 @@ active_stories<span class="op">$</span>request<span class="op">$</span>headers
 ## "libcurl/7.51.0 curl/2.3 httr/1.2.1 pivotaltrackR/0.1.0"
 ##                                           X-TrackerToken
 ##                                           "8fe3452ac4e3"</code></pre></div>
-<p>Because we set <code>redact_headers("X-TrackerToken")</code> as the redactor, it should have been removed from the mock file that was written out. Let’s read in that file and inspect it.</p>
+<p>Because we set <code>~ redact_headers(., "X-TrackerToken")</code> as the redactor, it should have been removed from the mock file that was written out. Let’s read in that file and inspect it.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mockfile &lt;-<span class="st"> "www.pivotaltracker.com/services/v5/projects/my-project-name/stories-c0a029.R"</span>
 mock &lt;-<span class="st"> </span><span class="kw">source</span>(mockfile)<span class="op">$</span>value
 mock<span class="op">$</span>request<span class="op">$</span>headers
@@ -164,49 +181,68 @@ mock<span class="op">$</span>request<span class="op">$</span>headers
 <p>Sensitive or personal information can also found in other parts of the request and response. Sometimes personal identifiers are built into URLs or response bodies. These may be less sensitive than auth tokens, but you probably want to conceal or anonymize your data that is included in test fixtures.</p>
 <p>Redacting functions can help with this personal information as well. You can use redactors on any part of the response object, not just the headers and cookies. A redactor is just a function that takes a response as input and returns a response object, so anything is possible if you write a custom redactor.</p>
 <p>Keeping with the <code>pivotaltrackR</code> example, note that the Pivotal project id, stored in <code>options(pivotal.project)</code> in the R session, appears in the mock file path. It’s in the file path because it’s in the request URL, and it turns out that many API responses also include it in the response body. We’d rather not have that information leak in our test fixtures, so let’s write a function to remove it.</p>
-<p>All of the redactors we’ve seen here functions that take the “response” object as their only argument and return the response object modified in some way. In the previous step, we passed as our redactor <code>redact_headers("X-TrackerToken")</code>; this worked because <code>redact_headers</code> itself is not a redactor but rather a function that returns a redacting function. When evaluated, <code>redact_headers("X-TrackerToken")</code> returns a <code>function (response) ...</code> that is called on the response.</p>
-<p>We’ll start our custom redactor with that header purging, then do some more work, and then return the response:</p>
+<p>All of the redactors in <code>httptest</code> take the “response” object as their first argument and return the response object modified in some way. This lends them to pipelining, as with the <a href="http://magrittr.tidyverse.org/"><code>magrittr</code></a> package. Let’s use that, and let’s start our function with that “X-TrackerToken” header redacting:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">redact_pivotal &lt;-<span class="st"> </span><span class="cf">function</span> (response) {
-    response &lt;-<span class="st"> </span><span class="kw">redact_headers</span>(<span class="st">"X-TrackerToken"</span>)(response)
-    ...
-    <span class="kw">return</span>(response)
+    <span class="kw">require</span>(magrittr)
+    response <span class="op">%&gt;%</span>
+<span class="st">        </span><span class="kw">redact_headers</span>(<span class="st">"X-TrackerToken"</span>)
 }</code></pre></div>
-<p>What is that “more work” we want to do? Let’s say that we want to replace my project id with “123” everywhere it is found, both in the URL and in the response body. Let’s start by defining a function that takes a string value and does that replacement, and then we can apply it everywhere. To remove the project id from the response body, we can use the helper <code>within_body_text</code>, which takes as its argument a function and returns a redactor (which we then evaluate on “response”). <code>within_body_text</code> is helpful because <code>response</code> objects have their “content” stored as raw binary vectors, and it handles the <code>rawToChar</code>/<code>charToRaw</code> wrapping so that you don’t have to remember to deal with that.</p>
+<p>To remove the project ID, we can use the <code><a href="../reference/gsub_response.html">gsub_response()</a></code> function, which takes <code>response</code> as its first argument and then passes the rest to <code>gsub()</code>, which is called on the response URL, the response body, and the request object as well (because <code>response</code>s include the <code>request</code> object in them):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">redact_pivotal &lt;-<span class="st"> </span><span class="cf">function</span> (response) {
-    redact_pivotal_token &lt;-<span class="st"> </span><span class="kw">redact_headers</span>(<span class="st">"X-TrackerToken"</span>)
-    <span class="co"># Function that replaces my project id in a given string</span>
-    remove_project &lt;-<span class="st"> </span><span class="cf">function</span> (x) <span class="kw">gsub</span>(<span class="kw">getOption</span>(<span class="st">"pivotal.project"</span>), <span class="st">"123"</span>, x)
-    remove_project_from_body &lt;-<span class="st"> </span><span class="kw">within_body_text</span>(remove_project)
-
-    <span class="co"># Remove token from special header</span>
-    response &lt;-<span class="st"> </span><span class="kw">redact_pivotal_token</span>(response)
-    <span class="co"># Remove from URL--note that it appears twice!</span>
-    response<span class="op">$</span>url &lt;-<span class="st"> </span><span class="kw">remove_project</span>(response<span class="op">$</span>url)
-    response<span class="op">$</span>request<span class="op">$</span>url &lt;-<span class="st"> </span><span class="kw">remove_project</span>(response<span class="op">$</span>request<span class="op">$</span>url)
-    <span class="co"># Now remove from the response body</span>
-    response &lt;-<span class="st"> </span><span class="kw">remove_project_from_body</span>(response)
-    <span class="kw">return</span>(response)
+    <span class="kw">require</span>(magrittr)
+    response <span class="op">%&gt;%</span>
+<span class="st">        </span><span class="kw">redact_headers</span>(<span class="st">"X-TrackerToken"</span>) <span class="op">%&gt;%</span>
+<span class="st">        </span><span class="kw"><a href="../reference/gsub_response.html">gsub_response</a></span>(<span class="kw">getOption</span>(<span class="st">"pivotal.project"</span>), <span class="st">"123"</span>)
 }</code></pre></div>
 <p>To see this in action, let’s record a request:</p>
 <!-- show the output -->
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/capture_requests.html">start_capturing</a></span>(<span class="dt">redact=</span>redact_pivotal)
-s &lt;-<span class="st"> </span><span class="kw">getStories</span>(<span class="dt">search=</span><span class="st">"mnt"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/set_redactor.html">set_redactor</a></span>(redact_pivotal)
+<span class="kw"><a href="../reference/capture_requests.html">start_capturing</a></span>()
+s &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/pivotaltrackR/topics/getStories">getStories</a></span>(<span class="dt">search=</span><span class="st">"mnt"</span>)
 <span class="kw"><a href="../reference/capture_requests.html">stop_capturing</a></span>()</code></pre></div>
 <p>Note that the actual project id appears in the data returned from the search.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s[[<span class="dv">1</span>]]<span class="op">$</span>project_id
 ## [1] "my-project-name"</code></pre></div>
-<p>However, the project id won’t be found in the recorded file. If we load the recorded response in <code>with_mock_API</code>, we’ll see the value we substituted in:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/with_mock_API.html">with_mock_API</a></span>({
-    s &lt;-<span class="st"> </span><span class="kw">getStories</span>(<span class="dt">search=</span><span class="st">"mnt"</span>)
+<p>However, the project id won’t be found in the recorded file. If we load the recorded response in <code>with_mock_api</code>, we’ll see the value we substituted in:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/with_mock_api.html">with_mock_api</a></span>({
+    s &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/pivotaltrackR/topics/getStories">getStories</a></span>(<span class="dt">search=</span><span class="st">"mnt"</span>)
 })
 s[[<span class="dv">1</span>]]<span class="op">$</span>project_id
 ## [1] "123"</code></pre></div>
-<p>Nor will the project id appear in the file path: since the redactor is evaluated before determining the file path to write to, if you alter the response URL, the destination file path will be generated based on the modified URL. In this case, our mock is written to “…/projects/123/stories-fb1776.json”, not “…/projects/my-project-name/stories-fb1776.json”. This feature can be helpful not only for removing sensitive data from your mock files but also for helping you resolve any “non-portable file paths” errors that <code>R CMD check</code> throws. File paths in packages are required to be under 100 characters long in order to maintain compatibility with old file systems. When dealing with APIs that have long URLs, you may run into this limit. But in this example, by replacing “my-project-name” with “123”, we cut 12 characters from the mock file paths, which will help with this check requirement.</p>
-<p>Finally, an observation about how to incorporate custom redactors into your testing workflow. One way to build it in is to define the redactor in your <code>tests/testthat/helper.R</code> file, and then override <code>capture_requests</code> with a version that uses your redactor, like this:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">capture_requests &lt;-<span class="st"> </span><span class="cf">function</span> (...) {
-    httptest<span class="op">::</span><span class="kw"><a href="http://enpiar.com/r/httptest/reference/capture_requests.html">capture_requests</a></span>(<span class="dt">redact=</span>redact_pivotal, ...)
+<p>Nor will the project id appear in the file path: since the redactor is evaluated before determining the file path to write to, if you alter the response URL, the destination file path will be generated based on the modified URL. In this case, our mock is written to “…/projects/123/stories-fb1776.json”, not “…/projects/my-project-name/stories-fb1776.json”.</p>
+</div>
+<div id="setting-a-package-level-redactor" class="section level2">
+<h2 class="hasAnchor">
+<a href="#setting-a-package-level-redactor" class="anchor"></a>Setting a package-level redactor</h2>
+<p>If you’re writing a package that wraps an API and you need a custom redactor to safely record API responses, you’ll want to make sure that you <em>always</em> record with that redactor. You don’t want to forget to call <code><a href="../reference/set_redactor.html">set_redactor()</a></code> in your R session and end up recording fixtures that contain your auth secrets.</p>
+<p>To make sure that your redactor is “always on” for your package, <code>httptest</code> enables you to define a package-level redactor. To do this, put a redacting function in <code>inst/httptest/redact.R</code> in your package. Any time you record requests while your package is loaded, as when running tests or building vignettes, this function will be called on the <code>response</code> object before writing it to disk. It’s automatic: set it there once and you never have to remember.</p>
+<p>For example, <a href="https://github.com/nealrichardson/pivotaltrackR/blob/master/inst/httptest/redact.R">here</a> is the one for <code>pivotaltrackR</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">function</span> (response) {
+    <span class="kw">require</span>(magrittr, <span class="dt">quietly=</span><span class="ot">TRUE</span>)
+    response <span class="op">%&gt;%</span>
+<span class="st">        </span><span class="co"># Remove the auth token</span>
+<span class="st">        </span><span class="kw">redact_headers</span>(<span class="st">"X-TrackerToken"</span>) <span class="op">%&gt;%</span>
+<span class="st">        </span><span class="co"># Shorten the URL</span>
+<span class="st">        </span><span class="kw"><a href="../reference/gsub_response.html">gsub_response</a></span>(<span class="st">"https://www.pivotaltracker.com/services/v5/"</span>, <span class="st">""</span>, <span class="dt">fixed=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
+<span class="st">        </span><span class="co"># Remove my project ID</span>
+<span class="st">        </span><span class="kw"><a href="../reference/gsub_response.html">gsub_response</a></span>(<span class="kw">getOption</span>(<span class="st">"pivotal.project"</span>), <span class="st">"123"</span>)
 }</code></pre></div>
-<p>So whenever you record requests from within your test setup, the redaction is automatically applied.</p>
+</div>
+<div id="request-preprocessing" class="section level2">
+<h2 class="hasAnchor">
+<a href="#request-preprocessing" class="anchor"></a>Request preprocessing</h2>
+<p>Finally, depending on how long the URLs are in the API requests you make, you may need to programmatically shorten them if you’re planning on submitting your package to CRAN because CRAN requires file names to be 100 characters or less. Long file names throw a “non-portable file paths” message in <code>R CMD check</code>.</p>
+<p>A good way to solve this problem is to use a request preprocessor: a function that alters the content of your ‘httr’ <code>request</code> before mapping it to a mock file. It’s like a redactor but for the request object. Just as you can provide a custom function to modify responses that are recorded, you can provide a function to tweak the request being made in order to map the request to the right file in the mocked context. Importantly, this lets you truncate the URLs, which then map to files.</p>
+<p>For example, if all of your API endpoints sit beneath <code>https://language.googleapis.com/v1/</code>, you could set a request preprocessor like:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/set_requester.html">set_requester</a></span>(<span class="op">~</span><span class="st"> </span><span class="kw"><a href="../reference/gsub_response.html">gsub_request</a></span>(., <span class="st">"https</span><span class="ch">\\</span><span class="st">://language.googleapis.com/v1/"</span>, <span class="st">"api/"</span>))</code></pre></div>
+<p>and then all mocked requests would look for a path starting with “api/” rather than “language.googleapis.com/v1/”, saving you (in this case) 23 characters.</p>
+<p>You can also provide this function in <code>inst/httptest/request.R</code>, just as you can for the redactor, and any time your package is loaded and you’re reading mock (previously recorded) responses, this function will be called on the <code>request</code> object before mapping it to a file. For example, <a href="https://github.com/nealrichardson/pivotaltrackR/blob/master/inst/httptest/request.R">here</a> is the one from <code>pivotaltrackR</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">function</span> (request) {
+    <span class="kw">require</span>(magrittr, <span class="dt">quietly=</span><span class="ot">TRUE</span>)
+    request <span class="op">%&gt;%</span>
+<span class="st">        </span><span class="kw"><a href="../reference/gsub_response.html">gsub_request</a></span>(<span class="st">"https://www.pivotaltracker.com/services/v5/"</span>, <span class="st">""</span>, <span class="dt">fixed=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
+<span class="st">        </span><span class="kw"><a href="../reference/gsub_response.html">gsub_request</a></span>(<span class="kw">getOption</span>(<span class="st">"pivotal.project"</span>), <span class="st">"123"</span>)
+}</code></pre></div>
 </div>
 </div>
   </div>
@@ -219,6 +255,8 @@ s[[<span class="dv">1</span>]]<span class="op">$</span>project_id
 <li><a href="#default-redact-standard-auth-methods">Default: redact standard auth methods</a></li>
       <li><a href="#handling-other-auth-methods">Handling other auth methods</a></li>
       <li><a href="#writing-custom-redacting-functions">Writing custom redacting functions</a></li>
+      <li><a href="#setting-a-package-level-redactor">Setting a package-level redactor</a></li>
+      <li><a href="#request-preprocessing">Request preprocessing</a></li>
       </ul>
 </div>
       </div>

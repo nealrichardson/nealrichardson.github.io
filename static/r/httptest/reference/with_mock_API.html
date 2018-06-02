@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Serve a mock API from files — with_mock_API • httptest</title>
+<title>Serve a mock API from files — with_mock_api • httptest</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,15 +25,14 @@
 <script src="../pkgdown.js"></script>
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Serve a mock API from files — with_mock_API" />
+<meta property="og:title" content="Serve a mock API from files — with_mock_api" />
 
 <meta property="og:description" content="In this context, HTTP requests attempt to load API response fixtures from
 files. This allows test code to proceed evaluating code that expects
 HTTP requests to return meaningful responses. Requests that do not have a
 corresponding fixture file raise errors, like how without_internet()
 does." />
-
-
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -92,6 +91,9 @@ does." />
       <a href="../articles/redacting.html">Redacting Sensitive Information</a>
     </li>
     <li>
+      <a href="../articles/vignettes.html">Using with Vignettes</a>
+    </li>
+    <li>
       <a href="../index.html#faq">FAQ</a>
     </li>
   </ul>
@@ -136,7 +138,9 @@ corresponding fixture file raise errors, like how <code><a href='without_interne
 does.</p>
     
 
-    <pre class="usage"><span class='fu'>with_mock_API</span>(<span class='no'>expr</span>)</pre>
+    <pre class="usage"><span class='fu'>with_mock_api</span>(<span class='no'>expr</span>)
+
+<span class='fu'>with_mock_API</span>(<span class='no'>expr</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -155,15 +159,17 @@ does.</p>
 
     <p>Requests are translated to mock file paths according to several rules that
 incorporate the request method, URL, query parameters, and body. See
-<code><a href='buildMockURL.html'>buildMockURL()</a></code> for details.</p>
+<code><a href='build_mock_url.html'>build_mock_url()</a></code> for details.</p>
 <p>File paths for API fixture files may be relative to the 'tests/testthat'
 directory, i.e. relative to the .R test files themselves. This is the default
 location for storing and retrieving mocks, but you can put them anywhere you
 want as long as you set the appropriate location with <code><a href='mockPaths.html'>.mockPaths()</a></code>.</p>
+<p>In the interest of standardizing naming conventions, <code>with_mock_api()</code> is the
+preferred name for this context; <code>with_mock_API()</code> is being deprecated.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='buildMockURL.html'>buildMockURL()</a></code> <code><a href='mockPaths.html'>.mockPaths()</a></code></p>
+    <p><code><a href='use_mock_api.html'>use_mock_api()</a></code> to enable mocking on its own (not in a context); <code><a href='build_mock_url.html'>build_mock_url()</a></code>; <code><a href='mockPaths.html'>.mockPaths()</a></code></p>
     
 
   </div>
