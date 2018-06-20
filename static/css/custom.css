@@ -254,3 +254,7 @@ time.post-time {
 .button.round {
     border-radius: 0;
 }
+
+a.headline-anchor {
+    text-decoration: none
+}
