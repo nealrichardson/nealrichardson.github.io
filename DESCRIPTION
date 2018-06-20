@@ -1,5 +1,3 @@
 Package: notapackage
 Title: Does not matter.
 Version: 42.0.0
-Remotes:
-    rstudio/blogdown
