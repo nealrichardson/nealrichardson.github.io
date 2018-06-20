@@ -6,7 +6,7 @@ branches:
 before_script:
 - git config --global user.email "neal@crunch.io"
 - git config --global user.name "Neal Richardson"
-- R -e 'devtools::install_github("rstudio/blogdown")'
+# - R -e 'devtools::install_github("rstudio/blogdown")'
 - R -e 'blogdown::install_hugo(version="0.20.7")'
 - git clone https://github.com/jeblister/kube.git ./themes/kube
 script:
