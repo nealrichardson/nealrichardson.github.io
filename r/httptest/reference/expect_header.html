@@ -18,11 +18,18 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
   <link href="../extra.css" rel="stylesheet">
   
 <meta property="og:title" content="Test that an HTTP request is made with a header — expect_header" />
@@ -31,6 +38,9 @@
 is present in a request. It works by inspecting the request object and
 raising warnings that are caught by testthat::expect_warning()." />
 <meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -40,16 +50,14 @@ raising warnings that are caught by testthat::expect_warning()." />
 <![endif]-->
 
 
-<!-- Google analytics -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-104182925-1"></script>
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  ga('create', 'UA-104182925-1', 'auto');
-  ga('send', 'pageview');
-
+  gtag('config', 'UA-104182925-1');
 </script>
 
   </head>
@@ -65,8 +73,12 @@ raising warnings that are caught by testthat::expect_warning()." />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">httptest</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">httptest</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.0</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -115,6 +127,7 @@ raising warnings that are caught by testthat::expect_warning()." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -122,21 +135,25 @@ raising warnings that are caught by testthat::expect_warning()." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Test that an HTTP request is made with a header</h1>
+    <small class="dont-index">Source: <a href='https://github.com/nealrichardson/httptest/blob/master/R/expect-header.R'><code>R/expect-header.R</code></a></small>
+    <div class="hidden name"><code>expect_header.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>This expectation checks that a HTTP header (and potentially header value)
 is present in a request. It works by inspecting the request object and
 raising warnings that are caught by <code><a href='http://www.rdocumentation.org/packages/testthat/topics/output-expectations'>testthat::expect_warning()</a></code>.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>expect_header</span>(<span class='no'>...</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -161,7 +178,7 @@ requests.</p>
     <span class='fu'>expect_header</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/httr/topics/GET'>GET</a></span>(<span class='st'>"http://example.com"</span>, <span class='kw'>config</span><span class='kw'>=</span><span class='fu'><a href='http://www.rdocumentation.org/packages/httr/topics/add_headers'>add_headers</a></span>(<span class='kw'>Accept</span><span class='kw'>=</span><span class='st'>"image/png"</span>)),
         <span class='st'>"Accept: image/png"</span>)
 })</div><div class='output co'>#&gt; <span class='message'>GET http://example.com</span></div><div class='output co'>#&gt; Response [http://example.com]
-#&gt;   Date: 2018-01-15 22:05
+#&gt;   Date: 2018-06-19 21:15
 #&gt;   Status: 200
 #&gt;   Content-Type: &lt;unknown&gt;
 #&gt;   Size: 4 B
@@ -194,5 +211,8 @@ requests.</p>
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

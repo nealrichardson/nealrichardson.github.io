@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>All news • httptest</title>
+<title>Changelog • httptest</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -18,14 +18,24 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="All news" />
+<meta property="og:title" content="Changelog" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -35,16 +45,14 @@
 <![endif]-->
 
 
-<!-- Google analytics -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-104182925-1"></script>
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  ga('create', 'UA-104182925-1', 'auto');
-  ga('send', 'pageview');
-
+  gtag('config', 'UA-104182925-1');
 </script>
 
   </head>
@@ -60,8 +68,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">httptest</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">httptest</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.0</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -110,6 +122,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -117,17 +130,56 @@
       
       </header>
 
-      <div class="row">
-
-  <div class="col-md-9">
+<div class="row">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Change log <small>All releases</small></h1>
+      <h1>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/nealrichardson/httptest/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="contents">
+    <div id="httptest-3-1-0" class="section level1">
+<h1 class="page-header">
+<a href="#httptest-3-1-0" class="anchor"></a>httptest 3.1.0<small> 2018-06-19 </small>
+</h1>
+<div id="better-more-efficient-response-recording" class="section level2">
+<h2 class="hasAnchor">
+<a href="#better-more-efficient-response-recording" class="anchor"></a>Better, more efficient response recording</h2>
+<ul>
+<li>
+<code><a href="../reference/capture_requests.html">capture_requests()</a></code> no longer includes the “request” object inside the recorded response when writing <code>.R</code> verbose responses. As of 3.0.0, <code><a href="../reference/with_mock_api.html">with_mock_api()</a></code> inserts the current request when loading mock files, so it was being overwritten anyway. This eliminates some (though not all) of the need for redacting responses. As a result, the redacting functions <code>redact_oauth()</code> and <code>redact_http_auth()</code> have been removed because they only acted on the <code>response$request</code>, which is now dropped entirely.</li>
+<li>
+<code><a href="../reference/capture_requests.html">capture_requests()</a></code> will record simplified response bodies for a range of Content-Types when <code>simplify=TRUE</code> (the default). Previously, only <code>.json</code> (<code>Content-Type: application/json</code>) was recorded as a simple text files; now, <code>.html</code>, <code>.xml</code>, <code>.txt</code>, <code>.csv</code>, and <code>.tsv</code> are supported.</li>
+<li>When recording with <code>simplify=TRUE</code>, HTTP responses with <code>204 No Content</code> status are now written as empty files with <code>.204</code> extension. This saves around 2K of disk space per file.</li>
+<li>
+<code><a href="../reference/with_mock_api.html">with_mock_api()</a></code> now can also load these newly supported file types.</li>
+<li>Bare JSON files written by <code><a href="../reference/capture_requests.html">capture_requests()</a></code> are now “prettified” (i.e. multiline, nice indentation).</li>
+<li>
+<code><a href="../reference/capture_requests.html">capture_requests()</a></code> now records responses from <code><a href="http://www.rdocumentation.org/packages/httr/topics/RETRY">httr::RETRY()</a></code> (<a href='https://github.com/nealrichardson/httptest/issues/13'>#13</a>)</li>
+</ul>
+</div>
+<div id="vignette-setup-and-teardown" class="section level2">
+<h2 class="hasAnchor">
+<a href="#vignette-setup-and-teardown" class="anchor"></a>Vignette setup and teardown</h2>
+<ul>
+<li>Store package-level vignette setup and teardown code, called inside <code><a href="../reference/start_vignette.html">start_vignette()</a></code> and <code><a href="../reference/start_vignette.html">end_vignette()</a></code>, in <code>inst/httptest/start-vignette.R</code> and <code>inst/httptest/end-vignette.R</code>, respectively. Like with the package redactors and request preprocessors, these are automatically executed whenever your package is loaded and <code>start/end_vignette</code> is called. This makes it easy to write multiple vignettes without having to copy and paste as much setup code. See <code><a href="../articles/vignettes.html">vignette("vignettes")</a></code> for details.</li>
+</ul>
+</div>
+<div id="other-enhancements-and-options" class="section level2">
+<h2 class="hasAnchor">
+<a href="#other-enhancements-and-options" class="anchor"></a>Other enhancements and options</h2>
+<ul>
+<li>
+<code><a href="../reference/gsub_response.html">gsub_response()</a></code> now applies over the URL in a <code>Location</code> header, if found.</li>
+<li>Add <code>options(httptest.max.print)</code> to allow you the ability to specify a length to which to truncate the request body printed in the error message for requests in <code><a href="../reference/with_mock_api.html">with_mock_api()</a></code>. Useful for debugging mock files not found when there are large request bodies.</li>
+<li>Add <code>options(httptest.debug)</code>, which if <code>TRUE</code> prints more details about which functions are being traced (by <code><a href="http://www.rdocumentation.org/packages/base/topics/trace">base::trace()</a></code>) and when they’re called.</li>
+<li>Deprecate the “verbose” argument to <code><a href="../reference/capture_requests.html">capture_requests()</a></code>: use <code>options(httptest.verbose)</code> instead.</li>
+</ul>
+</div>
+</div>
     <div id="httptest-3-0-0" class="section level1">
-<h1 class="hasAnchor">
-<a href="#httptest-3-0-0" class="anchor"></a>httptest 3.0.0</h1>
+<h1 class="page-header">
+<a href="#httptest-3-0-0" class="anchor"></a>httptest 3.0.0<small> 2018-01-16 </small>
+</h1>
 <div id="major-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#major-features" class="anchor"></a>Major features</h2>
@@ -157,31 +209,36 @@
 <li>Option <code>"httptest.verbose"</code> to govern some extra debug messaging (automatically turned off by <code><a href="../reference/start_vignette.html">start_vignette()</a></code>)</li>
 <li>Fix a bug where <code>write_disk</code> responses that were recorded in one location and moved to another directory could not be loaded</li>
 </ul>
-<div id="httptest-2-3-4" class="section level3">
-<h3 class="hasAnchor">
-<a href="#httptest-2-3-4" class="anchor"></a>httptest 2.3.4</h3>
+</div>
+</div>
+    <div id="httptest-2-3-4" class="section level1">
+<h1 class="page-header">
+<a href="#httptest-2-3-4" class="anchor"></a>httptest 2.3.4<small> 2017-11-14 </small>
+</h1>
 <ul>
 <li>Ensure forward compatibility with a <a href="https://github.com/wch/r-source/commit/62fced00949b9a261034d24789175b205f7fa866">change</a> in <code>deparse()</code> in the development version of R (r73699).</li>
 </ul>
 </div>
-<div id="httptest-2-3-2" class="section level3">
-<h3 class="hasAnchor">
-<a href="#httptest-2-3-2" class="anchor"></a>httptest 2.3.2</h3>
+    <div id="httptest-2-3-2" class="section level1">
+<h1 class="page-header">
+<a href="#httptest-2-3-2" class="anchor"></a>httptest 2.3.2<small> 2017-10-20 </small>
+</h1>
 <ul>
-<li>Add <code>redact_oauth()</code> to purge <code><a href="http://www.rdocumentation.org/packages/httr/topics/Token-class">httr::Token()</a></code> objects from requests (<a href="https://github.com/nealrichardson/httptest/issues/9">#9</a>). <code>redact_oauth()</code> is built in to <code><a href="../reference/redact.html">redact_auth()</a></code>, the default redactor, so no action is required to start using it.</li>
+<li>Add <code>redact_oauth()</code> to purge <code><a href="http://www.rdocumentation.org/packages/httr/topics/Token-class">httr::Token()</a></code> objects from requests (<a href="https://github.com/nealrichardson/httptest/issues/9"><a href='https://github.com/nealrichardson/httptest/issues/9'>#9</a></a>). <code>redact_oauth()</code> is built in to <code><a href="../reference/redact.html">redact_auth()</a></code>, the default redactor, so no action is required to start using it.</li>
 </ul>
 </div>
-</div>
-<div id="httptest-2-3-0" class="section level2">
-<h2 class="hasAnchor">
-<a href="#httptest-2-3-0" class="anchor"></a>httptest 2.3.0</h2>
+    <div id="httptest-2-3-0" class="section level1">
+<h1 class="page-header">
+<a href="#httptest-2-3-0" class="anchor"></a>httptest 2.3.0<small> Unreleased </small>
+</h1>
 <ul>
 <li>Remove support for mocking <code><a href="http://www.rdocumentation.org/packages/utils/topics/download.file">utils::download.file()</a></code>, as <code>testthat</code> no longer permits it. Use <code><a href="http://www.rdocumentation.org/packages/httr/topics/GET">httr::GET(url, config=write_disk(filename))</a></code> instead, which <code>httptest</code> now more robustly supports in <code><a href="../reference/capture_requests.html">capture_requests()</a></code>.</li>
 </ul>
 </div>
-<div id="httptest-2-2-0" class="section level2">
-<h2 class="hasAnchor">
-<a href="#httptest-2-2-0" class="anchor"></a>httptest 2.2.0</h2>
+    <div id="httptest-2-2-0" class="section level1">
+<h1 class="page-header">
+<a href="#httptest-2-2-0" class="anchor"></a>httptest 2.2.0<small> Unreleased </small>
+</h1>
 <ul>
 <li>Add redacting functions (<code><a href="../reference/redact.html">redact_auth()</a></code>, <code>redact_cookies()</code>, <code>redact_http_auth()</code>, <code>redact_headers()</code>, <code>within_body_text()</code>) that can be specified in <code><a href="../reference/capture_requests.html">capture_requests()</a></code> so that sensitive information like tokens and ids can be purged from recorded response files. The default redacting function is <code><a href="../reference/redact.html">redact_auth()</a></code>, which wraps several of them. See <code><a href="../articles/redacting.html">vignette("redacting", package="httptest")</a></code> for more.</li>
 <li>When loading a JSON mock response, the current “request” object is now included in the response returned, as is the case with real responses.</li>
@@ -190,17 +247,19 @@
 <li>
 <code><a href="../reference/skip_if_disconnected.html">skip_if_disconnected()</a></code> now also wraps <code><a href="http://www.rdocumentation.org/packages/testthat/topics/skip">testthat::skip_on_cran()</a></code> so that tests that require a real network connection don’t cause a flaky test failure on CRAN</li>
 </ul>
-<div id="httptest-2-1-2" class="section level3">
-<h3 class="hasAnchor">
-<a href="#httptest-2-1-2" class="anchor"></a>httptest 2.1.2</h3>
+</div>
+    <div id="httptest-2-1-2" class="section level1">
+<h1 class="page-header">
+<a href="#httptest-2-1-2" class="anchor"></a>httptest 2.1.2<small> 2017-08-04 </small>
+</h1>
 <ul>
 <li>Fix for compatibility with upcoming release of <a href="http://httr.r-lib.org/">httr</a> that affected non-GET requests that did not contain any request body.</li>
 </ul>
 </div>
-</div>
-<div id="httptest-2-1-0" class="section level2">
-<h2 class="hasAnchor">
-<a href="#httptest-2-1-0" class="anchor"></a>httptest 2.1.0</h2>
+    <div id="httptest-2-1-0" class="section level1">
+<h1 class="page-header">
+<a href="#httptest-2-1-0" class="anchor"></a>httptest 2.1.0<small> 2017-07-31 </small>
+</h1>
 <ul>
 <li>
 <code><a href="../reference/with_mock_api.html">with_mock_api()</a></code> and <code><a href="../reference/without_internet.html">without_internet()</a></code> handle multipart and urlencoded form data in mocked HTTP requests.</li>
@@ -212,19 +271,21 @@
 <code><a href="../reference/capture_requests.html">capture_requests()</a></code> takes the first element in <code><a href="../reference/mockPaths.html">.mockPaths()</a></code> as its default “path” argument. The default is unchanged since <code><a href="../reference/mockPaths.html">.mockPaths()</a></code> by default returns the current working directory, just as the “path” default was, but if you set a different mock path for reading mocks, <code><a href="../reference/capture_requests.html">capture_requests()</a></code> will write there as well.</li>
 </ul>
 </div>
-</div>
     <div id="httptest-2-0-0" class="section level1">
-<h1 class="hasAnchor">
-<a href="#httptest-2-0-0" class="anchor"></a>httptest 2.0.0</h1>
+<h1 class="page-header">
+<a href="#httptest-2-0-0" class="anchor"></a>httptest 2.0.0<small> 2017-06-05 </small>
+</h1>
 <ul>
 <li>
 <code><a href="../reference/capture_requests.html">capture_requests()</a></code> now writes non-JSON-content-type and non-200-status responses as full “response” objects in .R files. <code><a href="../reference/with_mock_api.html">with_mock_api()</a></code> now looks for .R mocks if a .json mock isn’t found. This allows all requests and all responses, not just JSON content, to be mocked.</li>
 <li>New <code><a href="../reference/mockPaths.html">.mockPaths()</a></code> function, in the model of <code>.libPaths()</code>, which allows you to specify alternate directories in which to search for mock API responses.</li>
 <li>Documentation enriched and <code><a href="../articles/httptest.html">vignette("httptest")</a></code> added.</li>
 </ul>
-<div id="httptest-1-3-0" class="section level2">
-<h2 class="hasAnchor">
-<a href="#httptest-1-3-0" class="anchor"></a>httptest 1.3.0</h2>
+</div>
+    <div id="httptest-1-3-0" class="section level1">
+<h1 class="page-header">
+<a href="#httptest-1-3-0" class="anchor"></a>httptest 1.3.0<small> 2017-04-13 </small>
+</h1>
 <ul>
 <li>New context <code><a href="../reference/capture_requests.html">capture_requests()</a></code> to collect the responses from real requests and store them as mock files</li>
 <li>
@@ -234,49 +295,62 @@
 <code>mockDownload()</code> now processes request URLs as <code>mock_request()</code> does</li>
 </ul>
 </div>
-<div id="httptest-1-2-0" class="section level2">
-<h2 class="hasAnchor">
-<a href="#httptest-1-2-0" class="anchor"></a>httptest 1.2.0</h2>
+    <div id="httptest-1-2-0" class="section level1">
+<h1 class="page-header">
+<a href="#httptest-1-2-0" class="anchor"></a>httptest 1.2.0<small> 2017-03-22 </small>
+</h1>
 <ul>
-<li>Add support in <code><a href="../reference/with_mock_api.html">with_mock_api()</a></code> for loading request fixtures for all HTTP verbs, not only GET (<a href="https://github.com/nealrichardson/httptest/pull/4">#4</a>). Include request body in the mock file path hashing.</li>
+<li>Add support in <code><a href="../reference/with_mock_api.html">with_mock_api()</a></code> for loading request fixtures for all HTTP verbs, not only GET (<a href="https://github.com/nealrichardson/httptest/pull/4"><a href='https://github.com/nealrichardson/httptest/issues/4'>#4</a></a>). Include request body in the mock file path hashing.</li>
 <li>
 <code><a href="../reference/build_mock_url.html">buildMockURL()</a></code> can accept either a ‘request’ object or a character URL</li>
 <li>Bump mock payload max size up to 128K</li>
 </ul>
-<div id="httptest-1-1-2" class="section level3">
-<h3 class="hasAnchor">
-<a href="#httptest-1-1-2" class="anchor"></a>httptest 1.1.2</h3>
+</div>
+    <div id="httptest-1-1-2" class="section level1">
+<h1 class="page-header">
+<a href="#httptest-1-1-2" class="anchor"></a>httptest 1.1.2<small> Unreleased </small>
+</h1>
 <ul>
-<li>Support full URLs, not just file paths, in <code><a href="../reference/with_mock_api.html">with_mock_api()</a></code> (<a href="https://github.com/nealrichardson/httptest/issues/1">#1</a>)</li>
+<li>Support full URLs, not just file paths, in <code><a href="../reference/with_mock_api.html">with_mock_api()</a></code> (<a href="https://github.com/nealrichardson/httptest/issues/1"><a href='https://github.com/nealrichardson/httptest/issues/1'>#1</a></a>)</li>
 </ul>
 </div>
-</div>
-<div id="httptest-1-1-0" class="section level2">
-<h2 class="hasAnchor">
-<a href="#httptest-1-1-0" class="anchor"></a>httptest 1.1.0</h2>
+    <div id="httptest-1-1-0" class="section level1">
+<h1 class="page-header">
+<a href="#httptest-1-1-0" class="anchor"></a>httptest 1.1.0<small> 2017-02-03 </small>
+</h1>
 <ul>
 <li>
 <code><a href="../reference/expect_header.html">expect_header()</a></code> to assert that a HTTP request has a header</li>
 <li>Always prune the leading “:///” that appears in <code><a href="../reference/with_mock_api.html">with_mock_api()</a></code> if the URL has a querystring</li>
 </ul>
 </div>
-</div>
     <div id="httptest-1-0-0" class="section level1">
-<h1 class="hasAnchor">
-<a href="#httptest-1-0-0" class="anchor"></a>httptest 1.0.0</h1>
+<h1 class="page-header">
+<a href="#httptest-1-0-0" class="anchor"></a>httptest 1.0.0<small> 2016-12-31 </small>
+</h1>
 <ul>
-<li>Initial addition of functions and tests, largely pulled from <a href="https://github.com/nealrichardson/httpcache">httpcache</a> and <a href="http://crunch.io/r/crunch">crunch</a>.</li>
+<li>Initial addition of functions and tests, largely pulled from <a href="https://enpiar.com/r/httpcache">httpcache</a> and <a href="https://crunch.io/r/crunch">crunch</a>.</li>
 </ul>
 </div>
-    </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#httptest-3-1-0">3.1.0</a></li>
         <li><a href="#httptest-3-0-0">3.0.0</a></li>
+        <li><a href="#httptest-2-3-4">2.3.4</a></li>
+        <li><a href="#httptest-2-3-2">2.3.2</a></li>
+        <li><a href="#httptest-2-3-0">2.3.0</a></li>
+        <li><a href="#httptest-2-2-0">2.2.0</a></li>
+        <li><a href="#httptest-2-1-2">2.1.2</a></li>
+        <li><a href="#httptest-2-1-0">2.1.0</a></li>
         <li><a href="#httptest-2-0-0">2.0.0</a></li>
+        <li><a href="#httptest-1-3-0">1.3.0</a></li>
+        <li><a href="#httptest-1-2-0">1.2.0</a></li>
+        <li><a href="#httptest-1-1-2">1.1.2</a></li>
+        <li><a href="#httptest-1-1-0">1.1.0</a></li>
         <li><a href="#httptest-1-0-0">1.0.0</a></li>
       </ul>
     </div>
@@ -296,5 +370,8 @@
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

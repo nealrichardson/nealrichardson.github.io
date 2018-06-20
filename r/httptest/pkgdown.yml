@@ -1,8 +1,11 @@
-urls:
-  reference: http://enpiar.com/r/httptest/reference
-  article: http://enpiar.com/r/httptest/articles
+pandoc: 2.2.1
+pkgdown: 1.1.0.9000
+pkgdown_sha: ef83837c6e18fb890d05ebbb4e6ee435c79a7c0f
 articles:
   httptest: httptest.html
   redacting: redacting.html
   vignettes: vignettes.html
+urls:
+  reference: http://enpiar.com/r/httptest/reference
+  article: http://enpiar.com/r/httptest/articles
 

@@ -18,14 +18,24 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
   <link href="../extra.css" rel="stylesheet">
   
 <meta property="og:title" content="Function reference" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -35,16 +45,14 @@
 <![endif]-->
 
 
-<!-- Google analytics -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-104182925-1"></script>
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  ga('create', 'UA-104182925-1', 'auto');
-  ga('send', 'pageview');
-
+  gtag('config', 'UA-104182925-1');
 </script>
 
   </head>
@@ -60,8 +68,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">httptest</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">httptest</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.0</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -110,6 +122,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -117,200 +130,196 @@
       
       </header>
 
-      <div class="row">
-  <div class="col-md-9">
+<div class="row">
+  <div class="contents col-md-9">
     <div class="page-header">
-      <h1>
-        Reference
-        <small>version&nbsp;3.0.0</small>
-      </h1>
+      <h1>Reference</h1>
     </div>
 
-    <div class="contents">
-      <table class="ref-index">
+    <table class="ref-index">
 
-      <colgroup>
-        <col class="alias" />
-        <col class="title" />
-      </colgroup>
+    <colgroup>
+      
+      <col class="alias" />
+      <col class="title" />
+    </colgroup>
 
-      <tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-contexts" class="hasAnchor"><a href="#section-contexts" class="anchor"></a>Contexts</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="with_mock_api.html">with_mock_api</a></code> <code><a href="with_mock_api.html">with_mock_API</a></code> </p>
-          </td>
-          <td><p>Serve a mock API from files</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="use_mock_api.html">use_mock_api</a></code> </p>
-          </td>
-          <td><p>Turn on API mocking</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="without_internet.html">without_internet</a></code> </p>
-          </td>
-          <td><p>Make all HTTP requests raise an error</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="block_requests.html">block_requests</a></code> </p>
-          </td>
-          <td><p>Block HTTP requests</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="with_fake_http.html">with_fake_http</a></code> <code><a href="with_fake_http.html">with_fake_HTTP</a></code> </p>
-          </td>
-          <td><p>Make all HTTP requests return a fake response</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="stop_mocking.html">stop_mocking</a></code> </p>
-          </td>
-          <td><p>Turn off request mocking</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-expectations" class="hasAnchor"><a href="#section-expectations" class="anchor"></a>Expectations</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="expect_verb.html">expect_GET</a></code> <code><a href="expect_verb.html">expect_POST</a></code> <code><a href="expect_verb.html">expect_PATCH</a></code> <code><a href="expect_verb.html">expect_PUT</a></code> <code><a href="expect_verb.html">expect_DELETE</a></code> <code><a href="expect_verb.html">expect_no_request</a></code> </p>
-          </td>
-          <td><p>Expectations for mocked HTTP requests</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="expect_header.html">expect_header</a></code> </p>
-          </td>
-          <td><p>Test that an HTTP request is made with a header</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="expect_json_equivalent.html">expect_json_equivalent</a></code> </p>
-          </td>
-          <td><p>Test that objects would generate equivalent JSON</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-recording-and-redacting-responses" class="hasAnchor"><a href="#section-recording-and-redacting-responses" class="anchor"></a>Recording and redacting responses</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="capture_requests.html">capture_requests</a></code> <code><a href="capture_requests.html">start_capturing</a></code> <code><a href="capture_requests.html">stop_capturing</a></code> </p>
-          </td>
-          <td><p>Record API responses as mock files</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="redact.html">redact_cookies</a></code> <code><a href="redact.html">redact_headers</a></code> <code><a href="redact.html">redact_http_auth</a></code> <code><a href="redact.html">redact_oauth</a></code> <code><a href="redact.html">within_body_text</a></code> <code><a href="redact.html">redact_auth</a></code> </p>
-          </td>
-          <td><p>Remove sensitive content from HTTP responses</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="gsub_response.html">gsub_response</a></code> <code><a href="gsub_response.html">gsub_request</a></code> </p>
-          </td>
-          <td><p>Find and replace within a 'response' or 'request'</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="set_redactor.html">set_redactor</a></code> </p>
-          </td>
-          <td><p>Set a response redactor</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-loading-mock-recorded-fixtures" class="hasAnchor"><a href="#section-loading-mock-recorded-fixtures" class="anchor"></a>Loading mock (recorded) fixtures</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="mockPaths.html">.mockPaths</a></code> </p>
-          </td>
-          <td><p>Set an alternate directory for mock API fixtures</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="set_requester.html">set_requester</a></code> </p>
-          </td>
-          <td><p>Set a request preprocessor</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="build_mock_url.html">build_mock_url</a></code> <code><a href="build_mock_url.html">buildMockURL</a></code> </p>
-          </td>
-          <td><p>Convert a request to a mock file path</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="fake_response.html">fake_response</a></code> <code><a href="fake_response.html">fakeResponse</a></code> </p>
-          </td>
-          <td><p>Return something that looks like an httr 'response'</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-vignettes" class="hasAnchor"><a href="#section-vignettes" class="anchor"></a>Vignettes</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="start_vignette.html">start_vignette</a></code> <code><a href="start_vignette.html">end_vignette</a></code> </p>
-          </td>
-          <td><p>Set mocking/capturing state for a vignette</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="change_state.html">change_state</a></code> </p>
-          </td>
-          <td><p>Handle a change of server state</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-other-testing-tools" class="hasAnchor"><a href="#section-other-testing-tools" class="anchor"></a>Other testing tools</h2>
-            <p class="section-desc"></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="public.html">public</a></code> </p>
-          </td>
-          <td><p>Test that functions are exported</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="skip_if_disconnected.html">skip_if_disconnected</a></code> </p>
-          </td>
-          <td><p>Skip tests that need an internet connection if you don't have one</p></td>
-        </tr>
-      </tbody>
-      </table>
-    </div>
+    <tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-contexts" class="hasAnchor"><a href="#section-contexts" class="anchor"></a>Contexts</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="with_mock_api.html">with_mock_api()</a></code> <code><a href="with_mock_api.html">with_mock_API()</a></code> </p>
+        </td>
+        <td><p>Serve a mock API from files</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="use_mock_api.html">use_mock_api()</a></code> </p>
+        </td>
+        <td><p>Turn on API mocking</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="without_internet.html">without_internet()</a></code> </p>
+        </td>
+        <td><p>Make all HTTP requests raise an error</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="block_requests.html">block_requests()</a></code> </p>
+        </td>
+        <td><p>Block HTTP requests</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="with_fake_http.html">with_fake_http()</a></code> <code><a href="with_fake_http.html">with_fake_HTTP()</a></code> </p>
+        </td>
+        <td><p>Make all HTTP requests return a fake response</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="stop_mocking.html">stop_mocking()</a></code> </p>
+        </td>
+        <td><p>Turn off request mocking</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-expectations" class="hasAnchor"><a href="#section-expectations" class="anchor"></a>Expectations</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="expect_verb.html">expect_GET()</a></code> <code><a href="expect_verb.html">expect_POST()</a></code> <code><a href="expect_verb.html">expect_PATCH()</a></code> <code><a href="expect_verb.html">expect_PUT()</a></code> <code><a href="expect_verb.html">expect_DELETE()</a></code> <code><a href="expect_verb.html">expect_no_request()</a></code> </p>
+        </td>
+        <td><p>Expectations for mocked HTTP requests</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="expect_header.html">expect_header()</a></code> </p>
+        </td>
+        <td><p>Test that an HTTP request is made with a header</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="expect_json_equivalent.html">expect_json_equivalent()</a></code> </p>
+        </td>
+        <td><p>Test that objects would generate equivalent JSON</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-recording-and-redacting-responses" class="hasAnchor"><a href="#section-recording-and-redacting-responses" class="anchor"></a>Recording and redacting responses</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="capture_requests.html">capture_requests()</a></code> <code><a href="capture_requests.html">start_capturing()</a></code> <code><a href="capture_requests.html">stop_capturing()</a></code> </p>
+        </td>
+        <td><p>Record API responses as mock files</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="redact.html">redact_cookies()</a></code> <code><a href="redact.html">redact_headers()</a></code> <code><a href="redact.html">within_body_text()</a></code> <code><a href="redact.html">redact_auth()</a></code> </p>
+        </td>
+        <td><p>Remove sensitive content from HTTP responses</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gsub_response.html">gsub_response()</a></code> <code><a href="gsub_response.html">gsub_request()</a></code> </p>
+        </td>
+        <td><p>Find and replace within a 'response' or 'request'</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="set_redactor.html">set_redactor()</a></code> </p>
+        </td>
+        <td><p>Set a response redactor</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-loading-mock-recorded-fixtures" class="hasAnchor"><a href="#section-loading-mock-recorded-fixtures" class="anchor"></a>Loading mock (recorded) fixtures</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="mockPaths.html">.mockPaths()</a></code> </p>
+        </td>
+        <td><p>Set an alternate directory for mock API fixtures</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="set_requester.html">set_requester()</a></code> </p>
+        </td>
+        <td><p>Set a request preprocessor</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="build_mock_url.html">build_mock_url()</a></code> <code><a href="build_mock_url.html">buildMockURL()</a></code> </p>
+        </td>
+        <td><p>Convert a request to a mock file path</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="fake_response.html">fake_response()</a></code> </p>
+        </td>
+        <td><p>Return something that looks like a 'response'</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-vignettes" class="hasAnchor"><a href="#section-vignettes" class="anchor"></a>Vignettes</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="start_vignette.html">start_vignette()</a></code> <code><a href="start_vignette.html">end_vignette()</a></code> </p>
+        </td>
+        <td><p>Set mocking/capturing state for a vignette</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="change_state.html">change_state()</a></code> </p>
+        </td>
+        <td><p>Handle a change of server state</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-other-testing-tools" class="hasAnchor"><a href="#section-other-testing-tools" class="anchor"></a>Other testing tools</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="public.html">public()</a></code> </p>
+        </td>
+        <td><p>Test that functions are exported</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="skip_if_disconnected.html">skip_if_disconnected()</a></code> </p>
+        </td>
+        <td><p>Skip tests that need an internet connection if you don't have one</p></td>
+      </tr>
+    </tbody>
+    </table>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -338,5 +347,8 @@
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
