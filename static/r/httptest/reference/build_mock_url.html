@@ -18,11 +18,18 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
   <link href="../extra.css" rel="stylesheet">
   
 <meta property="og:title" content="Convert a request to a mock file path — build_mock_url" />
@@ -30,6 +37,9 @@
 <meta property="og:description" content="Requests are translated to mock file paths according to several rules that
 incorporate the request method, URL, query parameters, and body." />
 <meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -39,16 +49,14 @@ incorporate the request method, URL, query parameters, and body." />
 <![endif]-->
 
 
-<!-- Google analytics -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-104182925-1"></script>
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  ga('create', 'UA-104182925-1', 'auto');
-  ga('send', 'pageview');
-
+  gtag('config', 'UA-104182925-1');
 </script>
 
   </head>
@@ -64,8 +72,12 @@ incorporate the request method, URL, query parameters, and body." />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">httptest</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">httptest</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.0</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -114,6 +126,7 @@ incorporate the request method, URL, query parameters, and body." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -121,22 +134,26 @@ incorporate the request method, URL, query parameters, and body." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Convert a request to a mock file path</h1>
+    <small class="dont-index">Source: <a href='https://github.com/nealrichardson/httptest/blob/master/R/mock-api.R'><code>R/mock-api.R</code></a></small>
+    <div class="hidden name"><code>build_mock_url.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Requests are translated to mock file paths according to several rules that
 incorporate the request method, URL, query parameters, and body.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>build_mock_url</span>(<span class='no'>req</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"GET"</span>)
 
 <span class='fu'>buildMockURL</span>(<span class='no'>req</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"GET"</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -152,45 +169,41 @@ its request method will override this argument</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A file path and name, with .json extension. The file may or may not
+    <p>A file path and name, without an extension. The file, or a file with
+some extension appended, may or may not
 exist: existence is not a concern of this function.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>First, the URL is modified in two ways in order to allow it to map to a
-local file system. All mock files have the request protocol such as "http://"
-removed from the URL, and they also have a file extension appended. In an
+    <p>First, the request protocol, such as "https://", is removed from the URL.
+Second, if the request URL contains a query string, it will be popped off,
+hashed by <code><a href='http://www.rdocumentation.org/packages/digest/topics/digest'>digest::digest()</a></code>, and the first six characters appended to the
+file being read. Third, request bodies are similarly hashed and
+appended. Finally, if a request method other than GET is used it will be
+appended to the end of the end of the file name.</p>
+<p>Mock file paths also have a file extension appended, based on the
+<code>Content-Type</code> of the response, though this function, which is only concerned
+with the request, does not add the extension. In an
 HTTP API, a "directory" itself is a resource,
 so the extension allows distinguishing directories and files in the file
 system. That is, a mocked <code>GET("http://example.com/api/")</code> may read a
 "example.com/api.json" file, while
 <code>GET("http://example.com/api/object1/")</code> reads "example.com/api/object1.json".</p>
-<p>The extension also gives information on content type. Two extensions are
-currently supported: (1) .json and (2) .R. JSON mocks can be stored in .json
-files, and when they are loaded by <code><a href='with_mock_api.html'>with_mock_api()</a></code>, relevant request
-metadata (headers, status code, etc.) are inferred. If your API doesn't
-return JSON, or if you want to simulate requests with other behavior (201
-Location response, or 400 Bad Request, for example), you can store full
-<code>response</code> objects in .R files that <code>with_mock_api</code> will <code>source</code> to load.
-Any request can be stored as a .R mock, but the .json mocks offer a
-simplified, more readable alternative. (<code><a href='capture_requests.html'>capture_requests()</a></code> will record
-simplified .json files where appropriate and .R mocks otherwise by default.)</p>
-<p>Second, if the request URL contains a query string, it will be popped off,
-hashed by <code><a href='http://www.rdocumentation.org/packages/digest/topics/digest'>digest::digest()</a></code>, and the first six characters appended to the
-file being read. For example, <code>GET("api/object1/?a=1")</code> reads
-"api/object1-b64371.json". Third, request bodies are similarly hashed and
-appended. Finally, if a request method other than GET is used it will be
-appended to the end of the end of the file name. For example,
-<code>POST("api/object1/?a=1")</code> reads "api/object1-b64371-POST.json".</p>
-<p>This function is exported so that other packages can construct similar mock
+<p>Other examples:</p><ul>
+<li><p><code>GET("http://example.com/api/object1/?a=1")</code> may read
+"example.com/api/object1-b64371.xml".</p></li>
+<li><p><code>POST("http://example.com/api/object1/?a=1")</code> may read
+"example.com/api/object1-b64371-POST.json".</p></li>
+</ul>
+    <p>This function is exported so that other packages can construct similar mock
 behaviors or override specific requests at a higher level than
 <code>with_mock_api</code> mocks.</p>
 <p>In the interest of standardizing naming conventions, <code>build_mock_url()</code> is
-the preferred name for this context; <code>buildMockURL()</code> is being deprecated.</p>
+the preferred name for this function; <code>buildMockURL()</code> is deprecated.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='with_mock_api.html'>with_mock_api()</a></code> <code><a href='capture_requests.html'>capture_requests()</a></code></p>
+    <div class='dont-index'><p><code><a href='with_mock_api.html'>with_mock_api()</a></code> <code><a href='capture_requests.html'>capture_requests()</a></code></p></div>
     
 
   </div>
@@ -221,5 +234,8 @@ the preferred name for this context; <code>buildMockURL()</code> is being deprec
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

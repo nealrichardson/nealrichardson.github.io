@@ -18,11 +18,18 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+
   <link href="../extra.css" rel="stylesheet">
   
 <meta property="og:title" content="Record API responses as mock files — capture_requests" />
@@ -32,6 +39,9 @@ you make and stores them as mock files. This enables you to perform a series
 of requests against a live server once and then build your test suite using
 those mocks, running your tests in with_mock_api()." />
 <meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -41,16 +51,14 @@ those mocks, running your tests in with_mock_api()." />
 <![endif]-->
 
 
-<!-- Google analytics -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-104182925-1"></script>
 <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  ga('create', 'UA-104182925-1', 'auto');
-  ga('send', 'pageview');
-
+  gtag('config', 'UA-104182925-1');
 </script>
 
   </head>
@@ -66,8 +74,12 @@ those mocks, running your tests in with_mock_api()." />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">httptest</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">httptest</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.0</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -116,6 +128,7 @@ those mocks, running your tests in with_mock_api()." />
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -123,26 +136,30 @@ those mocks, running your tests in with_mock_api()." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Record API responses as mock files</h1>
+    <small class="dont-index">Source: <a href='https://github.com/nealrichardson/httptest/blob/master/R/capture-requests.R'><code>R/capture-requests.R</code></a></small>
+    <div class="hidden name"><code>capture_requests.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p><code>capture_requests</code> is a context that collects the responses from requests
 you make and stores them as mock files. This enables you to perform a series
 of requests against a live server once and then build your test suite using
 those mocks, running your tests in <code><a href='with_mock_api.html'>with_mock_api()</a></code>.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>capture_requests</span>(<span class='no'>expr</span>, <span class='no'>path</span>, <span class='no'>...</span>)
 
-<span class='fu'>start_capturing</span>(<span class='no'>path</span>, <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>redact</span>)
+<span class='fu'>start_capturing</span>(<span class='no'>path</span>, <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>verbose</span>, <span class='no'>redact</span>)
 
 <span class='fu'>stop_capturing</span>()</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -153,7 +170,8 @@ those mocks, running your tests in <code><a href='with_mock_api.html'>with_mock_
       <th>path</th>
       <td><p>Where to save the mock files. Default is the first directory in
 <code><a href='mockPaths.html'>.mockPaths()</a></code>, which if not otherwise specified is the current working
-directory.</p></td>
+directory. It is generally better to call <code><a href='mockPaths.html'>.mockPaths()</a></code> directly if you
+want to write to a different path, rather than using the <code>path</code> argument.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -171,7 +189,9 @@ a .R file using <code><a href='http://www.rdocumentation.org/packages/base/topic
       <td><p>logical: if <code>TRUE</code>, a <code>message</code> is printed for every file
 that is written when capturing requests containing the absolute path of the
 file. Useful for debugging if you're capturing but don't see the fixture
-files being written in the expected location. Default is <code>FALSE</code>.</p></td>
+files being written in the expected location. Default is <code>FALSE</code>. This
+parameter is deprecated; it is instead recommended that you set
+<code>options(httptest.verbose=TRUE)</code> to enable.</p></td>
     </tr>
     <tr>
       <th>redact</th>
@@ -191,14 +211,24 @@ it is called for its side effects.</p>
 
     <p><code>start_capturing</code> and <code>stop_capturing</code> allow you to turn on/off request
 recording for more convenient use in an interactive session.</p>
-<p>Mocks stored by this context are written out as plain-text files, either with
-extension <code>.json</code> if the request returned JSON content or with extension <code>.R</code>
-otherwise. The <code>.R</code> files contain syntax that when executed recreates the
-<code>httr</code> "response" object. By storing fixtures as plain-text files, you can
+<p>Recorded responses are written out as plain-text files. By storing fixtures
+as plain-text files, you can
 more easily confirm that your mocks look correct, and you can more easily
 maintain them without having to re-record them. If the API changes subtly,
 such as when adding an additional attribute to an object, you can just touch
 up the mocks.</p>
+<p>If the response has status <code>200 OK</code> and the <code>Content-Type</code>
+maps to a supported file extension---currently <code>.json</code>,
+<code>.html</code>, <code>.xml</code>, <code>.txt</code>, <code>.csv</code>, and <code>.tsv</code>---just the response body will be
+written out, using the appropriate extension. <code>204 No Content</code> status
+responses will be stored as an empty file with extension <code>.204</code>. Otherwise,
+the response will be written as a <code>.R</code> file containing syntax that, when
+executed, recreates the
+<code>httr</code> "response" object.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='build_mock_url.html'>build_mock_url()</a></code> for how requests are translated to file paths</p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -226,6 +256,8 @@ up the mocks.</p>
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
@@ -245,5 +277,8 @@ up the mocks.</p>
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
