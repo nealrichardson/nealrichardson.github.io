@@ -5,12 +5,12 @@ date: "2018-04-25T21:49:57-07:00"
 categories: ["code"]
 tags: ["R", "performance", "benchmark", "readr"]
 draft: false
-images: ["http://enpiar.com/img/star-wars-light-speed.gif"]
+images: ["https://enpiar.com/img/star-wars-light-speed.gif"]
 ---
 
 <!-- The 'readr' package is fast. Can we make it faster? -->
 
-Recently I analyzed some web traffic for my [team](http://crunch.io/team) at an all-hands meetup. I suspected there were some misconceptions about the frequency of certain kinds of requests, and that some basic descriptive statistics could help.
+Recently I analyzed some web traffic for my [team](https://crunch.io/team) at an all-hands meetup. I suspected there were some misconceptions about the frequency of certain kinds of requests, and that some basic descriptive statistics could help.
 
 Whenever I start an analysis like this, I also think about how to make it easier to repeat it. If the question is interesting enough to merit analysis now, it will probably be interesting next month too---particularly if it reveals things we want to improve. In this particular exercise, not only did I get statistics for my presentation, I also got a [new R package](https://github.com/nealrichardson/elbr) and some insights into how to read in data stored in lots of text files in an efficient, fast way, using [`readr`](http://readr.tidyverse.org/).
 

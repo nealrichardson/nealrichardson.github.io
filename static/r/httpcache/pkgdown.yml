@@ -1,6 +1,6 @@
 urls:
-  reference: http://enpiar.com/r/httpcache/reference
-  article: http://enpiar.com/r/httpcache/articles
+  reference: https://enpiar.com/r/httpcache/reference
+  article: https://enpiar.com/r/httpcache/articles
 articles:
   httpcache: httpcache.html
 

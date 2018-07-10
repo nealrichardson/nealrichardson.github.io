@@ -81,7 +81,7 @@
   </a>
 </li>
 <li>
-  <a href="http://enpiar.com">
+  <a href="https://enpiar.com">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -146,7 +146,7 @@
 <p>Sensitive or personal information is not limited to response cookies or headers. Sometimes identifiers are built into URLs or response bodies. These may be less sensitive than auth tokens, but you may want to conceal or anonymize your data that is included in test fixtures.</p>
 <p>Redacting functions can help with this content as well. You can use redactors on any part of the response object, not just the headers and cookies. A redactor is just a function that takes a response as input and returns a response object, so anything is possible if you write a custom redactor.</p>
 <p>For example, in the <a href="https://www.pivotaltracker.com/help/api">API for Pivotal Tracker</a>, the agile project management tool, the Pivotal project id is built into many of its URLs. As a result, it would appear in mock file paths you record. The id is also often included in the response body.</p>
-<p>We’d rather not have that information leak in our test fixtures, so in the <a href="http://enpiar.com/r/pivotaltrackR/">pivotaltrackR</a> package, which wraps this API, we need to tell <code>capture_requests</code> to scrub this id when we record mocks.</p>
+<p>We’d rather not have that information leak in our test fixtures, so in the <a href="https://enpiar.com/r/pivotaltrackR/">pivotaltrackR</a> package, which wraps this API, we need to tell <code>capture_requests</code> to scrub this id when we record mocks.</p>
 <p>To do this, we’ll use <code><a href="../reference/set_redactor.html">set_redactor()</a></code> to supply a custom function. The project id is stored in the R session in <code>options(pivotal.project)</code>, so we can identify it and find-and-replace it with <code><a href="../reference/gsub_response.html">gsub_response()</a></code>. The function takes <code>response</code> as its first argument and then passes the rest to <code>gsub()</code>, which is called on both the response URL and the response body.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="../reference/set_redactor.html">set_redactor</a></span>(<span class="op">~</span><span class="st"> </span><span class="kw"><a href="../reference/gsub_response.html">gsub_response</a></span>(., <span class="kw">getOption</span>(<span class="st">"pivotal.project"</span>), <span class="st">"123"</span>))</a></code></pre></div>
 <p>Note the formula shorthand: this follows the syntax in the <a href="purrr.tidyverse.org"><code>purrr</code></a> package for defining anonymous functions. It is equivalent to <code>function (response) gsub_response(response, getOption("pivotal.project"), "123")</code>.</p>
