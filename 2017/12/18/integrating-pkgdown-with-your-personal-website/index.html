@@ -26,7 +26,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2017/12/18/integrating-pkgdown-with-your-personal-website/" />
 
-  <meta property="og:image" content="http://enpiar.com/img/css_is_awesome_mug.jpg" />
+  <meta property="og:image" content="https://enpiar.com/img/css_is_awesome_mug.jpg" />
 
 
 
@@ -135,11 +135,11 @@ ga('send', 'pageview');
 <meta itemprop="dateModified" content="2017-12-18T16:49:57-07:00" />
 <meta itemprop="wordCount" content="2174">
 
-  <meta itemprop="image" content="http://enpiar.com/img/css_is_awesome_mug.jpg">
+  <meta itemprop="image" content="https://enpiar.com/img/css_is_awesome_mug.jpg">
 
 
 
-<meta itemprop="keywords" content="code,general,management,automation,benchmark,blogdown,cran,dependencies,httptest,hugo,meta,packages,performance,python,r,readr,tdd,testing,travis-ci,website," />
+<meta itemprop="keywords" content="code,general,management,automation,benchmark,blogdown,cran,dependencies,httptest,hugo,meta,packages,performance,prioritization,productivity,python,r,readr,tdd,technical-debt,testing,travis-ci,website," />
 
 <div id="hero">
     <h1 itemprop="headline">  Integrating 'pkgdown' with Your Personal Website</h1>
@@ -156,11 +156,11 @@ ga('send', 'pageview');
 
     
 
-<p>Publishing a website for your R package is simple with <a href="http://pkgdown.r-lib.org/"><code>pkgdown</code></a>. <a href="http://enpiar.com/2017/11/21/getting-down-with-pkgdown/">As I recently discussed</a>, you can build a basic site and host it on GitHub Pages with just a handful of commands and clicks.</p>
+<p>Publishing a website for your R package is simple with <a href="http://pkgdown.r-lib.org/"><code>pkgdown</code></a>. <a href="https://enpiar.com/2017/11/21/getting-down-with-pkgdown/">As I recently discussed</a>, you can build a basic site and host it on GitHub Pages with just a handful of commands and clicks.</p>
 
 <p>That&rsquo;s a great start, but why stop there? If you have a personal website or blog, it would be nice to have your package page mesh with it&mdash;that is, it should fit with your &ldquo;brand&rdquo;. Your personal site has a style (font, color, layout, etc.), and ideally your pkgdown site should match it. If you have a custom domain name for your website, it would be great to serve your pkgdown site under the same domain, rather than the default <code>username.github.io/pkgname</code> GitHub Pages convention. And if you have more than one R package with a website, they should all have a coherent presentation.</p>
 
-<p>All of this is possible with <code>pkgdown</code>, and while it requires getting your hands a little dirtier in code, it&rsquo;s not terribly challenging. Below, I&rsquo;ll walk through my experience doing this with <a href="http://enpiar.com/r/">my personal packages</a> and <a href="http://crunch.io/r/">at work</a>.</p>
+<p>All of this is possible with <code>pkgdown</code>, and while it requires getting your hands a little dirtier in code, it&rsquo;s not terribly challenging. Below, I&rsquo;ll walk through my experience doing this with <a href="https://enpiar.com/r/">my personal packages</a> and <a href="https://crunch.io/r/">at work</a>.</p>
 
 <p>A caveat: IANAWD (I am not a web developer). I can&rsquo;t claim that this is the &ldquo;right&rdquo; way to do any of this. All I can say is that it worked for me, and the code is minimally invasive.</p>
 
@@ -182,8 +182,8 @@ ga('send', 'pageview');
 
 <p>The first part is straightforward: CSS has an <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@import"><code>@import</code></a> statement that lets you dynamically load a CSS file from within another. No copy-and-paste needed&mdash;just the URL to point at. For my personal site, I saw that its <code>index.html</code> loaded several <code>.css</code> files, and two were particularly relevant: one had the font declarations, and the other all of the custom styles I had added on top of the base theme (the equivalent to <code>pkgdown/extra.css</code> for Hugo). I added imports for those two files into my <code>extra.css</code>:</p>
 
-<pre><code class="language-css">@import url(&quot;http://enpiar.com/css/font.css&quot;);
-@import url(&quot;http://enpiar.com/css/custom.css&quot;);
+<pre><code class="language-css">@import url(&quot;https://enpiar.com/css/font.css&quot;);
+@import url(&quot;https://enpiar.com/css/custom.css&quot;);
 </code></pre>
 
 <p>That got the basics. To work out the rest of the styling, I had to do some exploration of the pkgdown site markup, figure out how to identify elements on the page there, and then add special CSS classes to <code>pkgdown/extra.css</code> (after the <code>@import</code> statements). These styles overrode the defaults with styles that aligned with my personal site. In a few cases (notably, the navbar), it was easier&mdash;and more visually appealing&mdash;to edit the style of my personal site to make it align more closely with the pkgdown site.</p>
@@ -243,7 +243,7 @@ ga('send', 'pageview');
 
 <a class="headline-anchor" href="#site-header"><h2 id="site-header">Site header</a> </h2>
 
-<p><a href="http://enpiar.com/2017/11/21/getting-down-with-pkgdown/">In my previous post</a>, I discussed how you can add links to anything you want to your pkgdown site navbar by editing the <code>_pkgdown.yml</code>. You could add links to parts of your personal site, even arrange it to mirror how your personal site organizes header links.</p>
+<p><a href="https://enpiar.com/2017/11/21/getting-down-with-pkgdown/">In my previous post</a>, I discussed how you can add links to anything you want to your pkgdown site navbar by editing the <code>_pkgdown.yml</code>. You could add links to parts of your personal site, even arrange it to mirror how your personal site organizes header links.</p>
 
 <p>I personally didn&rsquo;t do much to harmonize the contents of the navbar across the personal and pkgdown sites. I wanted to keep the standard pkgdown navbar arrangement (Get Started, Reference, Articles, News) and didn&rsquo;t want that on the personal site, so I just worked to make the style consistent even if the links themselves weren&rsquo;t.</p>
 
@@ -253,14 +253,14 @@ ga('send', 'pageview');
 - icon: fa-github fa-lg
   href: https://github.com/nealrichardson/httptest
 - icon: fa-home fa-lg
-  href: http://enpiar.com
+  href: https://enpiar.com
 </code></pre>
 
 <a class="headline-anchor" href="#add-to-your-personal-site"><h2 id="add-to-your-personal-site">Add to your personal site</a> </h2>
 
 <p>Both of the websites with which I&rsquo;ve integrated pkgdown sites are built by <a href="http://gohugo.io/">Hugo</a>: one via <a href="https://bookdown.org/yihui/blogdown/">blogdown</a> and one not, so the process I&rsquo;ll describe is oriented to how Hugo works. I can&rsquo;t speak to how you&rsquo;d do this with Jekyll or other static-site generators, but I would imagine that something similar would work there.</p>
 
-<p>Hugo uses a <a href="https://gohugo.io/content-management/static-files/#readout">folder named &ldquo;static&rdquo;</a> for containing extra CSS, JavaScript, and image files. A file put in <code>static/css/custom.css</code> in the source code, for example, will be included at <code>css/custom.css</code> in the built site. <em>We can exploit this feature and copy our built pkgdown site wholesale into the <code>static</code> directory</em>, so when our Hugo site is built and deployed (<a href="http://enpiar.com/2017/06/01/building-a-blogdown-site-with-travis-ci/">automated</a>, <a href="http://crunch.io/dev/blog/building-the-blog-on-travis/">of course</a>), our pkgdown site is too.</p>
+<p>Hugo uses a <a href="https://gohugo.io/content-management/static-files/#readout">folder named &ldquo;static&rdquo;</a> for containing extra CSS, JavaScript, and image files. A file put in <code>static/css/custom.css</code> in the source code, for example, will be included at <code>css/custom.css</code> in the built site. <em>We can exploit this feature and copy our built pkgdown site wholesale into the <code>static</code> directory</em>, so when our Hugo site is built and deployed (<a href="https://enpiar.com/2017/06/01/building-a-blogdown-site-with-travis-ci/">automated</a>, <a href="https://crunch.io/dev/blog/building-the-blog-on-travis/">of course</a>), our pkgdown site is too.</p>
 
 <p>Assume you have your Hugo website repository checked out in a directory called <code>mysite</code>, alongside your R package repository, and you want to host your pkgdown site at <code>yourdomain.com/r/mypkg</code>. This would build the site and insert it in the right location in the file system:</p>
 
@@ -298,16 +298,16 @@ table(m &gt; 1)
 
 <p>The CSS part is trivial for every package after your first one: <code>@import url</code> from your first site&rsquo;s <code>extra.css</code>. You&rsquo;ve worked out all of the imports, classes, and styles there, so bring it over to your new pkgdown site.</p>
 
-<p>For example, the second pkgdown site I did was for <a href="http://enpiar.com/r/httpcache">httpcache</a>, and its <code>pkgdown/extra.css</code> is just</p>
+<p>For example, the second pkgdown site I did was for <a href="https://enpiar.com/r/httpcache">httpcache</a>, and its <code>pkgdown/extra.css</code> is just</p>
 
-<pre><code class="language-css">@import url(&quot;http://enpiar.com/r/httptest/extra.css&quot;);
+<pre><code class="language-css">@import url(&quot;https://enpiar.com/r/httptest/extra.css&quot;);
 </code></pre>
 
 <p>that is, it imports the <code>extra.css</code> file from <code>httptest</code>, the first one I built. Again, IANAWD, but this approach was uncomplicated for me&mdash;and dead simple.</p>
 
 <a class="headline-anchor" href="#site-directory"><h2 id="site-directory">Site directory</a> </h2>
 
-<p>As you get more code and packages on your website, it&rsquo;s good to provide links to them from the rest of the site. You can achieve this by customizing the navbar in all of your pkgdown sites and your main website, but it may also be nice to have index-like page listing your packages. In my case, because I had placed my pkgdown sites in an <code>r</code> directory (<a href="http://enpiar.com/r/httptest">http://enpiar.com/r/httptest</a>, <a href="http://enpiar.com/r/httpcache">http://enpiar.com/r/httpcache</a>), the URL structure implied that <a href="http://enpiar.com/r/">http://enpiar.com/r/</a> would exist and that it might have some sort of listing or overview.</p>
+<p>As you get more code and packages on your website, it&rsquo;s good to provide links to them from the rest of the site. You can achieve this by customizing the navbar in all of your pkgdown sites and your main website, but it may also be nice to have index-like page listing your packages. In my case, because I had placed my pkgdown sites in an <code>r</code> directory (<a href="https://enpiar.com/r/httptest">https://enpiar.com/r/httptest</a>, <a href="https://enpiar.com/r/httpcache">https://enpiar.com/r/httpcache</a>), the URL structure implied that <a href="https://enpiar.com/r/">https://enpiar.com/r/</a> would exist and that it might have some sort of listing or overview.</p>
 
 <p>We can again exploit a feature of Hugo to create this index page. Hugo&rsquo;s <a href="http://gohugo.io/content-management/organization/">content management</a> works by organizing pages within &ldquo;sections&rdquo;, i.e. directories. Each section can have an <code>_index.md</code> file that provides content for the index page of the section, regardless of how many other pages are in the section.</p>
 
@@ -334,7 +334,7 @@ table(m &gt; 1)
 
 <p>For some reason (my Hugo ignorance, no doubt), I didn&rsquo;t figure out how to just inline that <code>[&quot;r&quot;, &quot;R&quot;]</code> into the <code>where</code> statement, but it worked when reading from the index page front matter.</p>
 
-<p>The result looks like <a href="http://enpiar.com/r/">this</a>:</p>
+<p>The result looks like <a href="https://enpiar.com/r/">this</a>:</p>
 
 
 <figure class="centered-image bordered-image">

@@ -135,7 +135,7 @@ ga('send', 'pageview');
 
 
 
-<meta itemprop="keywords" content="code,general,management,automation,benchmark,blogdown,cran,dependencies,httptest,hugo,meta,packages,performance,python,r,readr,tdd,testing,travis-ci,website," />
+<meta itemprop="keywords" content="code,general,management,automation,benchmark,blogdown,cran,dependencies,httptest,hugo,meta,packages,performance,prioritization,productivity,python,r,readr,tdd,technical-debt,testing,travis-ci,website," />
 
 <div id="hero">
     <h1 itemprop="headline">  Getting Down with pkgdown</h1>
@@ -156,7 +156,7 @@ ga('send', 'pageview');
 
 <p>I say &ldquo;incredibly&rdquo; powerful in the most literal sense&mdash;I could not believe how much <code>pkgdown</code> does with so little required of its user. <code>pkgdown</code> draws its power by relying on <a href="https://en.wikipedia.org/wiki/Convention_over_configuration">conventions</a> of how R packages are structured. Some of these conventions are inherent to R packages, particularly what CRAN deems as acceptable. Others, however, are less obvious. If you&rsquo;re closely tracking the <a href="http://r-pkgs.had.co.nz/">best practices for package development</a>, you&rsquo;re may be following most of these conventions already. But best practices evolve, and if you&rsquo;re adding <code>pkgdown</code> to a package that is a year or two old, you may find that you need to tweak some details to make it work smoothly.</p>
 
-<p>This post distills my experiences in setting up a <a href="http://enpiar.com/r/httptest/">few</a> <a href="http://enpiar.com/r/httpcache/">pkgdown</a> <a href="http://crunch.io/r/crplyr/">sites</a> recently and exposes some of the features of <code>pkgdown</code> that I discovered along the way. While <code>pkgdown</code> does have basic documentation, whenever I hit something that didn&rsquo;t work quite like I expected, or if I wanted to move beyond the default behavior, I found that the best way to figure out what was happening was to read the source. My intent here is to capture what I learned <a href="http://catb.org/jargon/html/R/RTFS.html">RTFS&rsquo;ing</a>, including links to the relevant source code, and share with you (and with my future self, who surely will have forgotten all of this).</p>
+<p>This post distills my experiences in setting up a <a href="https://enpiar.com/r/httptest/">few</a> <a href="https://enpiar.com/r/httpcache/">pkgdown</a> <a href="https://crunch.io/r/crplyr/">sites</a> recently and exposes some of the features of <code>pkgdown</code> that I discovered along the way. While <code>pkgdown</code> does have basic documentation, whenever I hit something that didn&rsquo;t work quite like I expected, or if I wanted to move beyond the default behavior, I found that the best way to figure out what was happening was to read the source. My intent here is to capture what I learned <a href="http://catb.org/jargon/html/R/RTFS.html">RTFS&rsquo;ing</a>, including links to the relevant source code, and share with you (and with my future self, who surely will have forgotten all of this).</p>
 
 <a class="headline-anchor" href="#1-install-pkgdown"><h1 id="1-install-pkgdown">1. Install <code>pkgdown</code></a> </h1>
 
@@ -232,7 +232,7 @@ sink()
 
 <p>I had to do some updating of my vignettes to make them work correctly with <code>pkgdown</code>, specifically in their &ldquo;front matter&rdquo;: the metadata at the top of the file. If your package is new and you&rsquo;re following the current <a href="http://r-pkgs.had.co.nz/vignettes.html">best practices</a> for writing vignettes, you may be most of the way there already.</p>
 
-<p>I was using R Markdown and building the vignettes with <a href="https://yihui.name/knitr/">knitr</a>, but not <em>à la mode</em>, which uses the <a href="https://github.com/rstudio/rmarkdown">rmarkdown</a> package on top of <a href="http://pandoc.org/">pandoc</a>. For example, in <a href="http://enpiar.com/r/httptest">httptest</a>, the main vignette previously started like this:</p>
+<p>I was using R Markdown and building the vignettes with <a href="https://yihui.name/knitr/">knitr</a>, but not <em>à la mode</em>, which uses the <a href="https://github.com/rstudio/rmarkdown">rmarkdown</a> package on top of <a href="http://pandoc.org/">pandoc</a>. For example, in <a href="https://enpiar.com/r/httptest">httptest</a>, the main vignette previously started like this:</p>
 
 <pre><code class="language-latex">&lt;!--
 %\VignetteEngine{knitr::knitr}

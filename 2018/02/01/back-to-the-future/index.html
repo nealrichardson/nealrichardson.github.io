@@ -26,7 +26,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2018/02/01/back-to-the-future/" />
 
-  <meta property="og:image" content="http://enpiar.com/img/bttf-cover.png" />
+  <meta property="og:image" content="https://enpiar.com/img/bttf-cover.png" />
 
 
 
@@ -135,11 +135,11 @@ ga('send', 'pageview');
 <meta itemprop="dateModified" content="2018-02-01T16:49:57-07:00" />
 <meta itemprop="wordCount" content="2242">
 
-  <meta itemprop="image" content="http://enpiar.com/img/bttf-cover.png">
+  <meta itemprop="image" content="https://enpiar.com/img/bttf-cover.png">
 
 
 
-<meta itemprop="keywords" content="code,general,management,automation,benchmark,blogdown,cran,dependencies,httptest,hugo,meta,packages,performance,python,r,readr,tdd,testing,travis-ci,website," />
+<meta itemprop="keywords" content="code,general,management,automation,benchmark,blogdown,cran,dependencies,httptest,hugo,meta,packages,performance,prioritization,productivity,python,r,readr,tdd,technical-debt,testing,travis-ci,website," />
 
 <div id="hero">
     <h1 itemprop="headline">  Back to the Future</h1>
@@ -338,9 +338,9 @@ if (!(&quot;startsWith&quot; %in% ls(envir=asNamespace(&quot;base&quot;)))) {
 
 <p>One last challenge to circumvent: while I could conditionally set the method like this, I couldn&rsquo;t conditionally specify the man page: the .Rd file is created at build time, not install time. This meant that it was not possible to document this function/method in a forward-compatible way. And <code>R CMD check</code> also fails if you &ldquo;export&rdquo; undocumented functions, so I had to remove it from the explicit namespace export too. Fortunately (I guess?), method dispatch still worked, so it was fine.</p>
 
-<p>Check out the <a href="https://github.com/Crunch-io/rcrunch/blob/1e9de0de2c57d518532e49afdacb7fad09ecdaa3/R/univariate.R#L49-L65">real code</a> in the <a href="http://crunch.io/r/crunch/">crunch</a> package.</p>
+<p>Check out the <a href="https://github.com/Crunch-io/rcrunch/blob/1e9de0de2c57d518532e49afdacb7fad09ecdaa3/R/univariate.R#L49-L65">real code</a> in the <a href="https://crunch.io/r/crunch/">crunch</a> package.</p>
 
-<p>More recently, another change in R-devel, slated for R 3.5, broke <a href="http://enpiar.com/r/httptest/">httptest</a>. The <code>deparse</code> function is getting some attention, initially just internal improvements (<a href="http://r.789695.n4.nabble.com/Bug-dput-deparse-with-named-character-vector-inside-list-td4745298.html">which caused breakage for me along the way</a>) but now also a change to the arguments. Up to R 3.4, <code>deparse</code> (and by association <code>dput</code>) printed named lists and vectors in a verbose way. <code>list(a=1)</code> got deparsed as <code>structure(list(a = 1), .Names = &quot;a&quot;)</code> by default. But, you could specify &ldquo;control&rdquo; arguments to change that behavior, and <code>control = NULL</code> yielded <code>list(a = 1)</code> without the <code>structure</code> business. So I used that control option in <code>httptest</code>.</p>
+<p>More recently, another change in R-devel, slated for R 3.5, broke <a href="https://enpiar.com/r/httptest/">httptest</a>. The <code>deparse</code> function is getting some attention, initially just internal improvements (<a href="http://r.789695.n4.nabble.com/Bug-dput-deparse-with-named-character-vector-inside-list-td4745298.html">which caused breakage for me along the way</a>) but now also a change to the arguments. Up to R 3.4, <code>deparse</code> (and by association <code>dput</code>) printed named lists and vectors in a verbose way. <code>list(a=1)</code> got deparsed as <code>structure(list(a = 1), .Names = &quot;a&quot;)</code> by default. But, you could specify &ldquo;control&rdquo; arguments to change that behavior, and <code>control = NULL</code> yielded <code>list(a = 1)</code> without the <code>structure</code> business. So I used that control option in <code>httptest</code>.</p>
 
 <p>The <a href="https://github.com/wch/r-source/commit/62fced00949b9a261034d24789175b205f7fa866">change</a> adds a &ldquo;niceNames&rdquo; deparse option, which is now required to get named lists printed with names&mdash;they no longer are named with <code>control = NULL</code>. So the new (future) default behavior of <code>deparse(list(a=1))</code> is what we want, and <code>deparse(list(a=1), control = NULL)</code> would now return <code>list(1)</code>, which is not what we want.</p>
 
@@ -393,7 +393,7 @@ if (!(&quot;startsWith&quot; %in% ls(envir=asNamespace(&quot;base&quot;)))) {
 </figure>
 
 
-<p>Just like the movies, the one going back farthest in time was the least enjoyable. I had a CRAN submission for the <a href="http://crunch.io/r/crunch/">crunch</a> package rejected because the tests failed to run on the Solaris operating system, which R still supports and CRAN includes in their continuous integration checks. The problem was an encoding issue: specifically, I had non-ASCII UTF-8 in a test file, and the test file <em>failed to parse</em>. That&rsquo;s right: it wasn&rsquo;t that the tests ran and failed; the file couldn&rsquo;t be read at all. Naturally, <code>R CMD check</code> passed locally for me, and it passed on Travis and Appveyor.</p>
+<p>Just like the movies, the one going back farthest in time was the least enjoyable. I had a CRAN submission for the <a href="https://crunch.io/r/crunch/">crunch</a> package rejected because the tests failed to run on the Solaris operating system, which R still supports and CRAN includes in their continuous integration checks. The problem was an encoding issue: specifically, I had non-ASCII UTF-8 in a test file, and the test file <em>failed to parse</em>. That&rsquo;s right: it wasn&rsquo;t that the tests ran and failed; the file couldn&rsquo;t be read at all. Naturally, <code>R CMD check</code> passed locally for me, and it passed on Travis and Appveyor.</p>
 
 <p>Suppose the offending test file contained this.</p>
 

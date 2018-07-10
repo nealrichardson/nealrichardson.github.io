@@ -26,7 +26,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2017/08/11/one-hour-package/" />
 
-  <meta property="og:image" content="http://enpiar.com/img/fotomat.jpg" />
+  <meta property="og:image" content="https://enpiar.com/img/fotomat.jpg" />
 
 
 
@@ -135,11 +135,11 @@ ga('send', 'pageview');
 <meta itemprop="dateModified" content="2017-08-11T16:49:57-07:00" />
 <meta itemprop="wordCount" content="2808">
 
-  <meta itemprop="image" content="http://enpiar.com/img/fotomat.jpg">
+  <meta itemprop="image" content="https://enpiar.com/img/fotomat.jpg">
 
 
 
-<meta itemprop="keywords" content="code,general,management,automation,benchmark,blogdown,cran,dependencies,httptest,hugo,meta,packages,performance,python,r,readr,tdd,testing,travis-ci,website," />
+<meta itemprop="keywords" content="code,general,management,automation,benchmark,blogdown,cran,dependencies,httptest,hugo,meta,packages,performance,prioritization,productivity,python,r,readr,tdd,technical-debt,testing,travis-ci,website," />
 
 <div id="hero">
     <h1 itemprop="headline">  One-Hour Package</h1>
@@ -156,7 +156,7 @@ ga('send', 'pageview');
 
     
 
-<p>At <a href="http://crunch.io/">Crunch</a>, I occasionally pick up small <a href="../../../07/04/better-management-through-code/">coding projects to help with project management</a>. Recently, I wanted a way to get automated reporting on our open issues in <a href="http://usersnap.com/">Usersnap</a>, a service embedded in our web application that allows users to report bugs from within the app. My thought was to set up a cron job to report daily summaries in our Slack channel on things like the number of reports created, resolved, and so on, so that we could make sure that bug reports were being addressed quickly.</p>
+<p>At <a href="https://crunch.io/">Crunch</a>, I occasionally pick up small <a href="../../../07/04/better-management-through-code/">coding projects to help with project management</a>. Recently, I wanted a way to get automated reporting on our open issues in <a href="http://usersnap.com/">Usersnap</a>, a service embedded in our web application that allows users to report bugs from within the app. My thought was to set up a cron job to report daily summaries in our Slack channel on things like the number of reports created, resolved, and so on, so that we could make sure that bug reports were being addressed quickly.</p>
 
 
 <figure class="floating-right halfwidth">
@@ -176,7 +176,7 @@ ga('send', 'pageview');
 </figure>
 
 
-<p>Given that I don&rsquo;t have much time to code, and that I&rsquo;ve been working on <a href="http://enpiar.com/r/httptest/">tools to make working with APIs easier</a>, I wanted to challenge myself: how quickly could I write an R package for a new API? In addition to getting the job done, I set a few additional requirements: the package must have full test coverage, be fully documented, and pass <code>R CMD check</code>&mdash;that is, it must be complete enough for <a href="https://cran.r-project.org/">CRAN</a> submission.</p>
+<p>Given that I don&rsquo;t have much time to code, and that I&rsquo;ve been working on <a href="https://enpiar.com/r/httptest/">tools to make working with APIs easier</a>, I wanted to challenge myself: how quickly could I write an R package for a new API? In addition to getting the job done, I set a few additional requirements: the package must have full test coverage, be fully documented, and pass <code>R CMD check</code>&mdash;that is, it must be complete enough for <a href="https://cran.r-project.org/">CRAN</a> submission.</p>
 
 <p>Just to make it interesting, it turns out that the API I set out to tackle is neither documented nor even officially acknowledged. When I asked Usersnap about their API, they responded that they &ldquo;currently do not offer API access.&rdquo; Clearly, though, there was an API behind their web application, so I was going to have to infer how the API works by examining how their app uses their unpublished API. It reminded me of my days in grad school collecting data by scraping Brazilian government websites, so with a touch of nostalgia, I embraced the challenge.</p>
 
@@ -186,7 +186,7 @@ ga('send', 'pageview');
 
 <p>We&rsquo;ll need a few R packages to move forward. A couple merit highlighting here; the rest I&rsquo;ll mention in the discussion below. First, when dealing with HTTP APIs in R, the <a href="http://httr.r-lib.org/">httr</a> package is essential. It handles requests and responses and lets you focus on how to translate your (users&rsquo;) intuitions about the data you&rsquo;re accessing into sensible R functions and objects.</p>
 
-<p>Next, we&rsquo;ll need some tools for writing tests. <a href="https://t.co/IljRyeTIsj">Testing is especially important</a> when writing packages. The <a href="http://testthat.r-lib.org/">testthat</a> package is the current standard for R package test suites, but it lacks some useful tools for working with remote APIs. To make it easy to test API packages, I wrote <a href="http://enpiar.com/r/httptest/">httptest</a>, which extends <code>testthat</code>. As we&rsquo;ll see below, <code>httptest</code> allowed me to get test coverage for all of the lines of code I wrote and enabled me to run the tests quickly and without complication on public continuous-integration services (Travis-CI and Appveyor).</p>
+<p>Next, we&rsquo;ll need some tools for writing tests. <a href="https://t.co/IljRyeTIsj">Testing is especially important</a> when writing packages. The <a href="http://testthat.r-lib.org/">testthat</a> package is the current standard for R package test suites, but it lacks some useful tools for working with remote APIs. To make it easy to test API packages, I wrote <a href="https://enpiar.com/r/httptest/">httptest</a>, which extends <code>testthat</code>. As we&rsquo;ll see below, <code>httptest</code> allowed me to get test coverage for all of the lines of code I wrote and enabled me to run the tests quickly and without complication on public continuous-integration services (Travis-CI and Appveyor).</p>
 
 <a class="headline-anchor" href="#step-1-set-up-the-package-skeleton"><h1 id="step-1-set-up-the-package-skeleton">Step 1: Set up the package skeleton</a> </h1>
 
@@ -325,12 +325,12 @@ length(reps) # Should be 10
 reps[[1]]    # Inspect one
 </code></pre>
 
-<p>After tweaking to make sure that the response looked as expected (my first attempt didn&rsquo;t return only the <code>$data</code> element of the response object, so <code>length</code> was not 10), I repeated the <code>getReports</code> query but wrapped in <code>httptest</code>&rsquo;s <a href="http://enpiar.com/r/httptest/articles/httptest.html#recording-mocks-with-capture_requests">capture_requests</a> context, which records the responses from real API requests as fixtures that you can use in tests.</p>
+<p>After tweaking to make sure that the response looked as expected (my first attempt didn&rsquo;t return only the <code>$data</code> element of the response object, so <code>length</code> was not 10), I repeated the <code>getReports</code> query but wrapped in <code>httptest</code>&rsquo;s <a href="https://enpiar.com/r/httptest/articles/httptest.html#recording-mocks-with-capture_requests">capture_requests</a> context, which records the responses from real API requests as fixtures that you can use in tests.</p>
 
 <pre><code class="language-r">reps &lt;- capture_requests(getReports())
 </code></pre>
 
-<p>Now we can write tests around that fixture using the <a href="http://enpiar.com/r/httptest/articles/httptest.html#the-with_mock_api-context">with_mock_api</a> context, and we can iterate on the R code and tests as needed, all without hitting the actual API or making any potentially expensive network requests. In <a href="https://github.com/nealrichardson/useRsnap/blob/8c2662de5e726ad99e5985b92b97ef5b092c5e0a/tests/testthat/test-get-reports.R">tests/testthat/test-get-reports.R</a>,</p>
+<p>Now we can write tests around that fixture using the <a href="https://enpiar.com/r/httptest/articles/httptest.html#the-with_mock_api-context">with_mock_api</a> context, and we can iterate on the R code and tests as needed, all without hitting the actual API or making any potentially expensive network requests. In <a href="https://github.com/nealrichardson/useRsnap/blob/8c2662de5e726ad99e5985b92b97ef5b092c5e0a/tests/testthat/test-get-reports.R">tests/testthat/test-get-reports.R</a>,</p>
 
 <pre><code class="language-r">context(&quot;Get reports&quot;)
 

@@ -135,7 +135,7 @@ ga('send', 'pageview');
 
 
 
-<meta itemprop="keywords" content="code,general,management,automation,benchmark,blogdown,cran,dependencies,httptest,hugo,meta,packages,performance,python,r,readr,tdd,testing,travis-ci,website," />
+<meta itemprop="keywords" content="code,general,management,automation,benchmark,blogdown,cran,dependencies,httptest,hugo,meta,packages,performance,prioritization,productivity,python,r,readr,tdd,technical-debt,testing,travis-ci,website," />
 
 <div id="hero">
     <h1 itemprop="headline">  Building a Blogdown Site with Travis-CI</h1>
@@ -150,7 +150,7 @@ ga('send', 'pageview');
 <div id="post-box">
 <div id="post" itemprop="articleBody">
 
-    <p><a href="http://crunch.io/dev/blog/building-the-blog-on-travis/">Over on the Crunch.io dev blog</a>, I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I’d do the same for my personal blog, though with one twist: using R and the <a href="https://github.com/rstudio/blogdown">blogdown</a> package on top of Hugo.</p>
+    <p><a href="https://crunch.io/dev/blog/building-the-blog-on-travis/">Over on the Crunch.io dev blog</a>, I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I’d do the same for my personal blog, though with one twist: using R and the <a href="https://github.com/rstudio/blogdown">blogdown</a> package on top of Hugo.</p>
 <p><a href="https://github.com/rstudio/blogdown/issues/26">This blogdown GitHub issue</a> pointed to <a href="https://bookdown.org/yihui/bookdown/github.html">Yihui’s guide to building bookdown projects on Travis</a>, as well as a project that had <a href="https://github.com/curso-r/verao2017">adapted</a> that flow for <code>blogdown</code>. Both were helpful, and with my prior experience, I was able to build on those examples to come up with a simple workflow. It was shockingly straightforward.</p>
 <p>This post outlines the steps I took to automate the Hugo/blogdown build on Travis-CI. It starts from the point of having already installed blogdown locally, created the Hugo project, played around with themes and customization, and having something serving locally that’s worth deploying. It assumes that you have a GitHub account and have used Travis before (surely you use continuous integration on all of your projects, right ;). If you’re not at that point yet, the internet has lots of great resources to help you get started.</p>
 <p>There are three main steps: setting up your repository on GitHub and Travis-CI, adding the build script, and setting up your GitHub API token access to connect it all.</p>

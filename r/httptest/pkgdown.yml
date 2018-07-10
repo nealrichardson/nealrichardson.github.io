@@ -6,6 +6,6 @@ articles:
   redacting: redacting.html
   vignettes: vignettes.html
 urls:
-  reference: http://enpiar.com/r/httptest/reference
-  article: http://enpiar.com/r/httptest/articles
+  reference: https://enpiar.com/r/httptest/reference
+  article: https://enpiar.com/r/httptest/articles
 
