@@ -12,7 +12,7 @@ Here are a few R packages that I've published to [CRAN](https://cran.r-project.o
 
 -   [httpcache](/r/httpcache/): Query Cache for HTTP Clients
 
--   [skeletor](https://github.com/nealrichardson/skeletor): A Package Skeleton Generator
+-   [skeletor](/r/skeletor/): A Package Skeleton Generator
 
 -   [pivotaltrackR](/r/pivotaltrackR/): A Client for the [Pivotal Tracker](https://www.pivotaltracker.com/) [API](https://www.pivotaltracker.com/help/api/rest/v5)
 

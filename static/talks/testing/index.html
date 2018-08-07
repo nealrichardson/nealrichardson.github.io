@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Crunch</title>
+
+		<meta name="author" content="Crunch.io">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+			<section data-transition="concave">
+				<img src="img/crunch.png"/>
+				<h2>Dr. Datascience</h2>
+				<h3>Or: How I Learned to Stop Munging and Love Tests</h3>
+				<p>Neal Richardson</p>
+				<p>neal@crunch.io<br>@enpiar</p>
+				<p>June 29, 2016</p>
+				<p><i>Revised version of 2016 R NYC Conference talk, with Mike Malecki</i></p>
+			</section>
+			<section>
+				<img src="img/crunch.png"/>
+				<h2>About me</h2>
+				<div data-markdown class="fragment">
+					* Political scientist
+				</div>
+				<div data-markdown class="fragment">
+					* Then worked in survey research industry
+				</div>
+				<div data-markdown class="fragment">
+					* Now in data product development
+					* Crunch.io
+				</div>
+			</section>
+			<section>
+    			<section>
+				    <img src="img/crunch.png"/>
+					<h2>Data “Science”</h2>
+					<img src="img/definition-tweet.png"/>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>vs. “Faith-based coding”</h2>
+					<div data-markdown class="fragment">
+						* Misplaced faith in own infallability 🤓✔︎
+					</div>
+    				<div data-markdown class="fragment">
+						* Your code works because you believe it does
+    				</div>
+					<div data-markdown class="fragment">
+						* Its output feels true 💁
+					</div>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Reproducibility</h2>
+					<div data-markdown>
+						* Central to Science--or a bare minimum
+					</div>
+					<div data-markdown class="fragment">
+						* Give me your data and code and I should get the same results
+					</div>
+					<div data-markdown class="fragment">
+						* Code quality --> scientific quality
+					</div>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Extensibility</h2>
+					<div data-markdown>
+						* Practical concern rather than scientific quality
+					</div>
+					<div data-markdown class="fragment">
+						* Indicator of healthy code
+					</div>
+					<div data-markdown class="fragment">
+						* Make your life easier
+					</div>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Extensibility</h2>
+					<div data-markdown class="fragment">
+						What will happen if I give you slightly different data?
+						<!-- inputs and outputs -->
+					</div>
+					<div data-markdown class="fragment">
+						* Meaningful results
+					</div>
+					<div data-markdown class="fragment">
+						* Complete failure
+					</div>
+					<div data-markdown class="fragment">
+						* Silent failure
+						<!-- this is the worst -->
+					</div>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Extensibility</h2>
+					<div data-markdown class="fragment">
+						* More data comes in (e.g. too many revise and resubmits)
+						* Replication study
+						* Recurring report
+					</div>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Goal #1: Bring more "science" to data science</h2>
+					<div data-markdown class="fragment">
+						* Improve code quality with lessons from software development
+					</div>
+					<div data-markdown class="fragment">
+						* Mind your metadata: your data is about something
+					</div>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Goal #2: talk about the dirty work</h2>
+					<div data-markdown class="fragment">
+						* Cliché that 90% of data science is "janitorial"
+					</div>
+					<div data-markdown class="fragment">
+						* In that case, improving our skills there will have big benefit
+					</div>
+				</section>
+    		</section>
+			<section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Tests</h2>
+					<div data-markdown class="fragment">
+						* Make the implicit explicit
+					</div>
+					<div data-markdown class="fragment">
+						* Turn assumptions into assertions
+					</div>
+					<div data-markdown class="fragment">
+						* Are a form of documentation
+					</div>
+					<div data-markdown class="fragment">
+						* Reduce complexity
+					</div>
+					<div data-markdown class="fragment">
+						* Are liberating
+					</div>
+				</section>
+			</section>
+			<section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>What are tests?</h2>
+					<div data-markdown>
+				* Assertions, written in code, that your functions do what you expect
+				* That if you give certain inputs, you’ll get known, expected outputs
+				* That giving invalid input results in an expected failure
+				* Tests are code: code that must be run every time you make changes
+					</div>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Getting started</h2>
+					<div data-markdown class="fragment">
+				1. Make a package
+					</div>
+					<pre class="fragment"><code>
+source("mycode.R")
+df <- read.csv("data.csv")
+doThings(df)
+					</code></pre>
+				</section>
+				<section data-transition="none">
+					<img src="img/crunch.png"/>
+					<h2>Getting started</h2>
+					<div data-markdown>
+				1. Make a package. Not that different.
+					</div>
+					<pre><code>
+library(rmycode)
+df <- read.csv("data.csv")
+doThings(df)
+					</code></pre>
+					<p class="fragment">Use a package skeleton, such as https://github.com/nealrichardson/skeletor</p>
+				</section>
+				<section data-transition="none">
+					<img src="img/crunch.png"/>
+					<h2>Testing flow</h2>
+					<div data-markdown class="fragment">
+				2. Write test. Run it and see it fail.
+					</div>
+					<div data-markdown class="fragment">
+				3. Write code that makes test pass.
+					</div>
+					<div data-markdown class="fragment">
+				4. Run tests again. See them pass.
+					</div>
+					<div data-markdown class="fragment">
+				5. Repeat
+					</div>
+				</section>
+			</section>
+			<section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Example</h2>
+					<div data-markdown>
+						Read and analyze AWS Elastic Load Balancer logs
+					</div>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Example</h2>
+					<pre><code>
+enpiar:c npr$ R -e 'skeletor::skeletor("elbr")'
+enpiar:c npr$ cd elbr
+enpiar:elbr npr$ atom .
+					</code></pre>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Example</h2>
+					<pre><code>
+# elbr/tests/testthat/test-read.R
+
+context("read.elb")
+
+test_that("read.elb returns a data.frame", {
+	expect_true(is.data.frame(read.elb("example.log")))
+})
+					</code></pre>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Example</h2>
+					<pre><code>
+enpiar:elbr npr$ make test
+...
+Loading required package: elbr
+read.elb: 1
+
+Failed -------------------------------------------------------------------------
+1. Error: read.elb returns a data.frame (@test-something.R#4) ------------------
+could not find function "read.elb"
+1: .handleSimpleError(function (e)
+   {
+       e$call <- sys.calls()[(frame + 11):(sys.nframe() - 2)]
+       register_expectation(e, frame + 11, sys.nframe() - 2)
+       signalCondition(e)
+   }, "could not find function \"read.elb\"", quote(eval(expr, envir, enclos))) at testthat/test-something.R:4
+2: eval(expr, envir, enclos)
+
+DONE ===========================================================================
+Error: Test failures
+					</code></pre>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Example</h2>
+					<pre><code>
+# elbr/R/read-elb.R
+
+read.elb <- function (file, stringsAsFactors=FALSE, ...) {
+    read.delim(file,
+        sep=" ",
+        stringsAsFactors=stringsAsFactors,
+        col.names=c("timestamp", "elb", "client_port", "backend_port",
+                    "request_processing_time", "backend_processing_time",
+                    "response_processing_time", "elb_status_code",
+                    "backend_status_code", "received_bytes", "sent_bytes",
+                    "request", "user_agent", "ssl_cipher", "ssl_protocol"),
+        ...)
+}
+					</code></pre>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Example</h2>
+					<pre><code>
+enpiar:elbr npr$ make test
+...
+Loading required package: elbr
+read.elb: .
+
+DONE ===========================================================================
+					</code></pre>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Example</h2>
+					<pre><code>
+test_that("read.elb returns a data.frame", {
+    df <- read.elb("example.log")
+    expect_true(is.data.frame(df))
+    expect_equal(dim(df), c(4, 15))
+})
+					</code></pre>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Example</h2>
+					<pre><code>
+enpiar:elbr npr$ make test
+...
+Loading required package: elbr
+read.elb: .1
+
+Failed -------------------------------------------------------------------------
+1. Failure: read.elb returns a data.frame (@test-something.R#6) ----------------
+dim(df) not equal to c(4, 15).
+1/2 mismatches
+[1] 3 - 4 == -1
+
+
+DONE ===========================================================================
+Error: Test failures
+					</code></pre>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Example</h2>
+					<pre><code>
+read.elb <- function (file, stringsAsFactors=FALSE, ...) {
+    read.delim(file,
+        sep=" ",
+        header=FALSE, # <-- Oh, right.
+        stringsAsFactors=stringsAsFactors,
+        col.names=c("timestamp", "elb", "client_port", "backend_port",
+                    "request_processing_time", "backend_processing_time",
+                    "response_processing_time", "elb_status_code",
+                    "backend_status_code", "received_bytes", "sent_bytes",
+                    "request", "user_agent", "ssl_cipher", "ssl_protocol"),
+        ...)
+}
+					</code></pre>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Example</h2>
+					<pre><code>
+enpiar:elbr npr$ make test
+...
+Loading required package: elbr
+read.elb: ..
+
+DONE ===========================================================================
+					</code></pre>
+				</section>
+			</section>
+<section>
+<section>
+	<img src="img/crunch.png"/>
+	<h2>Tests make explicit</h2>
+	<!-- Formatter expected an integer, did ==; got factor. zeros ensued -->
+	<div data-markdown>
+	* Tradeoffs everywhere ⚖
+	* Example: is an integer an implicit categorical?
+	</div>
+	<div data-markdown class="fragment">
+	* Don’t try to be clever.
+	* Don't assume it's obvious.
+	</div>
+</section>
+<section>
+	<img src="img/crunch.png"/>
+	<h2>Tests assert</h2>
+	<!-- One sensor will report different tz; don’t make running on a
+	different machine move dates from one month to the past -->
+	<div data-markdown>
+	* You can assert dumb things like row counts
+	* Datetime data is *never* simple 📅
+	* Don’t be surprised by being wrong later
+	</div>
+</section>
+<section>
+	<img src="img/carwash.gif" height=800>
+</section>
+<section>
+	<img src="img/crunch.png"/>
+	<h2>Tests document</h2>
+	<div data-markdown>
+	* Example: “I combined categories” aka “recode”
+	* The data itself doesn’t preserve this relationship
+	* Missingness is hard
+	* Did I already do it?
+	</div>
+</section>
+<section>
+<div data-markdown>
+	`df$col[df$col == 1 | df$col == 2] <- 1`
+</div>
+<div class="fragment">
+	<img src="img/combine-categories.png"/>
+</div>
+</section>
+<section>
+	<img src="img/crunch.png"/>
+	<h2>Tests simplify</h2>
+	<div data-markdown>
+	* Turn big, hard-to-reason-about problems into small ones
+	* `expect_equal(dimnames(pred), dimnames(population))`
+	<!-- Staring at outputs, asking yourself if they make sense,
+	adding tests lets you solve a simpler bug -->
+	</div>
+	<pre><code>
+	num [1:4, 1:4, 1:6, 1:51, 1:3] 0.0196 0.0414 0.038 0.0106 0.0167 ...
+ - attr(*, "dimnames")=List of 5
+  ..$ edu        : chr [1:4] "&lt;HS" "HS" "Some" "Grad"
+  ..$ age        : chr [1:4] "18-29" "30-44" "45-64" "≥65"
+  ..$ race.female: chr [1:6] "White M" "Black M" "Hispanic M" "White F" ...
+  ..$ state      : chr [1:51] "AK" "AL" "AR" "AZ" ...
+  ..$ party      : chr [1:3] "R" "I" "D"
+</code></pre>
+	<img src="img/stare-at-this.png">
+</section>
+
+<section>
+	<img src="img/tapemeasure.gif" height=800>
+</section>
+
+<section>
+	<img src="img/crunch.png"/>
+	<img src="img/cell-predictions.png" height=800>
+</section>
+<section>
+	<img src="img/crunch.png"/>
+	<h2>Tests liberate</h2>
+	<div data-markdown>
+	* Free to extend your code without worrying about breaking what it already does
+	* Fix bugs and handle unforeseen complications only once
+	</div>
+</section>
+</section>
+<section>
+	<img src="img/crunch.png"/>
+	<h2>You can also test your data</h2>
+	<div data-markdown class="fragment">
+		But be careful about performance
+	</div>
+</section>
+<section>
+	<section>
+		<img src="img/crunch.png"/>
+		<h2>Metadata is magical</h2>
+		<div data-markdown class="fragment">
+			* Nobody cares about your 1s and 2s. They care about Males and Females, "Leave" vs. "Remain" voters, Coke or Pepsi
+			* Any graph or table you produce needs to be nicely labeled
+		</div>
+	</section>
+	<section>
+		<img src="img/crunch.png"/>
+		<h2>Respect your metadata</h2>
+		<div data-markdown class="fragment">
+			* Can be a hassle to keep metadata and data in sync
+		</div>
+		<div data-markdown class="fragment">
+			* Necessary for reporting
+		</div>
+		<div data-markdown class="fragment">
+			* Important for extensibility: reference the meaningful quantity, independent of the compact data representation
+		</div>
+	</section>
+	<section>
+		<img src="img/crunch.png"/>
+		<h2>How to respect your metadata</h2>
+		<div data-markdown class="fragment">
+			* Use software and libraries that help you
+		</div>
+		<div data-markdown class="fragment">
+			* Avoid positional indexing: assumes sort order of data/metadata
+			* Avoid indexing on internal data representation (at least at highest level)
+		</div>
+		<div data-markdown class="fragment">
+			* Be explicit about the data-metadata contract you assume </div><div class="fragment">with tests...
+		</div>
+		<div data-markdown class="fragment">
+			* Be skeptical of your data sources </div><div class="fragment">even if you're the source
+		</div>
+	</section>
+	<section>
+		<img src="img/crunch.png"/>
+		<h2>Fail early and loudly</h2>
+		<div data-markdown class="fragment">
+		* Worse than no results: the wrong results masquerading as valid
+		</div>
+		<div data-markdown class="fragment">
+		* Well-tested code is easier to debug
+		</div>
+		<div data-markdown class="fragment">
+		* It's also way easier to fix--and you only have to fix the same issue once
+		</div>
+	</section>
+</section>
+			<section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Why not just hack?</h2>
+					<img src="img/hackit.gif" width=60% style="float:right;" class="fragment">
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Because data contracts can't be trusted</h2>
+					<img src="img/cabbage.jpg" width=60%>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Because you'll have to extend your code to do something else</h2>
+					<img src="img/kimchi.jpg" width=60%>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Because someone else will pick up your code in the future</h2>
+					<img src="img/making-kimchi.jpg" width=60%>
+					<p>Because that someone else could be your future self</p>
+				</section>
+				<section>
+					<img src="img/crunch.png"/>
+					<h2>Because you’re already testing, just not systematically
+					</h2>
+					<img src="img/eating-kimchi.jpg">
+				</section>
+			</section>
+			<section>
+				<img src="img/crunch.png"/>
+				<h2>Well tested, resiliant code is always valuable</h2>
+				<div data-markdown class="fragment">
+					* Even more valuable when you're reusing code
+				</div>
+				<div data-markdown class="fragment">
+					* You reuse code more than you think you will
+				</div>
+				<div data-markdown class="fragment">
+					* Hard to "add code quality" after the fact
+				</div>
+			</section>
+			<section data-transition="concave">
+				<img src="img/crunch.png"/>
+				<h2>Dr. Datascience</h2>
+				<h3>Or: How I Learned to Stop Munging and Love Tests</h3>
+				<p>Neal Richardson</p>
+				<p>neal@crunch.io<br>@enpiar</p>
+			</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				width: 1600,
+				height: 900,
+				controls: true,
+				progress: true,
+				history: true,
+				center: false,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
