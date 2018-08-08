@@ -38,11 +38,12 @@ class: center, middle, inverse, title-slide
 
 [enpiar.com/2017/08/11/one-hour-package/](https://enpiar.com/2017/08/11/one-hour-package/)
 
+
 &lt;img src="img/one-hour-package.png" height="50%" width="50%" style="float:left; padding-right: 20px;"/&gt;
 
-* How to set up an R package that wraps an API
+* How to set up an R package that wraps an API 
 
-* Minimal effort, yet robust and extensible
+* Minimal effort, yet robust and extensible 
 
 * Packaging and testing: with good tools, not much work to set up, and will save us
 
@@ -78,9 +79,9 @@ class: center, middle
 
 * Search CRAN package list: &lt;br /&gt; https://cran.r-project.org/web/packages/available_packages_by_name.html
 
-    * Search it within R: https://cran.r-project.org/package=packagefinder
+    * Search it within R: https://cran.r-project.org/package=packagefinder 
 
-* CRAN Web Technologies Task View: &lt;br /&gt; https://cran.r-project.org/web/views/WebTechnologies.html
+* CRAN Web Technologies Task View: &lt;br /&gt; https://cran.r-project.org/web/views/WebTechnologies.html 
 &lt;!-- but not updated regularly --&gt;
 
 If you find one, and it works ok, great! Use it!
@@ -105,7 +106,7 @@ Don't be afraid to put your code in a package. It's the best way to contain your
 
 * Other more specialized skeletons (e.g. `Rcpp`)
 
-* I have one that sets up for testing (including Travis, codecov, appveyor): `skeletor`
+* I have one that sets up for testing (including Travis, codecov, appveyor): `skeletor` ([enpiar.com/r/skeletor/](https://enpiar.com/r/skeletor/))
     * `devtools::install_github("nealrichardson/skeletor")`
 
 * Which you use isn't important; goal is do set up the boilerplate and lower the cost of packaging so you can focus on your code.
@@ -409,7 +410,7 @@ get_reports &lt;- function (...) {
             offset=0,
             limit=10,
             search='[{"type":"state","id":"open"}]'
-        ),
+        ), 
         list(...)
     )
     resp &lt;- us_GET(us_url("reports"), query=query)
@@ -523,7 +524,7 @@ with_mock_api({
 
 If you only need one, stop now. Don't feel like you have to do the whole API.
 
-We've designed the package to make it easy to add to later.
+We've designed the package to make it easy to add to later. 
 
 ---
 
@@ -539,7 +540,7 @@ get_reports &lt;- function (state=NULL, ...) {
             includeapikey="false",
             offset=0,
             limit=10
-        ),
+        ), 
         dots
     )
     return(us_GET(us_url("reports"), query=query)$data)
@@ -554,7 +555,7 @@ get_reports &lt;- function (state=NULL, ...) {
 
 * It's ok if you spend just as much time writing docs as you do code
 
-* Explaining how to use your code is a good way to find out where it's not easy to use
+* Explaining how to use your code is a good way to find out where it's not easy to use 
 
 * Remember: you'll forget everything you learned about how this API works by the next time you have to use it
 
@@ -576,7 +577,7 @@ get_reports &lt;- function (state=NULL, ...) {
 #' This is how you search for stories in the Pivotal Tracker web app.
 #' @param search A search string
 #' @param query List of query parameters. See
-#' \url{https://www.pivotaltracker.com/help/api/rest/v5#Stories}.
+#' \url{https://www.pivotaltracker.com/help/api/rest/v5#Stories}. 
 #' Most are not valid when filter terms are used.
 #' @return A 'stories' object: a list of all stories matching the search.
 #' @examples
@@ -597,6 +598,9 @@ class: inverse, center, middle
 These slides: [enpiar.com/talks/api-in-r/](https://enpiar.com/talks/api-in-r/)
 
 `httptest` package: [enpiar.com/r/httptest/](https://enpiar.com/r/httptest/)
+
+`skeletor` package: [enpiar.com/r/skeletor/](https://enpiar.com/r/skeletor/)
+
 
 Original blog post: [enpiar.com/2017/08/11/one-hour-package/](https://enpiar.com/2017/08/11/one-hour-package/)
     </textarea>
