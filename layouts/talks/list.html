@@ -1,0 +1,24 @@
+{{ define "title"}} {{ .Site.Title }}{{end}}
+{{ define "description"}} {{ .Site.Theme }}{{end}}
+{{ define "header"}} {{ partial "header" .}} {{end}}
+{{ define "main"}}
+
+<div id="post-box">
+<div class="wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-sm-6">
+                <div class="clearfix"></div>
+                <h2 class="section-heading">{{ .Title }}</h2>
+                <p>{{.Content}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+{{ end }}
+{{ define "footer" }}
+  {{ partial "footer" . }}
+{{ end }}
