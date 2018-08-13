@@ -6,10 +6,19 @@
     <description>Recent content in General on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 01 Jun 2017 21:49:57 -0700</lastBuildDate>
+    <lastBuildDate>Mon, 13 Aug 2018 12:49:57 -0700</lastBuildDate>
     
 	<atom:link href="/categories/general/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Talk Slides Now Available</title>
+      <link>/2018/08/13/talk-slides-now-available/</link>
+      <pubDate>Mon, 13 Aug 2018 12:49:57 -0700</pubDate>
+      
+      <guid>/2018/08/13/talk-slides-now-available/</guid>
+      <description>In putting up the slides for the talk I gave at last week&amp;rsquo;s Bay Area R meetup, I figured it would be good to dig up the slides from previous talks and post them here too. (In fact, I linked to one of them in the slides from last week.) So, there&amp;rsquo;s now a &amp;ldquo;Talks&amp;rdquo; section of the site.</description>
+    </item>
     
     <item>
       <title>Building a Blogdown Site with Travis-CI</title>

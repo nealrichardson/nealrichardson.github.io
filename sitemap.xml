@@ -7,6 +7,16 @@
   </url>
   
   <url>
+    <loc>/talks/</loc>
+    <lastmod>2017-10-15T14:08:35+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2018/08/13/talk-slides-now-available/</loc>
+    <lastmod>2018-08-13T12:49:57-07:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/2018/07/08/against-technical-debt/</loc>
     <lastmod>2018-07-08T21:49:57-07:00</lastmod>
   </url>
@@ -73,7 +83,7 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2018-07-08T21:49:57-07:00</lastmod>
+    <lastmod>2018-08-13T12:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -120,7 +130,7 @@
   
   <url>
     <loc>/categories/general/</loc>
-    <lastmod>2017-06-01T21:49:57-07:00</lastmod>
+    <lastmod>2018-08-13T12:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -162,7 +172,7 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2018-07-08T21:49:57-07:00</lastmod>
+    <lastmod>2018-08-13T12:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -199,6 +209,12 @@
   <url>
     <loc>/tags/</loc>
     <lastmod>2017-07-04T16:49:57-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/talks/</loc>
+    <lastmod>2018-08-13T12:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
