@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert a request to a mock file path — build_mock_url • httptest</title>
+<title>Use 'httptest' in your tests — use_httptest • httptest</title>
 
 <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
 
@@ -34,10 +34,11 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Convert a request to a mock file path — build_mock_url" />
+<meta property="og:title" content="Use 'httptest' in your tests — use_httptest" />
 
-<meta property="og:description" content="Requests are translated to mock file paths according to several rules that
-incorporate the request method, URL, query parameters, and body." />
+<meta property="og:description" content="This function adds httptest to Suggests in the package DESCRIPTION and
+loads it in tests/testthat/helper.R. Call it once when you're setting up
+a new package test suite." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -140,73 +141,38 @@ incorporate the request method, URL, query parameters, and body." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert a request to a mock file path</h1>
-    <small class="dont-index">Source: <a href='https://github.com/nealrichardson/httptest/blob/master/R/mock-api.R'><code>R/mock-api.R</code></a></small>
-    <div class="hidden name"><code>build_mock_url.Rd</code></div>
+    <h1>Use 'httptest' in your tests</h1>
+    <small class="dont-index">Source: <a href='https://github.com/nealrichardson/httptest/blob/master/R/use-httptest.R'><code>R/use-httptest.R</code></a></small>
+    <div class="hidden name"><code>use_httptest.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Requests are translated to mock file paths according to several rules that
-incorporate the request method, URL, query parameters, and body.</p>
+    <p>This function adds <code>httptest</code> to Suggests in the package DESCRIPTION and
+loads it in <code>tests/testthat/helper.R</code>. Call it once when you're setting up
+a new package test suite.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>build_mock_url</span>(<span class='no'>req</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"GET"</span>)
-
-<span class='fu'>buildMockURL</span>(<span class='no'>req</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"GET"</span>)</pre>
+    <pre class="usage"><span class='fu'>use_httptest</span>(<span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"."</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>req</th>
-      <td><p>A <code>request</code> object, or a character "URL" to convert</p></td>
-    </tr>
-    <tr>
-      <th>method</th>
-      <td><p>character HTTP method. If <code>req</code> is a 'request' object,
-its request method will override this argument</p></td>
+      <th>path</th>
+      <td><p>character path to the package</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A file path and name, without an extension. The file, or a file with
-some extension appended, may or may not
-exist: existence is not a concern of this function.</p>
+    <p>Nothing: called for file system side effects.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>First, the request protocol, such as "https://", is removed from the URL.
-Second, if the request URL contains a query string, it will be popped off,
-hashed by <code><a href='http://www.rdocumentation.org/packages/digest/topics/digest'>digest::digest()</a></code>, and the first six characters appended to the
-file being read. Third, request bodies are similarly hashed and
-appended. Finally, if a request method other than GET is used it will be
-appended to the end of the end of the file name.</p>
-<p>Mock file paths also have a file extension appended, based on the
-<code>Content-Type</code> of the response, though this function, which is only concerned
-with the request, does not add the extension. In an
-HTTP API, a "directory" itself is a resource,
-so the extension allows distinguishing directories and files in the file
-system. That is, a mocked <code>GET("http://example.com/api/")</code> may read a
-"example.com/api.json" file, while
-<code>GET("http://example.com/api/object1/")</code> reads "example.com/api/object1.json".</p>
-<p>Other examples:</p><ul>
-<li><p><code>GET("http://example.com/api/object1/?a=1")</code> may read
-"example.com/api/object1-b64371.xml".</p></li>
-<li><p><code>POST("http://example.com/api/object1/?a=1")</code> may read
-"example.com/api/object1-b64371-POST.json".</p></li>
-</ul>
-    <p>This function is exported so that other packages can construct similar mock
-behaviors or override specific requests at a higher level than
-<code>with_mock_api</code> mocks.</p>
-<p>In the interest of standardizing naming conventions, <code>build_mock_url()</code> is
-the preferred name for this function; <code>buildMockURL()</code> is deprecated.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='with_mock_api.html'>with_mock_api()</a></code> <code><a href='capture_requests.html'>capture_requests()</a></code></p></div>
+    <p>The function is idempotent: if <code>httptest</code> is already added to these files, no
+additional changes will be made.</p>
     
 
   </div>
@@ -218,8 +184,6 @@ the preferred name for this function; <code>buildMockURL()</code> is deprecated.
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
-
-      <li><a href="#see-also">See also</a></li>
           </ul>
 
   </div>
