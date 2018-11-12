@@ -31,6 +31,12 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
   <link href="../extra.css" rel="stylesheet">
   
@@ -131,6 +137,12 @@ raising warnings that are caught by testthat::expect_warning()." />
 </li>
       </ul>
       
+      <form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -181,7 +193,7 @@ requests.</p>
     <span class='fu'>expect_header</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/httr/topics/GET'>GET</a></span>(<span class='st'>"http://example.com"</span>, <span class='kw'>config</span><span class='kw'>=</span><span class='fu'><a href='http://www.rdocumentation.org/packages/httr/topics/add_headers'>add_headers</a></span>(<span class='kw'>Accept</span><span class='kw'>=</span><span class='st'>"image/png"</span>)),
         <span class='st'>"Accept: image/png"</span>)
 })</div><div class='output co'>#&gt; <span class='message'>GET http://example.com</span></div><div class='output co'>#&gt; Response [http://example.com]
-#&gt;   Date: 2018-11-09 08:36
+#&gt;   Date: 2018-11-12 09:12
 #&gt;   Status: 200
 #&gt;   Content-Type: &lt;unknown&gt;
 #&gt;   Size: 4 B
@@ -215,6 +227,23 @@ requests.</p>
    </div>
 
   
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: 'ad019ea9fe75a8488c96ff15cf8a57',
+    indexName: 'enpiar_httptest',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
   </body>
 </html>
