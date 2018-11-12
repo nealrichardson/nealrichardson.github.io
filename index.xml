@@ -6,10 +6,21 @@
     <description>Recent content on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 13 Aug 2018 12:49:57 -0700</lastBuildDate>
+    <lastBuildDate>Sun, 11 Nov 2018 09:00:57 -0700</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>httptest 3.2.0 Released</title>
+      <link>/2018/11/11/httptest-3.2.0-released/</link>
+      <pubDate>Sun, 11 Nov 2018 09:00:57 -0700</pubDate>
+      
+      <guid>/2018/11/11/httptest-3.2.0-released/</guid>
+      <description>The 3.2.0 release of httptest is now on CRAN. This is a minor release with several enhancements suggested by package users. Details can be found in the release notes.
+A few of the changes improve the behavior of httptest in interactive use. There is one new function, use_httptest(), which configures your package to use httptest when you&amp;rsquo;re setting it up.
+Thanks to everyone who filed issues and submitted pull requests. Included in this release are contributions from and improvements prompted by GitHub users brooklynbagel, jameslamb, jjankowiak, npelikan, and ramiromagno.</description>
+    </item>
     
     <item>
       <title>Talk Slides Now Available</title>
