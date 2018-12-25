@@ -3,7 +3,11 @@ title: "Better Management Through Code"
 description: "When becoming an engineering leader means you don't have time to write code anymore, scratch your itch by automating some of your management duties."
 date: "2017-07-04T16:49:57-07:00"
 categories: ["management"]
+<<<<<<< Updated upstream
 tags: ["automation", "python", "productivity"]
+=======
+tags: ["automation", "python", "management"]
+>>>>>>> Stashed changes
 draft: false
 images: ["https://maritime.org/doc/pt/know/img/pg15.jpg"]
 ---
