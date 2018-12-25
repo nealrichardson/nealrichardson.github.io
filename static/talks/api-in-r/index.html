@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Wrapping Web APIs in R</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Neal Richardson @enpiar" />
+    <link href="remark_libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="remark_libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Wrapping Web APIs in R
+### Neal Richardson<br/><span class="citation">@enpiar</span>
+### August 7, 2018<br/><br/>Slides: <a href="https://enpiar.com/talks/api-in-r/">enpiar.com/talks/api-in-r/</a>
+
+---
+
+
+# About me
+
+* Recovering academic
+
+* Currently lead product development at Crunch.io, a survey data platform
+
+--
+
+* Among many things, I design APIs, write R clients for our APIs, and write tools to connect various other APIs
+
+* R packages to help with API clients: [`httptest`](https://enpiar.com/r/httptest/) and [`httpcache`](https://enpiar.com/r/httpcache/). (See [enpiar.com/r/](https://enpiar.com/r/))
+
+* Occasional blogging at [enpiar.com](https://enpiar.com/)
+
+---
+
+# One-Hour Package
+
+[enpiar.com/2017/08/11/one-hour-package/](https://enpiar.com/2017/08/11/one-hour-package/)
+
+
+&lt;img src="img/one-hour-package.png" height="50%" width="50%" style="float:left; padding-right: 20px;"/&gt;
+
+* How to set up an R package that wraps an API 
+
+* Minimal effort, yet robust and extensible 
+
+* Packaging and testing: with good tools, not much work to set up, and will save us
+
+* Good foundation lets us stop writing code sooner because we can extend it later _if/when we need to_
+
+---
+class: inverse, center, middle
+
+### A better title:
+
+&lt;img src="img/hurry.jpg" height="45%" width="45%"/&gt;
+
+---
+
+class: inverse, center, middle
+
+### A better title:
+
+&lt;img src="img/hurry-npr.jpg" height="45%" width="45%" /&gt;
+
+---
+class: center, middle
+
+# Let's get started!
+
+---
+
+# Step 0: See if there's already a package
+
+* Search GitHub: &lt;br /&gt; https://github.com/search?l=R&amp;type=Repositories&amp;q=yourAPIhere
+
+&lt;!-- 371 matches of the string "api" --&gt;
+
+* Search CRAN package list: &lt;br /&gt; https://cran.r-project.org/web/packages/available_packages_by_name.html
+
+    * Search it within R: https://cran.r-project.org/package=packagefinder 
+
+* CRAN Web Technologies Task View: &lt;br /&gt; https://cran.r-project.org/web/views/WebTechnologies.html 
+&lt;!-- but not updated regularly --&gt;
+
+If you find one, and it works ok, great! Use it!
+
+---
+
+# Step 1: Set up the package
+
+Don't be afraid to put your code in a package. It's the best way to contain your functions, and it's particularly appropriate when wrapping an API.
+
+* Expect others to use: packaging is good for **distribution**
+
+* Expect to reuse over time: **documentation**
+
+* Expect needs may grow/change: **testing**
+
+---
+
+# Step 1: Set up the package _skeleton_
+
+* RStudio has helpers, `devtools`, `usethis` packages
+
+* Other more specialized skeletons (e.g. `Rcpp`)
+
+* I have one that sets up for testing (including Travis, codecov, appveyor): `skeletor` ([enpiar.com/r/skeletor/](https://enpiar.com/r/skeletor/))
+    * `devtools::install_github("nealrichardson/skeletor")`
+
+* Which you use isn't important; goal is do set up the boilerplate and lower the cost of packaging so you can focus on your code.
+
+--
+
+```r
+# Let's make a package to wrap the Avocado Toast Price Index API
+skeletor::skeletor("avocador", api=TRUE)
+```
+
+---
+
+```
+avocador
+├── .Rbuildignore
+├── .Rinstignore
+├── .gitignore
+├── .travis.yml
+├── DESCRIPTION
+├── LICENSE
+├── Makefile
+├── NAMESPACE
+├── NEWS.md
+├── R
+│   ├── api.R
+│   └── avocador.R
+├── README.md
+├── appveyor.yml
+├── inst
+│   └── WORDLIST
+├── man
+├── tests
+│   ├── spelling.R
+│   ├── testthat
+│   │   ├── helper.R
+│   │   └── test-api.R
+│   └── testthat.R
+└── vignettes
+```
+
+---
+
+# Step 2: Add general API wrappers
+
+Web APIs follow conventions. But R is _not_ HTTP. Insulate R users (ourselves) from the API with several layers:
+
+--
+
+* `httr` library to handle the HTTP part
+
+--
+
+* **Thin layer on top of that, collecting configuration specific to our API**
+
+--
+
+* **Then map API resources to R functions and objects**
+
+--
+
+* Depending on how closely the API structure fits with our mental model, we may want another layer above it that lets you forget about the API specifics
+
+
+---
+
+# Step 2: Add general API wrappers
+
+Our lowest layer: all requests and responses pass through the same core logic
+
+1. a function through which all API requests will pass
+
+2. a function that configures requests (authentication, etc.)
+
+3. a generic API response handler
+
+4. a URL-constructing utility
+
+---
+
+# Step 2: Add general API wrappers
+
+```r
+my_api &lt;- function (verb, url, config=list(), ...) {
+    FUN &lt;- get(verb, envir=asNamespace("httr"))
+    resp &lt;- FUN(url, ..., config=c(my_config(), config))
+    return(my_handle_response(resp))
+}
+```
+
+---
+
+# Step 2: Add general API wrappers
+
+```r
+my_api &lt;- function (verb, url, config=list(), ...) {
+    FUN &lt;- get(verb, envir=asNamespace("httr"))
+    resp &lt;- FUN(url, ..., config=c(my_config(), config))
+    return(my_handle_response(resp))
+}
+
+my_config &lt;- function () {
+    add_headers(`user-agent`=ua("yourpackagename"))
+}
+```
+
+---
+
+# Step 2: Add general API wrappers
+
+```r
+my_api &lt;- function (verb, url, config=list(), ...) {
+    FUN &lt;- get(verb, envir=asNamespace("httr"))
+    resp &lt;- FUN(url, ..., config=c(my_config(), config))
+    return(my_handle_response(resp))
+}
+
+my_config &lt;- function () {
+    add_headers(`user-agent`=ua("yourpackagename"))
+}
+
+my_handle_response &lt;- function (resp) {
+    if (resp$status_code &gt;= 400L)  {
+        msg &lt;- http_status(resp)$message
+        stop(msg, call.=FALSE)
+    } else {
+        return(content(resp))
+    }
+}
+```
+
+---
+
+# Step 2: Add general API wrappers
+
+```r
+my_api &lt;- function (verb, url, config=list(), ...) {
+    FUN &lt;- get(verb, envir=asNamespace("httr"))
+    resp &lt;- FUN(url, ..., config=c(my_config(), config))
+    return(my_handle_response(resp))
+}
+
+my_config &lt;- function () {
+    add_headers(`user-agent`=ua("yourpackagename"))
+}
+
+my_handle_response &lt;- function (resp) {
+    if (resp$status_code &gt;= 400L)  {
+        msg &lt;- http_status(resp)$message
+        stop(msg, call.=FALSE)
+    } else {
+        return(content(resp))
+    }
+}
+
+my_url &lt;- function (...) {
+    paste(..., sep="/")
+}
+```
+
+---
+# Step 2: Add general API wrappers
+
+```r
+my_GET &lt;- function (url, ...) my_api("GET", url, ...)
+
+my_PUT &lt;- function (url, ...) my_api("PUT", url, ...)
+
+my_PATCH &lt;- function (url, ...) my_api("PATCH", url, ...)
+
+my_POST &lt;- function (url, ...) my_api("POST", url, ...)
+
+my_DELETE &lt;- function (url, ...) my_api("DELETE", url, ...)
+
+ua &lt;- function (pkg) {
+    paste(pkg, as.character(packageVersion(pkg)), sep="/")
+}
+```
+
+---
+
+# Step 3: Work out authentication and other configuration
+
+* Read the API docs for how to authenticate
+
+* Identify any other configuration that goes into all requests (e.g. a project or account ID)
+
+* Then figure out how that plugs into our basic functions
+
+---
+`useRsnap` package (https://github.com/nealrichardson/useRsnap)
+
+```r
+us_api &lt;- function (verb, url, config=list(), ...) {
+    FUN &lt;- get(verb, envir=asNamespace("httr"))
+    resp &lt;- FUN(url, ..., config=c(us_config(), config))
+    return(us_handle_response(resp))
+}
+
+us_config &lt;- function () {
+    add_headers(`user-agent`=ua("useRsnap"))
+}
+
+us_handle_response &lt;- function (resp) {
+    if (resp$status_code &gt;= 400L)  {
+        msg &lt;- http_status(resp)$message
+        stop(msg, call.=FALSE)
+    } else {
+        return(content(resp))
+    }
+}
+
+us_url &lt;- function (...) {
+    paste(..., sep="/")
+}
+```
+
+---
+`useRsnap` package (https://github.com/nealrichardson/useRsnap)
+
+```r
+us_api &lt;- function (verb, url, config=list(), ...) {
+    FUN &lt;- get(verb, envir=asNamespace("httr"))
+    resp &lt;- FUN(url, ..., config=c(us_config(), config))
+    return(us_handle_response(resp))
+}
+
+us_config &lt;- function () {
+    c(add_headers(`user-agent`=ua("useRsnap"),
+*     config(cookie=getOption("usersnap.cookie")))
+}
+
+us_handle_response &lt;- function (resp) {
+    if (resp$status_code &gt;= 400L)  {
+        msg &lt;- http_status(resp)$message
+        stop(msg, call.=FALSE)
+    } else {
+        return(content(resp))
+    }
+}
+
+us_url &lt;- function (...) {
+    paste(..., sep="/")
+}
+```
+
+---
+`useRsnap` package (https://github.com/nealrichardson/useRsnap)
+
+```r
+us_api &lt;- function (verb, url, config=list(), ...) {
+    FUN &lt;- get(verb, envir=asNamespace("httr"))
+    resp &lt;- FUN(url, ..., config=c(us_config(), config))
+    return(us_handle_response(resp))
+}
+
+us_config &lt;- function () {
+    c(add_headers(`user-agent`=ua("useRsnap"),
+      config(cookie=getOption("usersnap.cookie")))
+}
+
+us_handle_response &lt;- function (resp) {
+    if (resp$status_code &gt;= 400L)  {
+        msg &lt;- http_status(resp)$message
+        stop(msg, call.=FALSE)
+    } else {
+        return(content(resp))
+    }
+}
+
+*us_url &lt;- function (..., project=getOption("usersnap.project")) {
+*    us_root &lt;- "https://ec2.usersnap.com/angular/apikeys"
+*    paste(us_root, project, ..., sep="/")
+*}
+```
+
+---
+
+# Step 3: Choices
+
+* Set once? Set once per session? Shouldn't have to pass credentials for every request you make
+
+* How much do you care about security?
+
+* `options()`, environment variables, etc.
+
+---
+
+# Step 4: Pick an endpoint
+
+Get the data into R. Figure out how you want to express it.
+
+---
+`useRsnap` package (https://github.com/nealrichardson/useRsnap)
+
+```r
+get_reports &lt;- function (...) {
+    query &lt;- modifyList(
+        list(
+            includeapikey="false",
+            offset=0,
+            limit=10,
+            search='[{"type":"state","id":"open"}]'
+        ), 
+        list(...)
+    )
+    resp &lt;- us_GET(us_url("reports"), query=query)
+    return(resp$data)
+}
+```
+
+--
+
+```r
+reps &lt;- get_reports()
+length(reps) # Should be 10
+reps[[1]]    # Inspect one, make sure it looks right
+```
+
+---
+
+# Step 4: Pick an endpoint _and write a test_
+
+&lt;!-- * any software devs here? (going to talk TDD and Agile) --&gt;
+
+Writing tests makes our lives so much easier
+
+* Won't have to worry about breaking our code when we try to add something else
+
+* And since it's easy to extend later, we can avoid bothering with extra work now (YAGNI)
+
+See [enpiar.com/talks/testing/](https://enpiar.com/talks/testing/)
+---
+
+# Testing _with APIs_
+
+Use the `httptest` package to test all of our R code without requiring a network connection, private credentials, etc.
+
+* Test that we're making the right request (`expect_VERB()`, `expect_header()`)
+
+* Supply fixtures as API responses (`with_mock_api()`)
+
+* Record fixtures from real requests (`capture_requests()`)
+
+* Secure, fast, and human readable
+
+Details at [enpiar.com/r/httptest/](https://enpiar.com/r/httptest/)
+
+```r
+install.packages("httptest")
+```
+
+---
+
+# Step 4: Pick an endpoint _and write a test_
+
+Grab an example API response from the documentation, or use `httptest`'s `capture_requests()` function to record one.
+
+--
+
+```r
+reps &lt;- capture_requests(get_reports())
+```
+
+[tests/testthat/ec2.usersnap.com/angular/apikeys/R/reports-aa9175.json](https://github.com/nealrichardson/useRsnap/blob/8c2662de5e726ad99e5985b92b97ef5b092c5e0a/tests/testthat/ec2.usersnap.com/angular/apikeys/R/reports-aa9175.json)
+
+---
+
+# Step 4: Pick an endpoint _and write a test_
+
+
+Then, write the test with that response using `httptest::with_mock_api()`
+
+```r
+context("Get reports")
+
+with_mock_api({
+    test_that("Get reports", {
+        reps &lt;- get_reports()
+        expect_length(reps, 10)
+    })
+})
+```
+
+[tests/testthat/test-get-reports.R](https://github.com/nealrichardson/useRsnap/blob/8c2662de5e726ad99e5985b92b97ef5b092c5e0a/tests/testthat/test-get-reports.R)
+
+--
+
+* No network connection required to run this test
+* No secret credentials in the recorded request; no tokens required to run the test
+* Mock is plain text file, freely editable (fewer records, anonymization)
+
+---
+
+# Step 4: Pick an endpoint
+
+* Next question: What do you (or anyone else?) want to do with this API: read only, or read then update?
+
+--
+
+    * If read only, you may want to transform the data you get from the API into a more usable shape (data.frame/tbl)
+    * If read then edit, you may need to preserve the original object shape in order to send it back to the server. May also want class/methods.
+
+--
+
+* Not sure? Have separate R interface (e.g. an `as.data.frame` method)
+
+---
+
+# Do another
+
+--
+
+## ... or don't if you don't need to!
+
+If you only need one, stop now. Don't feel like you have to do the whole API.
+
+We've designed the package to make it easy to add to later. 
+
+---
+
+```r
+get_reports &lt;- function (state=NULL, ...) {
+*   dots &lt;- list(...)
+*   if (!is.null(state)) {
+*       state &lt;- match.arg(state, c("open", "closed"))
+*       dots$search &lt;- paste0('[{"type":"state","id":"', state, '"}]')
+*   }
+    query &lt;- modifyList(
+        list(
+            includeapikey="false",
+            offset=0,
+            limit=10
+        ), 
+        dots
+    )
+    return(us_GET(us_url("reports"), query=query)$data)
+}
+```
+
+---
+
+# Step 5: Document and wrap up
+
+* Include links to relevant API docs
+
+* It's ok if you spend just as much time writing docs as you do code
+
+* Explaining how to use your code is a good way to find out where it's not easy to use 
+
+* Remember: you'll forget everything you learned about how this API works by the next time you have to use it
+
+---
+
+# Step 5: Document and wrap up
+
+&lt;img src="img/brain-trauma.png" /&gt;
+
+---
+
+`pivotaltrackR` package (https://github.com/nealrichardson/pivotaltrackR)
+
+```r
+#' Get stories
+#'
+#' @param ... "Filter" terms to refine the query. See
+#' \url{https://www.pivotaltracker.com/help/articles/advanced_search/}.
+#' This is how you search for stories in the Pivotal Tracker web app.
+#' @param search A search string
+#' @param query List of query parameters. See
+#' \url{https://www.pivotaltracker.com/help/api/rest/v5#Stories}. 
+#' Most are not valid when filter terms are used.
+#' @return A 'stories' object: a list of all stories matching the search.
+#' @examples
+#' \dontrun{
+#' getStories(story_type="bug", current_state="unstarted",
+#'     search="deep learning")
+#' }
+#' @export
+```
+
+---
+class: inverse, center, middle
+
+# end
+
+@enpiar
+
+These slides: [enpiar.com/talks/api-in-r/](https://enpiar.com/talks/api-in-r/)
+
+`httptest` package: [enpiar.com/r/httptest/](https://enpiar.com/r/httptest/)
+
+`skeletor` package: [enpiar.com/r/skeletor/](https://enpiar.com/r/skeletor/)
+
+
+Original blog post: [enpiar.com/2017/08/11/one-hour-package/](https://enpiar.com/2017/08/11/one-hour-package/)
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "color-brewer",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

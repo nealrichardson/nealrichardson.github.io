@@ -5,7 +5,7 @@ date: "2017-08-05T21:49:57-07:00"
 categories: ["code"]
 tags: ["R", "packages", "dependencies"]
 draft: false
-images: ["http://enpiar.com/img/yo-dawg-deps.png"]
+images: ["https://enpiar.com/img/yo-dawg-deps.png"]
 ---
 
 At Crunch, we've recently hired an "R Team" to build out our package offerings beyond what I could write [in my spare time](../../../07/04/better-management-through-code/). It's been great to have more resources to dedicate to our R tools, and it's been particularly fun for me because now I get to have package design debates with other smart humans, not just inside my head.
@@ -92,7 +92,7 @@ findDependencies <- function (pkg) {
 }
 ```
 
-So, for example, the [crunch](http://crunch.io/r/crunch/) package, the subject of our discussion at work, formally lists these five dependencies
+So, for example, the [crunch](https://crunch.io/r/crunch/) package, the subject of our discussion at work, formally lists these five dependencies
 
 ```{r}
 cran[cran$Package == "crunch", c("Depends", "Imports")]

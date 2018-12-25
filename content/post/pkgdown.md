@@ -12,7 +12,7 @@ images: []
 
 I say "incredibly" powerful in the most literal sense---I could not believe how much `pkgdown` does with so little required of its user. `pkgdown` draws its power by relying on [conventions](https://en.wikipedia.org/wiki/Convention_over_configuration) of how R packages are structured. Some of these conventions are inherent to R packages, particularly what CRAN deems as acceptable. Others, however, are less obvious. If you're closely tracking the [best practices for package development](http://r-pkgs.had.co.nz/), you're may be following most of these conventions already. But best practices evolve, and if you're adding `pkgdown` to a package that is a year or two old, you may find that you need to tweak some details to make it work smoothly.
 
-This post distills my experiences in setting up a [few](http://enpiar.com/r/httptest/) [pkgdown](http://enpiar.com/r/httpcache/) [sites](http://crunch.io/r/crplyr/) recently and exposes some of the features of `pkgdown` that I discovered along the way. While `pkgdown` does have basic documentation, whenever I hit something that didn't work quite like I expected, or if I wanted to move beyond the default behavior, I found that the best way to figure out what was happening was to read the source. My intent here is to capture what I learned [RTFS'ing](http://catb.org/jargon/html/R/RTFS.html), including links to the relevant source code, and share with you (and with my future self, who surely will have forgotten all of this).
+This post distills my experiences in setting up a [few](https://enpiar.com/r/httptest/) [pkgdown](https://enpiar.com/r/httpcache/) [sites](https://crunch.io/r/crplyr/) recently and exposes some of the features of `pkgdown` that I discovered along the way. While `pkgdown` does have basic documentation, whenever I hit something that didn't work quite like I expected, or if I wanted to move beyond the default behavior, I found that the best way to figure out what was happening was to read the source. My intent here is to capture what I learned [RTFS'ing](http://catb.org/jargon/html/R/RTFS.html), including links to the relevant source code, and share with you (and with my future self, who surely will have forgotten all of this).
 
 # 1. Install `pkgdown`
 
@@ -86,7 +86,7 @@ Functions noted like `fun()` or `?fun` get auto-linked; however, just writing `f
 
 I had to do some updating of my vignettes to make them work correctly with `pkgdown`, specifically in their "front matter": the metadata at the top of the file. If your package is new and you're following the current [best practices](http://r-pkgs.had.co.nz/vignettes.html) for writing vignettes, you may be most of the way there already.
 
-I was using R Markdown and building the vignettes with [knitr](https://yihui.name/knitr/), but not _à la mode_, which uses the [rmarkdown](https://github.com/rstudio/rmarkdown) package on top of [pandoc](http://pandoc.org/). For example, in [httptest](http://enpiar.com/r/httptest), the main vignette previously started like this:
+I was using R Markdown and building the vignettes with [knitr](https://yihui.name/knitr/), but not _à la mode_, which uses the [rmarkdown](https://github.com/rstudio/rmarkdown) package on top of [pandoc](http://pandoc.org/). For example, in [httptest](https://enpiar.com/r/httptest), the main vignette previously started like this:
 
 ```latex
 <!--

@@ -5,7 +5,7 @@ date: "2018-02-01T16:49:57-07:00"
 categories: ["code"]
 tags: ["R", "packages", "CRAN"]
 draft: false
-images: ["http://enpiar.com/img/bttf-cover.png"]
+images: ["https://enpiar.com/img/bttf-cover.png"]
 ---
 
 When you submit a package update to CRAN, they ask you to check some boxes confirming that you've done your due diligence on your submission: that it passes its checks. One confirmation is that you've addressed any failures on the CRAN package check page, which looks [like this](https://cran.r-project.org/web/checks/check_results_httptest.html).
@@ -135,9 +135,9 @@ setMethod("median", "NumericVariable", median_func(is.R.3.4))
 
 One last challenge to circumvent: while I could conditionally set the method like this, I couldn't conditionally specify the man page: the .Rd file is created at build time, not install time. This meant that it was not possible to document this function/method in a forward-compatible way. And `R CMD check` also fails if you "export" undocumented functions, so I had to remove it from the explicit namespace export too. Fortunately (I guess?), method dispatch still worked, so it was fine.
 
-Check out the [real code](https://github.com/Crunch-io/rcrunch/blob/1e9de0de2c57d518532e49afdacb7fad09ecdaa3/R/univariate.R#L49-L65) in the [crunch](http://crunch.io/r/crunch/) package.
+Check out the [real code](https://github.com/Crunch-io/rcrunch/blob/1e9de0de2c57d518532e49afdacb7fad09ecdaa3/R/univariate.R#L49-L65) in the [crunch](https://crunch.io/r/crunch/) package.
 
-More recently, another change in R-devel, slated for R 3.5, broke [httptest](http://enpiar.com/r/httptest/). The `deparse` function is getting some attention, initially just internal improvements ([which caused breakage for me along the way](http://r.789695.n4.nabble.com/Bug-dput-deparse-with-named-character-vector-inside-list-td4745298.html)) but now also a change to the arguments. Up to R 3.4, `deparse` (and by association `dput`) printed named lists and vectors in a verbose way. `list(a=1)` got deparsed as `structure(list(a = 1), .Names = "a")` by default. But, you could specify "control" arguments to change that behavior, and `control = NULL` yielded `list(a = 1)` without the `structure` business. So I used that control option in `httptest`.
+More recently, another change in R-devel, slated for R 3.5, broke [httptest](https://enpiar.com/r/httptest/). The `deparse` function is getting some attention, initially just internal improvements ([which caused breakage for me along the way](http://r.789695.n4.nabble.com/Bug-dput-deparse-with-named-character-vector-inside-list-td4745298.html)) but now also a change to the arguments. Up to R 3.4, `deparse` (and by association `dput`) printed named lists and vectors in a verbose way. `list(a=1)` got deparsed as `structure(list(a = 1), .Names = "a")` by default. But, you could specify "control" arguments to change that behavior, and `control = NULL` yielded `list(a = 1)` without the `structure` business. So I used that control option in `httptest`.
 
 The [change](https://github.com/wch/r-source/commit/62fced00949b9a261034d24789175b205f7fa866) adds a "niceNames" deparse option, which is now required to get named lists printed with names---they no longer are named with `control = NULL`. So the new (future) default behavior of `deparse(list(a=1))` is what we want, and `deparse(list(a=1), control = NULL)` would now return `list(1)`, which is not what we want.
 
@@ -177,7 +177,7 @@ To reiterate, for both `median` and `deparse`, we could have used the `R.Version
 
 {{< figure src="/img/bttfiii.gif" class="floating-right halfwidth" attr="A train wreck" attrlink="http://33.media.tumblr.com/d99ae1c753b568dcb87139cf099cedb9/tumblr_nnica9WQb31qfr6udo1_500.gif">}}
 
-Just like the movies, the one going back farthest in time was the least enjoyable. I had a CRAN submission for the [crunch](http://crunch.io/r/crunch/) package rejected because the tests failed to run on the Solaris operating system, which R still supports and CRAN includes in their continuous integration checks. The problem was an encoding issue: specifically, I had non-ASCII UTF-8 in a test file, and the test file _failed to parse_. That's right: it wasn't that the tests ran and failed; the file couldn't be read at all. Naturally, `R CMD check` passed locally for me, and it passed on Travis and Appveyor.
+Just like the movies, the one going back farthest in time was the least enjoyable. I had a CRAN submission for the [crunch](https://crunch.io/r/crunch/) package rejected because the tests failed to run on the Solaris operating system, which R still supports and CRAN includes in their continuous integration checks. The problem was an encoding issue: specifically, I had non-ASCII UTF-8 in a test file, and the test file _failed to parse_. That's right: it wasn't that the tests ran and failed; the file couldn't be read at all. Naturally, `R CMD check` passed locally for me, and it passed on Travis and Appveyor.
 
 Suppose the offending test file contained this.
 

@@ -12,10 +12,10 @@ Here are a few R packages that I've published to [CRAN](https://cran.r-project.o
 
 -   [httpcache](/r/httpcache/): Query Cache for HTTP Clients
 
--   [skeletor](https://github.com/nealrichardson/skeletor): A Package Skeleton Generator
+-   [skeletor](/r/skeletor/): A Package Skeleton Generator
 
 -   [pivotaltrackR](/r/pivotaltrackR/): A Client for the [Pivotal Tracker](https://www.pivotaltracker.com/) [API](https://www.pivotaltracker.com/help/api/rest/v5)
 
--   [crunch, crplyr, crunchy](http://crunch.io/r/): Several packages to facilitate working with the [Crunch](http://crunch.io/) data platform.
+-   [crunch, crplyr, crunchy](https://crunch.io/r/): Several packages to facilitate working with the [Crunch](https://crunch.io/) data platform.
 
 See [GitHub](https://github.com/nealrichardson?utf8=%E2%9C%93&tab=repositories&q=&type=source&language=r) for a list of other unpublished packages.

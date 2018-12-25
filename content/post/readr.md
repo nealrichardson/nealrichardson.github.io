@@ -5,12 +5,12 @@ date: "2018-04-25T21:49:57-07:00"
 categories: ["code"]
 tags: ["R", "performance", "benchmark", "readr"]
 draft: false
-images: ["http://enpiar.com/img/star-wars-light-speed.gif"]
+images: ["https://enpiar.com/img/star-wars-light-speed.gif"]
 ---
 
 <!-- The 'readr' package is fast. Can we make it faster? -->
 
-Recently I analyzed some web traffic for my [team](http://crunch.io/team) at an all-hands meetup. I suspected there were some misconceptions about the frequency of certain kinds of requests, and that some basic descriptive statistics could help.
+Recently I analyzed some web traffic for my [team](https://crunch.io/team) at an all-hands meetup. I suspected there were some misconceptions about the frequency of certain kinds of requests, and that some basic descriptive statistics could help.
 
 Whenever I start an analysis like this, I also think about how to make it easier to repeat it. If the question is interesting enough to merit analysis now, it will probably be interesting next month too---particularly if it reveals things we want to improve. In this particular exercise, not only did I get statistics for my presentation, I also got a [new R package](https://github.com/nealrichardson/elbr) and some insights into how to read in data stored in lots of text files in an efficient, fast way, using [`readr`](http://readr.tidyverse.org/).
 
@@ -323,6 +323,45 @@ microbenchmark(
 Alright, so that's worse than without the filtering. Clearly, this raw row filtering has its biggest benefits when the number of rows that match your search is small. I didn't attempt to nail down the specific threshold where one is faster than the other, but clearly it's somewhere less than this. In general, it's important to have an intuition about your data.
 
 A few final notes. First, I tried a version using the [`processx`](https://github.com/r-lib/processx) package for managing external processes, but the overhead it added eroded the filtering benefits: the direct `system2` call was notably faster. Second, I suspect that this code isn't platform-independent; I knew `egrep` was on my log server, so that wasn't a concern for me, but if you're looking to use this pattern on Windows, you may need to adapt the code or install a tool.
+
+## Update: _il y a une pipe!_
+
+After this was first published, [Jim Hester pointed out](https://twitter.com/jimhester_/status/993172484458508289) that you could use the `pipe()` connection as an input and that would save having to read the standard output into an R object and `paste()`ing it together.
+
+I made a `read_elb5()` version that replaced the `line_filter` block with this much simpler code:
+
+```r
+if (!is.null(line_filter)) {
+    cmd <- paste("egrep", shQuote(line_filter), file)
+    file <- pipe(cmd)
+}
+```
+
+I found an even bigger log file (230 MB) than the one I'd been benchmarking with before, and I repeated the `"POST "` search. Even though the file was bigger, there were fewer `POST` requests, only 16 percent. Because there were fewer lines being read in, the `paste(system2(...))` version was a bit faster than in the benchmark with the log file used throughout this post. The `pipe()` version, though, was nearly twice as fast as that:
+
+```r
+##  Unit: milliseconds
+##                              expr      min       lq     mean   median
+## read_elb4(f, line_filter="POST ") 612.9062 623.6136 693.2473 641.7480
+## read_elb5(f, line_filter="POST ") 327.5515 343.9537 380.7328 350.2193
+##       uq       max neval
+## 724.7104 1027.4293    25
+## 440.5271  477.9381    25
+```
+
+Under 400 milliseconds to read in 16,000 rows of log data, already filtered to the set I want to consider. `pipe()` it is!
+
+One other observation: pipe or no pipe, doing the filtering before the data hits R is much faster than filtering it in R. For comparison, here's benchmarking of calling `grep` to find the `POST` requests in the full `data.frame` (roughly 100,000 rows) read in without any filtering:
+
+```r
+##  Unit: seconds
+##                       expr      min       lq     mean   median       uq
+## grep("^POST ", df$request) 7.991233 9.218501 9.532355 9.644332 9.881512
+##      max neval
+## 10.83446    25
+```
+
+That is, even after spending several seconds to read in all of the data, it's another 9-10 seconds to identify which rows to keep. If you can skip that work, why not?
 
 ## Conclusion: Turbocharging readr
 
