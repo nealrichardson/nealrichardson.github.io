@@ -12,6 +12,11 @@
   </url>
   
   <url>
+    <loc>/2019/01/03/the-s-curve/</loc>
+    <lastmod>2019-01-03T16:49:57-07:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/2018/11/11/httptest-3.2.0-released/</loc>
     <lastmod>2018-11-11T09:00:57-07:00</lastmod>
   </url>
@@ -88,7 +93,7 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2018-11-11T09:00:57-07:00</lastmod>
+    <lastmod>2019-01-03T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -152,8 +157,14 @@
   </url>
   
   <url>
+    <loc>/tags/management/</loc>
+    <lastmod>2019-01-03T16:49:57-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/categories/management/</loc>
-    <lastmod>2018-07-08T21:49:57-07:00</lastmod>
+    <lastmod>2019-01-03T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -177,7 +188,7 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2018-11-11T09:00:57-07:00</lastmod>
+    <lastmod>2019-01-03T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -188,8 +199,20 @@
   </url>
   
   <url>
+    <loc>/tags/product/</loc>
+    <lastmod>2019-01-03T16:49:57-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/productivity/</loc>
     <lastmod>2018-07-08T21:49:57-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/project-management/</loc>
+    <lastmod>2019-01-03T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   

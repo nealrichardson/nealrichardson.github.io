@@ -20,14 +20,5 @@
       <description>As a product owner and development leader, I often hear that &amp;ldquo;we have to pay our technical debt&amp;rdquo; in order to proceed with our product plan. As the metaphor goes, when you choose to take shortcuts now, you incur a debt that you&amp;rsquo;ll eventually have to repay with interest. The implication when a developer raises it is that those interest payments are too high and are preventing us from moving forward as effectively as we should.</description>
     </item>
     
-    <item>
-      <title>Better Management Through Code</title>
-      <link>/2017/07/04/better-management-through-code/</link>
-      <pubDate>Tue, 04 Jul 2017 16:49:57 -0700</pubDate>
-      
-      <guid>/2017/07/04/better-management-through-code/</guid>
-      <description>At Crunch, I lead both engineering and product management. Over the last few years, what that entails has changed greatly. How I spent my day when we were getting started, with a team of four developers and zero users, is very different from how I spend my time now with 16 on the team and thousands of users around the world. In fact, my day-to-day has evolved through several phases as we&amp;rsquo;ve grown, and each phase has come with its own challenges and learning opportunities&amp;mdash;or rather, challenges that are learning opportunities.</description>
-    </item>
-    
   </channel>
 </rss>

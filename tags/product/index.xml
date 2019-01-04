@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Product on A Blog</title>
+    <link>/tags/product/</link>
+    <description>Recent content in Product on A Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 03 Jan 2019 16:49:57 -0700</lastBuildDate>
+    
+	<atom:link href="/tags/product/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>The S-Curve</title>
+      <link>/2019/01/03/the-s-curve/</link>
+      <pubDate>Thu, 03 Jan 2019 16:49:57 -0700</pubDate>
+      
+      <guid>/2019/01/03/the-s-curve/</guid>
+      <description>At Crunch, we&amp;rsquo;ve built up our product over the span of six years, and what we&amp;rsquo;ve built helps a lot of people analyze their data quickly and painlessly. As ever, our ambitions are great and we want to build more. Sometimes this requires changing data contracts and APIs, and that poses an additional challenge: not only do we have to design a good solution to our users&amp;rsquo; problems, we have to transition to it with minimal disruption.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -75,6 +75,15 @@
     </item>
     
     <item>
+      <title>Management</title>
+      <link>/tags/management/</link>
+      <pubDate>Thu, 03 Jan 2019 16:49:57 -0700</pubDate>
+      
+      <guid>/tags/management/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Meta</title>
       <link>/tags/meta/</link>
       <pubDate>Thu, 01 Jun 2017 21:49:57 -0700</pubDate>
@@ -111,11 +120,29 @@
     </item>
     
     <item>
+      <title>Product</title>
+      <link>/tags/product/</link>
+      <pubDate>Thu, 03 Jan 2019 16:49:57 -0700</pubDate>
+      
+      <guid>/tags/product/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Productivity</title>
       <link>/tags/productivity/</link>
       <pubDate>Sun, 08 Jul 2018 21:49:57 -0700</pubDate>
       
       <guid>/tags/productivity/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Project Management</title>
+      <link>/tags/project-management/</link>
+      <pubDate>Thu, 03 Jan 2019 16:49:57 -0700</pubDate>
+      
+      <guid>/tags/project-management/</guid>
       <description></description>
     </item>
     
