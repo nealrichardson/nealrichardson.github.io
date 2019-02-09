@@ -12,6 +12,11 @@
   </url>
   
   <url>
+    <loc>/2019/02/08/analyzing-logs-with-aws-athena/</loc>
+    <lastmod>2019-02-08T16:49:57-07:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/2019/01/03/the-s-curve/</loc>
     <lastmod>2019-01-03T16:49:57-07:00</lastmod>
   </url>
@@ -93,7 +98,13 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2019-01-03T16:49:57-07:00</lastmod>
+    <lastmod>2019-02-08T16:49:57-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/athena/</loc>
+    <lastmod>2019-02-08T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -122,7 +133,7 @@
   
   <url>
     <loc>/categories/code/</loc>
-    <lastmod>2018-11-11T09:00:57-07:00</lastmod>
+    <lastmod>2019-02-08T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -153,6 +164,12 @@
   <url>
     <loc>/tags/hugo/</loc>
     <lastmod>2017-12-18T16:49:57-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/logs/</loc>
+    <lastmod>2019-02-08T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -188,7 +205,7 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2019-01-03T16:49:57-07:00</lastmod>
+    <lastmod>2019-02-08T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -235,8 +252,20 @@
   </url>
   
   <url>
+    <loc>/tags/serverless/</loc>
+    <lastmod>2019-02-08T16:49:57-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/sql/</loc>
+    <lastmod>2019-02-08T16:49:57-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/</loc>
-    <lastmod>2017-07-04T16:49:57-07:00</lastmod>
+    <lastmod>2019-02-08T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   

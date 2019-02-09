@@ -6,10 +6,19 @@
     <description>Recent content on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 03 Jan 2019 16:49:57 -0700</lastBuildDate>
+    <lastBuildDate>Fri, 08 Feb 2019 16:49:57 -0700</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Analyzing Logs with AWS Athena</title>
+      <link>/2019/02/08/analyzing-logs-with-aws-athena/</link>
+      <pubDate>Fri, 08 Feb 2019 16:49:57 -0700</pubDate>
+      
+      <guid>/2019/02/08/analyzing-logs-with-aws-athena/</guid>
+      <description>This week, I wanted to analyze some web traffic patterns back over several years. For contemporary analysis, we sync the last couple of months of load balancer (AWS ELB) log files from S3 to a EC2 instance, and I&amp;rsquo;ve written some tools in R to query them using dplyr methods. The elbr R package I wrote does some clever things to take advantage of the directory structure for fast filtering by date, and it supports parallelized reading and querying of the files, among other optimizations, so it&amp;rsquo;s reasonably fast.</description>
+    </item>
     
     <item>
       <title>The S-Curve</title>
