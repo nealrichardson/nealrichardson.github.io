@@ -3,7 +3,7 @@ title: "Turbocharging 'readr'"
 description: "The 'readr' package is a fast reader for text data files, and with a couple of tricks, we can make it even faster by only reading the parts of the files we care about."
 date: "2018-04-25T21:49:57-07:00"
 categories: ["code"]
-tags: ["R", "performance", "benchmark", "readr"]
+tags: ["R", "performance", "benchmark", "readr", "logs"]
 draft: false
 images: ["https://enpiar.com/img/star-wars-light-speed.gif"]
 ---
