@@ -3,7 +3,7 @@ title: "Integrating 'pkgdown' with Your Personal Website"
 description: "You don't have to be a web developer to have smooth flow and consistent style across your personal website or blog and your R package websites."
 date: "2017-12-18T16:49:57-07:00"
 categories: ["code"]
-tags: ["R", "packages", "website", "hugo", "blogdown"]
+tags: ["R", "packages", "website", "hugo", "blogdown", "documentation"]
 draft: false
 images: ["https://enpiar.com/img/css_is_awesome_mug.jpg"]
 ---

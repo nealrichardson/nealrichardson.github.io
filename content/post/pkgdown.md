@@ -3,7 +3,7 @@ title: "Getting Down with pkgdown"
 description: "Building a beautiful website for your R package is a great way to improve its documentation, usability, and visibility. 'pkgdown' makes it easy to build your site, particularly if you follow these conventions."
 date: "2017-11-21T16:49:57-07:00"
 categories: ["code"]
-tags: ["R", "packages", "website"]
+tags: ["R", "packages", "website", "documentation"]
 draft: false
 images: []
 ---
