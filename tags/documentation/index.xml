@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Packages on A Blog</title>
-    <link>/tags/packages/</link>
-    <description>Recent content in Packages on A Blog</description>
+    <title>Documentation on A Blog</title>
+    <link>/tags/documentation/</link>
+    <description>Recent content in Documentation on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 17 Feb 2019 16:49:57 -0700</lastBuildDate>
     
-	<atom:link href="/tags/packages/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/documentation/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,16 +19,6 @@
       <guid>/2019/02/17/writing-docs-is-better-than-having-docs/</guid>
       <description>When interviewing developers at Crunch, we sometimes do a live coding exercise using a JavaScript data visualization library. It&amp;rsquo;s basic, and we don&amp;rsquo;t assume any prior knowledge of the library. To start, we tell the candidate that they can use the full internet to help them solve the problem (we&amp;rsquo;re trying to simulate real working conditions, after all), and by the way, this library has excellent documentation.
 It&amp;rsquo;s about 50-50 the candidates that ever open the docs&amp;mdash;the other half go straight to Stack Overflow to look for code to copy.</description>
-    </item>
-    
-    <item>
-      <title>Back to the Future</title>
-      <link>/2018/02/01/back-to-the-future/</link>
-      <pubDate>Thu, 01 Feb 2018 16:49:57 -0700</pubDate>
-      
-      <guid>/2018/02/01/back-to-the-future/</guid>
-      <description>When you submit a package update to CRAN, they ask you to check some boxes confirming that you&amp;rsquo;ve done your due diligence on your submission: that it passes its checks. One confirmation is that you&amp;rsquo;ve addressed any failures on the CRAN package check page, which looks like this.
-  Hey, all passing today!   This page is a window into one of the key features of CRAN: it runs continuous-integration tests of your package against multiple versions of R, on multiple operating systems, with the current version of your dependencies.</description>
     </item>
     
     <item>
@@ -48,25 +38,6 @@ That&amp;rsquo;s a great start, but why stop there? If you have a personal websi
       
       <guid>/2017/11/21/getting-down-with-pkgdown/</guid>
       <description>pkgdown is an incredibly powerful tool for building beautiful websites for R packages. With pkgdown and services like GitHub Pages, deploying a package website is so simple and straightforward that I&amp;rsquo;m starting to see it as an essential part of writing a package. What&amp;rsquo;s more, I&amp;rsquo;ve found that the act of preparing a package website has led me to improve the package itself, particularly the readability and usefulness of its documentation.</description>
-    </item>
-    
-    <item>
-      <title>One-Hour Package</title>
-      <link>/2017/08/11/one-hour-package/</link>
-      <pubDate>Fri, 11 Aug 2017 16:49:57 -0700</pubDate>
-      
-      <guid>/2017/08/11/one-hour-package/</guid>
-      <description>At Crunch, I occasionally pick up small coding projects to help with project management. Recently, I wanted a way to get automated reporting on our open issues in Usersnap, a service embedded in our web application that allows users to report bugs from within the app. My thought was to set up a cron job to report daily summaries in our Slack channel on things like the number of reports created, resolved, and so on, so that we could make sure that bug reports were being addressed quickly.</description>
-    </item>
-    
-    <item>
-      <title>Should You Add a Package Dependency?</title>
-      <link>/2017/08/05/should-you-add-a-package-dependency/</link>
-      <pubDate>Sat, 05 Aug 2017 21:49:57 -0700</pubDate>
-      
-      <guid>/2017/08/05/should-you-add-a-package-dependency/</guid>
-      <description>At Crunch, we’ve recently hired an “R Team” to build out our package offerings beyond what I could write in my spare time. It’s been great to have more resources to dedicate to our R tools, and it’s been particularly fun for me because now I get to have package design debates with other smart humans, not just inside my head.
-In one such debate, we discussed when it was appropriate to add a new dependency to a package.</description>
     </item>
     
   </channel>

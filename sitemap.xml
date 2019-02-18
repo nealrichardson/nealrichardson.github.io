@@ -12,6 +12,11 @@
   </url>
   
   <url>
+    <loc>/2019/02/17/writing-docs-is-better-than-having-docs/</loc>
+    <lastmod>2019-02-17T16:49:57-07:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/2019/02/08/analyzing-logs-with-aws-athena/</loc>
     <lastmod>2019-02-08T16:49:57-07:00</lastmod>
   </url>
@@ -98,7 +103,7 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2019-02-08T16:49:57-07:00</lastmod>
+    <lastmod>2019-02-17T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -133,7 +138,7 @@
   
   <url>
     <loc>/categories/code/</loc>
-    <lastmod>2019-02-08T16:49:57-07:00</lastmod>
+    <lastmod>2019-02-17T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -146,6 +151,12 @@
   <url>
     <loc>/tags/dependencies/</loc>
     <lastmod>2017-08-05T21:49:57-07:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/documentation/</loc>
+    <lastmod>2019-02-17T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -193,7 +204,7 @@
   
   <url>
     <loc>/tags/packages/</loc>
-    <lastmod>2018-02-01T16:49:57-07:00</lastmod>
+    <lastmod>2019-02-17T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -205,7 +216,7 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2019-02-08T16:49:57-07:00</lastmod>
+    <lastmod>2019-02-17T16:49:57-07:00</lastmod>
     <priority>0</priority>
   </url>
   

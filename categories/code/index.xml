@@ -6,10 +6,20 @@
     <description>Recent content in Code on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 08 Feb 2019 16:49:57 -0700</lastBuildDate>
+    <lastBuildDate>Sun, 17 Feb 2019 16:49:57 -0700</lastBuildDate>
     
 	<atom:link href="/categories/code/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Writing Docs Is Better Than Having Docs</title>
+      <link>/2019/02/17/writing-docs-is-better-than-having-docs/</link>
+      <pubDate>Sun, 17 Feb 2019 16:49:57 -0700</pubDate>
+      
+      <guid>/2019/02/17/writing-docs-is-better-than-having-docs/</guid>
+      <description>When interviewing developers at Crunch, we sometimes do a live coding exercise using a JavaScript data visualization library. It&amp;rsquo;s basic, and we don&amp;rsquo;t assume any prior knowledge of the library. To start, we tell the candidate that they can use the full internet to help them solve the problem (we&amp;rsquo;re trying to simulate real working conditions, after all), and by the way, this library has excellent documentation.
+It&amp;rsquo;s about 50-50 the candidates that ever open the docs&amp;mdash;the other half go straight to Stack Overflow to look for code to copy.</description>
+    </item>
     
     <item>
       <title>Analyzing Logs with AWS Athena</title>
