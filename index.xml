@@ -6,10 +6,19 @@
     <description>Recent content on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 17 Feb 2019 16:49:57 -0700</lastBuildDate>
+    <lastBuildDate>Wed, 17 Jul 2019 06:49:57 -0700</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>To Err Is Human; To Ignore, Divine</title>
+      <link>/2019/07/17/to-err-is-human-to-ignore-divine/</link>
+      <pubDate>Wed, 17 Jul 2019 06:49:57 -0700</pubDate>
+      
+      <guid>/2019/07/17/to-err-is-human-to-ignore-divine/</guid>
+      <description>One of the great things about leading a software project is the sense of ownership over what you and your team are creating. Your mind is buzzing with the big picture of what your project can do and will be able to do. You also sweat the details, and particularly if you&amp;rsquo;ve been with it from the beginning, you have unrivaled breadth and depth of knowledge about the project.</description>
+    </item>
     
     <item>
       <title>Writing Docs Is Better Than Having Docs</title>
@@ -179,7 +188,7 @@ This blogdown GitHub issue pointed to Yihui’s guide to building bookdown proje
       <pubDate>Mon, 01 May 2017 21:48:51 -0700</pubDate>
       
       <guid>/about/</guid>
-      <description>Hi. I&amp;rsquo;m a recovering academic currently working as product manager and engineering leader. I still like to code and play with data when I can.</description>
+      <description>Hi. I&amp;rsquo;m a recovering academic currently working as product and engineering leader. I still like to code and play with data when I can.</description>
     </item>
     
   </channel>
