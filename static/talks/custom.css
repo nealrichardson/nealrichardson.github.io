@@ -1,0 +1,24 @@
+h1.title, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  color: #34699A;
+}
+
+body {
+  color: #182125;
+}
+
+a {
+  color: #408AB4;
+}
+a:hover {
+  color: #65C6C4;
+}
+
+.blinking{
+  animation:blink 1s infinite;
+}
+
+@keyframes blink {
+	0% {opacity: 0}
+	49%{opacity: 0}
+	50% {opacity: 1}
+}

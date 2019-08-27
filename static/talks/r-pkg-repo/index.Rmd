@@ -1,0 +1,316 @@
+---
+title: "Publishing an R Package Repository with Public (Free!) Services"
+author: 'Neal Richardson<br/><span class="citation"><a href="https://twitter.com/enpiar">@enpiar</a></span>'
+date: 'August 26, 2019<br/><br/>Slides: <a href="https://enpiar.com/talks/r-pkg-repo/">enpiar.com/talks/r-pkg-repo/</a>'
+output:
+  xaringan::moon_reader:
+    css: [default, default-fonts, "../custom.css"]
+    nature:
+      highlightStyle: color-brewer
+      highlightLines: true
+      countIncrementalSlides: false
+---
+class: inverse
+
+# Nightly binaries for {arrow}
+
+https://twitter.com/enpiar/status/1164268274239983616
+
+> Want to see what's coming in the next release of @ApacheArrow for #rstats? Binary packages for macOS and Windows, built daily from the latest C++ and R code in apache/arrow, are now available:
+>
+> install.packages("arrow", repos="https://dl.bintray.com/ursalabs/arrow-r")
+
+--
+
+Driven by scripts at https://github.com/ursa-labs/arrow-r-nightly, scheduled to run once a day on Travis-CI and Appveyor, and publishing to Bintray
+
+---
+
+# Why would you want to do this?
+
+You probably don't. But you may be interested if
+
+--
+
+* Your 📦 has compiled code, so binaries install faster
+
+* Your 📦 has C/C++ dependencies, and binary packages the most reliable way to distribute
+
+* You can't get your 📦 on CRAN
+
+If none of these apply to you, this talk still offers some fun facts about R package repositories, as well useful tricks for getting things done on public CI .blinking[(for free!)]
+
+---
+
+# What is an R Package repository?
+
+It's just a file server with files in expected locations. Nothing magical.
+
+```
+├── bin
+│   ├── macosx
+│   │   └── el-capitan
+│   │       └── contrib
+│   │           └── 3.6
+│   │               ├── PACKAGES
+│   │               └── pkg_x.y.z.tgz
+│   └── windows
+│       └── contrib
+│           └── 3.6
+│               ├── PACKAGES
+│               └── pkg_x.y.z.zip
+└── src
+    └── contrib
+        ├── PACKAGES
+        └── pkg_x.y.z.tar.gz
+```
+
+---
+
+# Demystifying install.packages
+
+When you type `install.packages("pkgname")`, it
+
+1. Fetches the list of available source packages: `GET repo/src/contrib/PACKAGES`
+
+2. On macOS or Windows, gets the appropriate binary `PACKAGES` manifest
+
+3. Sees if `pkgname` is available, whether available as binary and/or source, and if both, whether the source version is newer.
+
+4. If exists, downloads the binary file listed in `PACKAGES`, or prompts for user input if source version is newer.
+
+---
+
+# Creating an R repository
+
+So, to host an R repository, all you need is to
+
+* build binary packages
+
+* generate the `PACKAGES` manifest file
+
+* put the files in the appropriate directory structure
+
+--
+
+### How?
+
+* R knows how to build binary packages and write `PACKAGES`
+
+* Travis-CI and Appveyor already do almost all the work for you
+
+* Add a deploy step to builds that push to Bintray
+
+---
+
+# Bintray
+
+bintray.com is "software distribution as a service"
+
+* Free accounts for open source projects
+
+* A bit of boilerplate to set up:
+  * Create a "generic" type repository
+  * Create a "package" within that
+  * Create a "version" within that
+
+* Also need to upload a source `PACKAGES` to `src/contrib/PACKAGES` because `install.packages()` will look for it. Locally,
+
+```
+R CMD build .
+Rscript -e 'tools::write_PACKAGES(".", type = "source")'
+```
+
+then upload the PACKAGES file it writes out using the bintray web app.
+
+---
+
+# General approach
+
+Given the "usual" Travis-CI and Appveyor build configuration,
+
+* Bump the package Version in the DESCRIPTION file
+
+* Build the binary package as part of the usual checks
+
+* Generate `PACKAGES`
+
+* Upload to Bintray to the right file path
+
+--
+
+These are handled by 2 scripts, which work on both Travis-CI and Appveyor:
+
+* [up-date-description.sh](https://github.com/ursa-labs/arrow-r-nightly/blob/master/up-date-description.sh)
+* [bintray-upload.sh](https://github.com/ursa-labs/arrow-r-nightly/blob/master/bintray-upload.sh)
+
+You can copy them into your project--just change the `BINTRAY_*` variables.
+
+Both Travis and Appveyor have a bintray deploy integration, but Appveyor's doesn't work for the R repo layout, and since I needed a script for one, I chose to use the same script for both.
+
+---
+
+# Simple .travis.yml
+
+```yaml
+language: r
+os: osx
+cache: packages
+r:
+- oldrel
+- release
+
+*r_check_args: '--as-cran --install-args="--build"'
+*before_install:
+*- source up-date-description.sh
+*after_success:
+*- source bintray-upload.sh
+```
+
+* Plus encrypted BINTRAY_APIKEY environment variable set at https://travis-ci.org/$USER/$REPO/settings
+* Get your bintray API key from https://bintray.com/profile/edit
+
+---
+
+# Add to appveyor.yml
+
+```yaml
+environment:
+  global:
+    BINTRAY_APIKEY:
+      secure: asdfasdfasdfasdfasdf
+before_build:
+  - cmd: bash up-date-description.sh
+on_success:
+  - cmd: bash bintray-upload.sh
+```
+
+* No need to add `--install-args="--build"`: that's already included in the Appveyor setup
+* Encrypt the bintray key using the form at https://ci.appveyor.com/tools/encrypt
+
+---
+
+# Script 1: Set patch version
+
+```
+TODAY=$(date +%Y%m%d)
+sed -i.bak -E -e \
+  's/(^Version: [0-9]+\.[0-9]+\.[0-9]+).*$/\1.'"${TODAY}"'/' \
+  DESCRIPTION
+rm -f DESCRIPTION.bak
+```
+
+* This is ideal for daily builds
+* Many alternatives (check for latest version in your repo and increment that, etc.)
+
+---
+
+# Upload script part 1: Variables to set
+
+```
+BINTRAY_USER=nealrichardson
+BINTRAY_ORG=ursalabs # aka "subject"
+BINTRAY_REPO=arrow-r
+BINTRAY_PKG=arrow
+BINTRAY_VERSION=latest
+R_PKG=$BINTRAY_PKG
+```
+
+* If you're using a personal bintray account, `BINTRAY_USER` and `BINTRAY_ORG` will probably be the same
+* `BINTRAY_PKG` and `BINTRAY_VERSION` will not appear in the repository URL you share, so they don't really matter. Makes sense for `BINTRAY_PKG` to be the same as your package name.
+* Since we're only hosting one package, `BINTRAY_REPO` can also just be your package name.
+
+---
+
+# Upload script part 2: Detect 📦 file & OS
+
+```
+PKG_FILE=$(ls ${R_PKG}_*.tgz 2> /dev/null)
+if [ "$PKG_FILE" != "" ]; then
+  PKG_TYPE="mac.binary.el-capitan"
+else
+  PKG_FILE=$(ls ${R_PKG}_*.zip 2> /dev/null)
+  if [ "$PKG_FILE" != "" ]; then
+    PKG_TYPE="win.binary"
+  else
+    echo "Binary package not found"
+    exit 1
+  fi
+fi
+```
+
+* Records `PKG_FILE` so we can upload it
+* `PKG_TYPE` is needed for some R functions
+
+---
+
+# Upload script part 3: Build upload URL
+
+```
+R_REPO_PATH=$(Rscript -e 'cat(contrib.url("", type = "'$PKG_TYPE'"))')
+
+BASE_URL="https://api.bintray.com/content/${BINTRAY_ORG}/${BINTRAY_REPO}"
+DST_URL="${BASE_URL}"/${BINTRAY_PKG}/${BINTRAY_VERSION}${R_REPO_PATH}"
+
+upload_file() {
+  curl -u "${BINTRAY_USER}:${BINTRAY_APIKEY}" /
+      -X PUT "${DST_URL}/$1?override=1&publish=1" /
+      --data-binary "@$1"
+}
+```
+
+* `contrib.url()` is a function called inside `install.packages()` et al. that knows how to construct the `/bin/macos/el-capitan/contrib/3.6/` path, based on the platform/package type requested
+* `upload_file` is just for convenience to wrap all of that up for reuse
+
+---
+
+# Upload script part 4: Send all the things
+
+```
+upload_file $PKG_FILE
+
+Rscript -e 'tools::write_PACKAGES(".", type = substr("'$PKG_TYPE'", 1, 10))'
+upload_file PACKAGES
+upload_file PACKAGES.gz
+upload_file PACKAGES.rds
+```
+
+* `tools::write_PACKAGES()` generates that manifest file. It actually makes three versions of it, compressed differently. (Only one is necessary but might as well upload them all.)
+* While `contrib.url()` requires the `"mac.binary.el-capitan"` type to give the right path, `write_PACKAGES()` only allows `"mac.binary"`, hence the `substr()`
+
+---
+
+# Final (optional) steps
+
+* Add a build matrix to repeat build for multiple R versions (`release` and `oldrel` is what CRAN does but you can do more)
+
+* Set scheduled builds (daily)
+
+---
+class: inverse, center, middle
+
+# "Demo"
+
+---
+### Before
+```r
+> install.packages("arrow", repos="https://cloud.r-project.org")
+trying URL '.../el-capitan/contrib/3.6/arrow_0.14.1.1.tgz'
+> library(arrow)
+> system.time(df <- read_parquet("demofile.parquet"))
+   user  system elapsed
+  5.192   5.533  11.382
+> dim(df)
+[1] 215694     21
+```
+
+--
+### After
+```r
+> install.packages("arrow", repos="https://dl.bintray.com/ursalabs/arrow-r")
+trying URL '.../el-capitan/contrib/3.6/arrow_0.14.1.20190826.tgz'
+> library(arrow)
+> system.time(df <- read_parquet("demofile.parquet"))
+   user  system elapsed
+  0.972   0.137   0.915
+```
