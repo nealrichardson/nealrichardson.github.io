@@ -1,0 +1,7 @@
+h1.title, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  color: #182125;
+}
+
+.remark-slide-content {
+  font-size: 24px;
+}

@@ -1,0 +1,76 @@
+---
+title: "rstudio::conf(2020) Arrow Dataset demo"
+output:
+  html_document:
+    df_print: paged
+    css: ["../remark_libs/remark-css-0.0.1/default.css", "../remark_libs/remark-css-0.0.1/default-fonts.css", "../custom.css", "../dark-titles.css"]
+
+---
+
+```{r setup, include = FALSE, cache = FALSE}
+require("knitr")
+opts_knit$set(root.dir = "~/Documents/ursa/nyc-taxi/all")
+```
+
+Using Arrow, we can point at a directory of files and treat them as a single
+dataset, and we can query them with `dplyr` syntax.
+
+```{r, warning = FALSE, message = FALSE}
+library(arrow)
+library(dplyr)
+```
+
+(`dplyr` is optional for `arrow`, so we need to load both packages.)
+
+I've got 10+ years of the NYC Taxi trip data in Parquet files,
+split into directories for years and months.
+Total of 125 files.
+
+```{r}
+files <- dir(recursive = TRUE)
+head(files)
+
+length(files)
+```
+
+This is somewhere around 2 billion rows, which even in compressed Parquet
+files is 37 gigs.
+
+```{r}
+system("du -h | tail", intern = TRUE) %>% cat(sep = "\n")
+```
+
+`open_dataset()` takes a directory argument, and we can also provide the file  
+path segments as a source of partition information so that we can query more
+efficiently.
+
+```{r}
+ds <- open_dataset("nyc-taxi", partitioning = c("year", "month"))
+ds
+```
+
+```{r}
+system.time(ds %>%
+  filter(total_amount > 100, year == 2015) %>%
+  select(tip_amount, total_amount, passenger_count) %>%
+  group_by(passenger_count) %>%
+  collect() %>%
+  summarize(
+    tip_pct = median(100 * tip_amount / total_amount),
+    n = n()
+  ) %>%
+  print())
+```
+
+All of the data window selection (select, filter) happens in Arrow, with work
+pushed down to the individual files, so we don't have to pull everything into
+memory in order to query. Data is only read in when you `collect()`.
+
+```{r}
+ds %>%
+  filter(total_amount > 100, year == 2015) %>%
+  select(tip_amount, total_amount, passenger_count) %>%
+  group_by(passenger_count)
+```
+
+[Back to slides](index.html#17)
