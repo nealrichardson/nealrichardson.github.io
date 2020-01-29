@@ -6,7 +6,7 @@ body {
   color: #182125;
 }
 
-a {
+a, a > code {
   color: #408AB4;
 }
 a:hover {
@@ -21,4 +21,26 @@ a:hover {
 	0% {opacity: 0}
 	49%{opacity: 0}
 	50% {opacity: 1}
+}
+
+.cols {
+  display: flex;
+}
+
+.fifty {
+  flex: 50%;
+}
+
+div.my-footer {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    height: 20px;
+    width: 100%;
+}
+div.my-footer span {
+    font-size: 10pt;
+    position: absolute;
+    left: 15px;
+    bottom: 2px;
 }
