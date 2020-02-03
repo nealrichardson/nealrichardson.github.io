@@ -6,17 +6,17 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>httptest: A Test Environment for HTTP Requests in R • httptest</title>
-<link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.1/clipboard.min.js" integrity="sha256-hIvIxeqhGZF+VVeM55k0mJvWpQ6gTkWk3Emc+NmowYA=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="httptest: A Test Environment for HTTP Requests in R">
 <meta property="og:description" content="This vignette covers the core features of the httptest package, focusing on how to mock HTTP responses, how to make assertions about requests, and how to record real requests for future use as mocks.">
 <meta name="twitter:card" content="summary">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-104182925-1"></script><script>
@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">httptest</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3.0</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
   </a>
 </li>
       </ul>
-<form class="navbar-form navbar-right" role="search">
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
         <div class="form-group">
           <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
@@ -105,6 +105,7 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -129,17 +130,17 @@
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
 <p>To illustrate the power of <code>with_mock_api</code>, let’s try to add tests to an R package that wraps a prominent web API. The <code>twitteR</code> package is quite popular (<a href="https://cranlogs.r-pkg.org/badges/twitteR">13k downloads per month</a>, at the time of writing), but like most R packages, it doesn’t have a test suite. Indeed, it is hard to test the querying of an API that requires OAuth authentication, and thus a user account to use in testing. That’s tricky to set up to run locally, and even more challenging to run on a continuous-integration service like Travis-CI. But <code>httptest</code> can help.</p>
-<p>First, we need to add <code>httptest</code> to our package test suite. Once you’ve configured your package to use <code>testthat</code> (<code><a href="http://www.rdocumentation.org/packages/usethis/topics/use_testthat">usethis::use_testthat()</a></code> is one way), run <code><a href="../reference/use_httptest.html">httptest::use_httptest()</a></code>. This adds <code>httptest</code> to your package <code>DESCRIPTION</code> and makes sure it is loaded in your test setup code.</p>
+<p>First, we need to add <code>httptest</code> to our package test suite. Once you’ve configured your package to use <code>testthat</code> (<code><a href="https://usethis.r-lib.org/reference/use_testthat.html">usethis::use_testthat()</a></code> is one way), run <code><a href="../reference/use_httptest.html">httptest::use_httptest()</a></code>. This adds <code>httptest</code> to your package <code>DESCRIPTION</code> and makes sure it is loaded in your test setup code.</p>
 <p>Now we can start with our tests. From some experimenting, it’s clear that the package checks to see if you have an OAuth token set. We’re not actually going to hit the real Twitter API, so we don’t need a valid token—we just need a token to exist so the R code that looks for a token finds one:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">use_oauth_token</span>(<span class="st">"foo"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">use_oauth_token</span>(<span class="st">"foo"</span>)</a></code></pre></div>
 <p>Let’s write a test. Add “test-user.R” to your test directory and put a test for getting a user record, via the <code>getUser</code> function. According to the source code, this function should hit the “show user” Twitter API, documented <a href="https://dev.twitter.com/rest/reference/get/users/show">here</a>. But, we’re going to prevent that request from actually happening by wrapping our test in the <code>with_mock_api</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">context</span>(<span class="st">"Get a user"</span>)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="../reference/with_mock_api.html">with_mock_api</a></span>({</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">    <span class="kw">test_that</span>(<span class="st">"We can get a user object"</span>, {</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">        user &lt;-<span class="st"> </span><span class="kw">getUser</span>(<span class="st">"twitterdev"</span>)</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">    })</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">})</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">context</span>(<span class="st">"Get a user"</span>)</a>
+<a class="sourceLine" id="cb2-2" title="2"></a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="kw"><a href="../reference/with_mock_api.html">with_mock_api</a></span>({</a>
+<a class="sourceLine" id="cb2-4" title="4">    <span class="kw">test_that</span>(<span class="st">"We can get a user object"</span>, {</a>
+<a class="sourceLine" id="cb2-5" title="5">        user &lt;-<span class="st"> </span><span class="kw">getUser</span>(<span class="st">"twitterdev"</span>)</a>
+<a class="sourceLine" id="cb2-6" title="6">    })</a>
+<a class="sourceLine" id="cb2-7" title="7">})</a></code></pre></div>
 <p>When we run the tests, it fails with</p>
 <pre><code>Get a user: Error:
     GET https://api.twitter.com/1.1/users/show.json?screen_name=twitterdev
@@ -148,32 +149,32 @@
 <p>Requests are translated to mock file paths according to several rules that incorporate the request method, URL, query parameters, and body. Query parameters and request bodies are incorporated into the file path by hashing—hence the <code>84627b</code> in the <code>getUser</code> example. If a request method other than GET is used, it will be appended to the end of the end of the file name. Mock file paths also have an extension appended because in an HTTP API, a “directory” itself is a resource. The extension allows distinguishing directories and files in the file system. That is, a mocked <code>GET("http://example.com/api/")</code> may read a “example.com/api.json” file, while <code>GET("http://example.com/api/object1/")</code> reads “example.com/api/object1.json”, and <code>POST("api/object1/?a=1")</code> would map to “api/object1-b64371-POST.json”.</p>
 <p>The file extension also gives information on content type. Files with <code>.json</code>, <code>.html</code>, <code>.xml</code>, <code>.txt</code>, <code>.csv</code>, and <code>.tsv</code> are loaded directly by <code>with_mock_api</code>, and relevant request metadata (<code>Content-Type</code> header, status code 200, etc.) are inferred. If your API doesn’t return one of these types, or if you want to simulate requests with other behavior (201 Location response, or 400 Bad Request, for example), you can store full <code>response</code> objects in .R files that <code>with_mock_api</code> will <code>source</code> to load. Any request can be stored as a .R mock, but the <code>.json</code> and other media types offer a simplified, more readable alternative.</p>
 <p>Back to the <code>getUser</code> example. The error message tells us that the request it is making—<code>GET https://api.twitter.com/1.1/users/show.json?screen_name=twitterdev</code>—is what we should expect based on the API documentation, so that’s good. Now let’s provide a mock response. The API documentation page has an example JSON response, which looks like</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode json"><code class="sourceCode json"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="fu">{</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">  <span class="dt">"id"</span><span class="fu">:</span> <span class="dv">2244994945</span><span class="fu">,</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">  <span class="dt">"id_str"</span><span class="fu">:</span> <span class="st">"2244994945"</span><span class="fu">,</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"TwitterDev"</span><span class="fu">,</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">  <span class="dt">"screen_name"</span><span class="fu">:</span> <span class="st">"TwitterDev"</span><span class="fu">,</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">  <span class="dt">"location"</span><span class="fu">:</span> <span class="st">"Internet"</span><span class="fu">,</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">  <span class="dt">"profile_location"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">  <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"Developer and Platform Relations @Twitter. We are</span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="st">      developer advocates. We can't answer all your questions, but we listen</span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="st">      to all of them!"</span><span class="fu">,</span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11">  <span class="dt">"url"</span><span class="fu">:</span> <span class="st">"https://t.co/66w26cua1O"</span><span class="fu">,</span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12">  <span class="er">...</span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="fu">}</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode json"><code class="sourceCode json"><a class="sourceLine" id="cb4-1" title="1"><span class="fu">{</span></a>
+<a class="sourceLine" id="cb4-2" title="2">  <span class="dt">"id"</span><span class="fu">:</span> <span class="dv">2244994945</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb4-3" title="3">  <span class="dt">"id_str"</span><span class="fu">:</span> <span class="st">"2244994945"</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb4-4" title="4">  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"TwitterDev"</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb4-5" title="5">  <span class="dt">"screen_name"</span><span class="fu">:</span> <span class="st">"TwitterDev"</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb4-6" title="6">  <span class="dt">"location"</span><span class="fu">:</span> <span class="st">"Internet"</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb4-7" title="7">  <span class="dt">"profile_location"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb4-8" title="8">  <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"Developer and Platform Relations @Twitter. We are</span></a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="st">      developer advocates. We can't answer all your questions, but we listen</span></a>
+<a class="sourceLine" id="cb4-10" title="10"><span class="st">      to all of them!"</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb4-11" title="11">  <span class="dt">"url"</span><span class="fu">:</span> <span class="st">"https://t.co/66w26cua1O"</span><span class="fu">,</span></a>
+<a class="sourceLine" id="cb4-12" title="12">  <span class="er">...</span></a>
+<a class="sourceLine" id="cb4-13" title="13"><span class="fu">}</span></a></code></pre></div>
 <p>Let’s copy that example response to the fixture file path that the message indicated, <code>api.twitter.com/1.1/users/show.json-84627b.json</code>. When we run the tests again, there’s no more error. Great! This means that <code>with_mock_api</code> loaded our mock when it reached the GET request, and the rest of the code continued executing. <code>getUser</code> returns a “user” object, so let’s now assert some things about it and test some of its methods:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">test_that</span>(<span class="st">"We can get a user object"</span>, {</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">    user &lt;-<span class="st"> </span><span class="kw">getUser</span>(<span class="st">"twitterdev"</span>)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">    <span class="kw">expect_is</span>(user, <span class="st">"user"</span>)</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">    <span class="kw">expect_identical</span>(user<span class="op">$</span>name, <span class="st">"TwitterDev"</span>)</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">    <span class="kw">expect_output</span>(<span class="kw">print</span>(user), <span class="st">"TwitterDev"</span>)</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">})</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">test_that</span>(<span class="st">"We can get a user object"</span>, {</a>
+<a class="sourceLine" id="cb5-2" title="2">    user &lt;-<span class="st"> </span><span class="kw">getUser</span>(<span class="st">"twitterdev"</span>)</a>
+<a class="sourceLine" id="cb5-3" title="3">    <span class="kw">expect_is</span>(user, <span class="st">"user"</span>)</a>
+<a class="sourceLine" id="cb5-4" title="4">    <span class="kw">expect_identical</span>(user<span class="op">$</span>name, <span class="st">"TwitterDev"</span>)</a>
+<a class="sourceLine" id="cb5-5" title="5">    <span class="kw">expect_output</span>(<span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(user), <span class="st">"TwitterDev"</span>)</a>
+<a class="sourceLine" id="cb5-6" title="6">})</a></code></pre></div>
 <p>We can do the same for the <code>lookupUsers</code> function. It should hit the <code>users/lookup.json</code> endpoint and the function should return a list of <code>user</code> objects:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">test_that</span>(<span class="st">"lookupUsers retrieves many"</span>, {</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">    result &lt;-<span class="st"> </span><span class="kw">lookupUsers</span>(<span class="kw">c</span>(<span class="st">"twitterapi"</span>, <span class="st">"twitter"</span>))</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">    <span class="kw">expect_is</span>(result, <span class="st">"list"</span>)</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">    <span class="kw">expect_true</span>(<span class="kw">all</span>(<span class="kw">vapply</span>(result, inherits, <span class="kw">logical</span>(<span class="dv">1</span>), <span class="dt">what=</span><span class="st">"user"</span>)))</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">})</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">test_that</span>(<span class="st">"lookupUsers retrieves many"</span>, {</a>
+<a class="sourceLine" id="cb6-2" title="2">    result &lt;-<span class="st"> </span><span class="kw">lookupUsers</span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"twitterapi"</span>, <span class="st">"twitter"</span>))</a>
+<a class="sourceLine" id="cb6-3" title="3">    <span class="kw">expect_is</span>(result, <span class="st">"list"</span>)</a>
+<a class="sourceLine" id="cb6-4" title="4">    <span class="kw">expect_true</span>(<span class="kw"><a href="https://rdrr.io/r/base/all.html">all</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span>(result, inherits, <span class="kw"><a href="https://rdrr.io/r/base/logical.html">logical</a></span>(<span class="dv">1</span>), <span class="dt">what=</span><span class="st">"user"</span>)))</a>
+<a class="sourceLine" id="cb6-5" title="5">})</a></code></pre></div>
 <p>Drop the example response from the <a href="https://dev.twitter.com/rest/reference/get/users/lookup">API documentation</a> in the right location, and that passes as well.</p>
 <p>We just went from zero tests to 25 percent line coverage in a few minutes, using 16 lines of code. We’ve tested a lot of the code that prepares the requests of the user API, and we’ve tested much of the code that handles the server’s response, the “user” objects that get created in R, and their methods. Our resulting test directory, containing both our test files and our API fixtures, looks like this:</p>
 <pre><code>tests
@@ -187,25 +188,25 @@
 │   └── test-user.R
 └── testthat.R</code></pre>
 <p>The full test code looks like this:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">context</span>(<span class="st">"Get a user"</span>)</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw">use_oauth_token</span>(<span class="st">"foo"</span>) <span class="co"># Pulled here from helper.R for clarity</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="kw"><a href="../reference/with_mock_api.html">with_mock_api</a></span>({</a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">    <span class="kw">test_that</span>(<span class="st">"We can get a user object"</span>, {</a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">        user &lt;-<span class="st"> </span><span class="kw">getUser</span>(<span class="st">"twitterdev"</span>)</a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">        <span class="kw">expect_is</span>(user, <span class="st">"user"</span>)</a>
-<a class="sourceLine" id="cb8-9" data-line-number="9">        <span class="kw">expect_identical</span>(user<span class="op">$</span>name, <span class="st">"TwitterDev"</span>)</a>
-<a class="sourceLine" id="cb8-10" data-line-number="10">        <span class="kw">expect_identical</span>(<span class="kw">name</span>(user), <span class="st">"TwitterDev"</span>)</a>
-<a class="sourceLine" id="cb8-11" data-line-number="11">        <span class="kw">expect_output</span>(<span class="kw">print</span>(user), <span class="st">"TwitterDev"</span>)</a>
-<a class="sourceLine" id="cb8-12" data-line-number="12">    })</a>
-<a class="sourceLine" id="cb8-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb8-14" data-line-number="14">    <span class="kw">test_that</span>(<span class="st">"lookupUsers retrieves many"</span>, {</a>
-<a class="sourceLine" id="cb8-15" data-line-number="15">        result &lt;-<span class="st"> </span><span class="kw">lookupUsers</span>(<span class="kw">c</span>(<span class="st">"twitterapi"</span>, <span class="st">"twitter"</span>))</a>
-<a class="sourceLine" id="cb8-16" data-line-number="16">        <span class="kw">expect_is</span>(result, <span class="st">"list"</span>)</a>
-<a class="sourceLine" id="cb8-17" data-line-number="17">        <span class="kw">expect_true</span>(<span class="kw">all</span>(<span class="kw">vapply</span>(result, inherits, <span class="kw">logical</span>(<span class="dv">1</span>), <span class="dt">what=</span><span class="st">"user"</span>)))</a>
-<a class="sourceLine" id="cb8-18" data-line-number="18">    })</a>
-<a class="sourceLine" id="cb8-19" data-line-number="19">})</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">context</span>(<span class="st">"Get a user"</span>)</a>
+<a class="sourceLine" id="cb8-2" title="2"></a>
+<a class="sourceLine" id="cb8-3" title="3"><span class="kw">use_oauth_token</span>(<span class="st">"foo"</span>) <span class="co"># Pulled here from helper.R for clarity</span></a>
+<a class="sourceLine" id="cb8-4" title="4"></a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="kw"><a href="../reference/with_mock_api.html">with_mock_api</a></span>({</a>
+<a class="sourceLine" id="cb8-6" title="6">    <span class="kw">test_that</span>(<span class="st">"We can get a user object"</span>, {</a>
+<a class="sourceLine" id="cb8-7" title="7">        user &lt;-<span class="st"> </span><span class="kw">getUser</span>(<span class="st">"twitterdev"</span>)</a>
+<a class="sourceLine" id="cb8-8" title="8">        <span class="kw">expect_is</span>(user, <span class="st">"user"</span>)</a>
+<a class="sourceLine" id="cb8-9" title="9">        <span class="kw">expect_identical</span>(user<span class="op">$</span>name, <span class="st">"TwitterDev"</span>)</a>
+<a class="sourceLine" id="cb8-10" title="10">        <span class="kw">expect_identical</span>(<span class="kw"><a href="https://rdrr.io/r/base/name.html">name</a></span>(user), <span class="st">"TwitterDev"</span>)</a>
+<a class="sourceLine" id="cb8-11" title="11">        <span class="kw">expect_output</span>(<span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(user), <span class="st">"TwitterDev"</span>)</a>
+<a class="sourceLine" id="cb8-12" title="12">    })</a>
+<a class="sourceLine" id="cb8-13" title="13"></a>
+<a class="sourceLine" id="cb8-14" title="14">    <span class="kw">test_that</span>(<span class="st">"lookupUsers retrieves many"</span>, {</a>
+<a class="sourceLine" id="cb8-15" title="15">        result &lt;-<span class="st"> </span><span class="kw">lookupUsers</span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"twitterapi"</span>, <span class="st">"twitter"</span>))</a>
+<a class="sourceLine" id="cb8-16" title="16">        <span class="kw">expect_is</span>(result, <span class="st">"list"</span>)</a>
+<a class="sourceLine" id="cb8-17" title="17">        <span class="kw">expect_true</span>(<span class="kw"><a href="https://rdrr.io/r/base/all.html">all</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span>(result, inherits, <span class="kw"><a href="https://rdrr.io/r/base/logical.html">logical</a></span>(<span class="dv">1</span>), <span class="dt">what=</span><span class="st">"user"</span>)))</a>
+<a class="sourceLine" id="cb8-18" title="18">    })</a>
+<a class="sourceLine" id="cb8-19" title="19">})</a></code></pre></div>
 <p>Note that none of the test code inside the <code>with_mock_api</code> block looks any different from how you’d write it if you were testing against a live server using just <code>testthat</code>. The goal is to make your tests just as natural to write as if you were using your package normally. The <code>with_mock_api</code> context handles all of the HTTP mocking seamlessly.</p>
 </div>
 </div>
@@ -216,9 +217,9 @@
 <p>Using API documentation to build a library of fixtures is one way to set up testing using <code>with_mock_api</code>. Alternatively, you can collect real HTTP responses to use as test fixtures. <code><a href="../reference/capture_requests.html">capture_requests()</a></code> is a context that records the responses from requests you make and stores them as mock files. This enables you to perform a series of requests against a live server once and then build your test suite using those mocks, running your tests in <code>with_mock_api</code>.</p>
 <p>In an interactive session, it may be easier to use the functions <code>start_capturing</code> and <code>stop_capturing</code> rather than the context manager. You can set up your R session, call <code><a href="../reference/capture_requests.html">start_capturing()</a></code>, and then do whatever commands or function calls that would make HTTP requests, and the responses will be grabbed.</p>
 <p>We could do something like</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="../reference/capture_requests.html">start_capturing</a></span>()</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw">searchTwitter</span>(<span class="st">"#rstats"</span>)</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw"><a href="../reference/capture_requests.html">stop_capturing</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw"><a href="../reference/capture_requests.html">start_capturing</a></span>()</a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="kw">searchTwitter</span>(<span class="st">"#rstats"</span>)</a>
+<a class="sourceLine" id="cb9-3" title="3"><span class="kw"><a href="../reference/capture_requests.html">stop_capturing</a></span>()</a></code></pre></div>
 <p>and as a result, we’d see a file created with a path/name of <code>api.twitter.com/1.1/search/tweets.json-ca54df.json</code>. The file will contain a JSON containing status matching the search query, per the <a href="https://dev.twitter.com/rest/reference/get/search/tweets">docs</a>.</p>
 <p>Both the <code>capture_requests</code> context and the <code>start_capturing</code> function follow the path setting of <code><a href="../reference/mockPaths.html">.mockPaths()</a></code>, which lets you specify a location other than the current working directory to which to write the response files. They also have a “simplify” argument that, when <code>TRUE</code> (the default), it records simplified <code>.json</code>, <code>.csv</code>, <code>.xml</code>, et al. files where appropriate (200 OK response with a supported <code>Content-Type</code>) and .R full “response” objects otherwise.</p>
 <p>While recording responses to use later in tests can be very convenient, we don’t always want to use captured responses, or at least not blindly. Real responses may contain information you want to sanitize or redact, like usernames, emails, or tokens. And real responses may be too big or messy to want to deal with. You may want to pare back a large set of results that a query returns down to four or five results and still have enough variation to test with.</p>
@@ -270,62 +271,62 @@
 <h1 class="hasAnchor">
 <a href="#testing-that-requests-arent-made" class="anchor"></a>Testing that requests aren’t made</h1>
 <p>Mocking API responses isn’t the only thing you might want to do in order to test your code. Sometimes, the request that matters is the one you don’t make. <code>httptest</code> provides several tools to test requests without concern for the responses, as well as the ability to ensure that requests aren’t made when they shouldn’t be.</p>
-<p><code>without_internet</code> is a context that simulates the situation when any network request will fail, as in when you are without an internet connection. Any HTTP request will raise an error with a well-defined shape, the same as what <code>with_mock_api</code> returns when no mock file is found. The error message has three elements: the request method (e.g. “GET”), the request URL, and the request body, if present. The verb-expectation functions, such as <code>expect_GET</code> and <code>expect_POST</code>, look for this shape.</p>
+<p><code>without_internet</code> is a context that simulates the situation when any network request will fail, as in when you are without an internet connection. Any HTTP request will raise an error with a well-defined shape, the same as what <code>with_mock_api</code> returns when no mock file is found. The error message has three elements: the request method (e.g. “GET”), the request URL, and the request body, if present. The verb-expectation functions, such as <code>expect_GET</code> and <code>expect_POST</code>, look for this shape.</p>
 <p>Here’s a example of how <code>without_internet</code> can be used to assert that code that should not make network requests in fact does not. This is a simplified version of a test from the <a href="http://enpiar.com/r/httpcache">httpcache</a> package, a library that implements a query cache for HTTP requests in R. The point of the query cache is that only the first time you make a certain GET request should it hit the remote API; subsequent requests should read from the cache and not make a request. The test first makes a request (artificially, using <code>with_fake_http</code>, the third test context the package provides) to prime the cache.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="../reference/with_fake_http.html">with_fake_http</a></span>({</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">    <span class="kw">test_that</span>(<span class="st">"Cache gets set on GET"</span>, {</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">        <span class="kw">expect_length</span>(<span class="kw">cacheKeys</span>(), <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb11-4" data-line-number="4">        <span class="kw"><a href="../reference/expect_verb.html">expect_GET</a></span>(a &lt;-<span class="st"> </span><span class="kw">GET</span>(<span class="st">"https://app.crunch.io/api/"</span>),</a>
-<a class="sourceLine" id="cb11-5" data-line-number="5">            <span class="st">"https://app.crunch.io/api/"</span>)</a>
-<a class="sourceLine" id="cb11-6" data-line-number="6">        <span class="kw">expect_length</span>(<span class="kw">cacheKeys</span>(), <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb11-7" data-line-number="7">        <span class="kw">expect_identical</span>(a, <span class="kw">getCache</span>(<span class="st">"https://app.crunch.io/api/"</span>))</a>
-<a class="sourceLine" id="cb11-8" data-line-number="8">    })</a>
-<a class="sourceLine" id="cb11-9" data-line-number="9">})</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw"><a href="../reference/with_fake_http.html">with_fake_http</a></span>({</a>
+<a class="sourceLine" id="cb11-2" title="2">    <span class="kw">test_that</span>(<span class="st">"Cache gets set on GET"</span>, {</a>
+<a class="sourceLine" id="cb11-3" title="3">        <span class="kw">expect_length</span>(<span class="kw">cacheKeys</span>(), <span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb11-4" title="4">        <span class="kw"><a href="../reference/expect_verb.html">expect_GET</a></span>(a &lt;-<span class="st"> </span><span class="kw">GET</span>(<span class="st">"https://app.crunch.io/api/"</span>),</a>
+<a class="sourceLine" id="cb11-5" title="5">            <span class="st">"https://app.crunch.io/api/"</span>)</a>
+<a class="sourceLine" id="cb11-6" title="6">        <span class="kw">expect_length</span>(<span class="kw">cacheKeys</span>(), <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb11-7" title="7">        <span class="kw">expect_identical</span>(a, <span class="kw">getCache</span>(<span class="st">"https://app.crunch.io/api/"</span>))</a>
+<a class="sourceLine" id="cb11-8" title="8">    })</a>
+<a class="sourceLine" id="cb11-9" title="9">})</a></code></pre></div>
 <p>Then, using <code>without_internet</code>, the test checks two things: first, that doing the same GET succeeds because it reads from cache; and second, that if you bypass the query cache, you get an error because you tried to make a network request.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="../reference/without_internet.html">without_internet</a></span>({</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">    <span class="kw">test_that</span>(<span class="st">"When the cache is set, can read from it even with no connection"</span>, {</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">        <span class="kw">expect_identical</span>(<span class="kw">GET</span>(<span class="st">"https://app.crunch.io/api/"</span>)<span class="op">$</span>url,</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">            <span class="st">"https://app.crunch.io/api/"</span>)</a>
-<a class="sourceLine" id="cb12-5" data-line-number="5">    })</a>
-<a class="sourceLine" id="cb12-6" data-line-number="6">    <span class="kw">test_that</span>(<span class="st">"But uncached() prevents reading from the cache"</span>, {</a>
-<a class="sourceLine" id="cb12-7" data-line-number="7">        <span class="kw">expect_error</span>(<span class="kw">uncached</span>(<span class="kw">GET</span>(<span class="st">"https://app.crunch.io/api/"</span>)),</a>
-<a class="sourceLine" id="cb12-8" data-line-number="8">            <span class="st">"GET https://app.crunch.io/api/"</span>)</a>
-<a class="sourceLine" id="cb12-9" data-line-number="9">    })</a>
-<a class="sourceLine" id="cb12-10" data-line-number="10">})</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw"><a href="../reference/without_internet.html">without_internet</a></span>({</a>
+<a class="sourceLine" id="cb12-2" title="2">    <span class="kw">test_that</span>(<span class="st">"When the cache is set, can read from it even with no connection"</span>, {</a>
+<a class="sourceLine" id="cb12-3" title="3">        <span class="kw">expect_identical</span>(<span class="kw">GET</span>(<span class="st">"https://app.crunch.io/api/"</span>)<span class="op">$</span>url,</a>
+<a class="sourceLine" id="cb12-4" title="4">            <span class="st">"https://app.crunch.io/api/"</span>)</a>
+<a class="sourceLine" id="cb12-5" title="5">    })</a>
+<a class="sourceLine" id="cb12-6" title="6">    <span class="kw">test_that</span>(<span class="st">"But uncached() prevents reading from the cache"</span>, {</a>
+<a class="sourceLine" id="cb12-7" title="7">        <span class="kw">expect_error</span>(<span class="kw">uncached</span>(<span class="kw">GET</span>(<span class="st">"https://app.crunch.io/api/"</span>)),</a>
+<a class="sourceLine" id="cb12-8" title="8">            <span class="st">"GET https://app.crunch.io/api/"</span>)</a>
+<a class="sourceLine" id="cb12-9" title="9">    })</a>
+<a class="sourceLine" id="cb12-10" title="10">})</a></code></pre></div>
 <p>This tells us that our cache is working as expected: we can get results from cache and we don’t make a (potentially expensive) network request more than once.</p>
 <div id="assert-the-shape-of-request-payloads" class="section level2">
 <h2 class="hasAnchor">
 <a href="#assert-the-shape-of-request-payloads" class="anchor"></a>Assert the shape of request payloads</h2>
 <p>Sometimes it is more clear what you’re testing if you focus only on the requests. One case is when the response itself isn’t that interesting or doesn’t tell you that the request did the correct thing. For example, if you’re testing a POST request that alters the state of something on the server and returns 204 No Content status on success, nothing in the response itself (which would be stored in the mock file) tells you that the request you made was shaped correctly—the response has no content. A more transparent, readable test would just assert that the POST request was made to the right URL and had the expected request body.</p>
 <p>Both <code>without_internet</code> and <code>with_mock_api</code> allow you to make assertions about requests—method, URL, and payload—that should be made. The various <code>expect_VERB</code> expectation functions facilitate this testing. In this example from the <code>crunch</code> package, inside the <code>with_mock_api</code> context, there is a catalog resource containing three entities, each of which has an “archived” attribute. The <code>is.archived</code> method returns the value of that attribute:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">test_that</span>(<span class="st">"is.archived"</span>, {</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">    <span class="kw">expect_identical</span>(<span class="kw">is.archived</span>(catalog), <span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>))</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">})</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">test_that</span>(<span class="st">"is.archived"</span>, {</a>
+<a class="sourceLine" id="cb13-2" title="2">    <span class="kw">expect_identical</span>(<span class="kw">is.archived</span>(catalog), <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>, <span class="ot">FALSE</span>))</a>
+<a class="sourceLine" id="cb13-3" title="3">})</a></code></pre></div>
 <p>When we update the attributes of the catalog’s entities, we send a PATCH request, and we only want to send values that are changing. That way, we don’t unintentionally collide with any other concurrent actions happening on the server, and we can send smaller messages, which should be faster. In this example, if we were to set “archived” to <code>TRUE</code> for the second and third elements of the catalog, we’d only want to send a PATCH request that referenced the third element because the second one is already <code>TRUE</code>.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">test_that</span>(<span class="st">"'archive' sets the archived attribute and only PATCHes changes"</span>, {</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">    <span class="kw"><a href="../reference/expect_verb.html">expect_PATCH</a></span>(<span class="kw">archive</span>(catalog[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>]),</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3">        <span class="st">'https://app.crunch.io/api/datasets/'</span>,</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4">        <span class="st">'{"https://app.crunch.io/api/datasets/3/":{"archived":true}}'</span>)</a>
-<a class="sourceLine" id="cb14-5" data-line-number="5">})</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">test_that</span>(<span class="st">"'archive' sets the archived attribute and only PATCHes changes"</span>, {</a>
+<a class="sourceLine" id="cb14-2" title="2">    <span class="kw"><a href="../reference/expect_verb.html">expect_PATCH</a></span>(<span class="kw">archive</span>(catalog[<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>]),</a>
+<a class="sourceLine" id="cb14-3" title="3">        <span class="st">'https://app.crunch.io/api/datasets/'</span>,</a>
+<a class="sourceLine" id="cb14-4" title="4">        <span class="st">'{"https://app.crunch.io/api/datasets/3/":{"archived":true}}'</span>)</a>
+<a class="sourceLine" id="cb14-5" title="5">})</a></code></pre></div>
 <p>The resulting state of the system is the same whether the smaller PATCH request is sent or whether the overly verbose one is sent. If you’ve written logic in your R code to ensure that the smaller PATCH is sent, testing the shape of the request being made is the clearest way to demonstrate and assert that the desired behavior is happening.</p>
 <p>Another instance of when you might care more about request body shape rather than the resulting response is when there are multiple paths in your R code that should lead to the same request being made. If you can assert that all of those variations result in the same request, then when it comes to testing the response and how your code handles it, you can do that once and not have to repeat for all of the input variations. This is particularly useful in conjunction with integration tests that run against a live server because it means you can have the same test coverage with fewer integration tests.</p>
 <p>An example of this from the <code>crunch</code> package is in testing a <code>join</code> function, which has a similar syntax to the base R <code>merge</code> function. <code>merge</code> takes “by.x” and “by.y” arguments, which point to the variables in the “x” and “y” data.frames on which to match the rows when merging. It has a shortcut for the case where the variable have the same names in both data.frame, in which case you can just specify a “by” argument. To test that all of those combinations of specifying join keys result in the same request, the test defines a payload string to reuse</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">testPayload &lt;-<span class="st"> </span><span class="kw">paste0</span>(</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">    <span class="st">'{"https://app.crunch.io/api/datasets/1/joins/95c0b45fe0af492594863f818cb913d2/":'</span>,</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">    <span class="st">'{"left_key":"https://app.crunch.io/api/datasets/1/variables/birthyr/",'</span>,</a>
-<a class="sourceLine" id="cb15-4" data-line-number="4">    <span class="st">'"right_key":"https://app.crunch.io/api/datasets/3/variables/birthyr/"}}'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">testPayload &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(</a>
+<a class="sourceLine" id="cb15-2" title="2">    <span class="st">'{"https://app.crunch.io/api/datasets/1/joins/95c0b45fe0af492594863f818cb913d2/":'</span>,</a>
+<a class="sourceLine" id="cb15-3" title="3">    <span class="st">'{"left_key":"https://app.crunch.io/api/datasets/1/variables/birthyr/",'</span>,</a>
+<a class="sourceLine" id="cb15-4" title="4">    <span class="st">'"right_key":"https://app.crunch.io/api/datasets/3/variables/birthyr/"}}'</span>)</a></code></pre></div>
 <p>and then asserts that three different ways of calling <code>join</code> result in the same <code>PATCH</code> request being made</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">test_that</span>(<span class="st">"Can specify 'by' variables several ways"</span>, {</a>
-<a class="sourceLine" id="cb16-2" data-line-number="2">    <span class="kw"><a href="../reference/expect_verb.html">expect_PATCH</a></span>(<span class="kw">join</span>(ds1, ds2, <span class="dt">by.x=</span>ds1<span class="op">$</span>birthyr, ds2<span class="op">$</span>birthyr),</a>
-<a class="sourceLine" id="cb16-3" data-line-number="3">        <span class="st">'https://app.crunch.io/api/datasets/1/joins/'</span>,</a>
-<a class="sourceLine" id="cb16-4" data-line-number="4">        testPayload)</a>
-<a class="sourceLine" id="cb16-5" data-line-number="5">    <span class="kw"><a href="../reference/expect_verb.html">expect_PATCH</a></span>(<span class="kw">join</span>(ds1, ds2, <span class="dt">by.x=</span><span class="st">"birthyr"</span>, <span class="dt">by.y=</span><span class="st">"birthyr"</span>),</a>
-<a class="sourceLine" id="cb16-6" data-line-number="6">        <span class="st">'https://app.crunch.io/api/datasets/1/joins/'</span>,</a>
-<a class="sourceLine" id="cb16-7" data-line-number="7">        testPayload)</a>
-<a class="sourceLine" id="cb16-8" data-line-number="8">    <span class="kw"><a href="../reference/expect_verb.html">expect_PATCH</a></span>(<span class="kw">join</span>(ds1, ds2, <span class="dt">by=</span><span class="st">"birthyr"</span>),</a>
-<a class="sourceLine" id="cb16-9" data-line-number="9">        <span class="st">'https://app.crunch.io/api/datasets/1/joins/'</span>,</a>
-<a class="sourceLine" id="cb16-10" data-line-number="10">        testPayload)</a>
-<a class="sourceLine" id="cb16-11" data-line-number="11">})</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">test_that</span>(<span class="st">"Can specify 'by' variables several ways"</span>, {</a>
+<a class="sourceLine" id="cb16-2" title="2">    <span class="kw"><a href="../reference/expect_verb.html">expect_PATCH</a></span>(<span class="kw">join</span>(ds1, ds2, <span class="dt">by.x=</span>ds1<span class="op">$</span>birthyr, ds2<span class="op">$</span>birthyr),</a>
+<a class="sourceLine" id="cb16-3" title="3">        <span class="st">'https://app.crunch.io/api/datasets/1/joins/'</span>,</a>
+<a class="sourceLine" id="cb16-4" title="4">        testPayload)</a>
+<a class="sourceLine" id="cb16-5" title="5">    <span class="kw"><a href="../reference/expect_verb.html">expect_PATCH</a></span>(<span class="kw">join</span>(ds1, ds2, <span class="dt">by.x=</span><span class="st">"birthyr"</span>, <span class="dt">by.y=</span><span class="st">"birthyr"</span>),</a>
+<a class="sourceLine" id="cb16-6" title="6">        <span class="st">'https://app.crunch.io/api/datasets/1/joins/'</span>,</a>
+<a class="sourceLine" id="cb16-7" title="7">        testPayload)</a>
+<a class="sourceLine" id="cb16-8" title="8">    <span class="kw"><a href="../reference/expect_verb.html">expect_PATCH</a></span>(<span class="kw">join</span>(ds1, ds2, <span class="dt">by=</span><span class="st">"birthyr"</span>),</a>
+<a class="sourceLine" id="cb16-9" title="9">        <span class="st">'https://app.crunch.io/api/datasets/1/joins/'</span>,</a>
+<a class="sourceLine" id="cb16-10" title="10">        testPayload)</a>
+<a class="sourceLine" id="cb16-11" title="11">})</a></code></pre></div>
 <p>Subsequent integration tests that assert that the dataset is correctly modified on the server by <code>join</code> then only test with one of those ways of specifying the “by” variables. The R code that constructs the request is fully covered by these assertions.</p>
 </div>
 </div>
@@ -337,6 +338,7 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -361,19 +363,20 @@
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by Neal Richardson.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
 
       </footer>
 </div>
 
   
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script><script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
   docsearch({
     
     
