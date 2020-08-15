@@ -1,0 +1,688 @@
+---
+title: "Speeding Up Data Access With Apache Arrow"
+subtitle: ""
+pagetitle: "Speeding Up Data Access With Apache Arrow"
+author: 'Wes McKinney <span class="citation"><a href="https://twitter.com/wesmckinn">@wesmckinn</a></span><br/>Neal Richardson <span class="citation"><a href="https://twitter.com/enpiar">@enpiar</a></span>'
+date: 'August 15, 2020<br/>Slides: <a href="https://enpiar.com/talks/nyr-2020/">enpiar.com/talks/nyr-2020/</a>'
+output:
+  xaringan::moon_reader:
+    css: ["../remark_libs/remark-css-0.0.1/default.css", "../remark_libs/remark-css-0.0.1/default-fonts.css", "../custom.css", "../dark-titles.css", "nyr-2020.css"]
+    chakra: ../remark_libs/remark-latest.min.js
+    nature:
+      highlightStyle: color-brewer
+      highlightLines: true
+      countIncrementalSlides: false
+
+---
+
+layout: true
+
+<div class="my-footer"><span>https://enpiar.com/talks/nyr-2020/</span></div>
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.path = "img/"
+)
+
+# This is adapted from vroom's benchmark vignette so we can include graphs from it
+# For the data, install vroom from my arrow-benchmarks branch
+
+library(ggplot2)
+library(gghighlight)
+library(forcats)
+library(dplyr)
+library(tidyr)
+library(fs)
+
+
+read_benchmark <- function(file, desc) {
+  vroom::vroom(file, col_types = c("ccccddddd")) %>%
+    filter(op != "setup") %>%
+    mutate(
+      altrep = case_when(
+        grepl("^vroom_no_altrep", reading_package) ~ FALSE,
+        grepl("^vroom", reading_package) ~ TRUE,
+        TRUE ~ NA
+      ),
+      reading_package = case_when(
+        grepl("^vroom", reading_package) ~ "vroom",
+        TRUE ~ reading_package
+      ),
+    label = fct_reorder(
+      glue::glue("{reading_package}{altrep}\n{manip_package}",
+        altrep = ifelse(is.na(altrep), "", glue::glue("(altrep = {altrep})"))
+      ),
+      case_when(type == "real" ~ time, TRUE ~ 0),
+      sum),
+    op = factor(op, desc)
+  )
+}
+
+generate_subtitle <- function(data) {
+  rows <- scales::comma(data$rows[[1]])
+  cols <- scales::comma(data$cols[[1]])
+  size <- fs_bytes(data$size[[1]])
+  glue::glue("{rows} x {cols} - {size}B")
+}
+
+plot_benchmark <- function(data, title) {
+
+  subtitle <- generate_subtitle(data)
+  data <- data %>%
+    filter(reading_package != "read.delim", type == "real")
+
+  data %>%
+    ggplot() +
+    geom_bar(aes(x = label, y = time, fill = op, group = label), stat = "identity") +
+    scale_fill_brewer(type = "qual", palette = "Set2") +
+    scale_y_continuous(labels = scales::number_format(suffix = "s")) +
+    coord_flip() +
+    labs(title = title, subtitle = subtitle, x = NULL, y = NULL, fill = NULL) +
+    theme(
+      axis.text = element_text(size = 14),
+      legend.position = "right"
+    )
+}
+
+desc <- c("setup", "read", "print", "head", "tail", "sample", "filter", "aggregate")
+```
+
+---
+
+# Ursa Labs
+
+.cols[
+.fifty[
+
+<img src="img/ursa.png" />
+
+https://ursalabs.org
+
+]
+
+.fifty[
+
+* Build cross-language, open libraries for data science
+
+* Grow **Apache Arrow** ecosystem
+
+* Funding and employment for full-time developers
+
+* **Not-for-profit**, funded by multiple corporations
+
+]
+]
+
+---
+
+## Current generation data frame (tabular) computing is highly inefficient
+
+* High fraction of compute spent on **serialization** (converting between data formats)
+
+* Inefficient in-memory computing that **fails to fully utilize modern hardware capabilities**
+
+* Much developer time spent building data connectors and maintaining **glue code**
+
+### *Our mission is to make scalable data processing faster, simpler, and more cost-efficient for the world’s data scientists*
+
+
+---
+
+# <img src="https://arrow.apache.org/img/arrow.png" height="100" />
+
+* Started 2016, 1.0 release July 2020
+
+* Shared foundation for data analysis, built on lessons of existing data frame libraries and databases
+
+* Designed to take advantage of modern hardware
+
+🔗 https://arrow.apache.org/
+
+---
+
+# <img src="https://arrow.apache.org/img/arrow.png" height="100" />
+
+.cols[
+.fifty[
+
+**Format** for how data is arranged in memory: columnar, language-independent
+
+<img src="img/simd.png" />
+
+]
+
+.fifty[
+
+
+]
+]
+
+---
+
+# <img src="https://arrow.apache.org/img/arrow.png" height="100" />
+
+.cols[
+.fifty[
+
+**Format** for how data is arranged in memory: columnar, language-independent
+
+<img src="img/simd.png" />
+]
+
+.fifty[
+**Implementations** or bindings in 11 languages
+
+<img src="img/language_logos.png" />
+... and more
+
+
+]
+]
+
+
+---
+
+# Thriving open-source community
+
+<img src="img/arrow-contributors.png" />
+
+---
+
+# The arrow R package
+
+### CRAN release
+
+```r
+install.packages("arrow")
+```
+
+https://arrow.apache.org/docs/r/
+
+### Nightly dev builds
+
+```r
+arrow::install_arrow(nightly = TRUE)
+```
+
+https://ursalabs.org/arrow-r-nightly/
+
+---
+
+# rstudio::conf, 6 ~~years~~ months ago
+
+Demo of reading a multi-file Parquet dataset
+
+https://enpiar.com/talks/rstudio-conf-2020/demo.html
+
+125 files, ~2 billion rows
+
+--
+
+```r
+ds <- open_dataset("nyc-taxi", partitioning = c("year", "month"))
+
+system.time(ds %>%
+  filter(total_amount > 100, year == 2015) %>%
+  select(tip_amount, total_amount, passenger_count) %>%
+  group_by(passenger_count) %>%
+  collect() %>%
+  summarize(
+    tip_pct = median(100 * tip_amount / total_amount),
+    n = n()
+  ) %>%
+  print())
+```
+
+---
+# rstudio::conf, 6 ~~years~~ months ago
+
+```r
+## # A tibble: 10 x 3
+##    passenger_count tip_pct      n
+##              <int>   <dbl>  <int>
+##  1               0    9.84    380
+##  2               1   16.7  143087
+##  3               2   16.6   34418
+##  4               3   14.4    8922
+##  5               4   11.4    4771
+##  6               5   16.7    5806
+##  7               6   16.7    3338
+##  8               7   16.7      11
+##  9               8   16.7      32
+## 10               9   16.7      42
+
+##    user  system elapsed
+##  26.735   1.159   4.076
+```
+
+---
+
+# rstudio::conf, 6 ~~years~~ months ago
+
+```r
+## # A tibble: 10 x 3
+##    passenger_count tip_pct      n
+##              <int>   <dbl>  <int>
+##  1               0    9.84    380
+##  2               1   16.7  143087
+##  3               2   16.6   34418
+##  4               3   14.4    8922
+##  5               4   11.4    4771
+##  6               5   16.7    5806
+##  7               6   16.7    3338
+##  8               7   16.7      11
+##  9               8   16.7      32
+## 10               9   16.7      42
+
+*##    user  system elapsed
+*##   3.829   3.108   1.842   <----------- 2x faster today
+```
+
+---
+class: inverse, center, middle
+
+<img src="img/ludicrous-speed.gif" height="400"/>
+
+
+---
+
+class: inverse, center, middle
+
+# But what if I don't have Parquet files?
+
+---
+
+# 1. Read multi-file CSV datasets
+
+### Included in 1.0
+
+```r
+ds <- open_dataset("nyc-taxi/csv/2019", format = "csv",
+  partitioning = "month")
+ds
+
+## FileSystemDataset with 6 csv files
+## vendor_id: int64
+## pickup_at: timestamp[s]
+## dropoff_at: timestamp[s]
+## passenger_count: int64
+## trip_distance: double
+## rate_code_id: int64
+...
+```
+
+---
+
+# 1. Read multi-file CSV datasets
+
+### Included in 1.0
+
+```r
+system.time(ds %>%
+  filter(payment_type == 3, total_amount > 10) %>%
+  select(tip_amount, total_amount, passenger_count) %>%
+  group_by(passenger_count) %>%
+  collect() %>%
+  summarize(
+    tip_pct = mean(100 * tip_amount / total_amount),
+    n = n()
+  ) %>%
+  print())
+```
+
+---
+
+# 1. Read multi-file CSV datasets
+
+### Included in 1.0
+
+```r
+## # A tibble: 7 x 3
+##   passenger_count tip_pct     n
+##             <int>   <dbl> <int>
+## 1               0 0.0275   5588
+## 2               1 0.0121  73385
+## 3               2 0.0113  15918
+## 4               3 0.00626  4041
+## 5               4 0.00558  2981
+## 6               5 0         107
+## 7               6 0          55
+
+##    user  system elapsed
+##  27.951  14.728   7.639
+```
+
+---
+
+# 2. Write datasets to Parquet or Feather
+
+### Not yet released
+
+```r
+feather_dir <- "feather-taxi"
+ds %>%
+  group_by(payment_type) %>%
+  write_dataset(feather_dir, format = "feather")
+```
+
+---
+
+# 2. Write datasets to Parquet or Feather
+
+### Not yet released
+
+```r
+feather_dir <- "feather-taxi"
+ds %>%
+* group_by(payment_type) %>%
+  write_dataset(feather_dir, format = "feather")
+```
+
+---
+
+# 2. Write datasets to Parquet or Feather
+
+### Not yet released
+
+```r
+system("tree feather-taxi")
+
+# feather-taxi
+# ├── payment_type=1
+# │   ├── dat_0.ipc
+# │   ├── dat_1.ipc
+# │   ├── dat_2.ipc
+# │   ├── dat_3.ipc
+# │   ├── dat_4.ipc
+# │   └── dat_5.ipc
+# ├── payment_type=2
+# │   ├── dat_0.ipc
+# ...
+# └── payment_type=5
+#     └── dat_2.ipc
+#
+# 5 directories, 25 files
+```
+---
+
+# 2. Write datasets to Parquet or Feather
+
+### Not yet released
+
+```r
+ds2 <- open_dataset(feather_dir, format = "feather")
+system.time(ds2 %>%
+  filter(payment_type == 3, total_amount > 10) %>%
+  select(tip_amount, total_amount, passenger_count) %>%
+  group_by(passenger_count) %>%
+  collect() %>%
+  summarize(
+    tip_pct = mean(100 * tip_amount / total_amount),
+    n = n()
+  ) %>%
+  print())
+```
+
+---
+
+# 2. Write datasets to Parquet or Feather
+
+### Not yet released
+
+```r
+## # A tibble: 7 x 3
+##   passenger_count tip_pct     n
+##             <int>   <dbl> <int>
+## 1               0 0.0275   5588
+## 2               1 0.0121  73385
+## 3               2 0.0113  15918
+## 4               3 0.00626  4041
+## 5               4 0.00558  2981
+## 6               5 0         107
+## 7               6 0          55
+
+##    user  system elapsed
+*##   0.118   0.062   0.073   <----------- 100x faster
+```
+
+---
+class: inverse, center, middle
+
+<img src="img/gone-plaid.gif" height="400"/>
+
+---
+class: center, middle, inverse
+
+# Your friend, the CSV
+
+---
+
+# What is R's fastest CSV reader?
+
+--
+
+* `base::read.csv()`
+
+--
+
+* `readr::read_csv()`
+
+--
+
+* `data.table::fread()`
+
+--
+
+* `vroom::vroom()`
+
+--
+
+* Something else? (`arrow::read_csv_arrow()`?)
+
+---
+
+# It depends!
+
+* System specs
+
+  * CPU
+  * Memory
+  * Operating system
+  * File system
+  * Libraries, compilers, etc.
+
+* Test data features
+
+  * Size
+  * Shape
+  * Data types
+  * Missing/sparseness
+  * ...
+
+---
+
+# How do you compare speed?
+
+Run **benchmarks** to systematically compare code head-to-head
+
+Like a scientific experiment:
+
+* Hold everything else constant so we can attribute speed differences to the code
+
+* Explicit and reproducible
+
+Several R packages can help with this: `microbenchmark`, `bench`, etc.
+
+--
+
+Internal vs. external validity: "YMMV" even with the best benchmarks
+
+---
+
+# vroom's benchmarks
+
+https://vroom.r-lib.org/articles/benchmarks.html
+
+* Tests several different kinds of data files and shapes, including "real" data
+
+* Runs a series of real example workflows
+
+* Honest: `vroom` isn't the fastest at everything
+
+* Reproducible: all scripted and documented
+
+???
+
+* vroom has great benchmarks vignette. Tests several different kinds of data files and shapes, also tests a series of real example workflows that you would do against a dataset. This is because one of the ways vroom gets such good read performance is that it lazily does the parsing and reading into R, which can be expensive. So "read" time might be tiny but processing time is higher than if all of the data were in memory in R.
+
+* One of the especially great things about the vroom benchmarks is that they are fully scripted and reproducible, and include instructions for setting up and running them. Makes it easy for Jim to update them with every vroom release. They're *also* really easy to extend by adding additional R scripts.
+
+---
+
+# Extending vroom's benchmarks
+
+I added some variants:
+
+--
+
+* `arrow::read_csv_arrow()` to read into an R data.frame, then use dplyr or data.table on that
+
+--
+
+* `arrow::read_csv_arrow(as_data_frame = FALSE)` to return an Arrow Table and compute on that in Arrow (where possible)
+
+--
+
+* `cudf$read_csv()`: Python GPU data frame library built on top of Arrow, called from R via `reticulate`
+
+<img src="img/rapids_logo.png" height="80"/>
+
+---
+
+# Extending vroom's benchmarks
+
+Report: https://enpiar.com/talks/nyr-2020/benchmarks.html
+
+Source: [https://github.com/nealrichardson/vroom/tree/arrow-benchmarks](https://github.com/r-lib/vroom/compare/master...nealrichardson:arrow-benchmarks)
+
+* Environment: NVIDIA DGX workstation
+  * CPU: 20-core Intel Xeon @ 2.20GHz, 256 GB RAM (2400 MHz), SSD
+  * GPU: 4 NVIDIA V100 GPUs, 5,120 CUDA cores and 32 GB memory per GPU
+
+* Dev version of Arrow package for some post-1.0 release enhancements
+
+* `cudf` 0.15 (pre-release nightly build)
+
+* Release version of all other packages, via `conda`
+
+---
+
+# Extending vroom's benchmarks
+
+Report: https://enpiar.com/talks/nyr-2020/benchmarks.html
+
+Source: [https://github.com/nealrichardson/vroom/tree/arrow-benchmarks](https://github.com/r-lib/vroom/compare/master...nealrichardson:arrow-benchmarks)
+
+Example workflow:
+
+```r
+({ library(readr); library(dplyr) })
+x <- read_csv(file)
+print(x)
+a <- head(x)
+b <- tail(x)
+c <- sample_n(x, 100)
+d <- filter(x, payment_type == "UNK")
+e <- x %>%
+  group_by(payment_type) %>%
+  summarise(avg_tip = mean(tip_amount))
+```
+
+---
+class: less-padding
+
+```{r taxi-single, fig.retina = 2, fig.height = 8, fig.width=12, warning = FALSE, echo = FALSE, message = FALSE}
+taxi <- read_benchmark(path_package("vroom", "bench", "taxi.tsv"), desc)
+
+taxi_plot <- plot_benchmark(taxi, "Time to analyze taxi trip data")
+taxi_plot
+```
+
+---
+class: less-padding
+
+```{r taxi-single-arrow, fig.retina = 2, fig.height = 8, fig.width=12, warning = FALSE, echo = FALSE, message = FALSE}
+taxi_plot + gghighlight(grepl("arrow|cudf", label), use_direct_label = FALSE)
+```
+
+---
+
+# NYC taxi trip data, one file
+
+* Pure arrow (keeping the data in Arrow memory) is overall fastest, even though aggregation still happens in R
+
+* `cudf` is super fast at the grouped mean calculation: 100ms over 15 million rows!
+
+---
+
+class: less-padding
+
+```{r taxi-single-df, fig.retina = 2, fig.height = 8, fig.width=12, warning = FALSE, echo = FALSE, message = FALSE}
+taxi_plot + gghighlight(op == "read", grepl("dplyr$|table$", label), !grepl("TRUE", label), use_direct_label = FALSE)
+```
+
+---
+
+# NYC taxi trip data, one file
+
+* Pure arrow (keeping the data in Arrow memory) is overall fastest, even though aggregation still happens in R
+
+* `cudf` is super fast at the grouped mean calculation: 100ms over 15 million rows!
+
+* Arrow's CSV reader is significantly faster at producing a `data.frame`: can use it in combination with your favorite R computation packages
+
+---
+
+# All numeric/character
+
+* Benchmarks with two variations of all numeric (random normal distribution) and all random strings
+  * 1,000,000 x 25 (long)
+  * 100,000 x 1,000 (wide)
+
+* Numeric: Arrow is faster than the rest (except `data.table`) on the "long" data but less outstanding on "wide"
+* String: Arrow-in-arrow is like vroom-with-ALTREP in terms of speed (10-20x faster than `data.table`, which is faster than the rest) due to efficiency of Arrow's string data type.
+
+---
+class: less-padding
+
+```{r taxi-multiple, fig.retina = 2, fig.height = 8, fig.width=12, warning = FALSE, echo = FALSE, message = FALSE}
+taxi_multiple <- read_benchmark(path_package("vroom", "bench", "taxi_multiple.tsv"), desc)
+
+plot_benchmark(taxi_multiple, "Time to analyze multiple file data")
+```
+
+---
+
+
+# Conclusions
+
+* `arrow` can't do everything yet. But what it can do today is really, really fast:
+
+  * `arrow::read_csv_arrow()` to get an R `data.frame` and using `dplyr`/`data.table`/`whatever` on it
+
+  * Arrow especially stands out when you have (1) string data and/or (2) millions of rows
+
+  * The currently available Arrow compute functions, esp. for filtering data, are super fast
+
+* More and more is getting implemented in `arrow`, so stay tuned...
+
+---
+class: inverse, center, middle
+
+background-image: url(img/plaid.gif)
+background-size: cover
+
+## Thank you!
+
+@ApacheArrow<br/>@wesmckinn<br/>@enpiar

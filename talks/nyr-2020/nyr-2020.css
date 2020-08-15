@@ -1,0 +1,18 @@
+.title-slide {
+  background-image: url(img/hyperspace.jpg);
+  background-size: cover;
+  vertical-align: bottom !important;
+  text-align: left !important;
+}
+
+.title-slide a {
+  color: #FFE81F;
+}
+
+.inverse h1 {
+  color: #FFE81F;
+}
+
+.less-padding {
+  padding: 0.5em;
+}
