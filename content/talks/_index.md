@@ -7,6 +7,9 @@ weight = 1
 
 Here are slides from a few talks I've given in recent years:
 
+-   [Speeding Up Data Access With Apache Arrow](/talks/nyr-2020/):
+Overview of enhancements from 2020 in the [`arrow`](https://arrow.apache.org/docs/r) R package, plus some CSV reading benchmarks. Talk given at the [New York (virtual) R Conference](https://rstats.ai/nyr/), August 2020.
+
 -   [Accelerating Analytics With Apache Arrow](/talks/rstudio-conf-2020/):
 What [Arrow](https://arrow.apache.org) is,
 what the latest developments in the [`arrow`](https://arrow.apache.org/docs/r) R package are,
