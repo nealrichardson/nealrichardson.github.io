@@ -377,6 +377,9 @@ Let's use one of the taxi data CSVs we downloaded
 
 ```r
 df &lt;- read_csv_arrow("trip_fare_1.csv")
+
+##    user  system elapsed
+##  18.540  16.263   5.855
 ```
 
 Arguments follow naming conventions from `readr::read_csv()`
@@ -389,7 +392,9 @@ https://arrow.apache.org/docs/r/reference/read_delim_arrow.html
 
 ```r
 tab &lt;- read_csv_arrow("trip_fare_1.csv", as_data_frame = FALSE)
-tab
+
+##    user  system elapsed
+##  14.148   2.672   0.569
 ```
 
 ---
@@ -876,7 +881,20 @@ ds2 %&gt;%
     avg_tip = mean(100 * tip_amount / total_amount, na.rm = TRUE),
     n = n()
   )
+
+## # A tibble: 4 x 3
+##  payment_type avg_tip     n
+##  &lt;chr&gt;          &lt;dbl&gt; &lt;int&gt;
+## 1 CRD           15.2   58626
+## 2 CSH            0.758  8286
+## 3 DIS            0.835   369
+## 4 NOC            1.31    877
+
+##    user  system elapsed
+##   9.341   0.931   0.647
 ```
+
+Same query against CSV dataset without partitioning is 5.613s, 9x slower
 
 ---
 
@@ -932,6 +950,8 @@ https://arrow.apache.org/docs/r/articles/fs.html
 
 For demonstration, we're going to use the public S3 bucket from the arrow dataset vignette
 
+We're demoing on an `m5.8xlarge` EC2 instance in the same region as this S3 bucket, so we should expect reasonable performance
+
 ```r
 ds &lt;- open_dataset("s3://ursa-labs-taxi-data")
 ```
@@ -957,7 +977,13 @@ ds %&gt;%
     tip_pct = median(100 * tip_amount / total_amount),
     n = n()
   )
+
+##    user  system elapsed
+##   6.143   1.755  12.507
 ```
+
+Slower than if the data were local, but good performance given that we're querying against S3
+
 
 ---
 
@@ -966,6 +992,15 @@ ds %&gt;%
 ```r
 bucket$ls()
 df &lt;- read_parquet(bucket$path("2019/03/data.parquet"))
+
+##    user  system elapsed
+##   3.708   1.255   4.746
+
+# Compare to if the file is local:
+copy_files(bucket$path("2019/03"), ".")
+system.time(df &lt;- read_parquet("data.parquet"))
+##    user  system elapsed
+##   2.999   0.912   1.337
 ```
 
 ---
@@ -1028,6 +1063,10 @@ system.time(b2 &lt;- flight_get(client, "taxi"))
 ##    user  system elapsed
 ##   0.540   1.245   2.094
 ```
+
+Data as Feather on disk: 341M
+
+Works out to 1.33 gigabits/second
 
 ---
 class: center, middle, inverse
