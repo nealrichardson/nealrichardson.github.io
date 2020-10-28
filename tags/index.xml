@@ -57,15 +57,6 @@
     </item>
     
     <item>
-      <title>Dependencies</title>
-      <link>/tags/dependencies/</link>
-      <pubDate>Sat, 05 Aug 2017 21:49:57 -0700</pubDate>
-      
-      <guid>/tags/dependencies/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Documentation</title>
       <link>/tags/documentation/</link>
       <pubDate>Sun, 17 Feb 2019 16:49:57 -0700</pubDate>
@@ -116,15 +107,6 @@
       <pubDate>Wed, 17 Jul 2019 06:49:57 -0700</pubDate>
       
       <guid>/tags/management/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Meta</title>
-      <link>/tags/meta/</link>
-      <pubDate>Thu, 01 Jun 2017 21:49:57 -0700</pubDate>
-      
-      <guid>/tags/meta/</guid>
       <description></description>
     </item>
     
@@ -269,15 +251,6 @@
       <pubDate>Sun, 11 Nov 2018 09:00:57 -0700</pubDate>
       
       <guid>/tags/testing/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Travis Ci</title>
-      <link>/tags/travis-ci/</link>
-      <pubDate>Thu, 01 Jun 2017 21:49:57 -0700</pubDate>
-      
-      <guid>/tags/travis-ci/</guid>
       <description></description>
     </item>
     
