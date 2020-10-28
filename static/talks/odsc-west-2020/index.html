@@ -14,7 +14,7 @@
 class: center, middle, inverse, title-slide
 
 # Fast Data Access in R and Python with
-## <img src="img/arrow-inverse.png"/>
+## <img src="../rstudio-conf-2020/img/arrow-inverse.png"/>
 ### Neal Richardson<br/><span class="citation"><a href="https://twitter.com/enpiar"><span class="citation">@enpiar</span></a></span>
 ### October 27, 2020<br/>Slides: <a href="https://enpiar.com/talks/odsc-west-2020/">enpiar.com/talks/odsc-west-2020/</a>
 
@@ -25,16 +25,6 @@ layout: true
 
 &lt;div class="my-footer"&gt;&lt;span&gt;https://enpiar.com/talks/odsc-west-2020/&lt;/span&gt;&lt;/div&gt;
 
-&lt;!--
-TODO:
-* Polly app? Slack on old laptop
-* Clean up any artifacts
-* Upload slides to odsc?
-* Publish slides on website?
-* Close other tabs etc.
-
- --&gt;
-
 ---
 
 # Ursa Labs
@@ -42,7 +32,7 @@ TODO:
 .cols[
 .fifty[
 
-&lt;img src="img/ursa.png" /&gt;
+&lt;img src="../rstudio-conf-2020/img/ursa.png" /&gt;
 
 https://ursalabs.org
 
@@ -137,7 +127,7 @@ class: center, middle, inverse
 
 **Format** for how data is arranged in memory: columnar, language-independent
 
-&lt;img src="img/simd.png" /&gt;
+&lt;img src="../rstudio-conf-2020/img/simd.png" /&gt;
 
 ]
 
@@ -156,13 +146,13 @@ class: center, middle, inverse
 
 **Format** for how data is arranged in memory: columnar, language-independent
 
-&lt;img src="img/simd.png" /&gt;
+&lt;img src="../rstudio-conf-2020/img/simd.png" /&gt;
 ]
 
 .fifty[
 **Implementations** or bindings in 12 languages
 
-&lt;img src="img/language_logos.png" /&gt;
+&lt;img src="../rstudio-conf-2020/img/language_logos.png" /&gt;
 ... and more
 
 
@@ -173,7 +163,7 @@ class: center, middle, inverse
 
 # Thriving open-source community
 
-&lt;img src="img/arrow-contributors.png" /&gt;
+&lt;img src="../nyr-2020/img/arrow-contributors.png" /&gt;
 
 ---
 
@@ -188,7 +178,7 @@ class: center, middle, inverse
 and more
 
 ---
-background-image: url(img/community.png)
+background-image: url(../rstudio-conf-2020/img/community.png)
 
 # Lots of projects are using Arrow
 
@@ -198,7 +188,7 @@ background-image: url(img/community.png)
 * TODO specific projects to name-check (Tensorflow exchange? Athena federated query?)
 
 ---
-background-image: url(img/in-n-out.jpg)
+background-image: url(../rstudio-conf-2020/img/in-n-out.jpg)
 
 # Interoperability
 
@@ -213,7 +203,7 @@ background-image: url(img/in-n-out.jpg)
 
 https://arrow.apache.org/blog/2019/01/25/r-spark-improvements/
 
-&lt;img src="img/spark.png" style="box-shadow: 5px 5px 5px, -1px -1px 1px"/&gt;
+&lt;img src="../rstudio-conf-2020/img/spark.png" style="box-shadow: 5px 5px 5px, -1px -1px 1px"/&gt;
 
 Up to 40x speedup when pulling data from Spark to R
 
@@ -387,6 +377,9 @@ Let's use one of the taxi data CSVs we downloaded
 
 ```r
 df &lt;- read_csv_arrow("trip_fare_1.csv")
+
+##    user  system elapsed
+##  18.540  16.263   5.855
 ```
 
 Arguments follow naming conventions from `readr::read_csv()`
@@ -399,7 +392,9 @@ https://arrow.apache.org/docs/r/reference/read_delim_arrow.html
 
 ```r
 tab &lt;- read_csv_arrow("trip_fare_1.csv", as_data_frame = FALSE)
-tab
+
+##    user  system elapsed
+##  14.148   2.672   0.569
 ```
 
 ---
@@ -519,7 +514,7 @@ I added some variants:
 
 * `cudf$read_csv()`: Python GPU data frame library built on top of Arrow, called from R via `reticulate`
 
-&lt;img src="img/rapids_logo.png" height="80"/&gt;
+&lt;img src="../nyr-2020/img/rapids_logo.png" height="80"/&gt;
 
 ---
 
@@ -886,7 +881,20 @@ ds2 %&gt;%
     avg_tip = mean(100 * tip_amount / total_amount, na.rm = TRUE),
     n = n()
   )
+
+## # A tibble: 4 x 3
+##  payment_type avg_tip     n
+##  &lt;chr&gt;          &lt;dbl&gt; &lt;int&gt;
+## 1 CRD           15.2   58626
+## 2 CSH            0.758  8286
+## 3 DIS            0.835   369
+## 4 NOC            1.31    877
+
+##    user  system elapsed
+##   9.341   0.931   0.647
 ```
+
+Same query against CSV dataset without partitioning is 5.613s, 9x slower
 
 ---
 
@@ -942,6 +950,8 @@ https://arrow.apache.org/docs/r/articles/fs.html
 
 For demonstration, we're going to use the public S3 bucket from the arrow dataset vignette
 
+We're demoing on an `m5.8xlarge` EC2 instance in the same region as this S3 bucket, so we should expect reasonable performance
+
 ```r
 ds &lt;- open_dataset("s3://ursa-labs-taxi-data")
 ```
@@ -967,7 +977,13 @@ ds %&gt;%
     tip_pct = median(100 * tip_amount / total_amount),
     n = n()
   )
+
+##    user  system elapsed
+##   6.143   1.755  12.507
 ```
+
+Slower than if the data were local, but good performance given that we're querying against S3
+
 
 ---
 
@@ -976,6 +992,15 @@ ds %&gt;%
 ```r
 bucket$ls()
 df &lt;- read_parquet(bucket$path("2019/03/data.parquet"))
+
+##    user  system elapsed
+##   3.708   1.255   4.746
+
+# Compare to if the file is local:
+copy_files(bucket$path("2019/03"), ".")
+system.time(df &lt;- read_parquet("data.parquet"))
+##    user  system elapsed
+##   2.999   0.912   1.337
 ```
 
 ---
@@ -1038,6 +1063,10 @@ system.time(b2 &lt;- flight_get(client, "taxi"))
 ##    user  system elapsed
 ##   0.540   1.245   2.094
 ```
+
+Data as Feather on disk: 341M
+
+Works out to 1.33 gigabits/second
 
 ---
 class: center, middle, inverse
