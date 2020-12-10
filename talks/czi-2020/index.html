@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Fast Data Access with Apache Arrow</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Neal Richardson @enpiar" />
+    <link rel="stylesheet" href="../remark_libs/remark-css-0.0.1/default.css" type="text/css" />
+    <link rel="stylesheet" href="../remark_libs/remark-css-0.0.1/default-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="../custom.css" type="text/css" />
+    <link rel="stylesheet" href="../dark-titles.css" type="text/css" />
+    <link rel="stylesheet" href="../rstudio-conf-2021/rstudio-conf-2021.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Fast Data Access with
+## <img src="../rstudio-conf-2020/img/arrow-inverse.png"/>
+### Neal Richardson<br/><span class="citation"><a href="https://twitter.com/enpiar"><span class="citation">@enpiar</span></a></span>
+### December 10, 2020<br/>Slides: <a href="https://enpiar.com/talks/czi-2020/">enpiar.com/talks/czi-2020/</a>
+
+---
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;&lt;span&gt;https://enpiar.com/talks/czi-2020/&lt;/span&gt;&lt;/div&gt;
+
+---
+
+# Ursa Labs
+
+.cols[
+.fifty[
+
+&lt;img src="../nyr-2020/img/ursa.png" /&gt;
+
+]
+
+.fifty[
+
+* Build cross-language, open libraries for data science
+
+* Grow and maintain **Apache Arrow** ecosystem
+
+* Funding and employment for full-time developers
+
+* Consortium funded by multiple corporations
+
+https://ursalabs.org
+
+]
+]
+
+---
+
+class: inverse, center
+background-image: url(../rstudio-conf-2021/img/this-is-not-yet-fine.png)
+background-size: contain
+
+# Created in 2016
+
+---
+class: middle
+
+.cols[
+.fifty[
+
+# Format
+
+]
+
+.fifty[
+
+&lt;img src="../rstudio-conf-2020/img/simd.png" /&gt;
+
+]
+]
+
+---
+class: middle
+
+.cols[
+.fifty[
+
+# Libraries
+
+]
+
+.fifty[
+
+&lt;img src="../rstudio-conf-2020/img/language_logos.png" /&gt;
+... and more
+
+
+]
+]
+
+---
+class: middle
+
+.cols[
+.fifty[
+
+# Ecosystem
+
+]
+
+.fifty[
+
+&lt;img src="../rstudio-conf-2020/img/community.png" /&gt;
+
+
+]
+]
+
+---
+background-image: url(img/pyarrow-downloads.png)
+background-size: contain
+
+---
+
+# Arrow library features
+
+### Multi-file partitioned datasets (C++, Python, R)
+
+https://enpiar.com/talks/rstudio-conf-2020/demo.html
+
+125 files, ~2 billion rows
+
+--
+
+```r
+ds &lt;- open_dataset("nyc-taxi", partitioning = c("year", "month"))
+
+system.time(ds %&gt;%
+  filter(total_amount &gt; 100, year == 2015) %&gt;%
+  select(tip_amount, total_amount, passenger_count) %&gt;%
+  group_by(passenger_count) %&gt;%
+  collect() %&gt;%
+  summarize(
+    tip_pct = median(100 * tip_amount / total_amount),
+    n = n()
+  ) %&gt;%
+  print())
+```
+
+---
+
+# Arrow library features
+
+### Multi-file partitioned datasets (C++, Python, R)
+
+```r
+## # A tibble: 10 x 3
+##    passenger_count tip_pct      n
+##              &lt;int&gt;   &lt;dbl&gt;  &lt;int&gt;
+##  1               0    9.84    380
+##  2               1   16.7  143087
+##  3               2   16.6   34418
+##  4               3   14.4    8922
+##  5               4   11.4    4771
+##  6               5   16.7    5806
+##  7               6   16.7    3338
+##  8               7   16.7      11
+##  9               8   16.7      32
+## 10               9   16.7      42
+
+##    user  system elapsed
+##   3.425   4.024   1.370
+```
+
+---
+
+# Arrow library features
+
+### Multi-file partitioned datasets (C++, Python, R)
+
+```r
+## # A tibble: 10 x 3
+##    passenger_count tip_pct      n
+##              &lt;int&gt;   &lt;dbl&gt;  &lt;int&gt;
+##  1               0    9.84    380
+##  2               1   16.7  143087
+##  3               2   16.6   34418
+##  4               3   14.4    8922
+##  5               4   11.4    4771
+##  6               5   16.7    5806
+##  7               6   16.7    3338
+##  8               7   16.7      11
+##  9               8   16.7      32
+## 10               9   16.7      42
+
+*##    user  system elapsed
+*##   3.425   4.024   1.370   &lt;----------- 3x faster than last year
+```
+
+---
+
+# Arrow library features
+
+### Fast file reading/writing
+
+C++ (Python, R, Ruby) has fast readers for CSV, JSON, Parquet, Feather
+
+CSV benchmarking in R: https://enpiar.com/talks/nyr-2020/
+
+---
+background-image: url(../nyr-2020/img/taxi-single-1.png)
+background-size: contain
+
+---
+background-image: url(../nyr-2020/img/taxi-single-arrow-1.png)
+background-size: contain
+
+---
+background-image: url(../nyr-2020/img/taxi-single-df-1.png)
+background-size: contain
+
+---
+
+# Arrow library features
+
+.center[
+
+&lt;img src="img/datafusion.png" width="80%"/&gt;
+
+https://arrow.apache.org/blog/2019/02/04/datafusion-donation/
+
+]
+
+---
+
+# Arrow library features
+
+.center[
+
+&lt;img src="img/flight.png" width="80%"/&gt;
+
+https://arrow.apache.org/blog/2019/10/13/introducing-arrow-flight/
+
+]
+
+---
+
+# Selected projects based on Arrow
+
+.center[
+
+&lt;img src="../nyr-2020/img/rapids_logo.png" width="80%"/&gt;
+
+https://rapids.ai/
+
+]
+
+---
+
+# Selected projects based on Arrow
+
+.center[
+
+&lt;img src="img/influxdb.png" width="80%"/&gt;
+
+https://www.influxdata.com/blog/announcing-influxdb-iox/
+
+]
+
+---
+
+# Selected projects based on Arrow
+
+.center[
+&lt;img src="img/falcon.png" style="flex: 80%; max-height: 420px"/&gt;
+
+https://uwdata.github.io/falcon/flights/
+
+]
+
+---
+background-image: url(img/basf.jpg)
+background-size: contain
+
+---
+
+# Better living through Arrow
+
+&lt;img src="img/parquet_logo.png" width="200"/&gt;
+&lt;img src="img/pandas.png" width="200"/&gt;
+&lt;img src="img/dask.png" width="200"/&gt;
+
+---
+class: center
+
+&lt;img src="../rstudio-conf-2021/img/pyspark.png" width="80%"/&gt;
+
+https://arrow.apache.org/blog/2017/07/26/spark-arrow/
+
+---
+class:center
+
+&lt;img src="../rstudio-conf-2021/img/sparklyr.png" width="80%"/&gt;
+
+https://arrow.apache.org/blog/2019/01/25/r-spark-improvements/
+
+---
+class: center
+
+&lt;img src="img/bigquery.png" width="80%"/&gt;
+
+https://medium.com/google-cloud/announcing-google-cloud-bigquery-version-1-17-0-1fc428512171
+
+---
+
+# Key is language- &lt;br/&gt; agnostic format
+
+---
+
+background-image: url(../rstudio-conf-2021/img/arrow-format-1.png)
+background-size: contain
+
+# Key is language- &lt;br/&gt; agnostic format
+
+---
+background-image: url(../rstudio-conf-2021/img/arrow-format-2.png)
+background-size: contain
+
+---
+background-image: url(../rstudio-conf-2021/img/arrow-format-3.png)
+background-size: contain
+
+---
+background-image: url(../rstudio-conf-2021/img/arrow-format-4.png)
+background-size: contain
+
+---
+background-image: url(../rstudio-conf-2021/img/arrow-format-5.png)
+background-size: contain
+
+---
+background-image: url(../rstudio-conf-2021/img/arrow-format-6.png)
+background-size: contain
+
+---
+background-image: url(../rstudio-conf-2021/img/arrow-format-7.png)
+background-size: contain
+
+---
+
+# Arrow project growth and maturity
+
+* Created 2016
+
+* July 2020: 1.0 release, indicating format stability
+
+* Up to 12 language implementations/bindings (Julia most recently added)
+
+---
+background-image: url(../rstudio-conf-2021/img/contributors.png)
+background-size: contain
+
+---
+
+# Looking ahead
+
+* Ursa Labs has played the role of "institutional maintainer" (an organized group, not a single person): how do we scale that as the project grows?
+
+* What else can we do to support the developer community?
+
+* How has the community evolved over the past 5 years?
+
+* How will (and should) it evolve now that we've hit 1.0?
+
+---
+
+# Goal: grow + diversify maintainer base
+
+Challenges:
+
+* High technical barriers to entry
+
+* Big project norms, Apache governance
+
+* Leads to skewed + bimodal distribution: dozens of full-time contributors/maintainers, lots of one-off bugfixes from the community, very few part-time, casual contributors
+
+--
+
+*Welcoming and supporting new contributors is great but unlikely to create maintainers*
+
+---
+
+# CZI grant
+
+* Establishes 2 one-year fellowship/apprenticeship positions
+
+* Recruit engineers from traditionally underrepresented groups
+
+* Pay to work full time on open source project, provide mentorship on open-source project maintenance, support to learn new technical skills
+
+&lt;!--
+
+but we reasoned that we could have a broader impact if we (1) recruited less experienced developers from trad underrepresented and (2) could invite a new group every year rather than pay one person in perpetuity
+
+--&gt;
+
+---
+class: center, middle
+
+# https://arrow.apache.org/
+
+### @ApacheArrow
+### @enpiar
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../remark_libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "color-brewer",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

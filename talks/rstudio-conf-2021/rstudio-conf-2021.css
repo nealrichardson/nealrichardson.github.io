@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Lusitana:wght@400;700&family=Roboto&display=swap');
+
+h1, h2, h3 {
+  font-family: 'Lusitana', serif;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+.fifty h1 {
+  font-size: 100px;
+}
+
+.bigtext h1 {
+  font-size: 100px;
+}
+
+.bigtext h3 {
+  font-size: 60px;
+}
+
+.bigtext code {
+  font-size: 1.2em;
+}
