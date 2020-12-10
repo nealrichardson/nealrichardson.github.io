@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Fast Data Access with Apache Arrow</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Neal Richardson @enpiar" />
+    <link rel="stylesheet" href="../remark_libs/remark-css-0.0.1/default.css" type="text/css" />
+    <link rel="stylesheet" href="../remark_libs/remark-css-0.0.1/default-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="../custom.css" type="text/css" />
+    <link rel="stylesheet" href="../dark-titles.css" type="text/css" />
+    <link rel="stylesheet" href="rstudio-conf-2021.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Expanding the Possibilities of R Using
+## <img src="../rstudio-conf-2020/img/arrow-inverse.png"/>
+### Neal Richardson<br/><span class="citation"><a href="https://twitter.com/enpiar"><span class="citation">@enpiar</span></a></span>
+
+---
+
+
+---
+class: inverse
+background-image: url(img/screen1v2.png)
+background-size: contain
+&lt;!-- &lt;img src="img/screen1.png"/&gt; --&gt;
+
+---
+class: inverse
+background-image: url(img/screen2v4.png)
+background-size: contain
+
+&lt;!-- &lt;img src="img/screen2.png"/&gt; --&gt;
+
+---
+class: inverse
+background-image: url(img/screen3v3.png)
+background-size: contain
+
+&lt;!-- &lt;img src="img/screen3.png"/&gt; --&gt;
+
+---
+class: inverse
+background-image: url(img/screen4v3.png)
+background-size: contain
+
+&lt;!-- &lt;img src="img/screen4.png"/&gt; --&gt;
+
+---
+class: inverse
+background-image: url(img/screen5v3.png)
+background-size: contain
+
+&lt;!-- &lt;img src="img/screen5.png"/&gt; --&gt;
+
+---
+class: inverse
+background-image: url(img/screen6v2.png)
+background-size: contain
+
+&lt;!-- &lt;img src="img/screen6.png"/&gt; --&gt;
+
+---
+class: inverse
+background-image: url(img/screen7v3.png)
+background-size: contain
+
+&lt;!-- &lt;img src="img/screen6.png"/&gt; --&gt;
+
+---
+
+---
+background-image: url(img/this-is-not-yet-fine.png)
+background-size: contain
+
+---
+class: middle
+
+.cols[
+.fifty[
+
+# Format
+
+]
+
+.fifty[
+
+&lt;img src="../rstudio-conf-2020/img/simd.png" /&gt;
+
+]
+]
+
+---
+class: middle
+
+.cols[
+.fifty[
+
+# Libraries
+
+]
+
+.fifty[
+
+&lt;img src="../rstudio-conf-2020/img/language_logos.png" /&gt;
+... and more
+
+
+]
+]
+
+---
+class: middle
+
+.cols[
+.fifty[
+
+# Ecosystem
+
+]
+
+.fifty[
+
+&lt;img src="../rstudio-conf-2020/img/community.png" /&gt;
+
+
+]
+]
+
+---
+
+---
+
+background-image: url(img/win95.png)
+background-size: contain
+
+&lt;!-- https://unsplash.com/photos/yY9n0N4P_oY --&gt;
+
+---
+class: less-padding, center, middle
+
+&lt;img src="index_files/figure-html/unnamed-chunk-1-1.png" width="1080" /&gt;
+
+---
+class: less-padding, center, middle
+
+&lt;img src="index_files/figure-html/unnamed-chunk-2-1.png" width="1080" /&gt;
+
+---
+class: less-padding, center, middle
+
+&lt;img src="index_files/figure-html/unnamed-chunk-3-1.png" width="1080" /&gt;
+
+---
+class: center, middle, bigtext
+
+# SIMD
+
+### Single instruction, multiple data
+
+---
+
+background-image: url(img/fast-car.jpg)
+background-size: contain
+
+&lt;!-- https://unsplash.com/photos/yY9n0N4P_oY --&gt;
+
+---
+
+background-image: url(img/old-driver.jpg)
+background-size: contain
+
+&lt;!-- https://unsplash.com/photos/tPxnF8LVNEI --&gt;
+
+---
+
+---
+
+background-image: url(img/contributors.png)
+background-size: contain
+
+---
+
+---
+
+# rstudio::conf(2020)
+
+Demo of reading a multi-file Parquet dataset
+
+https://enpiar.com/talks/rstudio-conf-2020/demo.html
+
+125 files, ~2 billion rows
+
+--
+
+```r
+ds &lt;- open_dataset("nyc-taxi", partitioning = c("year", "month"))
+
+system.time(ds %&gt;%
+  filter(total_amount &gt; 100, year == 2015) %&gt;%
+  select(tip_amount, total_amount, passenger_count) %&gt;%
+  group_by(passenger_count) %&gt;%
+  collect() %&gt;%
+  summarize(
+    tip_pct = median(100 * tip_amount / total_amount),
+    n = n()
+  ) %&gt;%
+  print())
+```
+
+---
+# rstudio::conf(2020)
+
+```r
+## # A tibble: 10 x 3
+##    passenger_count tip_pct      n
+##              &lt;int&gt;   &lt;dbl&gt;  &lt;int&gt;
+##  1               0    9.84    380
+##  2               1   16.7  143087
+##  3               2   16.6   34418
+##  4               3   14.4    8922
+##  5               4   11.4    4771
+##  6               5   16.7    5806
+##  7               6   16.7    3338
+##  8               7   16.7      11
+##  9               8   16.7      32
+## 10               9   16.7      42
+
+##    user  system elapsed
+##  26.735   1.159   4.076
+```
+
+---
+
+# NY R conference, August 2020
+
+```r
+## # A tibble: 10 x 3
+##    passenger_count tip_pct      n
+##              &lt;int&gt;   &lt;dbl&gt;  &lt;int&gt;
+##  1               0    9.84    380
+##  2               1   16.7  143087
+##  3               2   16.6   34418
+##  4               3   14.4    8922
+##  5               4   11.4    4771
+##  6               5   16.7    5806
+##  7               6   16.7    3338
+##  8               7   16.7      11
+##  9               8   16.7      32
+## 10               9   16.7      42
+
+*##    user  system elapsed
+*##   3.829   3.108   1.842   &lt;----------- 2x faster
+```
+
+---
+
+# rstudio::global(2021)
+
+```r
+## # A tibble: 10 x 3
+##    passenger_count tip_pct      n
+##              &lt;int&gt;   &lt;dbl&gt;  &lt;int&gt;
+##  1               0    9.84    380
+##  2               1   16.7  143087
+##  3               2   16.6   34418
+##  4               3   14.4    8922
+##  5               4   11.4    4771
+##  6               5   16.7    5806
+##  7               6   16.7    3338
+##  8               7   16.7      11
+##  9               8   16.7      32
+## 10               9   16.7      42
+
+*##    user  system elapsed
+*##   3.425   4.024   1.370   &lt;----------- Another 25% faster
+```
+---
+
+---
+class: center, middle
+
+&lt;img src="img/xkcd-standards.png" width="80%"/&gt;
+
+---
+
+---
+
+background-image: url(img/arrow-format-1.png)
+background-size: contain
+
+---
+background-image: url(img/arrow-format-2.png)
+background-size: contain
+
+---
+background-image: url(img/arrow-format-3.png)
+background-size: contain
+
+---
+background-image: url(img/arrow-format-4.png)
+background-size: contain
+
+---
+background-image: url(img/arrow-format-5.png)
+background-size: contain
+
+---
+background-image: url(img/arrow-format-6.png)
+background-size: contain
+
+---
+background-image: url(img/arrow-format-7.png)
+background-size: contain
+
+---
+class: center, middle
+
+&lt;img src="img/pyspark.png" width="80%"/&gt;
+
+---
+class: center, middle
+
+&lt;img src="img/sparklyr.png" width="80%"/&gt;
+
+---
+
+---
+class: bigtext
+
+```r
+ds &lt;- open_dataset("nyc-taxi/csv/2019", format = "csv",
+  partitioning = "month")
+ds
+
+## FileSystemDataset with 6 csv files
+## vendor_id: int64
+## pickup_at: timestamp[s]
+## dropoff_at: timestamp[s]
+## passenger_count: int64
+## trip_distance: double
+## rate_code_id: int64
+...
+```
+
+---
+class: bigtext
+
+```r
+system.time(ds %&gt;%
+  filter(payment_type == 3, total_amount &gt; 10) %&gt;%
+  select(tip_amount, total_amount, passenger_count) %&gt;%
+  group_by(passenger_count) %&gt;%
+  collect() %&gt;%
+  summarize(
+    tip_pct = mean(100 * tip_amount / total_amount),
+    n = n()
+  ) %&gt;%
+  print())
+```
+
+---
+class: bigtext
+
+```r
+## # A tibble: 7 x 3
+##   passenger_count tip_pct     n
+##             &lt;int&gt;   &lt;dbl&gt; &lt;int&gt;
+## 1               0 0.0275   5588
+## 2               1 0.0121  73385
+## 3               2 0.0113  15918
+## 4               3 0.00626  4041
+## 5               4 0.00558  2981
+## 6               5 0         107
+## 7               6 0          55
+
+##    user  system elapsed
+##  27.951  14.728   7.639
+```
+
+---
+class: bigtext
+
+```r
+ds %&gt;%
+  group_by(payment_type) %&gt;%
+  write_dataset("./feather-taxi", format = "feather")
+```
+
+---
+class: bigtext
+
+```r
+ds %&gt;%
+* group_by(payment_type) %&gt;%
+  write_dataset("./feather-taxi", format = "feather")
+```
+
+--
+```r
+# feather-taxi
+# ├── payment_type=1
+# │   ├── dat_0.feather
+# │   ├── dat_4.feather
+# │   └── dat_5.feather
+# ├── payment_type=2
+# │   ├── dat_0.feather
+# ...
+# └── payment_type=5
+#     └── dat_2.feather
+```
+
+---
+class: bigtext
+
+```r
+ds2 &lt;- open_dataset("feather-taxi", format = "feather")
+system.time(ds2 %&gt;%
+  filter(payment_type == 3, total_amount &gt; 10) %&gt;%
+  select(tip_amount, total_amount, passenger_count) %&gt;%
+  group_by(passenger_count) %&gt;%
+  collect() %&gt;%
+  summarize(
+    tip_pct = mean(100 * tip_amount / total_amount),
+    n = n()
+  ) %&gt;%
+  print())
+```
+
+---
+class: bigtext
+
+```r
+## # A tibble: 7 x 3
+##   passenger_count tip_pct     n
+##             &lt;int&gt;   &lt;dbl&gt; &lt;int&gt;
+## 1               0 0.0275   5588
+## 2               1 0.0121  73385
+## 3               2 0.0113  15918
+## 4               3 0.00626  4041
+## 5               4 0.00558  2981
+## 6               5 0         107
+## 7               6 0          55
+
+##    user  system elapsed
+*##   0.118   0.062   0.073   &lt;----------- 100x faster
+```
+
+---
+class: center, bottom, inverse
+
+background-image: url(img/no-roads.jpg)
+background-size: contain
+
+&lt;!-- https://unsplash.com/photos/tPxnF8LVNEI --&gt;
+
+## Roads? Where we're going, we don't need roads.
+
+---
+class: center, middle
+
+# install.packages("arrow")
+
+# https://arrow.apache.org/
+
+### @ApacheArrow
+### @enpiar
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../remark_libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "color-brewer",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9",
+"slideNumberFormat": ""
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
