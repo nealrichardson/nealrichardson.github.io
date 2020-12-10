@@ -2,7 +2,7 @@
 title: "Fast Data Access with"
 subtitle: "<img src=\"../rstudio-conf-2020/img/arrow-inverse.png\"/>"
 pagetitle: "Fast Data Access with Apache Arrow "
-author: 'Neal Richardson<br/><span class="citation"><a href="https://twitter.com/enpiar">@enpiar</a></span>'
+author: 'Neal Richardson <a href="https://twitter.com/enpiar">@enpiar</a><br/><span class="citation">Slides: <a href="https://enpiar.com/talks/czi-2020/">enpiar.com/talks/czi-2020/</a></span>'
 date: 'December 10, 2020<br/>Slides: <a href="https://enpiar.com/talks/czi-2020/">enpiar.com/talks/czi-2020/</a>'
 output:
   xaringan::moon_reader:
