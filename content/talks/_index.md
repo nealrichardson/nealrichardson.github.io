@@ -7,12 +7,20 @@ weight = 1
 
 Here are slides from a few talks I've given in recent years:
 
--   [Speeding Up Data Access With Apache Arrow](/talks/nyr-2020/):
-Overview of enhancements from 2020 in the [`arrow`](https://arrow.apache.org/docs/r) R package, plus some CSV reading benchmarks. Talk given at the [New York (virtual) R Conference](https://rstats.ai/nyr/), August 2020.
+-   [Solving Big Data Problems With Apache Arrow](/talks/user-2021/) ([video](https://www.youtube.com/watch?v=kwGfwU-_G_o)): Some applications of the [`arrow`](https://arrow.apache.org/docs/r) R package provided by the user community. Presented at [UseR 2021](https://user2021.r-project.org/), July 2021.
 
--   [Accelerating Analytics With Apache Arrow](/talks/rstudio-conf-2020/):
-What [Arrow](https://arrow.apache.org) is,
-what the latest developments in the [`arrow`](https://arrow.apache.org/docs/r) R package are,
+-   [Bigger Data With Ease Using Apache Arrow](https://www.rstudio.com/resources/rstudioglobal-2021/bigger-data-with-ease-using-apache-arrow/) ([video](https://www.rstudio.com/resources/rstudioglobal-2021/bigger-data-with-ease-using-apache-arrow/)): This talk examines the unique characteristics of the Arrow project that enable it to redefine what is possible in R. It also highlights some of the latest developments in the arrow R package, including how you can query and manipulate multi-file datasets, and it presents strategies for speeding up workflows by up to 100x. Presented at rstudio::global(2021) conference, January 2021.
+
+-   [Fast Data Access With Apache Arrow](/talks/czi-2020/) ([video](https://www.youtube.com/watch?v=KnkN5AoZjZU)): Overview of the [Apache Arrow](https://arrow.apache.org) project and how it improves the speed and efficiency of data access, in many cases without your even being aware of it, plus a discussion of the growth of the Arrow community and [Ursa Labs's apprenticeship program](https://ursalabs.org/blog/2020-czi-ursa-labs/). Chan-Zuckerberg Initiative Essential Open Source Software for Science Meeting, December 2020.
+
+-   [Fast Data Access in R and Python With Apache Arrow](/talks/odsc-west-2020/): Review latest features in the 2.0.0 release of Apache Arrow and build up to an example of using the Flight RPC framework to ship data. Tutorial presented at the [ODSC West 2020](https://odsc.com/speakers/fast-data-access-in-r-and-python-with-apache-arrow/) conference, October 2020.
+
+-   [Speeding Up Data Access With Apache Arrow](/talks/nyr-2020/) ([video](https://www.youtube.com/watch?v=p87NFQbTP-A)):
+Overview of enhancements from 2020 in the `arrow` R package, plus some CSV reading benchmarks. Talk given at the [New York (virtual) R Conference](https://rstats.ai/nyr/), August 2020.
+
+-   [Accelerating Analytics With Apache Arrow](/talks/rstudio-conf-2020/) ([video](https://www.rstudio.com/resources/rstudioconf-2020/accelerating-analytics-with-apache-arrow/)):
+What Arrow is,
+what the latest developments in the `arrow` R package are,
 and how you can get involved. Talk given at rstudio::conf(2020), San Francisco.
 
 -   [Publishing an R Package Repository with Public (Free!) Services](/talks/r-pkg-repo/):
