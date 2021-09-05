@@ -1,16 +1,12 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Httptest on A Blog</title>
+    <title>httptest on A Blog</title>
     <link>/tags/httptest/</link>
-    <description>Recent content in Httptest on A Blog</description>
+    <description>Recent content in httptest on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 11 Nov 2018 09:00:57 -0700</lastBuildDate>
-    
-	<atom:link href="/tags/httptest/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 11 Nov 2018 09:00:57 -0700</lastBuildDate><atom:link href="/tags/httptest/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>httptest 3.2.0 Released</title>
       <link>/2018/11/11/httptest-3.2.0-released/</link>

@@ -1,16 +1,12 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Cran on A Blog</title>
+    <title>CRAN on A Blog</title>
     <link>/tags/cran/</link>
-    <description>Recent content in Cran on A Blog</description>
+    <description>Recent content in CRAN on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 01 Feb 2018 16:49:57 -0700</lastBuildDate>
-    
-	<atom:link href="/tags/cran/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Thu, 01 Feb 2018 16:49:57 -0700</lastBuildDate><atom:link href="/tags/cran/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Back to the Future</title>
       <link>/2018/02/01/back-to-the-future/</link>
@@ -18,7 +14,8 @@
       
       <guid>/2018/02/01/back-to-the-future/</guid>
       <description>When you submit a package update to CRAN, they ask you to check some boxes confirming that you&amp;rsquo;ve done your due diligence on your submission: that it passes its checks. One confirmation is that you&amp;rsquo;ve addressed any failures on the CRAN package check page, which looks like this.
-  Hey, all passing today!   This page is a window into one of the key features of CRAN: it runs continuous-integration tests of your package against multiple versions of R, on multiple operating systems, with the current version of your dependencies.</description>
+ Hey, all passing today!
+  This page is a window into one of the key features of CRAN: it runs continuous-integration tests of your package against multiple versions of R, on multiple operating systems, with the current version of your dependencies.</description>
     </item>
     
   </channel>

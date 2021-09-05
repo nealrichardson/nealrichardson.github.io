@@ -1,16 +1,12 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Technical Debt on A Blog</title>
+    <title>technical debt on A Blog</title>
     <link>/tags/technical-debt/</link>
-    <description>Recent content in Technical Debt on A Blog</description>
+    <description>Recent content in technical debt on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 08 Jul 2018 21:49:57 -0700</lastBuildDate>
-    
-	<atom:link href="/tags/technical-debt/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 08 Jul 2018 21:49:57 -0700</lastBuildDate><atom:link href="/tags/technical-debt/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Against Technical Debt</title>
       <link>/2018/07/08/against-technical-debt/</link>

@@ -1,16 +1,12 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Performance on A Blog</title>
+    <title>performance on A Blog</title>
     <link>/tags/performance/</link>
-    <description>Recent content in Performance on A Blog</description>
+    <description>Recent content in performance on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 25 Apr 2018 21:49:57 -0700</lastBuildDate>
-    
-	<atom:link href="/tags/performance/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 25 Apr 2018 21:49:57 -0700</lastBuildDate><atom:link href="/tags/performance/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Turbocharging &#39;readr&#39;</title>
       <link>/2018/04/25/turbocharging-readr/</link>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>A Blog</title>
@@ -6,11 +6,7 @@
     <description>Recent content on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 16 Mar 2020 06:49:57 -0700</lastBuildDate>
-    
-	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Mon, 16 Mar 2020 06:49:57 -0700</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Flow Like Water</title>
       <link>/2020/03/16/flow-like-water/</link>
@@ -26,7 +22,8 @@
       <pubDate>Wed, 17 Jul 2019 06:49:57 -0700</pubDate>
       
       <guid>/2019/07/17/to-err-is-human-to-ignore-divine/</guid>
-      <description>One of the great things about leading a software project is the sense of ownership over what you and your team are creating. Your mind is buzzing with the big picture of what your project can do and will be able to do. You also sweat the details, and particularly if you&amp;rsquo;ve been with it from the beginning, you have unrivaled breadth and depth of knowledge about the project.</description>
+      <description>One of the great things about leading a software project is the sense of ownership over what you and your team are creating. Your mind is buzzing with the big picture of what your project can do and will be able to do. You also sweat the details, and particularly if you&amp;rsquo;ve been with it from the beginning, you have unrivaled breadth and depth of knowledge about the project.
+So, when someone&amp;mdash;a user or new team member, for example&amp;mdash;has a question, you know the answer.</description>
     </item>
     
     <item>
@@ -54,7 +51,7 @@ It&amp;rsquo;s about 50-50 the candidates that ever open the docs&amp;mdash;the 
       <pubDate>Thu, 03 Jan 2019 16:49:57 -0700</pubDate>
       
       <guid>/2019/01/03/the-s-curve/</guid>
-      <description>At Crunch, we&amp;rsquo;ve built up our product over the span of six years, and what we&amp;rsquo;ve built helps a lot of people analyze their data quickly and painlessly. As ever, our ambitions are great and we want to build more. Sometimes this requires changing data contracts and APIs, and that poses an additional challenge: not only do we have to design a good solution to our users&amp;rsquo; problems, we have to transition to it with minimal disruption.</description>
+      <description>At Crunch, we&amp;rsquo;ve built up our product over the span of six years, and what we&amp;rsquo;ve built helps a lot of people analyze their data quickly and painlessly. As ever, our ambitions are great and we want to build more. Sometimes this requires changing data contracts and APIs, and that poses an additional challenge: not only do we have to design a good solution to our users&#39; problems, we have to transition to it with minimal disruption.</description>
     </item>
     
     <item>
@@ -103,7 +100,8 @@ Whenever I start an analysis like this, I also think about how to make it easier
       
       <guid>/2018/02/01/back-to-the-future/</guid>
       <description>When you submit a package update to CRAN, they ask you to check some boxes confirming that you&amp;rsquo;ve done your due diligence on your submission: that it passes its checks. One confirmation is that you&amp;rsquo;ve addressed any failures on the CRAN package check page, which looks like this.
-  Hey, all passing today!   This page is a window into one of the key features of CRAN: it runs continuous-integration tests of your package against multiple versions of R, on multiple operating systems, with the current version of your dependencies.</description>
+ Hey, all passing today!
+  This page is a window into one of the key features of CRAN: it runs continuous-integration tests of your package against multiple versions of R, on multiple operating systems, with the current version of your dependencies.</description>
     </item>
     
     <item>
@@ -113,7 +111,7 @@ Whenever I start an analysis like this, I also think about how to make it easier
       
       <guid>/2017/12/18/integrating-pkgdown-with-your-personal-website/</guid>
       <description>Publishing a website for your R package is simple with pkgdown. As I recently discussed, you can build a basic site and host it on GitHub Pages with just a handful of commands and clicks.
-That&amp;rsquo;s a great start, but why stop there? If you have a personal website or blog, it would be nice to have your package page mesh with it&amp;mdash;that is, it should fit with your &amp;ldquo;brand&amp;rdquo;.</description>
+That&amp;rsquo;s a great start, but why stop there? If you have a personal website or blog, it would be nice to have your package page mesh with it&amp;mdash;that is, it should fit with your &amp;ldquo;brand&amp;rdquo;. Your personal site has a style (font, color, layout, etc.</description>
     </item>
     
     <item>
@@ -177,7 +175,7 @@ In terms of functionality, the biggest change has been the addition of a framewo
       <pubDate>Mon, 01 May 2017 21:48:51 -0700</pubDate>
       
       <guid>/about/</guid>
-      <description>Hi. I&amp;rsquo;m a recovering academic currently working as product and engineering leader. I still like to code and play with data when I can.</description>
+      <description>Hi. I&amp;rsquo;m a recovering academic currently working to build the foundation for the next generation of data analysis software. All opinions expressed are my own.</description>
     </item>
     
   </channel>

@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <meta name="generator" content="Hugo 0.20.7" />
+  <meta name="generator" content="Hugo 0.88.1" />
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,23 +24,9 @@
   <meta property="og:title" content="Back to the Future" />
 <meta property="og:description" content="Maintaining R packages on CRAN sometimes means you have to find creative ways to ensure that your code runs on different platforms and on multiple versions of R---even ones that haven&#39;t been released yet." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2018/02/01/back-to-the-future/" />
-
-  <meta property="og:image" content="https://enpiar.com/img/bttf-cover.png" />
-
-
-
-<meta property="article:published_time" content="2018-02-01T16:49:57-07:00"/>
-<meta property="article:modified_time" content="2018-02-01T16:49:57-07:00"/>
-
-
-
-
-
-
-
-
-
+<meta property="og:url" content="/2018/02/01/back-to-the-future/" /><meta property="og:image" content="https://enpiar.com/img/bttf-cover.png" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2018-02-01T16:49:57-07:00" />
+<meta property="article:modified_time" content="2018-02-01T16:49:57-07:00" />
 
 
   
@@ -52,12 +38,16 @@
   
   
   
-<script>
-window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-ga('create', 'UA-104182925-1', 'auto');
-ga('send', 'pageview');
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-104182925-1', 'auto');
+	
+	ga('send', 'pageview');
+}
 </script>
-<script async src='//www.google-analytics.com/analytics.js'></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
   
 
@@ -70,8 +60,8 @@ ga('send', 'pageview');
   <link href="/css/kube.min.css" rel="stylesheet" type="text/css">
   <link href="/css/kube.legenda.css" rel="stylesheet" type="text/css">
   <link href="/css/highlight.css" rel="stylesheet" type="text/css">
-  <link href="/css/master.css" rel="stylesheet" type="text/css">
-  <link href="/css/kube.demo.css" rel="stylesheet" type="text/css">
+  <link href="/css/main.css" rel="stylesheet" type="text/css">
+  
 
  <link href="/css/custom.css" rel="stylesheet" type="text/css">
 
@@ -129,20 +119,11 @@ ga('send', 'pageview');
  </header>
   <main>
 <div class="push-center" itemscope itemtype="http://schema.org/BlogPosting">
-    
-<meta itemprop="name" content="Back to the Future">
-<meta itemprop="description" content="Maintaining R packages on CRAN sometimes means you have to find creative ways to ensure that your code runs on different platforms and on multiple versions of R---even ones that haven&#39;t been released yet.">
-
-
+    <meta itemprop="name" content="Back to the Future">
+<meta itemprop="description" content="Maintaining R packages on CRAN sometimes means you have to find creative ways to ensure that your code runs on different platforms and on multiple versions of R---even ones that haven&#39;t been released yet."><meta itemprop="datePublished" content="2018-02-01T16:49:57-07:00" />
 <meta itemprop="dateModified" content="2018-02-01T16:49:57-07:00" />
-<meta itemprop="wordCount" content="2242">
-
-  <meta itemprop="image" content="https://enpiar.com/img/bttf-cover.png">
-
-
-
-<meta itemprop="keywords" content="code,general,management,athena,automation,benchmark,blogdown,cran,documentation,httptest,hugo,leadership,logs,management,packages,performance,prioritization,product,productivity,project-management,python,r,readr,remote,serverless,sql,talks,tdd,technical-debt,testing,website,zen," />
-
+<meta itemprop="wordCount" content="2242"><meta itemprop="image" content="https://enpiar.com/img/bttf-cover.png">
+<meta itemprop="keywords" content="R,packages,CRAN," />
 <div id="hero">
     <h1 itemprop="headline">  Back to the Future</h1>
     
@@ -156,309 +137,157 @@ ga('send', 'pageview');
 <div id="post-box">
 <div id="post" itemprop="articleBody">
 
-    
-
-<p>When you submit a package update to CRAN, they ask you to check some boxes confirming that you&rsquo;ve done your due diligence on your submission: that it passes its checks. One confirmation is that you&rsquo;ve addressed any failures on the CRAN package check page, which looks <a href="https://cran.r-project.org/web/checks/check_results_httptest.html">like this</a>.</p>
-
-
-<figure >
-    
-        <img src="/img/cran-check-httptest.png" />
-    
-    
-    <figcaption>
-        <p>
-        
-        
-            Hey, all passing today!
-        
-        </p> 
-    </figcaption>
-    
+    <p>When you submit a package update to CRAN, they ask you to check some boxes confirming that you&rsquo;ve done your due diligence on your submission: that it passes its checks. One confirmation is that you&rsquo;ve addressed any failures on the CRAN package check page, which looks <a href="https://cran.r-project.org/web/checks/check_results_httptest.html">like this</a>.</p>
+<figure><img src="/img/cran-check-httptest.png"/><figcaption>
+            <p>Hey, all passing today!</p>
+        </figcaption>
 </figure>
-
 
 <p>This page is a window into one of the key features of CRAN: it runs continuous-integration tests of your package against multiple versions of R, on multiple operating systems, with the current version of your dependencies. You can&rsquo;t (without a special dispensation) submit a package to CRAN that doesn&rsquo;t work on all platforms that R supports, and you always have to pass against the bleeding-edge development version.</p>
-
 <p>A benefit of this system is that, as a user, you can trust that a new R release isn&rsquo;t going to break your packages, and if a package update makes it to CRAN, it has at least not broken other packages in the CRAN ecosystem. The cost of supporting the system gets passed along to R developers, both core and package maintainers, who have to maintain backwards compatibility&mdash;and forwards compatibility to future R releases.</p>
-
 <p>Every few months, it seems that there is a change in the development version of R that causes test failures in one of my packages, and I need to find a way to work around it, whether to submit an update to CRAN or just to make my Travis-CI builds stop failing.</p>
-
 <p>While no one likes to have a package release held up by some funky compatibility issue, I&rsquo;ve found that I&rsquo;ve oddly enjoyed solving these problems when they arise. It&rsquo;s a logic puzzle: how do I most efficiently get my code (package and test suite) to pass in different worlds that have different functions, options, and rules? Although it is frustrating in the moment having to spend time and energy on it, there&rsquo;s satisfaction in the clever solution: it feels good to solve the CRAN-sphinx&rsquo;s riddle.</p>
-
 <p>Here&rsquo;s a few examples, set to the story of the Marty McFly trilogy.</p>
-
 <a class="headline-anchor" href="#i-back-to-the-recent-past"><h1 id="i-back-to-the-recent-past">I. Back to the recent past</a> </h1>
-
-
-<figure class="floating-right halfwidth">
-    
-        <img src="/img/bttf.gif" />
-    
-    
-    <figcaption>
-        <p>
-        
-        <a href="https://media.giphy.com/media/JIzGoJKPAHO2Q/giphy.gif"> 
-            Gotta get back in time
-        </a> 
-        </p> 
-    </figcaption>
-    
+<figure class="floating-right halfwidth"><img src="/img/bttf.gif"/><figcaption>
+            <p>
+                    <a href="https://media.giphy.com/media/JIzGoJKPAHO2Q/giphy.gif">Gotta get back in time</a></p>
+        </figcaption>
 </figure>
 
-
 <p>Python has this fun <a href="https://docs.python.org/2/library/__future__.html">feature</a> in which some functions that are in upcoming releases can be pulled into current or older versions. It facilitates writing code that follows the new style but still runs on old Python, so upgrading to new tools and deprecating old ways can be done gradually. And it sounds cool:</p>
-
-<pre><code class="language-python">from __future__ import print_function
-</code></pre>
-
-<p>R doesn&rsquo;t have a similar mechanism (though it has natively had a <code>print()</code> function for forever, just sayin&rsquo;).</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> __future__ <span style="color:#f92672">import</span> print_function
+</code></pre></div><p>R doesn&rsquo;t have a similar mechanism (though it has natively had a <code>print()</code> function for forever, just sayin').</p>
 <p>I had a couple of instances where my package code worked on the current version of R, but it didn&rsquo;t in the previous version (aka &ldquo;oldrel&rdquo;), which CRAN requires. So, I needed to add some shims to make it work and pass all checks.</p>
-
 <p>First, the handy <code>startsWith</code> function was <a href="https://github.com/wch/r-source/blob/trunk/doc/NEWS.Rd#L2108-L2110">added in R 3.3</a>. It checks whether the first characters of a string match a given value. I started using it then, but still had to have code pass on R 3.2. So I added this code to my package to backport it:</p>
-
-<pre><code class="language-r">alt.startsWith &lt;- function (x, prefix) {
-    substr(x, 1, nchar(prefix)) == prefix
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">alt.startsWith <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(x, prefix) {
+    <span style="color:#a6e22e">substr</span>(x, <span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">nchar</span>(prefix)) <span style="color:#f92672">==</span> prefix
 }
-if (!(&quot;startsWith&quot; %in% ls(envir=asNamespace(&quot;base&quot;)))) {
-    startsWith &lt;- alt.startsWith
+<span style="color:#a6e22e">if </span>(<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;startsWith&#34;</span> <span style="color:#f92672">%in%</span> <span style="color:#a6e22e">ls</span>(envir<span style="color:#f92672">=</span><span style="color:#a6e22e">asNamespace</span>(<span style="color:#e6db74">&#34;base&#34;</span>)))) {
+    startsWith <span style="color:#f92672">&lt;-</span> alt.startsWith
 }
-</code></pre>
-
-<p>Note that the &ldquo;alt&rdquo; function is only used if <code>base::startsWith()</code>, the official version, doesn&rsquo;t exist. Defining the &ldquo;alt&rdquo; function outside of the <code>if</code> statement has the added benefit of allowing me to run tests on it regardless of what version of R I&rsquo;m running. This increases confidence that my code will work correctly on an old version of R, even if I don&rsquo;t use that version anymore.</p>
-
+</code></pre></div><p>Note that the &ldquo;alt&rdquo; function is only used if <code>base::startsWith()</code>, the official version, doesn&rsquo;t exist. Defining the &ldquo;alt&rdquo; function outside of the <code>if</code> statement has the added benefit of allowing me to run tests on it regardless of what version of R I&rsquo;m running. This increases confidence that my code will work correctly on an old version of R, even if I don&rsquo;t use that version anymore.</p>
 <p>Similarly, in the <a href="https://github.com/nealrichardson/skeletor/blob/5213ee23796dfde52cef498453086b415aec1539/tests/testthat/helper.R#L16-L28">skeletor</a> package tests, I conditionally define the <code>Rcmd()</code> function, which was also added in R 3.3:</p>
-
-<pre><code class="language-r">if (&quot;Rcmd&quot; %in% ls(envir=asNamespace(&quot;tools&quot;))) {
-    Rcmd &lt;- tools::Rcmd
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">if </span>(<span style="color:#e6db74">&#34;Rcmd&#34;</span> <span style="color:#f92672">%in%</span> <span style="color:#a6e22e">ls</span>(envir<span style="color:#f92672">=</span><span style="color:#a6e22e">asNamespace</span>(<span style="color:#e6db74">&#34;tools&#34;</span>))) {
+    Rcmd <span style="color:#f92672">&lt;-</span> tools<span style="color:#f92672">::</span>Rcmd
 } else {
-    # R &lt; 3.3
-    Rcmd &lt;- function (args, ...) {
-        if (.Platform$OS.type == &quot;windows&quot;) {
-            system2(file.path(R.home(&quot;bin&quot;), &quot;Rcmd.exe&quot;), args, ...)
+    <span style="color:#75715e"># R &lt; 3.3</span>
+    Rcmd <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(args, <span style="color:#66d9ef">...</span>) {
+        <span style="color:#a6e22e">if </span>(.Platform<span style="color:#f92672">$</span>OS.type <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;windows&#34;</span>) {
+            <span style="color:#a6e22e">system2</span>(<span style="color:#a6e22e">file.path</span>(<span style="color:#a6e22e">R.home</span>(<span style="color:#e6db74">&#34;bin&#34;</span>), <span style="color:#e6db74">&#34;Rcmd.exe&#34;</span>), args, <span style="color:#66d9ef">...</span>)
         } else {
-            system2(file.path(R.home(&quot;bin&quot;), &quot;R&quot;), c(&quot;CMD&quot;, args), ...)
+            <span style="color:#a6e22e">system2</span>(<span style="color:#a6e22e">file.path</span>(<span style="color:#a6e22e">R.home</span>(<span style="color:#e6db74">&#34;bin&#34;</span>), <span style="color:#e6db74">&#34;R&#34;</span>), <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;CMD&#34;</span>, args), <span style="color:#66d9ef">...</span>)
         }
     }
 }
-</code></pre>
-
-<p>Of course, this conditional definition of the functions isn&rsquo;t really necessary: I could always use my version of the function, even if the official one exists. I included it here because it illustrates a trick for identifying the state of the version of R the code is currently running in and changes behavior accordingly. By checking for the existence of a function in a namespace, we don&rsquo;t have to be so diligent in identifying exactly which version of R the function first appeared.</p>
-
-
-<figure class="floating-right halfwidth">
-    
-        <img src="/img/Erasedfromexistence.jpg" />
-    
-    
-    <figcaption>
-        <p>
-        
-        <a href="http://backtothefuture.wikia.com/wiki/File:Erasedfromexistance.jpg"> 
-            If you go back in time, some functions may be erased from existence.
-        </a> 
-        </p> 
-    </figcaption>
-    
+</code></pre></div><p>Of course, this conditional definition of the functions isn&rsquo;t really necessary: I could always use my version of the function, even if the official one exists. I included it here because it illustrates a trick for identifying the state of the version of R the code is currently running in and changes behavior accordingly. By checking for the existence of a function in a namespace, we don&rsquo;t have to be so diligent in identifying exactly which version of R the function first appeared.</p>
+<figure class="floating-right halfwidth"><img src="/img/Erasedfromexistence.jpg"/><figcaption>
+            <p>
+                    <a href="http://backtothefuture.wikia.com/wiki/File:Erasedfromexistance.jpg">If you go back in time, some functions may be erased from existence.</a></p>
+        </figcaption>
 </figure>
-
 
 <p>And while this is knowable for past releases if you know how to search the release notes, it&rsquo;s not so simple with the R-devel &ldquo;unstable&rdquo; builds, which every day report the same &ldquo;R version&rdquo;. And on CRAN, the R-devel builds for different operating systems and architectures aren&rsquo;t in lock-step: you may be running against last week&rsquo;s R-devel build on Windows and yesterday&rsquo;s on Linux. Rather than trying to identify and parse exactly which version or development source-code revision added the behavior in question, it&rsquo;s more foolproof to check for the behavior itself.</p>
-
 <a class="headline-anchor" href="#ii-back-to-the-actual-future"><h1 id="ii-back-to-the-actual-future">II. Back to the (actual) future</a> </h1>
-
-
-<figure class="floating-left halfwidth">
-    
-        <img src="/img/hoverboard.gif" />
-    
-    
-    <figcaption>
-        <p>
-        
-        <a href="https://giphy.com/gifs/michael-j-fox-back-to-the-future-part-two-S2wDawnEOEV68"> 
-            The future has new toys
-        </a> 
-        </p> 
-    </figcaption>
-    
+<figure class="floating-left halfwidth"><img src="/img/hoverboard.gif"/><figcaption>
+            <p>
+                    <a href="https://giphy.com/gifs/michael-j-fox-back-to-the-future-part-two-S2wDawnEOEV68">The future has new toys</a></p>
+        </figcaption>
 </figure>
-
 
 <p>Here are two examples of changes creeping into the development version of R meant that I had to alter package code to anticipate the future.</p>
-
 <p>In R 3.4, a <a href="https://github.com/wch/r-source/blob/trunk/doc/NEWS.Rd#L1074-L1075">change</a> was made to the signature of the <code>median()</code> function, adding <code>...</code>. This made <code>median</code> consistent with similar functions (e.g. <code>mean</code>) and allowed methods to be defined that take additional arguments.</p>
-
 <p>That&rsquo;s a good change, but unfortunately it made it difficult to define those methods because you had to find a way to support both versions, with and without <code>...</code>. Using S4 methods, when you call <code>setMethod</code>, the function you assign as the method has to match the signature of the generic. So in the old (at the time, current) version of R, I needed something like</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">setMethod</span>(<span style="color:#e6db74">&#34;median&#34;</span>, <span style="color:#e6db74">&#34;MyClass&#34;</span>, <span style="color:#a6e22e">function </span>(x, na.rm) <span style="color:#a6e22e">do_stuff</span>(x, na.rm))
+</code></pre></div><p>But starting in 3.4 (and in R-devel builds prior to the release, which is when it bit me), that would fail because the signature didn&rsquo;t match. Instead, I needed</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">setMethod</span>(<span style="color:#e6db74">&#34;median&#34;</span>, <span style="color:#e6db74">&#34;MyClass&#34;</span>, <span style="color:#a6e22e">function </span>(x, na.rm, <span style="color:#66d9ef">...</span>) <span style="color:#a6e22e">do_stuff</span>(x, na.rm))
+</code></pre></div><p>The first part of the solution is knowing which signature you need to match. Rather than checking version strings, the approach I took was to inspect the <code>median</code> function&rsquo;s arguments using the <code>formals</code> function</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">formals</span>(median)
 
-<pre><code class="language-r">setMethod(&quot;median&quot;, &quot;MyClass&quot;, function (x, na.rm) do_stuff(x, na.rm))
-</code></pre>
-
-<p>But starting in 3.4 (and in R-devel builds prior to the release, which is when it bit me), that would fail because the signature didn&rsquo;t match. Instead, I needed</p>
-
-<pre><code class="language-r">setMethod(&quot;median&quot;, &quot;MyClass&quot;, function (x, na.rm, ...) do_stuff(x, na.rm))
-</code></pre>
-
-<p>The first part of the solution is knowing which signature you need to match. Rather than checking version strings, the approach I took was to inspect the <code>median</code> function&rsquo;s arguments using the <code>formals</code> function</p>
-
-<pre><code class="language-r">formals(median)
-
-## $x
-##
-##
-## $na.rm
-## [1] FALSE
-##
-## $...
-##
-</code></pre>
-
-<p>which returns a list, and then seeing if &ldquo;&hellip;&rdquo; was in the names of that list:</p>
-
-<pre><code class="language-r">is.R.3.4 &lt;- &quot;...&quot; %in% names(formals(median))
-</code></pre>
-
-<p>(Re-reading the man page for <a href="https://www.rdocumentation.org/link/formals?package=base"><code>formals</code></a> now, I see that there is a <a href="https://www.rdocumentation.org/link/formalArgs?package=base"><code>methods::formalArgs()</code></a> function that is a shortcut for <code>names(formals(x))</code>. It also turns out that there is even a <code>formals&lt;-</code> assignment function that lets you redefine function arguments and default values!)</p>
-
+<span style="color:#75715e">## $x</span>
+<span style="color:#75715e">##</span>
+<span style="color:#75715e">##</span>
+<span style="color:#75715e">## $na.rm</span>
+<span style="color:#75715e">## [1] FALSE</span>
+<span style="color:#75715e">##</span>
+<span style="color:#75715e">## $...</span>
+<span style="color:#75715e">##</span>
+</code></pre></div><p>which returns a list, and then seeing if &ldquo;&hellip;&rdquo; was in the names of that list:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">is.R.3.4 <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#34;...&#34;</span> <span style="color:#f92672">%in%</span> <span style="color:#a6e22e">names</span>(<span style="color:#a6e22e">formals</span>(median))
+</code></pre></div><p>(Re-reading the man page for <a href="https://www.rdocumentation.org/link/formals?package=base"><code>formals</code></a> now, I see that there is a <a href="https://www.rdocumentation.org/link/formalArgs?package=base"><code>methods::formalArgs()</code></a> function that is a shortcut for <code>names(formals(x))</code>. It also turns out that there is even a <code>formals&lt;-</code> assignment function that lets you redefine function arguments and default values!)</p>
 <p>Then, I wrote a function that returned the right method (function) based on a logical value.</p>
-
-<pre><code class="language-r">median_func &lt;- function (v) {
-    if (v) {
-        return(function (x, na.rm=FALSE, ...) do_stuff(x, na.rm))
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">median_func <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(v) {
+    <span style="color:#a6e22e">if </span>(v) {
+        <span style="color:#a6e22e">return</span>(<span style="color:#a6e22e">function </span>(x, na.rm<span style="color:#f92672">=</span><span style="color:#66d9ef">FALSE</span>, <span style="color:#66d9ef">...</span>) <span style="color:#a6e22e">do_stuff</span>(x, na.rm))
     } else {
-        return(function (x, na.rm=FALSE) do_stuff(x, na.rm))
+        <span style="color:#a6e22e">return</span>(<span style="color:#a6e22e">function </span>(x, na.rm<span style="color:#f92672">=</span><span style="color:#66d9ef">FALSE</span>) <span style="color:#a6e22e">do_stuff</span>(x, na.rm))
     }
 }
-</code></pre>
-
-<p>Finally, I called <code>setMethod</code> and evaluated <code>median_func</code> with the logical value of <code>is.R.3.4</code> to return the function with the signature that will match the generic.</p>
-
-<pre><code class="language-r">setMethod(&quot;median&quot;, &quot;NumericVariable&quot;, median_func(is.R.3.4))
-</code></pre>
-
-<p>One last challenge to circumvent: while I could conditionally set the method like this, I couldn&rsquo;t conditionally specify the man page: the .Rd file is created at build time, not install time. This meant that it was not possible to document this function/method in a forward-compatible way. And <code>R CMD check</code> also fails if you &ldquo;export&rdquo; undocumented functions, so I had to remove it from the explicit namespace export too. Fortunately (I guess?), method dispatch still worked, so it was fine.</p>
-
+</code></pre></div><p>Finally, I called <code>setMethod</code> and evaluated <code>median_func</code> with the logical value of <code>is.R.3.4</code> to return the function with the signature that will match the generic.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">setMethod</span>(<span style="color:#e6db74">&#34;median&#34;</span>, <span style="color:#e6db74">&#34;NumericVariable&#34;</span>, <span style="color:#a6e22e">median_func</span>(is.R.3.4))
+</code></pre></div><p>One last challenge to circumvent: while I could conditionally set the method like this, I couldn&rsquo;t conditionally specify the man page: the .Rd file is created at build time, not install time. This meant that it was not possible to document this function/method in a forward-compatible way. And <code>R CMD check</code> also fails if you &ldquo;export&rdquo; undocumented functions, so I had to remove it from the explicit namespace export too. Fortunately (I guess?), method dispatch still worked, so it was fine.</p>
 <p>Check out the <a href="https://github.com/Crunch-io/rcrunch/blob/1e9de0de2c57d518532e49afdacb7fad09ecdaa3/R/univariate.R#L49-L65">real code</a> in the <a href="https://crunch.io/r/crunch/">crunch</a> package.</p>
-
 <p>More recently, another change in R-devel, slated for R 3.5, broke <a href="https://enpiar.com/r/httptest/">httptest</a>. The <code>deparse</code> function is getting some attention, initially just internal improvements (<a href="http://r.789695.n4.nabble.com/Bug-dput-deparse-with-named-character-vector-inside-list-td4745298.html">which caused breakage for me along the way</a>) but now also a change to the arguments. Up to R 3.4, <code>deparse</code> (and by association <code>dput</code>) printed named lists and vectors in a verbose way. <code>list(a=1)</code> got deparsed as <code>structure(list(a = 1), .Names = &quot;a&quot;)</code> by default. But, you could specify &ldquo;control&rdquo; arguments to change that behavior, and <code>control = NULL</code> yielded <code>list(a = 1)</code> without the <code>structure</code> business. So I used that control option in <code>httptest</code>.</p>
-
 <p>The <a href="https://github.com/wch/r-source/commit/62fced00949b9a261034d24789175b205f7fa866">change</a> adds a &ldquo;niceNames&rdquo; deparse option, which is now required to get named lists printed with names&mdash;they no longer are named with <code>control = NULL</code>. So the new (future) default behavior of <code>deparse(list(a=1))</code> is what we want, and <code>deparse(list(a=1), control = NULL)</code> would now return <code>list(1)</code>, which is not what we want.</p>
-
 <p>So, we want <code>control = NULL</code> on current R, and <code>control = &quot;niceNames&quot;</code> in future R, in any version of R where the &ldquo;niceNames&rdquo; argument is valid. To solve this, let&rsquo;s assume we have a function, let&rsquo;s call it <code>deparseNamedList</code>, that either returns <code>NULL</code> or <code>&quot;niceNames&quot;</code>, depending on the version of R. We can then call <code>deparse</code> like</p>
-
-<pre><code class="language-r">deparse(x, control=deparseNamedList())
-</code></pre>
-
-<p>Now we just need that function. As it turns out, if you try to specify &ldquo;niceNames&rdquo; on older versions of R that don&rsquo;t support it, you get an error. That&rsquo;s too bad; if <code>deparse</code> just ignored options it didn&rsquo;t recognize, we could just always specify &ldquo;niceNames&rdquo;. Instead, though, we can use that validation error to determine which control parameters to provide. Something like this:</p>
-
-<pre><code class="language-r">deparseNamedList &lt;- function () {
-    if (inherits(try(.deparseOpts(&quot;niceNames&quot;), silent=TRUE), &quot;try-error&quot;)) {
-        # niceNames isn't valid, so we're in old R
-        return(NULL)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">deparse</span>(x, control<span style="color:#f92672">=</span><span style="color:#a6e22e">deparseNamedList</span>())
+</code></pre></div><p>Now we just need that function. As it turns out, if you try to specify &ldquo;niceNames&rdquo; on older versions of R that don&rsquo;t support it, you get an error. That&rsquo;s too bad; if <code>deparse</code> just ignored options it didn&rsquo;t recognize, we could just always specify &ldquo;niceNames&rdquo;. Instead, though, we can use that validation error to determine which control parameters to provide. Something like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">deparseNamedList <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>() {
+    <span style="color:#a6e22e">if </span>(<span style="color:#a6e22e">inherits</span>(<span style="color:#a6e22e">try</span>(<span style="color:#a6e22e">.deparseOpts</span>(<span style="color:#e6db74">&#34;niceNames&#34;</span>), silent<span style="color:#f92672">=</span><span style="color:#66d9ef">TRUE</span>), <span style="color:#e6db74">&#34;try-error&#34;</span>)) {
+        <span style="color:#75715e"># niceNames isn&#39;t valid, so we&#39;re in old R</span>
+        <span style="color:#a6e22e">return</span>(<span style="color:#66d9ef">NULL</span>)
     }
-    return(&quot;niceNames&quot;)
+    <span style="color:#a6e22e">return</span>(<span style="color:#e6db74">&#34;niceNames&#34;</span>)
 }
-</code></pre>
-
-<p>(Aside: that&rsquo;s not actually how I wrote it, though it is the more straightforward way. Instead, I did:</p>
-
-<pre><code class="language-r">deparseNamedList &lt;- function () {
-    past &lt;- inherits(try(.deparseOpts(&quot;niceNames&quot;), silent=TRUE), &quot;try-error&quot;)
-    past &lt;- ifelse(past, &quot;old&quot;, &quot;new&quot;)
-    return(list(new=&quot;niceNames&quot;)[[past]])
+</code></pre></div><p>(Aside: that&rsquo;s not actually how I wrote it, though it is the more straightforward way. Instead, I did:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">deparseNamedList <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>() {
+    past <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">inherits</span>(<span style="color:#a6e22e">try</span>(<span style="color:#a6e22e">.deparseOpts</span>(<span style="color:#e6db74">&#34;niceNames&#34;</span>), silent<span style="color:#f92672">=</span><span style="color:#66d9ef">TRUE</span>), <span style="color:#e6db74">&#34;try-error&#34;</span>)
+    past <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">ifelse</span>(past, <span style="color:#e6db74">&#34;old&#34;</span>, <span style="color:#e6db74">&#34;new&#34;</span>)
+    <span style="color:#a6e22e">return</span>(<span style="color:#a6e22e">list</span>(new<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;niceNames&#34;</span>)[[past]])
 }
-</code></pre>
-
-<p>This allowed me technically to keep 100 percent line coverage in the test suite. In the more natural function, it&rsquo;s not possible to call every line in the function in a single version of R, but in this function, you can. Basically, test coverage became a game within a game: how to get a function that would execute every line in any version of R. Of course, it still doesn&rsquo;t mean that both logical cases are tested in a single version&mdash;one example among many of why 100 percent line coverage is nice to have but doesn&rsquo;t guarantee quality.)</p>
-
+</code></pre></div><p>This allowed me technically to keep 100 percent line coverage in the test suite. In the more natural function, it&rsquo;s not possible to call every line in the function in a single version of R, but in this function, you can. Basically, test coverage became a game within a game: how to get a function that would execute every line in any version of R. Of course, it still doesn&rsquo;t mean that both logical cases are tested in a single version&mdash;one example among many of why 100 percent line coverage is nice to have but doesn&rsquo;t guarantee quality.)</p>
 <p>To reiterate, for both <code>median</code> and <code>deparse</code>, we could have used the <code>R.Version()</code> function to figure out which version we were on. It returns even the <code>&quot;svn rev&quot;</code>, the revision number, for R-devel, so we could have pinpointed the change in deparse by revision and switched that way. But I like the <em>de facto</em> way of determining which version you&rsquo;re on: all that matters is the presence or absence of some feature, not what the name or revision number of the code is. Particularly when dealing with changes as they come in R-devel, trying to reason about version numbers may not be the most effective solution anyway.</p>
-
 <a class="headline-anchor" href="#iii-way-back-to-the-distant-past"><h1 id="iii-way-back-to-the-distant-past">III. Way back to the distant past</a> </h1>
-
-
-<figure class="floating-right halfwidth">
-    
-        <img src="/img/bttfiii.gif" />
-    
-    
-    <figcaption>
-        <p>
-        
-        <a href="http://33.media.tumblr.com/d99ae1c753b568dcb87139cf099cedb9/tumblr_nnica9WQb31qfr6udo1_500.gif"> 
-            A train wreck
-        </a> 
-        </p> 
-    </figcaption>
-    
+<figure class="floating-right halfwidth"><img src="/img/bttfiii.gif"/><figcaption>
+            <p>
+                    <a href="http://33.media.tumblr.com/d99ae1c753b568dcb87139cf099cedb9/tumblr_nnica9WQb31qfr6udo1_500.gif">A train wreck</a></p>
+        </figcaption>
 </figure>
-
 
 <p>Just like the movies, the one going back farthest in time was the least enjoyable. I had a CRAN submission for the <a href="https://crunch.io/r/crunch/">crunch</a> package rejected because the tests failed to run on the Solaris operating system, which R still supports and CRAN includes in their continuous integration checks. The problem was an encoding issue: specifically, I had non-ASCII UTF-8 in a test file, and the test file <em>failed to parse</em>. That&rsquo;s right: it wasn&rsquo;t that the tests ran and failed; the file couldn&rsquo;t be read at all. Naturally, <code>R CMD check</code> passed locally for me, and it passed on Travis and Appveyor.</p>
-
 <p>Suppose the offending test file contained this.</p>
-
-<pre><code class="language-r">test_that(&quot;Something about UTF-8&quot;, {
-    expect_identical(Encoding(&quot;Budějovický Budvar&quot;), &quot;UTF-8&quot;)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">test_that</span>(<span style="color:#e6db74">&#34;Something about UTF-8&#34;</span>, {
+    <span style="color:#a6e22e">expect_identical</span>(<span style="color:#a6e22e">Encoding</span>(<span style="color:#e6db74">&#34;Budějovický Budvar&#34;</span>), <span style="color:#e6db74">&#34;UTF-8&#34;</span>)
 })
-</code></pre>
-
-<p>Adding <code>skip_on_cran()</code> like this</p>
-
-<pre><code class="language-r">test_that(&quot;Something about UTF-8&quot;, {
-    skip_on_cran()
-    expect_identical(Encoding(&quot;Budějovický Budvar&quot;), &quot;UTF-8&quot;)
+</code></pre></div><p>Adding <code>skip_on_cran()</code> like this</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">test_that</span>(<span style="color:#e6db74">&#34;Something about UTF-8&#34;</span>, {
+    <span style="color:#a6e22e">skip_on_cran</span>()
+    <span style="color:#a6e22e">expect_identical</span>(<span style="color:#a6e22e">Encoding</span>(<span style="color:#e6db74">&#34;Budějovický Budvar&#34;</span>), <span style="color:#e6db74">&#34;UTF-8&#34;</span>)
 })
-</code></pre>
-
-<p>doesn&rsquo;t resolve the issue because it&rsquo;s the file itself that can&rsquo;t parse: it wasn&rsquo;t even getting to the point of executing the test code.</p>
-
+</code></pre></div><p>doesn&rsquo;t resolve the issue because it&rsquo;s the file itself that can&rsquo;t parse: it wasn&rsquo;t even getting to the point of executing the test code.</p>
 <p>To work around it, I moved the <code>test_that</code> code block that contained UTF-8 to another file, &ldquo;utftesting.R&rdquo;, and then <code>source()</code>d that file:</p>
-
-<pre><code class="language-r">test_that(&quot;Something about UTF-8&quot;, {
-    skip_on_cran()
-    source(&quot;utftesting.R&quot;, local=TRUE)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">test_that</span>(<span style="color:#e6db74">&#34;Something about UTF-8&#34;</span>, {
+    <span style="color:#a6e22e">skip_on_cran</span>()
+    <span style="color:#a6e22e">source</span>(<span style="color:#e6db74">&#34;utftesting.R&#34;</span>, local<span style="color:#f92672">=</span><span style="color:#66d9ef">TRUE</span>)
 })
-</code></pre>
-
-<p>That way, the tests can still exist and be run locally and on Travis, but they&rsquo;re appropriately skipped on CRAN. This works because <code>testthat</code> only runs the <code>test-*.R</code> files, not any other .R or other kinds of files you have in your test directory. &ldquo;utftesting.R&rdquo; only gets touched after <code>skip_on_cran()</code> is called.</p>
-
+</code></pre></div><p>That way, the tests can still exist and be run locally and on Travis, but they&rsquo;re appropriately skipped on CRAN. This works because <code>testthat</code> only runs the <code>test-*.R</code> files, not any other .R or other kinds of files you have in your test directory. &ldquo;utftesting.R&rdquo; only gets touched after <code>skip_on_cran()</code> is called.</p>
 <p>To prevent a future relapse, I added this check that my test- files are all ASCII:</p>
-
-<pre><code class="language-r">test_that(&quot;All test- files are ASCII (for CHECK)&quot;, {
-    for (f in dir(pattern=&quot;^test.*R$&quot;)) {
-        expect_warning(scan(f, what=character(), fileEncoding=&quot;ascii&quot;, quiet=TRUE),
-            NA, info=i)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">test_that</span>(<span style="color:#e6db74">&#34;All test- files are ASCII (for CHECK)&#34;</span>, {
+    <span style="color:#a6e22e">for </span>(f in <span style="color:#a6e22e">dir</span>(pattern<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;^test.*R$&#34;</span>)) {
+        <span style="color:#a6e22e">expect_warning</span>(<span style="color:#a6e22e">scan</span>(f, what<span style="color:#f92672">=</span><span style="color:#a6e22e">character</span>(), fileEncoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ascii&#34;</span>, quiet<span style="color:#f92672">=</span><span style="color:#66d9ef">TRUE</span>),
+            <span style="color:#66d9ef">NA</span>, info<span style="color:#f92672">=</span>i)
     }
 })
-</code></pre>
-
-<p>Actual code change <a href="https://github.com/Crunch-io/rcrunch/commit/7f749717f6b796046671981edaeabf41edf49947">here</a>, and current file status <a href="https://github.com/Crunch-io/rcrunch/blob/master/tests/testthat/test-encoding.R">here</a>. Maybe that&rsquo;s overzealous, but I&rsquo;d rather not worry about a CRAN submission failing due to Solaris again.</p>
-
+</code></pre></div><p>Actual code change <a href="https://github.com/Crunch-io/rcrunch/commit/7f749717f6b796046671981edaeabf41edf49947">here</a>, and current file status <a href="https://github.com/Crunch-io/rcrunch/blob/master/tests/testthat/test-encoding.R">here</a>. Maybe that&rsquo;s overzealous, but I&rsquo;d rather not worry about a CRAN submission failing due to Solaris again.</p>
 <a class="headline-anchor" href="#make-like-a-tree"><h1 id="make-like-a-tree">Make like a tree</a> </h1>
-
-
-<figure class="floating-left halfwidth">
-    
-        <img src="/img/arent_ready_yet_bttf.gif" />
-    
-    
-    <figcaption>
-        <p>
-        
-        <a href="http://www.reactiongifs.us/wp-content/uploads/2014/07/arent_ready_yet_bttf.gif"> 
-            Coding for the future
-        </a> 
-        </p> 
-    </figcaption>
-    
+<figure class="floating-left halfwidth"><img src="/img/arent_ready_yet_bttf.gif"/><figcaption>
+            <p>
+                    <a href="http://www.reactiongifs.us/wp-content/uploads/2014/07/arent_ready_yet_bttf.gif">Coding for the future</a></p>
+        </figcaption>
 </figure>
 
-
 <p>Because the language is continually evolving (slowly but surely), those who maintain packages on CRAN will periodically have to figure out how to adjust their code to work across a range of versions. I&rsquo;ve found that adapting code based on the features and behavior of the R version in which it is running, rather than reading a version number or string, is a reliable way to keep things working, now, in the past, and into the future.</p>
-
-<!-- Some sort of conclusion -->
+<!-- raw HTML omitted -->
 
 
 
@@ -473,7 +302,7 @@ if (!(&quot;startsWith&quot; %in% ls(envir=asNamespace(&quot;base&quot;)))) {
     in <span itemprop="articleSection"><a href="/categories/code/">code</a></span>
   
   
-    and tagged <a href="/tags/cran/">CRAN</a>, <a href="/tags/r/">R</a> and <a href="/tags/packages/">packages</a>
+    and tagged <a href="/tags/cran/">CRAN</a>, <a href="/tags/packages/">packages</a> and <a href="/tags/r/">R</a>
   
 </p>
 
@@ -549,7 +378,7 @@ if (!(&quot;startsWith&quot; %in% ls(envir=asNamespace(&quot;base&quot;)))) {
   </script>
   <script src="/js/kube.legenda.js" type="text/javascript">
   </script>
-  <script src="/js/master.js" type="text/javascript">
+  <script src="/js/main.js" type="text/javascript">
   </script>
 </body>
 

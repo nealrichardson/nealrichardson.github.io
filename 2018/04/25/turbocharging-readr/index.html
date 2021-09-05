@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <meta name="generator" content="Hugo 0.20.7" />
+  <meta name="generator" content="Hugo 0.88.1" />
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,23 +24,9 @@
   <meta property="og:title" content="Turbocharging &#39;readr&#39;" />
 <meta property="og:description" content="The &#39;readr&#39; package is a fast reader for text data files, and with a couple of tricks, we can make it even faster by only reading the parts of the files we care about." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2018/04/25/turbocharging-readr/" />
-
-  <meta property="og:image" content="https://enpiar.com/img/star-wars-light-speed.gif" />
-
-
-
-<meta property="article:published_time" content="2018-04-25T21:49:57-07:00"/>
-<meta property="article:modified_time" content="2018-04-25T21:49:57-07:00"/>
-
-
-
-
-
-
-
-
-
+<meta property="og:url" content="/2018/04/25/turbocharging-readr/" /><meta property="og:image" content="https://enpiar.com/img/star-wars-light-speed.gif" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2018-04-25T21:49:57-07:00" />
+<meta property="article:modified_time" content="2018-04-25T21:49:57-07:00" />
 
 
   
@@ -52,12 +38,16 @@
   
   
   
-<script>
-window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-ga('create', 'UA-104182925-1', 'auto');
-ga('send', 'pageview');
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-104182925-1', 'auto');
+	
+	ga('send', 'pageview');
+}
 </script>
-<script async src='//www.google-analytics.com/analytics.js'></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
   
 
@@ -70,8 +60,8 @@ ga('send', 'pageview');
   <link href="/css/kube.min.css" rel="stylesheet" type="text/css">
   <link href="/css/kube.legenda.css" rel="stylesheet" type="text/css">
   <link href="/css/highlight.css" rel="stylesheet" type="text/css">
-  <link href="/css/master.css" rel="stylesheet" type="text/css">
-  <link href="/css/kube.demo.css" rel="stylesheet" type="text/css">
+  <link href="/css/main.css" rel="stylesheet" type="text/css">
+  
 
  <link href="/css/custom.css" rel="stylesheet" type="text/css">
 
@@ -129,20 +119,11 @@ ga('send', 'pageview');
  </header>
   <main>
 <div class="push-center" itemscope itemtype="http://schema.org/BlogPosting">
-    
-<meta itemprop="name" content="Turbocharging &#39;readr&#39;">
-<meta itemprop="description" content="The &#39;readr&#39; package is a fast reader for text data files, and with a couple of tricks, we can make it even faster by only reading the parts of the files we care about.">
-
-
+    <meta itemprop="name" content="Turbocharging &#39;readr&#39;">
+<meta itemprop="description" content="The &#39;readr&#39; package is a fast reader for text data files, and with a couple of tricks, we can make it even faster by only reading the parts of the files we care about."><meta itemprop="datePublished" content="2018-04-25T21:49:57-07:00" />
 <meta itemprop="dateModified" content="2018-04-25T21:49:57-07:00" />
-<meta itemprop="wordCount" content="3063">
-
-  <meta itemprop="image" content="https://enpiar.com/img/star-wars-light-speed.gif">
-
-
-
-<meta itemprop="keywords" content="code,general,management,athena,automation,benchmark,blogdown,cran,documentation,httptest,hugo,leadership,logs,management,packages,performance,prioritization,product,productivity,project-management,python,r,readr,remote,serverless,sql,talks,tdd,technical-debt,testing,website,zen," />
-
+<meta itemprop="wordCount" content="3063"><meta itemprop="image" content="https://enpiar.com/img/star-wars-light-speed.gif">
+<meta itemprop="keywords" content="R,performance,benchmark,readr,logs," />
 <div id="hero">
     <h1 itemprop="headline">  Turbocharging 'readr'</h1>
     
@@ -156,387 +137,280 @@ ga('send', 'pageview');
 <div id="post-box">
 <div id="post" itemprop="articleBody">
 
-    
-
-<!-- The 'readr' package is fast. Can we make it faster? -->
-
+    <!-- raw HTML omitted -->
 <p>Recently I analyzed some web traffic for my <a href="https://crunch.io/team">team</a> at an all-hands meetup. I suspected there were some misconceptions about the frequency of certain kinds of requests, and that some basic descriptive statistics could help.</p>
-
 <p>Whenever I start an analysis like this, I also think about how to make it easier to repeat it. If the question is interesting enough to merit analysis now, it will probably be interesting next month too&mdash;particularly if it reveals things we want to improve. In this particular exercise, not only did I get statistics for my presentation, I also got a <a href="https://github.com/nealrichardson/elbr">new R package</a> and some insights into how to read in data stored in lots of text files in an efficient, fast way, using <a href="http://readr.tidyverse.org/"><code>readr</code></a>.</p>
-
 <p>This post shares some of the insights I learned about <code>readr</code> and some tactics for squeezing more performance out of it. The <code>readr</code> package is fast, and by incorporating knowledge about the data structure and the questions we want to answer, we can selectively read the parts of the files we care about to make it load even faster.</p>
-
 <a class="headline-anchor" href="#the-data-source-aws-elastic-load-balancer"><h1 id="the-data-source-aws-elastic-load-balancer">The data source: AWS Elastic Load Balancer</a> </h1>
-
 <p>Amazon Web Services provides the <a href="https://aws.amazon.com/elasticloadbalancing/">Elastic Load Balancing</a> (ELB) service for distributing HTTP traffic across multiple servers. Load balancer logs have nice properties for understanding how our platform is performing. While they don&rsquo;t have the richness of detail that web server logs or Google Analytics might provide, they give a complete view of how our API is responding at the service boundary. We once had issues where clients reported timeouts, but the web server logs showed no problems. It turned out that the load balancer was timing out the requests; the server was successfully completing its work, only too late. The load balancer logs, though, confirmed the user reports and gave us evidence for how to resolve the issue.</p>
-
 <p>The ELB log format isn&rsquo;t the same as some <a href="https://github.com/Ironholds/webreadr">other standard log file schemas</a>, but it is <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/access-log-collection.html">documented</a>. Log files are written out in hour-long blocks, one per load balancing server&mdash;we usually have two at any given time&mdash;in a <code>.../year/month/day/</code> directory structure. There are 15 columns, space-delimited, with no header row. A log entry looks something like this:</p>
-
-<pre><code>2017-12-31T19:07:25.411521Z hpfv2 23.45.193.110:61424 10.20.0.2:443 0.000043 0.0181 0.000022 200 200 0 801 &quot;GET https://example.com:443/api/ HTTP/1.1&quot; &quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.80 Safari/537.36&quot; ECDHE-RSA-AES128-GCM-SHA256 TLSv1.2
-</code></pre>
-
-<p>Here&rsquo;s a simple function using <code>base::read.delim()</code> to read an ELB log file:</p>
-
-<pre><code class="language-r"># To avoid repetition below, define the column names globally here
-.elb.column.names &lt;- c(
-    &quot;timestamp&quot;, &quot;elb&quot;, &quot;client_port&quot;, &quot;backend_port&quot;,
-    &quot;request_processing_time&quot;, &quot;backend_processing_time&quot;,
-    &quot;response_processing_time&quot;, &quot;elb_status_code&quot;,
-    &quot;backend_status_code&quot;, &quot;received_bytes&quot;, &quot;sent_bytes&quot;,
-    &quot;request&quot;, &quot;user_agent&quot;, &quot;ssl_cipher&quot;, &quot;ssl_protocol&quot;
+<pre tabindex="0"><code>2017-12-31T19:07:25.411521Z hpfv2 23.45.193.110:61424 10.20.0.2:443 0.000043 0.0181 0.000022 200 200 0 801 &quot;GET https://example.com:443/api/ HTTP/1.1&quot; &quot;Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.80 Safari/537.36&quot; ECDHE-RSA-AES128-GCM-SHA256 TLSv1.2
+</code></pre><p>Here&rsquo;s a simple function using <code>base::read.delim()</code> to read an ELB log file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e"># To avoid repetition below, define the column names globally here</span>
+.elb.column.names <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">c</span>(
+    <span style="color:#e6db74">&#34;timestamp&#34;</span>, <span style="color:#e6db74">&#34;elb&#34;</span>, <span style="color:#e6db74">&#34;client_port&#34;</span>, <span style="color:#e6db74">&#34;backend_port&#34;</span>,
+    <span style="color:#e6db74">&#34;request_processing_time&#34;</span>, <span style="color:#e6db74">&#34;backend_processing_time&#34;</span>,
+    <span style="color:#e6db74">&#34;response_processing_time&#34;</span>, <span style="color:#e6db74">&#34;elb_status_code&#34;</span>,
+    <span style="color:#e6db74">&#34;backend_status_code&#34;</span>, <span style="color:#e6db74">&#34;received_bytes&#34;</span>, <span style="color:#e6db74">&#34;sent_bytes&#34;</span>,
+    <span style="color:#e6db74">&#34;request&#34;</span>, <span style="color:#e6db74">&#34;user_agent&#34;</span>, <span style="color:#e6db74">&#34;ssl_cipher&#34;</span>, <span style="color:#e6db74">&#34;ssl_protocol&#34;</span>
 )
-read.elb &lt;- function (file, ...) {
-    read.delim(
+read.elb <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(file, <span style="color:#66d9ef">...</span>) {
+    <span style="color:#a6e22e">read.delim</span>(
         file,
-        sep=&quot; &quot;,
-        header=FALSE,
-        stringsAsFactors=FALSE,
-        col.names=.elb.column.names,
-        ...
+        sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#34; &#34;</span>,
+        header<span style="color:#f92672">=</span><span style="color:#66d9ef">FALSE</span>,
+        stringsAsFactors<span style="color:#f92672">=</span><span style="color:#66d9ef">FALSE</span>,
+        col.names<span style="color:#f92672">=</span>.elb.column.names,
+        <span style="color:#66d9ef">...</span>
     )
 }
-</code></pre>
-
-<a class="headline-anchor" href="#the-readr-package"><h1 id="the-readr-package">The <code>readr</code> package</a> </h1>
-
-
-<figure class="floating-left">
-    
-        <img src="/img/millennium-falcon-awareness.gif" />
-    
-    
-    <figcaption>
-        <p>
-        
-        <a href="https://meandtenforever1216.tumblr.com/post/126611741283/star-wars-episode-iv-a-new-hope-gifs-and-pics"> 
-            Yes, it&#39;s a fast ship.
-        </a> 
-        </p> 
-    </figcaption>
-    
+</code></pre></div><a class="headline-anchor" href="#the-readr-package"><h1 id="the-readr-package">The <code>readr</code> package</a> </h1>
+<figure class="floating-left"><img src="/img/millennium-falcon-awareness.gif"/><figcaption>
+            <p>
+                    <a href="https://meandtenforever1216.tumblr.com/post/126611741283/star-wars-episode-iv-a-new-hope-gifs-and-pics">Yes, it&rsquo;s a fast ship.</a></p>
+        </figcaption>
 </figure>
 
-
-<!-- gif of millennium falcon is it a fast ship -->
-
+<!-- raw HTML omitted -->
 <p>I had heard that <code>readr</code> was fast, but I hadn&rsquo;t bothered to check it out before. In the three years since it was first released, I haven&rsquo;t had to read much text data in R, and when I have, I could stand to wait an extra second or two that the base R reader might take.</p>
-
 <p>In this case, though, I was reading in lots of large files that took around 4-6 seconds each to read with <code>read.elb()</code>. With 2 files per hour, that&rsquo;s 48 per day, 336 per week. That&rsquo;s about a half hour just to <em>read</em> a week&rsquo;s data, no analysis.</p>
-
 <p>I tried the simplest change to <code>read.elb()</code>&mdash;replace <code>.</code> with <code>_</code> and otherwise make the argument names line up&mdash;and tested it out. Read time dropped to about a second for the same file (around 82,000 rows), a savings of about three seconds. Three seconds itself isn&rsquo;t a huge win, but compounded over a week of files, it added up to around 20 minutes.</p>
-
-<pre><code class="language-r">read_elb &lt;- function (file, ...) {
-    read_delim(
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">read_elb <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(file, <span style="color:#66d9ef">...</span>) {
+    <span style="color:#a6e22e">read_delim</span>(
         file,
-        col_names=.elb.column.names,
-        delim=&quot; &quot;,
-        ...
+        col_names<span style="color:#f92672">=</span>.elb.column.names,
+        delim<span style="color:#f92672">=</span><span style="color:#e6db74">&#34; &#34;</span>,
+        <span style="color:#66d9ef">...</span>
     )
 }
 
-library(microbenchmark)
-microbenchmark(read.elb(f), read_elb(f), times=25)
+<span style="color:#a6e22e">library</span>(microbenchmark)
+<span style="color:#a6e22e">microbenchmark</span>(<span style="color:#a6e22e">read.elb</span>(f), <span style="color:#a6e22e">read_elb</span>(f), times<span style="color:#f92672">=</span><span style="color:#ae81ff">25</span>)
 
-## Unit: milliseconds
-##         expr       min        lq     mean   median       uq     max neval
-##  read.elb(f) 3181.3075 3697.9343 4164.783 3966.614 4943.768 5419.93    25
-##  read_elb(f)  650.4931  853.3361 1198.328 1166.088 1478.491 2325.52    25
-</code></pre>
-
-<p>Being able to read the week&rsquo;s data in 7 minutes is much better, but it&rsquo;s still not interactive speed. It&rsquo;s long enough for me to go do something else while I wait for it to run, and then forget that I was running something on the log server until much later. Plus, 7 minutes still seemed inefficient to load what amounted to only about 15 million rows of data. There had to be some way to optimize further.</p>
-
+<span style="color:#75715e">## Unit: milliseconds</span>
+<span style="color:#75715e">##         expr       min        lq     mean   median       uq     max neval</span>
+<span style="color:#75715e">##  read.elb(f) 3181.3075 3697.9343 4164.783 3966.614 4943.768 5419.93    25</span>
+<span style="color:#75715e">##  read_elb(f)  650.4931  853.3361 1198.328 1166.088 1478.491 2325.52    25</span>
+</code></pre></div><p>Being able to read the week&rsquo;s data in 7 minutes is much better, but it&rsquo;s still not interactive speed. It&rsquo;s long enough for me to go do something else while I wait for it to run, and then forget that I was running something on the log server until much later. Plus, 7 minutes still seemed inefficient to load what amounted to only about 15 million rows of data. There had to be some way to optimize further.</p>
 <a class="headline-anchor" href="#specify-column-schema"><h2 id="specify-column-schema">Specify column schema</a> </h2>
-
 <p>Since I had to read the <code>readr</code> docs to learn how to adapt my old function to use <code>read_delim()</code>, I saw that there was a convenient way to specify the types of the data in each column of the file. I&rsquo;m generally too cynical to trust that any data file I&rsquo;ve found is coded in an internally consistent way&mdash;to paraphrase Jean-Paul Sartre, hell is other people&rsquo;s data&mdash;so I generally let the reader sniff and then correct any miscoding in R. In this case, however, I trusted well enough that the ELB would write consistent data.</p>
-
 <p>In the interest of comparing apples to apples, I opened the man page for <code>base::read.table()</code> to look for a similar option, and it turns out that it had been there all along too (albeit inconsistently named). So I wrote two versions of the function specifying column types: <code>base</code> and <code>readr</code>.</p>
-
-<pre><code class="language-r">read.elb2 &lt;- function (file, ...) {
-    read.delim(
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">read.elb2 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(file, <span style="color:#66d9ef">...</span>) {
+    <span style="color:#a6e22e">read.delim</span>(
         file,
-        sep=&quot; &quot;,
-        header=FALSE,
-        stringsAsFactors=FALSE,
-        col.names=.elb.column.names,
-        colClasses=c(&quot;POSIXct&quot;, &quot;character&quot;, &quot;character&quot;, &quot;character&quot;, &quot;numeric&quot;, &quot;numeric&quot;, &quot;numeric&quot;, &quot;integer&quot;, &quot;integer&quot;, &quot;integer&quot;, &quot;integer&quot;, &quot;character&quot;, &quot;character&quot;, &quot;character&quot;, &quot;character&quot;),
-        ...
+        sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#34; &#34;</span>,
+        header<span style="color:#f92672">=</span><span style="color:#66d9ef">FALSE</span>,
+        stringsAsFactors<span style="color:#f92672">=</span><span style="color:#66d9ef">FALSE</span>,
+        col.names<span style="color:#f92672">=</span>.elb.column.names,
+        colClasses<span style="color:#f92672">=</span><span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;POSIXct&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>, <span style="color:#e6db74">&#34;numeric&#34;</span>, <span style="color:#e6db74">&#34;numeric&#34;</span>, <span style="color:#e6db74">&#34;numeric&#34;</span>, <span style="color:#e6db74">&#34;integer&#34;</span>, <span style="color:#e6db74">&#34;integer&#34;</span>, <span style="color:#e6db74">&#34;integer&#34;</span>, <span style="color:#e6db74">&#34;integer&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>),
+        <span style="color:#66d9ef">...</span>
     )
 }
 
-read_elb2 &lt;- function (file, ...) {
-    read_delim(
+read_elb2 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(file, <span style="color:#66d9ef">...</span>) {
+    <span style="color:#a6e22e">read_delim</span>(
         file,
-        col_names=.elb.column.names,
-        col_types=&quot;Tcccdddiiiicccc&quot;,
-        delim=&quot; &quot;,
-        ...
+        col_names<span style="color:#f92672">=</span>.elb.column.names,
+        col_types<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Tcccdddiiiicccc&#34;</span>,
+        delim<span style="color:#f92672">=</span><span style="color:#e6db74">&#34; &#34;</span>,
+        <span style="color:#66d9ef">...</span>
     )
 }
 
-microbenchmark(read.elb2(f), read_elb2(f), times=25)
+<span style="color:#a6e22e">microbenchmark</span>(<span style="color:#a6e22e">read.elb2</span>(f), <span style="color:#a6e22e">read_elb2</span>(f), times<span style="color:#f92672">=</span><span style="color:#ae81ff">25</span>)
 
-## Unit: milliseconds
-##          expr       min        lq     mean   median       uq      max neval
-##  read.elb2(f) 5372.7229 5842.2494 6444.295 6404.604 6910.416 8239.447    25
-##  read_elb2(f)  647.8243  740.1607 1110.859 1255.674 1332.852 1758.287    25
-</code></pre>
-
-<p>This second version using <code>readr</code> was not really any faster than the version without type specification. That suggests that the type guesser it uses when you don&rsquo;t declare column types is pretty efficient.</p>
-
+<span style="color:#75715e">## Unit: milliseconds</span>
+<span style="color:#75715e">##          expr       min        lq     mean   median       uq      max neval</span>
+<span style="color:#75715e">##  read.elb2(f) 5372.7229 5842.2494 6444.295 6404.604 6910.416 8239.447    25</span>
+<span style="color:#75715e">##  read_elb2(f)  647.8243  740.1607 1110.859 1255.674 1332.852 1758.287    25</span>
+</code></pre></div><p>This second version using <code>readr</code> was not really any faster than the version without type specification. That suggests that the type guesser it uses when you don&rsquo;t declare column types is pretty efficient.</p>
 <p>Interestingly, the base R version was significantly <em>slower</em> than without the type declarations. My guess, though I didn&rsquo;t confirm, is that specifying <code>&quot;POSIXct&quot;</code> for the timestamp column made it do more expensive work than it did without the specification (and in fact, the timestamp column is returned as <code>character</code> by default, unlike the simple <code>readr</code> version that correctly guesses the type).</p>
-
 <a class="headline-anchor" href="#select-columns"><h2 id="select-columns">Select columns</a> </h2>
-
 <p>Specifying the schema didn&rsquo;t really give us much for this file, but while reading the docs about column types, I noticed that there was an option to skip columns. Given that I only cared about a couple of the columns in the dataset, I wondered whether skipping columns would save some time.</p>
-
 <p>The approach I took was to add a <code>col_names</code> argument to my <code>read_elb()</code> that let you specify a subset of the column names. The default of <code>col_names</code> is all of the columns, so that makes it easy to document/show what the options are. This made for some interesting code to validate the column selections and construct the type mask appropriately:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">read_elb3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(file, col_names<span style="color:#f92672">=</span>.elb.column.names, <span style="color:#66d9ef">...</span>) {
+    <span style="color:#75715e">## Allow specifying only a selection of cols. Fill in &#34;col_types&#34; with &#34;-&#34;</span>
+    col_types <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">unlist</span>(<span style="color:#a6e22e">strsplit</span>(<span style="color:#e6db74">&#34;Tcccdddiiiicccc&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>))
+    keepcols <span style="color:#f92672">&lt;-</span> .elb.column.names <span style="color:#f92672">%in%</span> <span style="color:#a6e22e">match.arg</span>(col_names, several.ok<span style="color:#f92672">=</span><span style="color:#66d9ef">TRUE</span>)
+    col_types[<span style="color:#f92672">!</span>keepcols] <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#34;-&#34;</span>
 
-<pre><code class="language-r">read_elb3 &lt;- function (file, col_names=.elb.column.names, ...) {
-    ## Allow specifying only a selection of cols. Fill in &quot;col_types&quot; with &quot;-&quot;
-    col_types &lt;- unlist(strsplit(&quot;Tcccdddiiiicccc&quot;, &quot;&quot;))
-    keepcols &lt;- .elb.column.names %in% match.arg(col_names, several.ok=TRUE)
-    col_types[!keepcols] &lt;- &quot;-&quot;
-
-    read_delim(
+    <span style="color:#a6e22e">read_delim</span>(
         file,
-        col_names=.elb.column.names[keepcols],
-        col_types=paste(col_types, collapse=&quot;&quot;),
-        delim=&quot; &quot;,
-        ...
+        col_names<span style="color:#f92672">=</span>.elb.column.names[keepcols],
+        col_types<span style="color:#f92672">=</span><span style="color:#a6e22e">paste</span>(col_types, collapse<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>),
+        delim<span style="color:#f92672">=</span><span style="color:#e6db74">&#34; &#34;</span>,
+        <span style="color:#66d9ef">...</span>
     )
 }
-</code></pre>
+</code></pre></div><p>Once again, it turned out that this was also possible in <code>base::read.table()</code> too:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">read.elb3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(file, col.names<span style="color:#f92672">=</span>.elb.column.names, <span style="color:#66d9ef">...</span>) {
+    colClasses <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">list</span>(<span style="color:#e6db74">&#34;POSIXct&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>,
+        <span style="color:#e6db74">&#34;character&#34;</span>, <span style="color:#e6db74">&#34;numeric&#34;</span>, <span style="color:#e6db74">&#34;numeric&#34;</span>, <span style="color:#e6db74">&#34;numeric&#34;</span>, <span style="color:#e6db74">&#34;integer&#34;</span>,
+        <span style="color:#e6db74">&#34;integer&#34;</span>, <span style="color:#e6db74">&#34;integer&#34;</span>, <span style="color:#e6db74">&#34;integer&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>,
+        <span style="color:#e6db74">&#34;character&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>)
+    keepcols <span style="color:#f92672">&lt;-</span> .elb.column.names <span style="color:#f92672">%in%</span> <span style="color:#a6e22e">match.arg</span>(col.names, several.ok<span style="color:#f92672">=</span><span style="color:#66d9ef">TRUE</span>)
+    colClasses[<span style="color:#f92672">!</span>keepcols] <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">list</span>(<span style="color:#66d9ef">NULL</span>)
 
-<p>Once again, it turned out that this was also possible in <code>base::read.table()</code> too:</p>
-
-<pre><code class="language-r">read.elb3 &lt;- function (file, col.names=.elb.column.names, ...) {
-    colClasses &lt;- list(&quot;POSIXct&quot;, &quot;character&quot;, &quot;character&quot;,
-        &quot;character&quot;, &quot;numeric&quot;, &quot;numeric&quot;, &quot;numeric&quot;, &quot;integer&quot;,
-        &quot;integer&quot;, &quot;integer&quot;, &quot;integer&quot;, &quot;character&quot;,
-        &quot;character&quot;, &quot;character&quot;, &quot;character&quot;)
-    keepcols &lt;- .elb.column.names %in% match.arg(col.names, several.ok=TRUE)
-    colClasses[!keepcols] &lt;- list(NULL)
-
-    read.delim(
+    <span style="color:#a6e22e">read.delim</span>(
         file,
-        sep=&quot; &quot;,
-        header=FALSE,
-        stringsAsFactors=FALSE,
-        col.names=all_cols,
-        colClasses=colClasses,
-        ...
+        sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#34; &#34;</span>,
+        header<span style="color:#f92672">=</span><span style="color:#66d9ef">FALSE</span>,
+        stringsAsFactors<span style="color:#f92672">=</span><span style="color:#66d9ef">FALSE</span>,
+        col.names<span style="color:#f92672">=</span>all_cols,
+        colClasses<span style="color:#f92672">=</span>colClasses,
+        <span style="color:#66d9ef">...</span>
     )
 }
-</code></pre>
-
-<p>I benchmarked selecting just two columns that I generally was interested in analyzing: the &ldquo;request&rdquo;, containing HTTP method and URL, and &ldquo;elb_status_code&rdquo;, the HTTP status returned to the user.</p>
-
-<pre><code>Unit: milliseconds
+</code></pre></div><p>I benchmarked selecting just two columns that I generally was interested in analyzing: the &ldquo;request&rdquo;, containing HTTP method and URL, and &ldquo;elb_status_code&rdquo;, the HTTP status returned to the user.</p>
+<pre tabindex="0"><code>Unit: milliseconds
                                                       expr       min        lq
  read.elb3(f, col.names = c(&quot;elb_status_code&quot;, &quot;request&quot;)) 2346.7510 2877.7151
  read_elb3(f, col_names = c(&quot;elb_status_code&quot;, &quot;request&quot;))  415.2961  423.3368
       mean    median        uq       max neval
  3345.7744 3272.2818 3872.3245 4210.4662    25
   540.7898  451.9291  601.3482  968.7295    25
-</code></pre>
-
-<p>For the <code>readr</code> version, this change saved 800 milliseconds on the median read time, around a 60 percent improvement. That turns 7 minutes into 2:30 to read a week of data. The base version was also faster but still 2 seconds slower on average than the simplest <code>readr</code> version.</p>
-
+</code></pre><p>For the <code>readr</code> version, this change saved 800 milliseconds on the median read time, around a 60 percent improvement. That turns 7 minutes into 2:30 to read a week of data. The base version was also faster but still 2 seconds slower on average than the simplest <code>readr</code> version.</p>
 <p>My hunch, again unconfirmed, is that we&rsquo;re saving time by not allocating memory for the other columns, some of which, particularly &ldquo;user_agent&rdquo;, are large character vectors with lots of distinct values.</p>
-
 <a class="headline-anchor" href="#raw-row-filtering"><h2 id="raw-row-filtering">Raw row filtering</a> </h2>
-
 <p>Two and a half minutes is pretty good, but it still seemed excessive. For analyzing large log files, my first tool usually is <code>grep</code> at the command line, often combined with some <code>find</code> search for log files and piping that file list to it. For example, if I want to know how many 504 Gateway Timeout responses there were, I can search for this pattern in a directory of log files:</p>
-
-<pre><code>find . -name *.log | xargs -n 1 egrep &quot; -1 -1 504 &quot; | wc -l
-</code></pre>
-
-<p>and I get my answer almost instantly. So the machine is capable of scanning across large quantities of text data much faster than R seemed to be able to ingest it.</p>
-
+<pre tabindex="0"><code>find . -name *.log | xargs -n 1 egrep &quot; -1 -1 504 &quot; | wc -l
+</code></pre><p>and I get my answer almost instantly. So the machine is capable of scanning across large quantities of text data much faster than R seemed to be able to ingest it.</p>
 <p>A lot of the things I was interested in learning from the logs were similar: relatively rare events. It seemed inefficient to read in 15 million records just to find the 200 that matched my query and drop the rest. I wondered if there was a way to use the system tools to filter the data <em>before it got to R</em>.</p>
-
 <p>In the <code>readr::read_delim()</code> docs, I saw that the <code>file</code> argument accepted &ldquo;literal data&rdquo;:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e">## file: Either a path to a file, a connection, or literal data</span>
+<span style="color:#75715e">##       (either a single string or a raw vector).</span>
+<span style="color:#75715e">##</span>
+<span style="color:#75715e">##       ...</span>
+<span style="color:#75715e">##</span>
+<span style="color:#75715e">##       Literal data is most useful for examples and tests. It must</span>
+<span style="color:#75715e">##       contain at least one new line to be recognised as data</span>
+<span style="color:#75715e">##       (instead of a path).</span>
+</code></pre></div><p>So I tried shelling out to <code>egrep</code>, capturing stdout in R, and passing that as literal data.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">read_elb4 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(file,
+                       col_names<span style="color:#f92672">=</span>.elb.column.names,
+                       line_filter<span style="color:#f92672">=</span><span style="color:#66d9ef">NULL</span>,
+                       <span style="color:#66d9ef">...</span>) {
 
-<pre><code class="language-r">## file: Either a path to a file, a connection, or literal data
-##       (either a single string or a raw vector).
-##
-##       ...
-##
-##       Literal data is most useful for examples and tests. It must
-##       contain at least one new line to be recognised as data
-##       (instead of a path).
-</code></pre>
+    col_types <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">unlist</span>(<span style="color:#a6e22e">strsplit</span>(<span style="color:#e6db74">&#34;Tcccdddiiiicccc&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>))
+    keepcols <span style="color:#f92672">&lt;-</span> .elb.column.names <span style="color:#f92672">%in%</span> <span style="color:#a6e22e">match.arg</span>(col_names, several.ok<span style="color:#f92672">=</span><span style="color:#66d9ef">TRUE</span>)
+    col_types[<span style="color:#f92672">!</span>keepcols] <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#34;-&#34;</span>
 
-<p>So I tried shelling out to <code>egrep</code>, capturing stdout in R, and passing that as literal data.</p>
-
-<pre><code class="language-r">read_elb4 &lt;- function (file,
-                       col_names=.elb.column.names,
-                       line_filter=NULL,
-                       ...) {
-
-    col_types &lt;- unlist(strsplit(&quot;Tcccdddiiiicccc&quot;, &quot;&quot;))
-    keepcols &lt;- .elb.column.names %in% match.arg(col_names, several.ok=TRUE)
-    col_types[!keepcols] &lt;- &quot;-&quot;
-
-    if (!is.null(line_filter)) {
-        ## Shell out to egrep
-        ## If there are no matches, egrep returns status 1, which creates
-        ## a warning in R (with system2 when stdout=TRUE)
-        file &lt;- suppressWarnings(
-            system2(&quot;egrep&quot;, c(shQuote(line_filter), file), stdout=TRUE)
+    <span style="color:#a6e22e">if </span>(<span style="color:#f92672">!</span><span style="color:#a6e22e">is.null</span>(line_filter)) {
+        <span style="color:#75715e">## Shell out to egrep</span>
+        <span style="color:#75715e">## If there are no matches, egrep returns status 1, which creates</span>
+        <span style="color:#75715e">## a warning in R (with system2 when stdout=TRUE)</span>
+        file <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">suppressWarnings</span>(
+            <span style="color:#a6e22e">system2</span>(<span style="color:#e6db74">&#34;egrep&#34;</span>, <span style="color:#a6e22e">c</span>(<span style="color:#a6e22e">shQuote</span>(line_filter), file), stdout<span style="color:#f92672">=</span><span style="color:#66d9ef">TRUE</span>)
         )
-        nmatches &lt;- length(file)
-        ## Concatenate
-        file &lt;- paste(file, collapse=&quot;\n&quot;)
-        if (nmatches &lt; 2) {
-            ## Append a newline so that readr recognizes this as literal data
-            file &lt;- paste0(file, &quot;\n&quot;)
+        nmatches <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">length</span>(file)
+        <span style="color:#75715e">## Concatenate</span>
+        file <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">paste</span>(file, collapse<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;\n&#34;</span>)
+        <span style="color:#a6e22e">if </span>(nmatches <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">2</span>) {
+            <span style="color:#75715e">## Append a newline so that readr recognizes this as literal data</span>
+            file <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">paste0</span>(file, <span style="color:#e6db74">&#34;\n&#34;</span>)
         }
     }
-    read_delim(
+    <span style="color:#a6e22e">read_delim</span>(
         file,
-        col_names=.elb.column.names[keepcols],
-        col_types=paste(col_types, collapse=&quot;&quot;),
-        delim=&quot; &quot;,
-        ...
+        col_names<span style="color:#f92672">=</span>.elb.column.names[keepcols],
+        col_types<span style="color:#f92672">=</span><span style="color:#a6e22e">paste</span>(col_types, collapse<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>),
+        delim<span style="color:#f92672">=</span><span style="color:#e6db74">&#34; &#34;</span>,
+        <span style="color:#66d9ef">...</span>
     )
 }
-</code></pre>
+</code></pre></div><p>For the base R die-hards, yes, there is a pure base version:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">read.elb4 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(file,         
+                       col.names<span style="color:#f92672">=</span>.elb.column.names,
+                       line_filter<span style="color:#f92672">=</span><span style="color:#66d9ef">NULL</span>,
+                       <span style="color:#66d9ef">...</span>) {
 
-<p>For the base R die-hards, yes, there is a pure base version:</p>
+    colClasses <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">list</span>(<span style="color:#e6db74">&#34;POSIXct&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>,
+        <span style="color:#e6db74">&#34;character&#34;</span>, <span style="color:#e6db74">&#34;numeric&#34;</span>, <span style="color:#e6db74">&#34;numeric&#34;</span>, <span style="color:#e6db74">&#34;numeric&#34;</span>, <span style="color:#e6db74">&#34;integer&#34;</span>,
+        <span style="color:#e6db74">&#34;integer&#34;</span>, <span style="color:#e6db74">&#34;integer&#34;</span>, <span style="color:#e6db74">&#34;integer&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>,
+        <span style="color:#e6db74">&#34;character&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>)
 
-<pre><code class="language-r">read.elb4 &lt;- function (file,         
-                       col.names=.elb.column.names,
-                       line_filter=NULL,
-                       ...) {
+    keepcols <span style="color:#f92672">&lt;-</span> .elb.column.names <span style="color:#f92672">%in%</span> <span style="color:#a6e22e">match.arg</span>(col.names, several.ok<span style="color:#f92672">=</span><span style="color:#66d9ef">TRUE</span>)
+    colClasses[<span style="color:#f92672">!</span>keepcols] <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">list</span>(<span style="color:#66d9ef">NULL</span>)
 
-    colClasses &lt;- list(&quot;POSIXct&quot;, &quot;character&quot;, &quot;character&quot;,
-        &quot;character&quot;, &quot;numeric&quot;, &quot;numeric&quot;, &quot;numeric&quot;, &quot;integer&quot;,
-        &quot;integer&quot;, &quot;integer&quot;, &quot;integer&quot;, &quot;character&quot;,
-        &quot;character&quot;, &quot;character&quot;, &quot;character&quot;)
-
-    keepcols &lt;- .elb.column.names %in% match.arg(col.names, several.ok=TRUE)
-    colClasses[!keepcols] &lt;- list(NULL)
-
-    if (!is.null(line_filter)) {
-        file &lt;- textConnection(
-            system2(&quot;egrep&quot;, c(shQuote(line_filter), file), stdout=TRUE)
+    <span style="color:#a6e22e">if </span>(<span style="color:#f92672">!</span><span style="color:#a6e22e">is.null</span>(line_filter)) {
+        file <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">textConnection</span>(
+            <span style="color:#a6e22e">system2</span>(<span style="color:#e6db74">&#34;egrep&#34;</span>, <span style="color:#a6e22e">c</span>(<span style="color:#a6e22e">shQuote</span>(line_filter), file), stdout<span style="color:#f92672">=</span><span style="color:#66d9ef">TRUE</span>)
         )
     }
-    read.delim(
+    <span style="color:#a6e22e">read.delim</span>(
         file,
-        sep=&quot; &quot;,
-        header=FALSE,
-        stringsAsFactors=FALSE,
-        col.names=all_cols,
-        colClasses=colClasses,
-        ...
+        sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#34; &#34;</span>,
+        header<span style="color:#f92672">=</span><span style="color:#66d9ef">FALSE</span>,
+        stringsAsFactors<span style="color:#f92672">=</span><span style="color:#66d9ef">FALSE</span>,
+        col.names<span style="color:#f92672">=</span>all_cols,
+        colClasses<span style="color:#f92672">=</span>colClasses,
+        <span style="color:#66d9ef">...</span>
     )
 }
-</code></pre>
-
-<p>I was curious whether <code>textConnection</code>, which it turned out <code>readr</code> wouldn&rsquo;t read from, gave a benefit relative to <code>paste(..., collapse=&quot;\n&quot;)</code>.</p>
-
+</code></pre></div><p>I was curious whether <code>textConnection</code>, which it turned out <code>readr</code> wouldn&rsquo;t read from, gave a benefit relative to <code>paste(..., collapse=&quot;\n&quot;)</code>.</p>
 <p>To test this, I first benchmarked a search for requests to a specific entity in the system, which contained the hash <code>&quot;3aefb7&quot;</code> in the request URL. It appeared in 37 of the 82,000 requests in this file: less than 0.05 percent of requests.</p>
-
-<pre><code class="language-r">microbenchmark(
-    read.elb4(f, line_filter=&quot;3aefb7&quot;),
-    read_elb4(f, line_filter=&quot;3aefb7&quot;),
-    times=25
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">microbenchmark</span>(
+    <span style="color:#a6e22e">read.elb4</span>(f, line_filter<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;3aefb7&#34;</span>),
+    <span style="color:#a6e22e">read_elb4</span>(f, line_filter<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;3aefb7&#34;</span>),
+    times<span style="color:#f92672">=</span><span style="color:#ae81ff">25</span>
 )
 
-## Unit: milliseconds
-##                                expr      min       lq      mean   median
-##  read.elb4(f, line_filter=&quot;3aefb7&quot;)  52.7301  57.7062   85.8613  69.7250
-##  read_elb4(f, line_filter=&quot;3aefb7&quot;)  49.5254  57.4182   83.8109  62.1328
-##         uq       max neval
-##   117.3559  133.6879    25
-##    94.4999  356.3631    25
-</code></pre>
-
-<p>Whoa! We&rsquo;re down from over a second to under 70 milliseconds! For relatively rare events, preprocessing the log file by shelling out to <code>grep</code> is a big win.</p>
-
+<span style="color:#75715e">## Unit: milliseconds</span>
+<span style="color:#75715e">##                                expr      min       lq      mean   median</span>
+<span style="color:#75715e">##  read.elb4(f, line_filter=&#34;3aefb7&#34;)  52.7301  57.7062   85.8613  69.7250</span>
+<span style="color:#75715e">##  read_elb4(f, line_filter=&#34;3aefb7&#34;)  49.5254  57.4182   83.8109  62.1328</span>
+<span style="color:#75715e">##         uq       max neval</span>
+<span style="color:#75715e">##   117.3559  133.6879    25</span>
+<span style="color:#75715e">##    94.4999  356.3631    25</span>
+</code></pre></div><p>Whoa! We&rsquo;re down from over a second to under 70 milliseconds! For relatively rare events, preprocessing the log file by shelling out to <code>grep</code> is a big win.</p>
 <p>Let&rsquo;s try another benchmark, this time with a less rare line filter: a search for <code>POST</code> requests, which made up around 35 percent of this file (28,516 lines).</p>
-
-<pre><code class="language-r">microbenchmark(
-    read.elb4(f, line_filter=&quot;POST &quot;),
-    read_elb4(f, line_filter=&quot;POST &quot;),
-    times=25
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">microbenchmark</span>(
+    <span style="color:#a6e22e">read.elb4</span>(f, line_filter<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;POST &#34;</span>),
+    <span style="color:#a6e22e">read_elb4</span>(f, line_filter<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;POST &#34;</span>),
+    times<span style="color:#f92672">=</span><span style="color:#ae81ff">25</span>
 )
 
-## Unit: milliseconds
-##                               expr        min        lq      mean    median
-##  read.elb4(f, line_filter=&quot;POST &quot;) 27355.1855 32679.313 34085.754 34171.807
-##  read_elb4(f, line_filter=&quot;POST &quot;)   868.1771  1392.776  1591.701  1674.178
-##         uq       max neval
-##  36018.332 38215.991    25
-##   1776.117  2060.066    25
-</code></pre>
-
-<p>Alright, so that&rsquo;s worse than without the filtering. Clearly, this raw row filtering has its biggest benefits when the number of rows that match your search is small. I didn&rsquo;t attempt to nail down the specific threshold where one is faster than the other, but clearly it&rsquo;s somewhere less than this. In general, it&rsquo;s important to have an intuition about your data.</p>
-
+<span style="color:#75715e">## Unit: milliseconds</span>
+<span style="color:#75715e">##                               expr        min        lq      mean    median</span>
+<span style="color:#75715e">##  read.elb4(f, line_filter=&#34;POST &#34;) 27355.1855 32679.313 34085.754 34171.807</span>
+<span style="color:#75715e">##  read_elb4(f, line_filter=&#34;POST &#34;)   868.1771  1392.776  1591.701  1674.178</span>
+<span style="color:#75715e">##         uq       max neval</span>
+<span style="color:#75715e">##  36018.332 38215.991    25</span>
+<span style="color:#75715e">##   1776.117  2060.066    25</span>
+</code></pre></div><p>Alright, so that&rsquo;s worse than without the filtering. Clearly, this raw row filtering has its biggest benefits when the number of rows that match your search is small. I didn&rsquo;t attempt to nail down the specific threshold where one is faster than the other, but clearly it&rsquo;s somewhere less than this. In general, it&rsquo;s important to have an intuition about your data.</p>
 <p>A few final notes. First, I tried a version using the <a href="https://github.com/r-lib/processx"><code>processx</code></a> package for managing external processes, but the overhead it added eroded the filtering benefits: the direct <code>system2</code> call was notably faster. Second, I suspect that this code isn&rsquo;t platform-independent; I knew <code>egrep</code> was on my log server, so that wasn&rsquo;t a concern for me, but if you&rsquo;re looking to use this pattern on Windows, you may need to adapt the code or install a tool.</p>
-
-<a class="headline-anchor" href="#update-il-y-a-une-pipe"><h2 id="update-il-y-a-une-pipe">Update: <em>il y a une pipe!</em></a> </h2>
-
+<a class="headline-anchor" href="#update-_il-y-a-une-pipe_"><h2 id="update-_il-y-a-une-pipe_">Update: <em>il y a une pipe!</em></a> </h2>
 <p>After this was first published, <a href="https://twitter.com/jimhester_/status/993172484458508289">Jim Hester pointed out</a> that you could use the <code>pipe()</code> connection as an input and that would save having to read the standard output into an R object and <code>paste()</code>ing it together.</p>
-
 <p>I made a <code>read_elb5()</code> version that replaced the <code>line_filter</code> block with this much simpler code:</p>
-
-<pre><code class="language-r">if (!is.null(line_filter)) {
-    cmd &lt;- paste(&quot;egrep&quot;, shQuote(line_filter), file)
-    file &lt;- pipe(cmd)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">if </span>(<span style="color:#f92672">!</span><span style="color:#a6e22e">is.null</span>(line_filter)) {
+    cmd <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">paste</span>(<span style="color:#e6db74">&#34;egrep&#34;</span>, <span style="color:#a6e22e">shQuote</span>(line_filter), file)
+    file <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">pipe</span>(cmd)
 }
-</code></pre>
-
-<p>I found an even bigger log file (230 MB) than the one I&rsquo;d been benchmarking with before, and I repeated the <code>&quot;POST &quot;</code> search. Even though the file was bigger, there were fewer <code>POST</code> requests, only 16 percent. Because there were fewer lines being read in, the <code>paste(system2(...))</code> version was a bit faster than in the benchmark with the log file used throughout this post. The <code>pipe()</code> version, though, was nearly twice as fast as that:</p>
-
-<pre><code class="language-r">##  Unit: milliseconds
-##                              expr      min       lq     mean   median
-## read_elb4(f, line_filter=&quot;POST &quot;) 612.9062 623.6136 693.2473 641.7480
-## read_elb5(f, line_filter=&quot;POST &quot;) 327.5515 343.9537 380.7328 350.2193
-##       uq       max neval
-## 724.7104 1027.4293    25
-## 440.5271  477.9381    25
-</code></pre>
-
-<p>Under 400 milliseconds to read in 16,000 rows of log data, already filtered to the set I want to consider. <code>pipe()</code> it is!</p>
-
+</code></pre></div><p>I found an even bigger log file (230 MB) than the one I&rsquo;d been benchmarking with before, and I repeated the <code>&quot;POST &quot;</code> search. Even though the file was bigger, there were fewer <code>POST</code> requests, only 16 percent. Because there were fewer lines being read in, the <code>paste(system2(...))</code> version was a bit faster than in the benchmark with the log file used throughout this post. The <code>pipe()</code> version, though, was nearly twice as fast as that:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e">##  Unit: milliseconds</span>
+<span style="color:#75715e">##                              expr      min       lq     mean   median</span>
+<span style="color:#75715e">## read_elb4(f, line_filter=&#34;POST &#34;) 612.9062 623.6136 693.2473 641.7480</span>
+<span style="color:#75715e">## read_elb5(f, line_filter=&#34;POST &#34;) 327.5515 343.9537 380.7328 350.2193</span>
+<span style="color:#75715e">##       uq       max neval</span>
+<span style="color:#75715e">## 724.7104 1027.4293    25</span>
+<span style="color:#75715e">## 440.5271  477.9381    25</span>
+</code></pre></div><p>Under 400 milliseconds to read in 16,000 rows of log data, already filtered to the set I want to consider. <code>pipe()</code> it is!</p>
 <p>One other observation: pipe or no pipe, doing the filtering before the data hits R is much faster than filtering it in R. For comparison, here&rsquo;s benchmarking of calling <code>grep</code> to find the <code>POST</code> requests in the full <code>data.frame</code> (roughly 100,000 rows) read in without any filtering:</p>
-
-<pre><code class="language-r">##  Unit: seconds
-##                       expr      min       lq     mean   median       uq
-## grep(&quot;^POST &quot;, df$request) 7.991233 9.218501 9.532355 9.644332 9.881512
-##      max neval
-## 10.83446    25
-</code></pre>
-
-<p>That is, even after spending several seconds to read in all of the data, it&rsquo;s another 9-10 seconds to identify which rows to keep. If you can skip that work, why not?</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e">##  Unit: seconds</span>
+<span style="color:#75715e">##                       expr      min       lq     mean   median       uq</span>
+<span style="color:#75715e">## grep(&#34;^POST &#34;, df$request) 7.991233 9.218501 9.532355 9.644332 9.881512</span>
+<span style="color:#75715e">##      max neval</span>
+<span style="color:#75715e">## 10.83446    25</span>
+</code></pre></div><p>That is, even after spending several seconds to read in all of the data, it&rsquo;s another 9-10 seconds to identify which rows to keep. If you can skip that work, why not?</p>
 <a class="headline-anchor" href="#conclusion-turbocharging-readr"><h2 id="conclusion-turbocharging-readr">Conclusion: Turbocharging readr</a> </h2>
-
-
-<figure class="floating-left">
-    
-        <img src="/img/star-wars-light-speed.gif" />
-    
-    
-    <figcaption>
-        <p>
-        
-        <a href="https://meandtenforever1216.tumblr.com/post/126611741283/star-wars-episode-iv-a-new-hope-gifs-and-pics"> 
-            Cropdusting this is not.
-        </a> 
-        </p> 
-    </figcaption>
-    
+<figure class="floating-left"><img src="/img/star-wars-light-speed.gif"/><figcaption>
+            <p>
+                    <a href="https://meandtenforever1216.tumblr.com/post/126611741283/star-wars-episode-iv-a-new-hope-gifs-and-pics">Cropdusting this is not.</a></p>
+        </figcaption>
 </figure>
 
-
 <p><code>readr</code> is fast, and if we know up front a bit about what questions we want to answer with the data, we can select and filter out of the files intelligently and make it even faster.</p>
-
 <p>One postscript: the release notes for R 3.5 contained this entry:</p>
-
 <blockquote>
 <ul>
 <li>Reading from connections in text mode is buffered, significantly
@@ -544,33 +418,21 @@ improving the performance of readLines(), as well as scan() and
 read.table(), at least when specifying colClasses.</li>
 </ul>
 </blockquote>
-
 <p>These benchmarks were done on R 3.4.2. It would be interesting to replicate these benchmarks on the new R release and see if that core R improvement closes the performance gap between <code>base</code> and <code>readr</code> functions.</p>
-
 <a class="headline-anchor" href="#the-elbr-package"><h1 id="the-elbr-package">The &lsquo;elbr&rsquo; package</a> </h1>
-
 <p>I&rsquo;ve incorporated these insights into the new <code>elbr</code> package, available <a href="https://github.com/nealrichardson/elbr">on GitHub</a> now. The package is more than a single file reader: it provides a <code>dplyr</code> interface to the entire directory of log files, allowing you to <code>select</code>, <code>filter</code>, and aggregate over multiple files as if you were querying a single database. It does so as efficiently as possible, only reading and returning the minimum necessary from each file and binding together the results into a single table. This allows you to work with log data much larger than can fit comfortably into memory, without needing to set up an external database or even thinking much about the file system.</p>
-
 <p>You can specify a date range in which to search, limiting the set of files to be considered at all, and then the other operations are passed down to each file as it is read. When you <code>select()</code> columns, those selections are passed to the file reader and only those columns are read in, as we did above; <code>filter()</code> operates on each file separately, before any stacking of <code>data.frames</code> into a single one. Because it is functionally a bit different, the <code>egrep</code> system-call filtering is its own function, <code>line_filter()</code>. All of this is specified on the single log &ldquo;database&rdquo; object&mdash;you don&rsquo;t have to think about how many files there are or mapping over them. So</p>
-
-<pre><code class="language-r">df &lt;- ELBLog(&quot;2018-04-01&quot;, &quot;2018-04-07&quot;) %&gt;%
-    select(request, elb_status_code) %&gt;%
-    filter(elb_status_code == 504) %&gt;%
-    collect()
-</code></pre>
-
-<p>would give you a <code>tbl</code> of all of the requests that timed out during that week, across all 300+ files, and</p>
-
-<pre><code class="language-r">df &lt;- ELBLog(&quot;2018-04-01&quot;, &quot;2018-04-07&quot;) %&gt;%
-    select(request, elb_status_code) %&gt;%
-    line_filter(&quot; -1 -1 504 &quot;) %&gt;%
-    collect()
-</code></pre>
-
-<p>would exploit knowledge of the raw log file contents to do that reading and filtering at hyperspeed.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">df <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">ELBLog</span>(<span style="color:#e6db74">&#34;2018-04-01&#34;</span>, <span style="color:#e6db74">&#34;2018-04-07&#34;</span>) <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">select</span>(request, elb_status_code) <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">filter</span>(elb_status_code <span style="color:#f92672">==</span> <span style="color:#ae81ff">504</span>) <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">collect</span>()
+</code></pre></div><p>would give you a <code>tbl</code> of all of the requests that timed out during that week, across all 300+ files, and</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">df <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">ELBLog</span>(<span style="color:#e6db74">&#34;2018-04-01&#34;</span>, <span style="color:#e6db74">&#34;2018-04-07&#34;</span>) <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">select</span>(request, elb_status_code) <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">line_filter</span>(<span style="color:#e6db74">&#34; -1 -1 504 &#34;</span>) <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">collect</span>()
+</code></pre></div><p>would exploit knowledge of the raw log file contents to do that reading and filtering at hyperspeed.</p>
 <p>Having a large dataset effectively sharded across multiple text files seems like a common enough problem, but I was surprised that in my (admittedly cursory) search for existing R packages, I didn&rsquo;t find one that provided a <code>dplyr</code>-like interface over them. (Maybe a friendly reader will point me at the relevant packages.)</p>
-
 <p>Perhaps if you have data like this, you just put it in a proper database and forget about it. But I didn&rsquo;t feel like installing another system dependency and setting up an ETL process just to get a little more insight from these logs, particularly when it seemed like base R (or even some hard-earned <code>bash</code> skills) got me most of the way to what I wanted. Plus, I enjoyed the opportunity to explore <code>readr</code> and play some more with tidy evaluation.</p>
 
 
@@ -586,7 +448,7 @@ read.table(), at least when specifying colClasses.</li>
     in <span itemprop="articleSection"><a href="/categories/code/">code</a></span>
   
   
-    and tagged <a href="/tags/r/">R</a>, <a href="/tags/benchmark/">benchmark</a>, <a href="/tags/logs/">logs</a>, <a href="/tags/performance/">performance</a> and <a href="/tags/readr/">readr</a>
+    and tagged <a href="/tags/benchmark/">benchmark</a>, <a href="/tags/logs/">logs</a>, <a href="/tags/performance/">performance</a>, <a href="/tags/r/">R</a> and <a href="/tags/readr/">readr</a>
   
 </p>
 
@@ -662,7 +524,7 @@ read.table(), at least when specifying colClasses.</li>
   </script>
   <script src="/js/kube.legenda.js" type="text/javascript">
   </script>
-  <script src="/js/master.js" type="text/javascript">
+  <script src="/js/main.js" type="text/javascript">
   </script>
 </body>
 

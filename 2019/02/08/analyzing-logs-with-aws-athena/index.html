@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <meta name="generator" content="Hugo 0.20.7" />
+  <meta name="generator" content="Hugo 0.88.1" />
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,23 +24,9 @@
   <meta property="og:title" content="Analyzing Logs with AWS Athena" />
 <meta property="og:description" content="With Athena, I got some answers out of several years of log data in S3 relatively quickly. I also had an opportunity to learn some new tricks." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2019/02/08/analyzing-logs-with-aws-athena/" />
-
-  <meta property="og:image" content="https://enpiar.com/img/aquarius.gif" />
-
-
-
-<meta property="article:published_time" content="2019-02-08T16:49:57-07:00"/>
-<meta property="article:modified_time" content="2019-02-08T16:49:57-07:00"/>
-
-
-
-
-
-
-
-
-
+<meta property="og:url" content="/2019/02/08/analyzing-logs-with-aws-athena/" /><meta property="og:image" content="https://enpiar.com/img/aquarius.gif" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2019-02-08T16:49:57-07:00" />
+<meta property="article:modified_time" content="2019-02-08T16:49:57-07:00" />
 
 
   
@@ -52,12 +38,16 @@
   
   
   
-<script>
-window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-ga('create', 'UA-104182925-1', 'auto');
-ga('send', 'pageview');
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-104182925-1', 'auto');
+	
+	ga('send', 'pageview');
+}
 </script>
-<script async src='//www.google-analytics.com/analytics.js'></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
   
 
@@ -70,8 +60,8 @@ ga('send', 'pageview');
   <link href="/css/kube.min.css" rel="stylesheet" type="text/css">
   <link href="/css/kube.legenda.css" rel="stylesheet" type="text/css">
   <link href="/css/highlight.css" rel="stylesheet" type="text/css">
-  <link href="/css/master.css" rel="stylesheet" type="text/css">
-  <link href="/css/kube.demo.css" rel="stylesheet" type="text/css">
+  <link href="/css/main.css" rel="stylesheet" type="text/css">
+  
 
  <link href="/css/custom.css" rel="stylesheet" type="text/css">
 
@@ -129,20 +119,11 @@ ga('send', 'pageview');
  </header>
   <main>
 <div class="push-center" itemscope itemtype="http://schema.org/BlogPosting">
-    
-<meta itemprop="name" content="Analyzing Logs with AWS Athena">
-<meta itemprop="description" content="With Athena, I got some answers out of several years of log data in S3 relatively quickly. I also had an opportunity to learn some new tricks.">
-
-
+    <meta itemprop="name" content="Analyzing Logs with AWS Athena">
+<meta itemprop="description" content="With Athena, I got some answers out of several years of log data in S3 relatively quickly. I also had an opportunity to learn some new tricks."><meta itemprop="datePublished" content="2019-02-08T16:49:57-07:00" />
 <meta itemprop="dateModified" content="2019-02-08T16:49:57-07:00" />
-<meta itemprop="wordCount" content="2468">
-
-  <meta itemprop="image" content="https://enpiar.com/img/aquarius.gif">
-
-
-
-<meta itemprop="keywords" content="code,general,management,athena,automation,benchmark,blogdown,cran,documentation,httptest,hugo,leadership,logs,management,packages,performance,prioritization,product,productivity,project-management,python,r,readr,remote,serverless,sql,talks,tdd,technical-debt,testing,website,zen," />
-
+<meta itemprop="wordCount" content="2468"><meta itemprop="image" content="https://enpiar.com/img/aquarius.gif">
+<meta itemprop="keywords" content="athena,serverless,sql,logs," />
 <div id="hero">
     <h1 itemprop="headline">  Analyzing Logs with AWS Athena</h1>
     
@@ -156,230 +137,132 @@ ga('send', 'pageview');
 <div id="post-box">
 <div id="post" itemprop="articleBody">
 
-    
-
-<p>This week, I wanted to analyze some web traffic patterns back over several years. For contemporary analysis, we sync the last couple of months of load balancer (AWS ELB) log files from S3 to a EC2 instance, and I&rsquo;ve <a href="https://enpiar.com/2018/04/25/turbocharging-readr/">written some tools in R</a> to query them using <code>dplyr</code> methods. The <a href="https://github.com/nealrichardson/elbr"><code>elbr</code></a> R package I wrote does some clever things to take advantage of the directory structure for fast filtering by date, and it supports parallelized reading and querying of the files, among other optimizations, so it&rsquo;s reasonably fast. But it assumes that the source files are local.</p>
-
+    <p>This week, I wanted to analyze some web traffic patterns back over several years. For contemporary analysis, we sync the last couple of months of load balancer (AWS ELB) log files from S3 to a EC2 instance, and I&rsquo;ve <a href="https://enpiar.com/2018/04/25/turbocharging-readr/">written some tools in R</a> to query them using <code>dplyr</code> methods. The <a href="https://github.com/nealrichardson/elbr"><code>elbr</code></a> R package I wrote does some clever things to take advantage of the directory structure for fast filtering by date, and it supports parallelized reading and querying of the files, among other optimizations, so it&rsquo;s reasonably fast. But it assumes that the source files are local.</p>
 <p>To get access to the full history of 1.6 billion requests, I&rsquo;d need a different way to query the data in S3. I&rsquo;d read some interesting things about AWS&rsquo;s <a href="https://aws.amazon.com/athena/">Athena</a> query service, including examples of how to use it to read ELB logs in S3, my exact need, and thought I&rsquo;d give it a try. And rather than check out the fun-looking <a href="https://rud.is/b/2018/04/20/painless-odbc-dplyr-connections-to-amazon-athena-and-apache-drill-with-r-odbc/">R bindings</a>, I decided to do the SQL the old-fashioned way&mdash;by googling for help and trying things I found on Stack Overflow.</p>
-
-
-<figure class="floating-right halfwidth">
-    
-        <img src="/img/respect.gif" />
-    
-    
-    <figcaption>
-        <p>
-        
-        <a href="https://gifer.com/en/41AV"> 
-            source
-        </a> 
-        </p> 
-    </figcaption>
-    
+<figure class="floating-right halfwidth"><img src="/img/respect.gif"/><figcaption>
+            <p>
+                    <a href="https://gifer.com/en/41AV">source</a></p>
+        </figcaption>
 </figure>
-
 
 <p>I partly chose the old-fashioned way because of a dark secret: I had never actually written a SQL query before. I&rsquo;m not sure how I&rsquo;ve made it this far without having done it. I&rsquo;ve been analyzing data for many years using all kinds of tools, and I&rsquo;ve scraped, coded, cajoled, and assembled by any means necessary lots of kinds of data in both academia and industry. I&rsquo;ve run jobs on big compute clusters, I&rsquo;ve written lots of code to manage working with datasets too big to fit into memory, and I&rsquo;ve gotten the results I needed. But not with a direct SQL query.</p>
-
 <p>I&rsquo;ve worked with plenty of data that ultimately rested in some database, but there&rsquo;s always been some other way to get the data I needed out: an ORM, a web API, or some other interface. R has some nice tools for doing SQL-like queries on large datasets, some that even compile to SQL, so I&rsquo;ve always managed to get what I needed without shouting <code>SELECT</code> myself.</p>
-
 <p>Here&rsquo;s how I learned by doing and got some quick results.</p>
-
 <a class="headline-anchor" href="#getting-started-with-athena"><h1 id="getting-started-with-athena">Getting started with Athena</a> </h1>
-
 <p>Athena is a service that lets you query data in S3 using SQL without having to provision servers and move data around&mdash;that is, it is &ldquo;serverless&rdquo;. It uses a variant of Hive for defining tables and schemas (with <a href="https://docs.aws.amazon.com/athena/latest/ug/unsupported-ddl.html">certain restrictions</a>) and Presto for querying the data (also with <a href="https://docs.aws.amazon.com/athena/latest/ug/other-notable-limitations.html">some limitations</a>).</p>
-
 <p>One of Athena&rsquo;s canonical examples is analyzing load balancer logs in S3. The <a href="https://docs.aws.amazon.com/athena/latest/ug/elasticloadbalancer-classic-logs.html">simple version</a> seemed straightforward enough, and an <a href="https://aws.amazon.com/blogs/big-data/analyzing-data-in-s3-using-amazon-athena/">AWS blog post</a> took an example even further. Since I wasn&rsquo;t planning on going too far off that happy path, it seemed easy enough for a novice to try out. Plus, since Athena is serverless, the barrier to entry was low. I didn&rsquo;t have to do a bunch of work before I could try it out; I only needed to learn how to construct the right flavor of SQL query.</p>
-
 <p>From the beginning, Athena was quick to learn. When I first opened Athena in the AWS web console, it started me in a tutorial that used sample ELB logs. Rather than use that sample, I swapped in my S3 bucket for the <code>LOCATION</code> and followed the tutorial with my own data. The next step in the tutorial was</p>
-
-<pre><code class="language-sql">SELECT * FROM elb_logs
-  LIMIT 10;
-</code></pre>
-
-<p>Ta-da! Data on the screen. It was really quick to get set up and get a &ldquo;hello world&rdquo;; all of the fussy details of setting up the table pointing to my S3 bucket and parsing the files I was able to lift from a recipe.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> elb_logs
+  <span style="color:#66d9ef">LIMIT</span> <span style="color:#ae81ff">10</span>;
+</code></pre></div><p>Ta-da! Data on the screen. It was really quick to get set up and get a &ldquo;hello world&rdquo;; all of the fussy details of setting up the table pointing to my S3 bucket and parsing the files I was able to lift from a recipe.</p>
 <p>I noticed it was kinda slow for just grabbing 10 rows, and the timestamps suggested that it had just randomly grabbed some log file from the middle of the time window. And when I repeated the query, the rows it showed were different. So Athena didn&rsquo;t see the data as being ordered: good to know.</p>
-
 <p>Reading the <a href="https://aws.amazon.com/blogs/big-data/analyzing-data-in-s3-using-amazon-athena/">AWS blog post</a>, it seemed like partitioning, taking advantage of the directory layout, was the next thing to do. It would be faster and cheaper to query. So I copied the <code>CREATE TABLE</code> command that the tutorial had generated, stuck <code>PARTITIONED BY(year string, month string, day string)</code>, the line from the blog post, at the end&hellip; and got my first error.</p>
-
 <p>Googling around suggested that the syntax that <code>SHOW CREATE TABLE</code> returns from the GUI isn&rsquo;t great. Plus, I&rsquo;d put the <code>PARTITIONED BY</code> line in the wrong place. Fixed that, and now we were ready to go. The next task is to specify the partitions. Unfortunately, the automatic &ldquo;load all partitions&rdquo; link that Athena provides doesn&rsquo;t work for ELB logs because the file paths aren&rsquo;t <code>key=value</code> explicitly, they&rsquo;re just <code>value</code> (i.e. to work automatically, the paths would have to look like <code>.../year=2019/month=02/day=05/</code> rather than <code>.../2019/02/05/</code>), so to get partitions, you have to specify them each individually.</p>
-
 <p>Just to test it out, I added one, cribbing off the <code>ALTER TABLE ADD PARTITION</code> example from the blog post. I could now</p>
-
-<pre><code class="language-sql">SELECT * FROM elb_logs
-  WHERE year='2019'
-    AND month='02'
-    AND day='05'
-  LIMIT 10;
-</code></pre>
-
-<p>and get quick results just from that day. Nice.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> elb_logs
+  <span style="color:#66d9ef">WHERE</span> <span style="color:#66d9ef">year</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;2019&#39;</span>
+    <span style="color:#66d9ef">AND</span> <span style="color:#66d9ef">month</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;02&#39;</span>
+    <span style="color:#66d9ef">AND</span> <span style="color:#66d9ef">day</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;05&#39;</span>
+  <span style="color:#66d9ef">LIMIT</span> <span style="color:#ae81ff">10</span>;
+</code></pre></div><p>and get quick results just from that day. Nice.</p>
 <p>I now had enough of my bearings that I could see the path to the end. First, I&rsquo;d figure out how translate my R code that does some segmentation of traffic into SQL and get that working with just this single day partition. Then, I&rsquo;d add one more day partition and work out how to do the aggregations by segment and date. Once that checked out, I could write some code to produce the <code>PARTITION</code> statements for every day of data in the logs going back to late 2015, paste those into the console, and then run the query on the whole time series. That way, I could learn safely and quickly (and cheaply) on a small subset of data, and only once that was solid would I throw all of the data at it.</p>
-
 <p>My traffic segments were defined by pattern matching in the request URL and User-Agent string. This meant I became good friends with <code>CASE WHEN</code>, which is natural and reads nicely, and <code>REGEXP_EXTRACT</code>, which took a little experimentation to get to do what I wanted.</p>
-
 <p>Here&rsquo;s what I ended up with, with the specific URL regexps redacted:</p>
-
-<pre><code class="language-sql">SELECT
-    CASE
-        WHEN REGEXP_EXTRACT(url, '.*/path1/$', 0) != '' THEN 'Segment 1'
-        WHEN REGEXP_EXTRACT(url, '.*/path2/.*', 0) != '' THEN 'Segment 2'
-        WHEN REGEXP_EXTRACT(user_agent, 'WebKit|Firefox|Trident', 0) != '' THEN 'Other Web App'
-        ELSE 'Other'
-        END
-        as segment,
-    CASE
-        WHEN backend_processing_time &lt; 0 THEN 120
-        ELSE backend_processing_time + request_processing_time + client_response_time
-        END
-        as time,
-    day,
-    month,
-    year,
-    CAST(elb_response_code as INTEGER) as elb_response_code
-    FROM elb_logs
-    WHERE year='2019'
-      AND month='02'
-      AND day='05'
-    LIMIT 10;
-</code></pre>
-
-
-<figure class="floating-left halfwidth">
-    
-        <img src="/img/use-it.gif" />
-    
-    
-    <figcaption>
-        <p>
-        
-        <a href="https://uproxx.files.wordpress.com/2012/06/40yearoldvirgin-useit.gif?w=650"> 
-            It&#39;s important to ask the right questions
-        </a> 
-        </p> 
-    </figcaption>
-    
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SELECT</span>
+    <span style="color:#66d9ef">CASE</span>
+        <span style="color:#66d9ef">WHEN</span> REGEXP_EXTRACT(url, <span style="color:#e6db74">&#39;.*/path1/$&#39;</span>, <span style="color:#ae81ff">0</span>) <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;&#39;</span> <span style="color:#66d9ef">THEN</span> <span style="color:#e6db74">&#39;Segment 1&#39;</span>
+        <span style="color:#66d9ef">WHEN</span> REGEXP_EXTRACT(url, <span style="color:#e6db74">&#39;.*/path2/.*&#39;</span>, <span style="color:#ae81ff">0</span>) <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;&#39;</span> <span style="color:#66d9ef">THEN</span> <span style="color:#e6db74">&#39;Segment 2&#39;</span>
+        <span style="color:#66d9ef">WHEN</span> REGEXP_EXTRACT(user_agent, <span style="color:#e6db74">&#39;WebKit|Firefox|Trident&#39;</span>, <span style="color:#ae81ff">0</span>) <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;&#39;</span> <span style="color:#66d9ef">THEN</span> <span style="color:#e6db74">&#39;Other Web App&#39;</span>
+        <span style="color:#66d9ef">ELSE</span> <span style="color:#e6db74">&#39;Other&#39;</span>
+        <span style="color:#66d9ef">END</span>
+        <span style="color:#66d9ef">as</span> segment,
+    <span style="color:#66d9ef">CASE</span>
+        <span style="color:#66d9ef">WHEN</span> backend_processing_time <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">THEN</span> <span style="color:#ae81ff">120</span>
+        <span style="color:#66d9ef">ELSE</span> backend_processing_time <span style="color:#f92672">+</span> request_processing_time <span style="color:#f92672">+</span> client_response_time
+        <span style="color:#66d9ef">END</span>
+        <span style="color:#66d9ef">as</span> time,
+    <span style="color:#66d9ef">day</span>,
+    <span style="color:#66d9ef">month</span>,
+    <span style="color:#66d9ef">year</span>,
+    <span style="color:#66d9ef">CAST</span>(elb_response_code <span style="color:#66d9ef">as</span> INTEGER) <span style="color:#66d9ef">as</span> elb_response_code
+    <span style="color:#66d9ef">FROM</span> elb_logs
+    <span style="color:#66d9ef">WHERE</span> <span style="color:#66d9ef">year</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;2019&#39;</span>
+      <span style="color:#66d9ef">AND</span> <span style="color:#66d9ef">month</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;02&#39;</span>
+      <span style="color:#66d9ef">AND</span> <span style="color:#66d9ef">day</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;05&#39;</span>
+    <span style="color:#66d9ef">LIMIT</span> <span style="color:#ae81ff">10</span>;
+</code></pre></div><figure class="floating-left halfwidth"><img src="/img/use-it.gif"/><figcaption>
+            <p>
+                    <a href="https://uproxx.files.wordpress.com/2012/06/40yearoldvirgin-useit.gif?w=650">It&rsquo;s important to ask the right questions</a></p>
+        </figcaption>
 </figure>
-
 
 <p>In hindsight, there&rsquo;s probably a <code>REGEXP_MATCH</code> or something that does more naturally what I wanted (turns out it&rsquo;s spelled <a href="https://prestodb.github.io/docs/0.172/functions/regexp.html"><code>REGEXP_LIKE</code></a> in Presto), but one of my challenges as an inexperienced SQL writer was learning how to search for help. Sorting out all of the flavors of SQL and knowing which ones are valid in this environment took some practice.</p>
-
 <p>There is an additional <code>CASE WHEN</code> for the <code>time</code> variable, filling in what are effectively missing values for response time when the ELB returns 504 Gateway Timeout. This status is when the load balancer gives up waiting for the server to return, so <code>backend_processing_time</code> is unknown. ELB logs code this as <code>-1</code>, and if you&rsquo;re aggregating server response time, it&rsquo;s important not to treat that as a literal negative value.</p>
-
 <p>One fun feature: the bits of the file path that defined the partitions, which happen to be year, month, and day, are now effectively part of the table, columns we can select and group by. That felt like getting something for free: no need to extract them from the timestamp column in the data.</p>
-
 <a class="headline-anchor" href="#aggregating"><h2 id="aggregating">Aggregating</a> </h2>
-
 <p>Next was to take that and compute some daily aggregates. This was mostly straightforward. Here&rsquo;s what I wrapped around that initial <code>SELECT</code> statement to do the aggregation:</p>
-
-<pre><code class="language-sql">SELECT
-    COUNT() as n,
-    SUM(time) as total_time,
-    SUM(CASE
-        WHEN elb_response_code &gt; 499 THEN 1
-        ELSE 0
-        END) as n_5xx,
-    SUM(CASE
-        WHEN elb_response_code = 504 THEN 1
-        ELSE 0
-        END) as n_504,
-    SUM(CASE
-        WHEN time &lt; .2 THEN 1
-        ELSE 0
-        END) as n_under200ms,
-    segment, day, month, year
-    FROM (SELECT
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SELECT</span>
+    <span style="color:#66d9ef">COUNT</span>() <span style="color:#66d9ef">as</span> n,
+    <span style="color:#66d9ef">SUM</span>(time) <span style="color:#66d9ef">as</span> total_time,
+    <span style="color:#66d9ef">SUM</span>(<span style="color:#66d9ef">CASE</span>
+        <span style="color:#66d9ef">WHEN</span> elb_response_code <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">499</span> <span style="color:#66d9ef">THEN</span> <span style="color:#ae81ff">1</span>
+        <span style="color:#66d9ef">ELSE</span> <span style="color:#ae81ff">0</span>
+        <span style="color:#66d9ef">END</span>) <span style="color:#66d9ef">as</span> n_5xx,
+    <span style="color:#66d9ef">SUM</span>(<span style="color:#66d9ef">CASE</span>
+        <span style="color:#66d9ef">WHEN</span> elb_response_code <span style="color:#f92672">=</span> <span style="color:#ae81ff">504</span> <span style="color:#66d9ef">THEN</span> <span style="color:#ae81ff">1</span>
+        <span style="color:#66d9ef">ELSE</span> <span style="color:#ae81ff">0</span>
+        <span style="color:#66d9ef">END</span>) <span style="color:#66d9ef">as</span> n_504,
+    <span style="color:#66d9ef">SUM</span>(<span style="color:#66d9ef">CASE</span>
+        <span style="color:#66d9ef">WHEN</span> time <span style="color:#f92672">&lt;</span> .<span style="color:#ae81ff">2</span> <span style="color:#66d9ef">THEN</span> <span style="color:#ae81ff">1</span>
+        <span style="color:#66d9ef">ELSE</span> <span style="color:#ae81ff">0</span>
+        <span style="color:#66d9ef">END</span>) <span style="color:#66d9ef">as</span> n_under200ms,
+    segment, <span style="color:#66d9ef">day</span>, <span style="color:#66d9ef">month</span>, <span style="color:#66d9ef">year</span>
+    <span style="color:#66d9ef">FROM</span> (<span style="color:#66d9ef">SELECT</span>
         ...
-        FROM elb_logs
+        <span style="color:#66d9ef">FROM</span> elb_logs
     )
-    GROUP BY segment, day, month, year
-</code></pre>
-
-<p>The way I computed the counts of subgroups (for example, requests that returned 504 Gateway Timeout status) with <code>CASE WHEN</code> seemed verbose and like there should be an easier way, but that was how the blog post did it, and it worked so I didn&rsquo;t try to polish. One sticky point was the ELB status code, which needed to be cast from string to an integer (and that&rsquo;s <code>INTEGER</code> not <code>INT</code>) in the inner <code>SELECT</code> statement, but that was easy enough to figure out from the error messages and some persistent googling.</p>
-
+    <span style="color:#66d9ef">GROUP</span> <span style="color:#66d9ef">BY</span> segment, <span style="color:#66d9ef">day</span>, <span style="color:#66d9ef">month</span>, <span style="color:#66d9ef">year</span>
+</code></pre></div><p>The way I computed the counts of subgroups (for example, requests that returned 504 Gateway Timeout status) with <code>CASE WHEN</code> seemed verbose and like there should be an easier way, but that was how the blog post did it, and it worked so I didn&rsquo;t try to polish. One sticky point was the ELB status code, which needed to be cast from string to an integer (and that&rsquo;s <code>INTEGER</code> not <code>INT</code>) in the inner <code>SELECT</code> statement, but that was easy enough to figure out from the error messages and some persistent googling.</p>
 <p>Before running against all of the data, I checked that the counts I was getting from Athena matched the results from my R code that runs against local copies of the log files. It looked sensible&hellip; except the counts of error responses were too low. Doing some exploration and querying counts grouped by <code>elb_response_code</code>, it appeared that all of the rows that corresponded to 504 Gateway Timeouts were all missing. (Once again, the first rule of working with data is <em>look at your data</em>!)</p>
-
-
-<figure class="floating-left halfwidth">
-    
-        <img src="/img/wax.gif" />
-    
-    
-    <figcaption>
-        <p>
-        
-        <a href="https://media3.giphy.com/media/8JKuFdUW7PVcs/giphy.gif"> 
-            Surprise!
-        </a> 
-        </p> 
-    </figcaption>
-    
+<figure class="floating-left halfwidth"><img src="/img/wax.gif"/><figcaption>
+            <p>
+                    <a href="https://media3.giphy.com/media/8JKuFdUW7PVcs/giphy.gif">Surprise!</a></p>
+        </figcaption>
 </figure>
 
-
 <p>Seeing how <code>REGEXP_EXTRACT</code> behaved and knowing that 504 responses look a little different in the ELB logs, my first guess was that the <code>CREATE TABLE</code>&rsquo;s <code>'input.regex'</code> was to blame. I compared what I had in my table definition with the blog post and found that the blog post one was more complex. Specifically, the regular expression didn&rsquo;t account for a <code>-1</code> response time. Apparently starting with the one from the tutorial was a bad idea&mdash;the sample data probably didn&rsquo;t have this request behavior and didn&rsquo;t need the more complex regular expression to parse the fields correctly.</p>
-
 <p>As a side note: as someone who has worked with lots of data sources, including these exact log files, it seemed strange to use a regular expression to parse a delimited text file. ELB logs are space-delimited, albeit with a little funny business where the <code>request</code> field contains the request method, URL, and protocol in a single quoted string. Maybe that was the reason for the special parsing, but it struck me as unnatural, like it was ignoring an important feature of the data and adding unnecessary complexity and room for error.</p>
-
 <a class="headline-anchor" href="#running-over-all-the-data"><h2 id="running-over-all-the-data">Running over all the data</a> </h2>
-
 <p>With that resolved, I was getting numbers for the three days of data that I had defined partitions for, and these matched the figures I got from my standard R script on the local files, so I was ready to try the whole series.</p>
-
 <p>To do that, I needed to generate <code>PARTITION</code> statements for every date for which there was data. When I need something quick and dirty, R is my go-to tool. This was indeed quick and dirty, not code that I find aesthetically pleasing, but it got it done.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e"># PARTITION (year=&#39;2019&#39;,month=&#39;02&#39;,day=&#39;05&#39;) location &#39;s3://my/elb/logs/2019/02/05&#39;</span>
 
-<pre><code class="language-r"># PARTITION (year='2019',month='02',day='05') location 's3://my/elb/logs/2019/02/05'
-
-partition_statement &lt;- function (date) {
-    date &lt;- format(date, &quot;%Y/%m/%d&quot;)
-    parts &lt;- unlist(strsplit(date, &quot;/&quot;))
-    part1 &lt;- paste0(&quot;(year='&quot;, parts[1], &quot;',month='&quot;, parts[2], &quot;',day='&quot;, parts[3], &quot;')&quot;)
-    paste0(
-        &quot;  PARTITION &quot;, part1,
-        &quot; location 's3://my/elb/logs/&quot;, date, &quot;'&quot;
+partition_statement <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(date) {
+    date <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">format</span>(date, <span style="color:#e6db74">&#34;%Y/%m/%d&#34;</span>)
+    parts <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">unlist</span>(<span style="color:#a6e22e">strsplit</span>(date, <span style="color:#e6db74">&#34;/&#34;</span>))
+    part1 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#34;(year=&#39;&#34;</span>, parts[1], <span style="color:#e6db74">&#34;&#39;,month=&#39;&#34;</span>, parts[2], <span style="color:#e6db74">&#34;&#39;,day=&#39;&#34;</span>, parts[3], <span style="color:#e6db74">&#34;&#39;)&#34;</span>)
+    <span style="color:#a6e22e">paste0</span>(
+        <span style="color:#e6db74">&#34;  PARTITION &#34;</span>, part1,
+        <span style="color:#e6db74">&#34; location &#39;s3://my/elb/logs/&#34;</span>, date, <span style="color:#e6db74">&#34;&#39;&#34;</span>
     )
 }
 
-dates &lt;- seq(as.Date(&quot;2015-10-22&quot;), as.Date(&quot;2019-02-05&quot;), 1)
-cat(sapply(dates, partition_statement), file=&quot;athena-partitions.sql&quot;)
-</code></pre>
-
-<p>Then, I just needed to paste those contents into the <code>ALTER TABLE ADD PARTITION</code> query, and we&rsquo;re ready to run over all the data.</p>
-
+dates <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">seq</span>(<span style="color:#a6e22e">as.Date</span>(<span style="color:#e6db74">&#34;2015-10-22&#34;</span>), <span style="color:#a6e22e">as.Date</span>(<span style="color:#e6db74">&#34;2019-02-05&#34;</span>), <span style="color:#ae81ff">1</span>)
+<span style="color:#a6e22e">cat</span>(<span style="color:#a6e22e">sapply</span>(dates, partition_statement), file<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;athena-partitions.sql&#34;</span>)
+</code></pre></div><p>Then, I just needed to paste those contents into the <code>ALTER TABLE ADD PARTITION</code> query, and we&rsquo;re ready to run over all the data.</p>
 <p>A query for a single day&rsquo;s worth of data took somewhere between two and four seconds to compute. Split the difference, and project over 3+ years of data, and if it scaled linearly, the query would take something on the order of an hour to finish; let&rsquo;s be generous and cut that in half because we had less traffic three years ago so the files are smaller back then. Surely, though, it would do better than 30 minutes&mdash;the whole point of the system is that it scales automatically&mdash;but how much better?</p>
-
-
-<figure class="floating-right">
-    
-        <img src="/img/aquarius.gif" />
-    
-    
-    <figcaption>
-        <p>
-        
-        <a href="https://media2.giphy.com/media/OEDhjYlskC3O8/giphy.gif"> 
-            Aquarius
-        </a> 
-        </p> 
-    </figcaption>
-    
+<figure class="floating-right"><img src="/img/aquarius.gif"/><figcaption>
+            <p>
+                    <a href="https://media2.giphy.com/media/OEDhjYlskC3O8/giphy.gif">Aquarius</a></p>
+        </figcaption>
 </figure>
 
-
 <p>I hit &ldquo;submit&rdquo; on the query, waited to see the progress bar indicating that it hadn&rsquo;t errored and was running, and went to the kitchen to get some coffee. When I came back&hellip; it was done! Half a terabyte of data, and results in 105 seconds. And I didn&rsquo;t have to configure a server or do anything beyond learn how to type a query. That was awesome.</p>
-
 <p>Now to hit &ldquo;download results to CSV&rdquo; and finish off my analysis in R from the comfort of my laptop.</p>
-
 <a class="headline-anchor" href="#conclusion"><h1 id="conclusion">Conclusion</a> </h1>
-
 <p>Athena is slick. It scales well and is easy to set up: no servers to provision, just straight to the queries. It was the perfect tool for the problem I had, and I can definitely see using it again if I have a data split across lots of files in an S3 bucket. In fact, since my initial experiment with it, I&rsquo;ve already come back to query the logs for different things. It&rsquo;s not instant but it&rsquo;s fast enough that I could use it to learn and iterate quickly, which was an important feature for me in this case.</p>
-
 <p>For its part, I found SQL to be certainly effective, though a bit barbaric and retrograde. Maybe it&rsquo;s all the uppercase statements&mdash;although as a novice searching around, it wasn&rsquo;t clear what, if anything, was case sensitive and how that varied by SQL variant. Empirically, all lowercase <code>select * from elb_logs where year='2019' and month='02' limit 10</code> works just fine, at least in Athena.</p>
-
 <p>And that&rsquo;s the other challenge, as I experienced it: SQL&rsquo;s utility seems to be as the lowest-common denominator language for accessing databases, yet the range of dialects is vast, so as a learner it takes some work to know what is idiomatic for the system you&rsquo;re querying. The experience was something like learning Spanish by looking up words in Google Translate: you get five alternatives back, the ones used in Spain, Mexico, Cuba, Peru, and Argentina, but you don&rsquo;t know which to use. Pick the wrong one, and the listener (database) will giggle because that <em>totally</em> doesn&rsquo;t mean what you think. So while it may be quick to get started and communicate the basics, it takes some time to learn the specifics of a given dialect.</p>
-
 <p>Nevertheless, SQL is also quite expressive and human readable. Somehow what felt like a bunch of grunting and pointing resulted in a beautiful sonnet, and I got results back quickly that I could understand and work with further. And beyond the results, I build a good foundation of knowledge for next time I use Athena or bare SQL.</p>
 
 
@@ -459,7 +342,7 @@ cat(sapply(dates, partition_statement), file=&quot;athena-partitions.sql&quot;)
   </script>
   <script src="/js/kube.legenda.js" type="text/javascript">
   </script>
-  <script src="/js/master.js" type="text/javascript">
+  <script src="/js/main.js" type="text/javascript">
   </script>
 </body>
 

@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Project Management on A Blog</title>
+    <title>project management on A Blog</title>
     <link>/tags/project-management/</link>
-    <description>Recent content in Project Management on A Blog</description>
+    <description>Recent content in project management on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 17 Jul 2019 06:49:57 -0700</lastBuildDate>
-    
-	<atom:link href="/tags/project-management/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Wed, 17 Jul 2019 06:49:57 -0700</lastBuildDate><atom:link href="/tags/project-management/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>To Err Is Human; To Ignore, Divine</title>
       <link>/2019/07/17/to-err-is-human-to-ignore-divine/</link>
       <pubDate>Wed, 17 Jul 2019 06:49:57 -0700</pubDate>
       
       <guid>/2019/07/17/to-err-is-human-to-ignore-divine/</guid>
-      <description>One of the great things about leading a software project is the sense of ownership over what you and your team are creating. Your mind is buzzing with the big picture of what your project can do and will be able to do. You also sweat the details, and particularly if you&amp;rsquo;ve been with it from the beginning, you have unrivaled breadth and depth of knowledge about the project.</description>
+      <description>One of the great things about leading a software project is the sense of ownership over what you and your team are creating. Your mind is buzzing with the big picture of what your project can do and will be able to do. You also sweat the details, and particularly if you&amp;rsquo;ve been with it from the beginning, you have unrivaled breadth and depth of knowledge about the project.
+So, when someone&amp;mdash;a user or new team member, for example&amp;mdash;has a question, you know the answer.</description>
     </item>
     
     <item>
@@ -26,7 +23,7 @@
       <pubDate>Thu, 03 Jan 2019 16:49:57 -0700</pubDate>
       
       <guid>/2019/01/03/the-s-curve/</guid>
-      <description>At Crunch, we&amp;rsquo;ve built up our product over the span of six years, and what we&amp;rsquo;ve built helps a lot of people analyze their data quickly and painlessly. As ever, our ambitions are great and we want to build more. Sometimes this requires changing data contracts and APIs, and that poses an additional challenge: not only do we have to design a good solution to our users&amp;rsquo; problems, we have to transition to it with minimal disruption.</description>
+      <description>At Crunch, we&amp;rsquo;ve built up our product over the span of six years, and what we&amp;rsquo;ve built helps a lot of people analyze their data quickly and painlessly. As ever, our ambitions are great and we want to build more. Sometimes this requires changing data contracts and APIs, and that poses an additional challenge: not only do we have to design a good solution to our users&#39; problems, we have to transition to it with minimal disruption.</description>
     </item>
     
   </channel>

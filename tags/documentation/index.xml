@@ -1,16 +1,12 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Documentation on A Blog</title>
+    <title>documentation on A Blog</title>
     <link>/tags/documentation/</link>
-    <description>Recent content in Documentation on A Blog</description>
+    <description>Recent content in documentation on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 17 Feb 2019 16:49:57 -0700</lastBuildDate>
-    
-	<atom:link href="/tags/documentation/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 17 Feb 2019 16:49:57 -0700</lastBuildDate><atom:link href="/tags/documentation/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Writing Docs Is Better Than Having Docs</title>
       <link>/2019/02/17/writing-docs-is-better-than-having-docs/</link>
@@ -28,7 +24,7 @@ It&amp;rsquo;s about 50-50 the candidates that ever open the docs&amp;mdash;the 
       
       <guid>/2017/12/18/integrating-pkgdown-with-your-personal-website/</guid>
       <description>Publishing a website for your R package is simple with pkgdown. As I recently discussed, you can build a basic site and host it on GitHub Pages with just a handful of commands and clicks.
-That&amp;rsquo;s a great start, but why stop there? If you have a personal website or blog, it would be nice to have your package page mesh with it&amp;mdash;that is, it should fit with your &amp;ldquo;brand&amp;rdquo;.</description>
+That&amp;rsquo;s a great start, but why stop there? If you have a personal website or blog, it would be nice to have your package page mesh with it&amp;mdash;that is, it should fit with your &amp;ldquo;brand&amp;rdquo;. Your personal site has a style (font, color, layout, etc.</description>
     </item>
     
     <item>
