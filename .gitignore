@@ -6,3 +6,4 @@ static/post/*_files/*
 *.DS_Store*
 *.orig
 .Rproj.user
+.hugo_build.lock

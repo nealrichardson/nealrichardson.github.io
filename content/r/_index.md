@@ -1,21 +1,22 @@
 +++
-date = "2017-10-15T14:08:35+02:00"
+date = "2023-04-07T00:08:35+02:00"
 draft = false
 title = "Code"
 weight = 1
 feed_tags = ["r", "R"]
 +++
 
-Here are a few R packages that I've published to [CRAN](https://cran.r-project.org/):
+I maintain several R packages on [CRAN](https://cran.r-project.org/) and have others on [GitHub](https://github.com/nealrichardson). For over three years, I was the maintainer of the [`arrow`](https://arrow.apache.org/docs/r/) package. 
 
--   [distro](/distro/): A Standardized Interface to Linux Distribution Version Information
+Some packages with documentation sites published here:
 
--   [httpcache](/r/httpcache/): Query Cache for HTTP Clients
+-   [`distro`](/distro/): A Standardized Interface to Linux Distribution Version Information
 
--   [httptest](/r/httptest/): A Test Environment for HTTP Requests
+-   [`httpcache`](/r/httpcache/): Query Cache for HTTP Clients
 
--   [pivotaltrackR](/r/pivotaltrackR/): A Client for the [Pivotal Tracker](https://www.pivotaltracker.com/) [API](https://www.pivotaltracker.com/help/api/rest/v5)
+-   [`httptest`](/r/httptest/) (for `httr`) and [`httptest2`](/httptest2/) (for `httr2`): A Test Environment for HTTP Requests
 
--   [skeletor](/r/skeletor/): A Package Skeleton Generator
+-   [`pivotaltrackR`](/r/pivotaltrackR/): A Client for the [Pivotal Tracker](https://www.pivotaltracker.com/) [API](https://www.pivotaltracker.com/help/api/rest/v5)
 
-See [GitHub](https://github.com/nealrichardson?utf8=%E2%9C%93&tab=repositories&q=&type=source&language=r) for a list of other packages.
+-   [`skeletor`](/r/skeletor/): A Package Skeleton Generator
+
