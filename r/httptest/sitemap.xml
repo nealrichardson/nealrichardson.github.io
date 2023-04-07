@@ -1,7 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://enpiar.com/r/httptest/404.html</loc>
+  </url>
+  <url>
+    <loc>https://enpiar.com/r/httptest/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://enpiar.com/r/httptest/articles/faq.html</loc>
+  </url>
+  <url>
+    <loc>https://enpiar.com/r/httptest/articles/httptest.html</loc>
+  </url>
+  <url>
+    <loc>https://enpiar.com/r/httptest/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://enpiar.com/r/httptest/articles/redacting.html</loc>
+  </url>
+  <url>
+    <loc>https://enpiar.com/r/httptest/articles/vignettes.html</loc>
+  </url>
+  <url>
+    <loc>https://enpiar.com/r/httptest/authors.html</loc>
+  </url>
+  <url>
     <loc>https://enpiar.com/r/httptest/index.html</loc>
+  </url>
+  <url>
+    <loc>https://enpiar.com/r/httptest/news/index.html</loc>
   </url>
   <url>
     <loc>https://enpiar.com/r/httptest/reference/as-redactor.html</loc>
@@ -43,6 +70,9 @@
     <loc>https://enpiar.com/r/httptest/reference/httptest.html</loc>
   </url>
   <url>
+    <loc>https://enpiar.com/r/httptest/reference/index.html</loc>
+  </url>
+  <url>
     <loc>https://enpiar.com/r/httptest/reference/mockPaths.html</loc>
   </url>
   <url>
@@ -82,18 +112,12 @@
     <loc>https://enpiar.com/r/httptest/reference/with_mock_api.html</loc>
   </url>
   <url>
+    <loc>https://enpiar.com/r/httptest/reference/with_mock_dir.html</loc>
+  </url>
+  <url>
     <loc>https://enpiar.com/r/httptest/reference/with_trace.html</loc>
   </url>
   <url>
     <loc>https://enpiar.com/r/httptest/reference/without_internet.html</loc>
-  </url>
-  <url>
-    <loc>https://enpiar.com/r/httptest/articles/httptest.html</loc>
-  </url>
-  <url>
-    <loc>https://enpiar.com/r/httptest/articles/redacting.html</loc>
-  </url>
-  <url>
-    <loc>https://enpiar.com/r/httptest/articles/vignettes.html</loc>
   </url>
 </urlset>

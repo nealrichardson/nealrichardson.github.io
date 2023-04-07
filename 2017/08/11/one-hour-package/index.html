@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <meta name="generator" content="Hugo 0.88.1" />
+  <meta name="generator" content="Hugo 0.111.3">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,7 +27,6 @@
 <meta property="og:url" content="/2017/08/11/one-hour-package/" /><meta property="og:image" content="https://enpiar.com/img/fotomat.jpg" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2017-08-11T16:49:57-07:00" />
 <meta property="article:modified_time" content="2017-08-11T16:49:57-07:00" />
-
 
   
 
@@ -148,7 +147,7 @@ if (!doNotTrack) {
 <p>Just to make it interesting, it turns out that the API I set out to tackle is neither documented nor even officially acknowledged. When I asked Usersnap about their API, they responded that they &ldquo;currently do not offer API access.&rdquo; Clearly, though, there was an API behind their web application, so I was going to have to infer how the API works by examining how their app uses their unpublished API. It reminded me of my days in grad school collecting data by scraping Brazilian government websites, so with a touch of nostalgia, I embraced the challenge.</p>
 <p>Despite the obstacles, from start to finish, it took me an hour between generating the package skeleton and getting passing builds on <a href="https://travis-ci.org/">Travis-CI</a> and <a href="https://www.appveyor.com/">Appveyor</a> with <a href="https://codecov.io/gh/nealrichardson/useRsnap">100 percent line coverage</a>. I&rsquo;ve written a few public <a href="https://github.com/Crunch-io/rcrunch">API</a> <a href="https://nealrichardson/pivotaltrackR">client</a> <a href="https://github.com/nealrichardson/useRsnap">packages</a> now, and in the process have worked out a good system that gets them started quickly and makes them easy to both test and extend. This approach worked well here too, and in the discussion below, I&rsquo;ll show you how. There are code snippets inline, but it may be easier to get a more complete picture of the project by <a href="https://github.com/nealrichardson/useRsnap">browsing it on GitHub</a>.</p>
 <a class="headline-anchor" href="#tools"><h1 id="tools">Tools</a> </h1>
-<p>We&rsquo;ll need a few R packages to move forward. A couple merit highlighting here; the rest I&rsquo;ll mention in the discussion below. First, when dealing with HTTP APIs in R, the <a href="http://httr.r-lib.org/">httr</a> package is essential. It handles requests and responses and lets you focus on how to translate your (users') intuitions about the data you&rsquo;re accessing into sensible R functions and objects.</p>
+<p>We&rsquo;ll need a few R packages to move forward. A couple merit highlighting here; the rest I&rsquo;ll mention in the discussion below. First, when dealing with HTTP APIs in R, the <a href="http://httr.r-lib.org/">httr</a> package is essential. It handles requests and responses and lets you focus on how to translate your (users&rsquo;) intuitions about the data you&rsquo;re accessing into sensible R functions and objects.</p>
 <p>Next, we&rsquo;ll need some tools for writing tests. <a href="https://t.co/IljRyeTIsj">Testing is especially important</a> when writing packages. The <a href="http://testthat.r-lib.org/">testthat</a> package is the current standard for R package test suites, but it lacks some useful tools for working with remote APIs. To make it easy to test API packages, I wrote <a href="https://enpiar.com/r/httptest/">httptest</a>, which extends <code>testthat</code>. As we&rsquo;ll see below, <code>httptest</code> allowed me to get test coverage for all of the lines of code I wrote and enabled me to run the tests quickly and without complication on public continuous-integration services (Travis-CI and Appveyor).</p>
 <a class="headline-anchor" href="#step-1-set-up-the-package-skeleton"><h1 id="step-1-set-up-the-package-skeleton">Step 1: Set up the package skeleton</a> </h1>
 <p>The first step is to set up some basic scaffolding for the R package. Base R has a <code>package.skeleton</code> function that I don&rsquo;t find particularly useful. There are some helpers in the <code>devtools</code> package as well, but for simplicity, I like the <a href="https://github.com/nealrichardson/skeletor">skeletor</a> package skeleton generator. With just one line of code, it sets everything up for using GitHub, Travis-CI, Codecov.io, and Appveyor, gives you a basic test suite setup, and includes helpful instructions for things like how to write a package &ldquo;Description&rdquo; that will pass muster with CRAN.</p>
@@ -177,94 +176,94 @@ atom .
 <a class="headline-anchor" href="#how-should-users-supply-their-credentials-to-the-r-session"><h2 id="how-should-users-supply-their-credentials-to-the-r-session">How should users supply their credentials to the R session?</a> </h2>
 <p>Once we know what credentials are required to authenticate, we need to determine how package users will provide them. There are a few alternatives: set them as <code>options</code> and thereby be able to specify them in your <code>.Rprofile</code>; set them as environment variables; or some configuration file format. Security-wise, there&rsquo;s really not much difference. And, from the perspective of bootstrapping a new package, it&rsquo;s not an architecturally significant decision: it&rsquo;s easy to support multiple ways of specifying these parameters should you decide you want to do something different in the future. So, just pick one.</p>
 <p>I opted for <code>options</code> purely out of convenience, both for me as a package developer and for ease of setting them as a user&mdash;no special setting and loading functions are required. We need two options, which I namespaced as &ldquo;usersnap.project&rdquo; and &ldquo;usersnap.cookie&rdquo;, so</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">options</span>(usersnap.project<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;some-project-slug&#34;</span>,
-        usersnap.cookie<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;bugrep=4de1f6somehashstring912fe0c&#34;</span>)
-</code></pre></div><p>sets them, either in your current session, or for all sessions if you put it in your <code>.Rprofile</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">options</span>(usersnap.project<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;some-project-slug&#34;</span>,
+</span></span><span style="display:flex;"><span>        usersnap.cookie<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;bugrep=4de1f6somehashstring912fe0c&#34;</span>)
+</span></span></code></pre></div><p>sets them, either in your current session, or for all sessions if you put it in your <code>.Rprofile</code>.</p>
 <a class="headline-anchor" href="#including-configuration-in-requests"><h2 id="including-configuration-in-requests">Including configuration in requests</a> </h2>
 <p>The next step is to integrate these parameters into our boilerplate functions. In this API, it appeared that the &ldquo;project&rdquo; was built into the request URLs, so the URL-constructing utility looks like:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">apiRoot <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#34;https://ec2.usersnap.com/angular/apikeys&#34;</span>
-
-usURL <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(segment, project<span style="color:#f92672">=</span><span style="color:#a6e22e">getOption</span>(<span style="color:#e6db74">&#34;usersnap.project&#34;</span>), <span style="color:#66d9ef">...</span>) {
-    <span style="color:#a6e22e">file.path</span>(apiRoot, project, segment)
-}
-</code></pre></div><p>This means that <code>usURL(&quot;reports/42&quot;)</code> would return <code>&quot;https://ec2.usersnap.com/angular/apikeys/some-project-slug/reports/42&quot;</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>apiRoot <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#34;https://ec2.usersnap.com/angular/apikeys&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>usURL <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(segment, project<span style="color:#f92672">=</span><span style="color:#a6e22e">getOption</span>(<span style="color:#e6db74">&#34;usersnap.project&#34;</span>), <span style="color:#66d9ef">...</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">file.path</span>(apiRoot, project, segment)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>This means that <code>usURL(&quot;reports/42&quot;)</code> would return <code>&quot;https://ec2.usersnap.com/angular/apikeys/some-project-slug/reports/42&quot;</code>.</p>
 <p>The auth cookie needs to be set as <code>httr</code> request &ldquo;config&rdquo; for all requests, so I defined a config function that pulls the cookie string from the options and included that result in all requests that go through the generic API function:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e">#&#39; @importFrom httr config</span>
-usConfig <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>() {
-    <span style="color:#a6e22e">return</span>(<span style="color:#a6e22e">config</span>(cookie<span style="color:#f92672">=</span><span style="color:#a6e22e">getOption</span>(<span style="color:#e6db74">&#34;usersnap.cookie&#34;</span>)))
-}
-
-<span style="color:#75715e">#&#39; @importFrom httr GET</span>
-usAPI <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(verb, url, config<span style="color:#f92672">=</span><span style="color:#a6e22e">list</span>(), <span style="color:#66d9ef">...</span>) {
-    FUN <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">get</span>(verb, envir<span style="color:#f92672">=</span><span style="color:#a6e22e">asNamespace</span>(<span style="color:#e6db74">&#34;httr&#34;</span>))
-    x <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">FUN</span>(url, <span style="color:#66d9ef">...</span>, config<span style="color:#f92672">=</span><span style="color:#a6e22e">c</span>(<span style="color:#a6e22e">usConfig</span>(), config))
-    <span style="color:#a6e22e">return</span>(<span style="color:#a6e22e">handleUSResponse</span>(x))
-}
-</code></pre></div><p>So <code>usAPI(&quot;GET&quot;, usURL(&quot;reports/42&quot;))</code> would perform a <code>GET</code> request on the report URL mentioned above, including our Usersnap auth cookie in the request.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e">#&#39; @importFrom httr config</span>
+</span></span><span style="display:flex;"><span>usConfig <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">return</span>(<span style="color:#a6e22e">config</span>(cookie<span style="color:#f92672">=</span><span style="color:#a6e22e">getOption</span>(<span style="color:#e6db74">&#34;usersnap.cookie&#34;</span>)))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#&#39; @importFrom httr GET</span>
+</span></span><span style="display:flex;"><span>usAPI <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(verb, url, config<span style="color:#f92672">=</span><span style="color:#a6e22e">list</span>(), <span style="color:#66d9ef">...</span>) {
+</span></span><span style="display:flex;"><span>    FUN <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">get</span>(verb, envir<span style="color:#f92672">=</span><span style="color:#a6e22e">asNamespace</span>(<span style="color:#e6db74">&#34;httr&#34;</span>))
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">FUN</span>(url, <span style="color:#66d9ef">...</span>, config<span style="color:#f92672">=</span><span style="color:#a6e22e">c</span>(<span style="color:#a6e22e">usConfig</span>(), config))
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">return</span>(<span style="color:#a6e22e">handleUSResponse</span>(x))
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>So <code>usAPI(&quot;GET&quot;, usURL(&quot;reports/42&quot;))</code> would perform a <code>GET</code> request on the report URL mentioned above, including our Usersnap auth cookie in the request.</p>
 <p>The other basic functions are the response handler</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e">#&#39; @importFrom httr http_status content</span>
-handleUSResponse <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(resp) {
-    <span style="color:#a6e22e">if </span>(resp<span style="color:#f92672">$</span>status_code <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">400L</span>)  {
-        msg <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">http_status</span>(resp)<span style="color:#f92672">$</span>message
-        <span style="color:#75715e">## The API tends not to respond with anything else useful, so there&#39;s</span>
-        <span style="color:#75715e">## nothing to add to that message</span>
-        <span style="color:#a6e22e">stop</span>(msg, call.<span style="color:#f92672">=</span><span style="color:#66d9ef">FALSE</span>)
-    } else {
-        <span style="color:#a6e22e">return</span>(<span style="color:#a6e22e">content</span>(resp))
-    }
-}
-</code></pre></div><p>which doesn&rsquo;t yet do much other than stop on error and otherwise return the response content, but it will grow as we learn more about the API and its standard response behaviors; and a convenience <code>GET</code> method that passes through the API function:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">usGET <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(url, <span style="color:#66d9ef">...</span>) {
-    <span style="color:#a6e22e">usAPI</span>(<span style="color:#e6db74">&#34;GET&#34;</span>, url, <span style="color:#66d9ef">...</span>)
-}
-</code></pre></div><p>I like to namespace these core functions, primarily so that you can call, for example, <code>usGET(&quot;some/url&quot;)</code> and you know that it will include the right authentication credentials for that API. That&rsquo;s why these functions all have &ldquo;us&rdquo; in the name.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e">#&#39; @importFrom httr http_status content</span>
+</span></span><span style="display:flex;"><span>handleUSResponse <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(resp) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">if </span>(resp<span style="color:#f92672">$</span>status_code <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">400L</span>)  {
+</span></span><span style="display:flex;"><span>        msg <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">http_status</span>(resp)<span style="color:#f92672">$</span>message
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">## The API tends not to respond with anything else useful, so there&#39;s</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">## nothing to add to that message</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">stop</span>(msg, call.<span style="color:#f92672">=</span><span style="color:#66d9ef">FALSE</span>)
+</span></span><span style="display:flex;"><span>    } else {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">return</span>(<span style="color:#a6e22e">content</span>(resp))
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>which doesn&rsquo;t yet do much other than stop on error and otherwise return the response content, but it will grow as we learn more about the API and its standard response behaviors; and a convenience <code>GET</code> method that passes through the API function:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>usGET <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(url, <span style="color:#66d9ef">...</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">usAPI</span>(<span style="color:#e6db74">&#34;GET&#34;</span>, url, <span style="color:#66d9ef">...</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>I like to namespace these core functions, primarily so that you can call, for example, <code>usGET(&quot;some/url&quot;)</code> and you know that it will include the right authentication credentials for that API. That&rsquo;s why these functions all have &ldquo;us&rdquo; in the name.</p>
 <p>Note that this is mostly boilerplate code at this point. The only real customization to the current API is the specification of the auth cookie. The <code>usURL</code> is a convenience tool for building URLs that follow an apparent convention, but it&rsquo;s not essential.</p>
 <p>While we don&rsquo;t strictly need a generic requesting function and a generic response handler to start working on our first methods, they will help us as we go forward. They give us a place to put our common API logic, so the cost of adding each additional API endpoint wrapper stays low. Plus, they help encapsulate our code and keep the complexities of the API and of HTTP separated from our R object space as much as possible.</p>
 <a class="headline-anchor" href="#step-4-pick-an-endpoint"><h1 id="step-4-pick-an-endpoint">Step 4: Pick an endpoint</a> </h1>
 <p>Now, with the core infrastructure in place, let&rsquo;s pick our first endpoint and write a wrapper for it. The one I was most interested in was the &ldquo;reports&rdquo; list so that I could get a catalog of recently opened issues. This is the first view you see when you open up a project in Usersnap&rsquo;s web interface.</p>
 <p>While I usually like to write tests before I write the main code, for this initial case, it made sense to debug interactively, against the live API, just to make sure the end-to-end works. Then we can set up the unit tests, with and without API mocks.</p>
 <p>Normally, you&rsquo;d read the docs and set up something that matches their guidelines. Good documentation usually gives example requests and responses as well. In this case, my available documentation was &ldquo;whatever the web app does&rdquo;. In some ways, not having API documentation helped to keep the initial implementation lean: because I have no idea what the API supports other than what I see the web app doing, there was no sense in trying to be too clever about designing the R function interface. I just set the web app&rsquo;s query as the default, allowed it to be overridden in the <code>...</code> arguments so that I could experiment and not be limited by those defaults, and wrapped it up neatly:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">getReports <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(<span style="color:#66d9ef">...</span>) {
-    query <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">modifyList</span>(<span style="color:#a6e22e">list</span>(
-        includeapikey<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;false&#34;</span>,
-        offset<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,
-        limit<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>,
-        search<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;[{&#34;type&#34;:&#34;state&#34;,&#34;id&#34;:&#34;open&#34;}]&#39;</span>
-    ), <span style="color:#a6e22e">list</span>(<span style="color:#66d9ef">...</span>))
-    <span style="color:#a6e22e">return</span>(<span style="color:#a6e22e">usGET</span>(<span style="color:#a6e22e">usURL</span>(<span style="color:#e6db74">&#34;reports&#34;</span>), query<span style="color:#f92672">=</span>query)<span style="color:#f92672">$</span>data)
-}
-</code></pre></div><p>So, drop that in, install the package, and try it out against the live API.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(useRsnap)
-reps <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">getReports</span>()
-<span style="color:#a6e22e">length</span>(reps) <span style="color:#75715e"># Should be 10</span>
-reps[[1]]    <span style="color:#75715e"># Inspect one</span>
-</code></pre></div><p>After tweaking to make sure that the response looked as expected (my first attempt didn&rsquo;t return only the <code>$data</code> element of the response object, so <code>length</code> was not 10), I repeated the <code>getReports</code> query but wrapped in <code>httptest</code>&rsquo;s <a href="https://enpiar.com/r/httptest/articles/httptest.html#recording-mocks-with-capture_requests">capture_requests</a> context, which records the responses from real API requests as fixtures that you can use in tests.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">reps <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">capture_requests</span>(<span style="color:#a6e22e">getReports</span>())
-</code></pre></div><p>Now we can write tests around that fixture using the <a href="https://enpiar.com/r/httptest/articles/httptest.html#the-with_mock_api-context">with_mock_api</a> context, and we can iterate on the R code and tests as needed, all without hitting the actual API or making any potentially expensive network requests. In <a href="https://github.com/nealrichardson/useRsnap/blob/8c2662de5e726ad99e5985b92b97ef5b092c5e0a/tests/testthat/test-get-reports.R">tests/testthat/test-get-reports.R</a>,</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">context</span>(<span style="color:#e6db74">&#34;Get reports&#34;</span>)
-
-<span style="color:#a6e22e">with_mock_api</span>({
-    <span style="color:#a6e22e">test_that</span>(<span style="color:#e6db74">&#34;Get reports&#34;</span>, {
-        reps <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">getReports</span>()
-        <span style="color:#a6e22e">expect_length</span>(reps, <span style="color:#ae81ff">3</span>)
-    })
-})
-</code></pre></div><p>Note that this test says there&rsquo;s only 3 records, not the 10 from my fixture. To save on file size, I deleted the other seven from the recorded mock. It&rsquo;s a plain text file, so I could massage it as needed.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>getReports <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(<span style="color:#66d9ef">...</span>) {
+</span></span><span style="display:flex;"><span>    query <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">modifyList</span>(<span style="color:#a6e22e">list</span>(
+</span></span><span style="display:flex;"><span>        includeapikey<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;false&#34;</span>,
+</span></span><span style="display:flex;"><span>        offset<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>        limit<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>,
+</span></span><span style="display:flex;"><span>        search<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;[{&#34;type&#34;:&#34;state&#34;,&#34;id&#34;:&#34;open&#34;}]&#39;</span>
+</span></span><span style="display:flex;"><span>    ), <span style="color:#a6e22e">list</span>(<span style="color:#66d9ef">...</span>))
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">return</span>(<span style="color:#a6e22e">usGET</span>(<span style="color:#a6e22e">usURL</span>(<span style="color:#e6db74">&#34;reports&#34;</span>), query<span style="color:#f92672">=</span>query)<span style="color:#f92672">$</span>data)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>So, drop that in, install the package, and try it out against the live API.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(useRsnap)
+</span></span><span style="display:flex;"><span>reps <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">getReports</span>()
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">length</span>(reps) <span style="color:#75715e"># Should be 10</span>
+</span></span><span style="display:flex;"><span>reps[[1]]    <span style="color:#75715e"># Inspect one</span>
+</span></span></code></pre></div><p>After tweaking to make sure that the response looked as expected (my first attempt didn&rsquo;t return only the <code>$data</code> element of the response object, so <code>length</code> was not 10), I repeated the <code>getReports</code> query but wrapped in <code>httptest</code>&rsquo;s <a href="https://enpiar.com/r/httptest/articles/httptest.html#recording-mocks-with-capture_requests">capture_requests</a> context, which records the responses from real API requests as fixtures that you can use in tests.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>reps <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">capture_requests</span>(<span style="color:#a6e22e">getReports</span>())
+</span></span></code></pre></div><p>Now we can write tests around that fixture using the <a href="https://enpiar.com/r/httptest/articles/httptest.html#the-with_mock_api-context">with_mock_api</a> context, and we can iterate on the R code and tests as needed, all without hitting the actual API or making any potentially expensive network requests. In <a href="https://github.com/nealrichardson/useRsnap/blob/8c2662de5e726ad99e5985b92b97ef5b092c5e0a/tests/testthat/test-get-reports.R">tests/testthat/test-get-reports.R</a>,</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">context</span>(<span style="color:#e6db74">&#34;Get reports&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">with_mock_api</span>({
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">test_that</span>(<span style="color:#e6db74">&#34;Get reports&#34;</span>, {
+</span></span><span style="display:flex;"><span>        reps <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">getReports</span>()
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">expect_length</span>(reps, <span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>    })
+</span></span><span style="display:flex;"><span>})
+</span></span></code></pre></div><p>Note that this test says there&rsquo;s only 3 records, not the 10 from my fixture. To save on file size, I deleted the other seven from the recorded mock. It&rsquo;s a plain text file, so I could massage it as needed.</p>
 <p>We can add a few more tests from here, but we&rsquo;re basically done with code&mdash;we have a function that returns a list of report entries in our R session. That&rsquo;s enough of an API wrapper to start writing my daily cron job summarizing our support tickets.</p>
 <a class="headline-anchor" href="#step-5-document-and-wrap-up"><h1 id="step-5-document-and-wrap-up">Step 5: Document and wrap up</a> </h1>
 <p>At this point, we&rsquo;ve set up the skeleton for the package, worked out authentication and configuration for the API, added the core functions through which all requests will go, and added the first method that we&rsquo;re going to expose to our package users. It&rsquo;s been about 40 minutes at this point. We&rsquo;ll spend the next 20 minutes on documentation and polishing.</p>
 <p>First, we need to document the <code>getReports</code> function. The <a href="https://github.com/klutometis/roxygen">roxygen2</a> system for inline documentation of functions is the way to go. Add a description of what the function does, what the arguments are (to the best of our understanding of the API), include a usage example, and finally add the <code>@export</code> note so that the function is exported from the package namespace so that it is public to our package users. Typically this would also include external links to the API documentation, but that wasn&rsquo;t available in this particular case. Finally, as in the examples above, our internal functions already have the <code>@importFrom</code> statements to bring into the package namespace the functions from <code>httr</code> that we need.</p>
-<pre tabindex="0"><code>#' Query Your Usersnaps
-#'
-#' @param ... query parameters to include. There's no documentation, but known
-#' parameters are (1) includeapikey, which should always be `&quot;false&quot;`; (2)
-#' offset; (3) limit; and (4) search, which by default is
-#' `'[{&quot;type&quot;:&quot;state&quot;,&quot;id&quot;:&quot;open&quot;}]'`, the default in the Usersnap GUI. You
-#' can also specify a &quot;project&quot; to query against a project other than your
-#' default.
-#' @return A list of report entries.
-#' @export
-#' @importFrom utils modifyList
+<pre tabindex="0"><code>#&#39; Query Your Usersnaps
+#&#39;
+#&#39; @param ... query parameters to include. There&#39;s no documentation, but known
+#&#39; parameters are (1) includeapikey, which should always be `&#34;false&#34;`; (2)
+#&#39; offset; (3) limit; and (4) search, which by default is
+#&#39; `&#39;[{&#34;type&#34;:&#34;state&#34;,&#34;id&#34;:&#34;open&#34;}]&#39;`, the default in the Usersnap GUI. You
+#&#39; can also specify a &#34;project&#34; to query against a project other than your
+#&#39; default.
+#&#39; @return A list of report entries.
+#&#39; @export
+#&#39; @importFrom utils modifyList
 </code></pre><p>In this phase, we&rsquo;ll run <code>R CMD check</code> until it passes. The main things we&rsquo;ll be battling with here will be namespace (imports and exports) and documentation. Run it, fix whatever it says is wrong, and repeat until the docs and namespace are satisfactory.</p>
 <p>Next, we need a useful README file that gives instructions on how to install and configure the package, particularly with regards to authentication. We want package users to be able to get started quickly.</p>
 <p>Finally, there&rsquo;s some source control and continuous integration setup, which might take you 30 seconds if you know where to go and what to click and type. Fortunately, the <code>skeletor</code> package skeleton puts <a href="https://github.com/nealrichardson/skeletor/blob/master/inst/pkg/README.md#how-to-finish-setting-up-your-new-package">instructions in your README</a> for how to <code>git init</code> and set up your repository on GitHub, Travis-CI, and Appveyor. Follow the instructions, <code>git add .</code>, <code>git commit</code>, and <code>git push</code>. Then we&rsquo;re done.</p>

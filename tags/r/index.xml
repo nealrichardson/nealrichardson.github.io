@@ -35,8 +35,8 @@ Whenever I start an analysis like this, I also think about how to make it easier
       
       <guid>/2018/02/01/back-to-the-future/</guid>
       <description>When you submit a package update to CRAN, they ask you to check some boxes confirming that you&amp;rsquo;ve done your due diligence on your submission: that it passes its checks. One confirmation is that you&amp;rsquo;ve addressed any failures on the CRAN package check page, which looks like this.
- Hey, all passing today!
-  This page is a window into one of the key features of CRAN: it runs continuous-integration tests of your package against multiple versions of R, on multiple operating systems, with the current version of your dependencies.</description>
+Hey, all passing today!
+This page is a window into one of the key features of CRAN: it runs continuous-integration tests of your package against multiple versions of R, on multiple operating systems, with the current version of your dependencies.</description>
     </item>
     
     <item>

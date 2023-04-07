@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <meta name="generator" content="Hugo 0.88.1" />
+  <meta name="generator" content="Hugo 0.111.3">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,7 +27,6 @@
 <meta property="og:url" content="/2017/11/21/getting-down-with-pkgdown/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2017-11-21T16:49:57-07:00" />
 <meta property="article:modified_time" content="2017-11-21T16:49:57-07:00" />
-
 
   
 
@@ -122,7 +121,7 @@ if (!doNotTrack) {
     <meta itemprop="name" content="Getting Down with pkgdown">
 <meta itemprop="description" content="Building a beautiful website for your R package is a great way to improve its documentation, usability, and visibility. &#39;pkgdown&#39; makes it easy to build your site, particularly if you follow these conventions."><meta itemprop="datePublished" content="2017-11-21T16:49:57-07:00" />
 <meta itemprop="dateModified" content="2017-11-21T16:49:57-07:00" />
-<meta itemprop="wordCount" content="2558">
+<meta itemprop="wordCount" content="2559">
 <meta itemprop="keywords" content="R,packages,website,documentation," />
 <div id="hero">
     <h1 itemprop="headline">  Getting Down with pkgdown</h1>
@@ -151,21 +150,21 @@ if (!doNotTrack) {
 <a class="headline-anchor" href="#2-configuration"><h1 id="2-configuration">2. Configuration</a> </h1>
 <p>At this point, you could run <code>pkgdown::build_site()</code> and probably get a functioning website. In fact, give it a try and see what you get.</p>
 <p>Generally, you won&rsquo;t want to stop here. The first step in customizing your site is to create the YAML file that <code>pkgdown</code> uses for configuration: <code>_pkgdown.yml</code>. The package does provide some initial <a href="http://pkgdown.r-lib.org/reference/templates.html">template generating functions</a>, but they don&rsquo;t actually create the .yml file&mdash;they print to the screen. We can solve that by using <code>sink()</code> to send the output to the file.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(pkgdown)
-<span style="color:#a6e22e">sink</span>(<span style="color:#e6db74">&#34;_pkgdown.yml&#34;</span>)
-<span style="color:#a6e22e">template_navbar</span>()
-<span style="color:#a6e22e">template_reference</span>()
-<span style="color:#a6e22e">sink</span>()
-</code></pre></div><p>You could throw <code>template_articles()</code>, the third template function, in there for good measure, if you&rsquo;ve got multiple vignettes in your package and want to customize the display of <code>articles/index.html</code>. I personally didn&rsquo;t bother because by default, there is no link to that page anywhere that I can find.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(pkgdown)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">sink</span>(<span style="color:#e6db74">&#34;_pkgdown.yml&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">template_navbar</span>()
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">template_reference</span>()
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">sink</span>()
+</span></span></code></pre></div><p>You could throw <code>template_articles()</code>, the third template function, in there for good measure, if you&rsquo;ve got multiple vignettes in your package and want to customize the display of <code>articles/index.html</code>. I personally didn&rsquo;t bother because by default, there is no link to that page anywhere that I can find.</p>
 <p>Now that you have a basic YAML file, you can start customizing it. The docs for <a href="http://pkgdown.r-lib.org/reference/build_site.html"><code>build_site()</code></a> give an overview of what is possible, and you can get pretty far with trial-and-error and by looking at other <code>pkgdown</code> sites. The <a href="https://github.com/hadley/pkgdown/blob/master/_pkgdown.yml">site for pkgdown itself</a> is a good place to start; <a href="https://github.com/tidyverse/dplyr/blob/master/_pkgdown.yml">dplyr</a> has a more complex, customized one; my <a href="https://github.com/nealrichardson/httptest/blob/master/_pkgdown.yml">httptest</a> package is somewhere in the middle.</p>
 <p>The big thing you&rsquo;ll want to do is organize the &ldquo;reference&rdquo; (the help pages), grouping by topic and ordering them sensibly. <a href="https://github.com/hadley/pkgdown/blob/081639735104a03c01527f568a99f0ef7351433d/R/build-reference-index.R#L86">By default</a>, all exported, non-internal (that&rsquo;s <code>@keywords internal</code> in <a href="https://github.com/klutometis/roxygen">roxygen</a>-speak) functions are included in the index, but you don&rsquo;t have to list them all. Any function you omit from the index in the YAML just won&rsquo;t appear in the index page, but it will still exist as a page on your site, so you can cross-reference to it.</p>
 <p>For aesthetics in your YAML, you can remove the heavy quoting of reference and article entries that appear in the default templates, like</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">articles</span>:
-- <span style="color:#f92672">title</span>: <span style="color:#ae81ff">All vignettes</span>
-  <span style="color:#f92672">contents</span>:
-  - <span style="color:#e6db74">&#39;`pkgdown`&#39;</span>
-  - <span style="color:#e6db74">&#39;`highlight`&#39;</span>
-</code></pre></div><p>For sensibly named files, the quoting is unnecessary, and you won&rsquo;t see it in good examples in the wild.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">articles</span>:
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">title</span>: <span style="color:#ae81ff">All vignettes</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">contents</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#e6db74">&#39;`pkgdown`&#39;</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#e6db74">&#39;`highlight`&#39;</span>
+</span></span></code></pre></div><p>For sensibly named files, the quoting is unnecessary, and you won&rsquo;t see it in good examples in the wild.</p>
 <p>In the navbar, you can play around with ordering of entries, positioning groups of menu items in &ldquo;left&rdquo; or &ldquo;right&rdquo;, and nesting menus. Note that you&rsquo;re not limited to just links to things in your pkgdown site&mdash;your navbar menu can include whatever you want. So, for example, if you have a personal or company website you want to link to, you can <a href="https://github.com/nealrichardson/httptest/blob/948e200df62572557fe10c3b9930bb31c4ebee2a/_pkgdown.yml#L5-L27">like this</a>.</p>
 <p>One other customization I like to do to the navbar is to remove &ldquo;index.html&rdquo; from links so that they&rsquo;re prettier in the browser. That is, you see <code>you.github.io/yourpkg/</code> instead of <code>you.github.io/yourpkg/index.html</code>. Doing this does mean that if you preview your site locally by opening it as a file in your web browser (which is what <code>pkgdown</code> does in an interactive session, including in RStudio), those links won&rsquo;t work directly, but they do work fine when served by a web server, including GitHub Pages. It&rsquo;s a slight inconvenience for development but worth it for the end user experience, in my opinion. If you find it annoying to work with, just do it last, after you&rsquo;re done customizing your site locally.</p>
 <p>Note that the default navbar YAML relies on a few conventions. If you have a <a href="https://github.com/hadley/pkgdown/blob/ad1b1dfb12871919e06a2aa7e366ec0980af2714/R/navbar.R#L82-L87">NEWS.md</a> file at the top level of your package, it will be parsed and a link to it added to the navbar. If you have a <a href="https://github.com/hadley/pkgdown/blob/ad1b1dfb12871919e06a2aa7e366ec0980af2714/R/navbar.R#L55-L64">vignette with the same name as the package</a>, you&rsquo;ll get a &ldquo;Get started&rdquo; link in the navbar. If you don&rsquo;t have those initially and you want to add them later, you can recreate the YAML template, or you can just edit your <code>_pkgdown.yml</code> to add links to them.</p>
@@ -183,28 +182,28 @@ if (!doNotTrack) {
 <a class="headline-anchor" href="#check-vignette-metadata"><h2 id="check-vignette-metadata">Check vignette metadata</a> </h2>
 <p>I had to do some updating of my vignettes to make them work correctly with <code>pkgdown</code>, specifically in their &ldquo;front matter&rdquo;: the metadata at the top of the file. If your package is new and you&rsquo;re following the current <a href="http://r-pkgs.had.co.nz/vignettes.html">best practices</a> for writing vignettes, you may be most of the way there already.</p>
 <p>I was using R Markdown and building the vignettes with <a href="https://yihui.name/knitr/">knitr</a>, but not <em>à la mode</em>, which uses the <a href="https://github.com/rstudio/rmarkdown">rmarkdown</a> package on top of <a href="http://pandoc.org/">pandoc</a>. For example, in <a href="https://enpiar.com/r/httptest">httptest</a>, the main vignette previously started like this:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-latex" data-lang="latex">&lt;!--
-<span style="color:#75715e">%\VignetteEngine{knitr::knitr}
-</span><span style="color:#75715e">%\VignetteIndexEntry{httptest: A Test Environment for HTTP Requests in R}
-</span><span style="color:#75715e">%\VignetteEncoding{UTF-8}
-</span><span style="color:#75715e"></span>--&gt;
-
-# httptest: A Test Environment for HTTP Requests in R
-
-...
-</code></pre></div><p>The new way, which <code>pkgdown</code> prefers, <a href="http://r-pkgs.had.co.nz/vignettes.html#vignette-metadata">uses YAML front matter</a> and indicates that it should render with the <code>rmarkdown</code> package.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
-<span style="color:#f92672">title</span>: <span style="color:#e6db74">&#34;httptest: A Test Environment for HTTP Requests in R&#34;</span>
-<span style="color:#f92672">description</span>: <span style="color:#e6db74">&#34;This vignette covers the core features of the httptest package, focusing on how to mock HTTP responses, how to make assertions about requests, and how to record real requests for future use as mocks.&#34;</span>
-<span style="color:#f92672">output</span>: <span style="color:#ae81ff">rmarkdown::html_vignette</span>
-<span style="color:#f92672">vignette</span>: &gt;<span style="color:#e6db74">
-</span><span style="color:#e6db74">  %\VignetteIndexEntry{httptest: A Test Environment for HTTP Requests in R}
-</span><span style="color:#e6db74">  %\VignetteEngine{knitr::rmarkdown}
-</span><span style="color:#e6db74">  %\VignetteEncoding{UTF-8}</span>  
----
-
-...
-</code></pre></div><p>This YAML front matter allows for additional fields. The <code>rmarkdown::html_vignette</code> default template will make use of &ldquo;author&rdquo; and &ldquo;date&rdquo; fields, though in the context of a package vignette, those might not be relevant. <code>rmarkdown</code> will also take your <code>title:</code> and add it as a <code>&lt;h1&gt;</code> header in your HTML (built) vignette, so you don&rsquo;t need to duplicate it in the body of your vignette, as I had previously (though you do still need to duplicate it, or at least provide something, in the <code>\VignetteIndexEntry</code> field).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-latex" data-lang="latex"><span style="display:flex;"><span>&lt;!--
+</span></span><span style="display:flex;"><span><span style="color:#75715e">%\VignetteEngine{knitr::knitr}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">%\VignetteIndexEntry{httptest: A Test Environment for HTTP Requests in R}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">%\VignetteEncoding{UTF-8}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>--&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># httptest: A Test Environment for HTTP Requests in R
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>The new way, which <code>pkgdown</code> prefers, <a href="http://r-pkgs.had.co.nz/vignettes.html#vignette-metadata">uses YAML front matter</a> and indicates that it should render with the <code>rmarkdown</code> package.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#f92672">title</span>: <span style="color:#e6db74">&#34;httptest: A Test Environment for HTTP Requests in R&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">description</span>: <span style="color:#e6db74">&#34;This vignette covers the core features of the httptest package, focusing on how to mock HTTP responses, how to make assertions about requests, and how to record real requests for future use as mocks.&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">output</span>: <span style="color:#ae81ff">rmarkdown::html_vignette</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">vignette</span>: &gt;<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  %\VignetteIndexEntry{httptest: A Test Environment for HTTP Requests in R}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  %\VignetteEngine{knitr::rmarkdown}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  %\VignetteEncoding{UTF-8}</span>  
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>This YAML front matter allows for additional fields. The <code>rmarkdown::html_vignette</code> default template will make use of &ldquo;author&rdquo; and &ldquo;date&rdquo; fields, though in the context of a package vignette, those might not be relevant. <code>rmarkdown</code> will also take your <code>title:</code> and add it as a <code>&lt;h1&gt;</code> header in your HTML (built) vignette, so you don&rsquo;t need to duplicate it in the body of your vignette, as I had previously (though you do still need to duplicate it, or at least provide something, in the <code>\VignetteIndexEntry</code> field).</p>
 <p>I also included a <code>description:</code> field, which may look familiar to <code>blogdown</code> (or pure Hugo) users. If/when <a href="https://github.com/hadley/pkgdown/pull/438">this pull request</a> is accepted (or today, if you use <a href="https://github.com/nealrichardson/pkgdown/tree/dev">my fork</a> of <code>pkgdown</code>), this field will be used to generate meta tags in the HTML pages of your pkgdown site, such that when you share a link to the vignette on a social media platform or in a Slack channel, a nice preview will be generated.</p>
 <p>One caveat: for <code>rmarkdown</code> vignettes to build correctly, you&rsquo;ll need to make sure you have <a href="http://pandoc.org/installing.html">pandoc installed</a>. If pandoc is not present, <code>knitr</code> will fall back to using the older <code>markdown</code> library, which does not handle the YAML metadata the same way. Notably, the <code>title:</code> is not printed as a header in your vignette. Unfortunately, <code>pkgdown</code> suppresses the warnings that <code>knitr</code> makes about pandoc not being available, so this won&rsquo;t be obvious unless you build your vignettes directly. Better to make sure that you have a good version of pandoc installed before proceeding.</p>
 <a class="headline-anchor" href="#check-syntax-highlighting"><h2 id="check-syntax-highlighting">Check syntax highlighting</a> </h2>
@@ -214,20 +213,20 @@ if (!doNotTrack) {
 <p>This turns</p>
 <pre tabindex="0"><code>OMG.R_isFun &lt;- function () {
     data.frame(
-        snake_case = c(&quot;A&quot;, &quot;A_B&quot;, &quot;ABC&quot;, NA),
+        snake_case = c(&#34;A&#34;, &#34;A_B&#34;, &#34;ABC&#34;, NA),
         stringsAsFactors = TRUE
     ) -&gt; data.frame
     data.frame[, , drop = FALSE]$snake[-1]
 }
 </code></pre><p>into something like</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">OMG.R_isFun <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>() {
-    <span style="color:#a6e22e">data.frame</span>(
-        snake_case <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;A&#34;</span>, <span style="color:#e6db74">&#34;A_B&#34;</span>, <span style="color:#e6db74">&#34;ABC&#34;</span>, <span style="color:#66d9ef">NA</span>),
-        stringsAsFactors <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>
-    ) <span style="color:#f92672">-&gt;</span> data.frame
-    data.frame[, , drop <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>]<span style="color:#f92672">$</span>snake[<span style="color:#ae81ff">-1</span>]
-}
-</code></pre></div><p>depending on the highlighting theme/CSS applied.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>OMG.R_isFun <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">data.frame</span>(
+</span></span><span style="display:flex;"><span>        snake_case <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;A&#34;</span>, <span style="color:#e6db74">&#34;A_B&#34;</span>, <span style="color:#e6db74">&#34;ABC&#34;</span>, <span style="color:#66d9ef">NA</span>),
+</span></span><span style="display:flex;"><span>        stringsAsFactors <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>
+</span></span><span style="display:flex;"><span>    ) <span style="color:#f92672">-&gt;</span> data.frame
+</span></span><span style="display:flex;"><span>    data.frame[, , drop <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>]<span style="color:#f92672">$</span>snake[<span style="color:#ae81ff">-1</span>]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>depending on the highlighting theme/CSS applied.</p>
 <a class="headline-anchor" href="#4-final-setup-provide-your-url-and-optional-logo"><h1 id="4-final-setup-provide-your-url-and-optional-logo">4. Final setup: provide your URL and (optional) logo</a> </h1>
 <p>When <code>pkgdown</code> links to functions in other packages, by default it constructs a link to help pages on rdocumentation.com and vignettes on cran.rstudio.com, knowing that there are hosted versions of the documentation in those places. That itself is quite nice. However, a very slick (and undersold) feature is that <code>pkgdown</code> will try to link to <em>other pkgdown sites</em> instead. It feels like magic: <code>pkgdown</code> <a href="https://github.com/hadley/pkgdown/blob/ad1b1dfb12871919e06a2aa7e366ec0980af2714/R/metadata.R#L24-L46">somehow</a> knows what other packages have pkgdown sites.</p>
 <p>In order for this to work, you have to add your website URL in two places:</p>

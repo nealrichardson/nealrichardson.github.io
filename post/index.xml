@@ -51,7 +51,7 @@ It&amp;rsquo;s about 50-50 the candidates that ever open the docs&amp;mdash;the 
       <pubDate>Thu, 03 Jan 2019 16:49:57 -0700</pubDate>
       
       <guid>/2019/01/03/the-s-curve/</guid>
-      <description>At Crunch, we&amp;rsquo;ve built up our product over the span of six years, and what we&amp;rsquo;ve built helps a lot of people analyze their data quickly and painlessly. As ever, our ambitions are great and we want to build more. Sometimes this requires changing data contracts and APIs, and that poses an additional challenge: not only do we have to design a good solution to our users&#39; problems, we have to transition to it with minimal disruption.</description>
+      <description>At Crunch, we&amp;rsquo;ve built up our product over the span of six years, and what we&amp;rsquo;ve built helps a lot of people analyze their data quickly and painlessly. As ever, our ambitions are great and we want to build more. Sometimes this requires changing data contracts and APIs, and that poses an additional challenge: not only do we have to design a good solution to our users&amp;rsquo; problems, we have to transition to it with minimal disruption.</description>
     </item>
     
     <item>
@@ -100,8 +100,8 @@ Whenever I start an analysis like this, I also think about how to make it easier
       
       <guid>/2018/02/01/back-to-the-future/</guid>
       <description>When you submit a package update to CRAN, they ask you to check some boxes confirming that you&amp;rsquo;ve done your due diligence on your submission: that it passes its checks. One confirmation is that you&amp;rsquo;ve addressed any failures on the CRAN package check page, which looks like this.
- Hey, all passing today!
-  This page is a window into one of the key features of CRAN: it runs continuous-integration tests of your package against multiple versions of R, on multiple operating systems, with the current version of your dependencies.</description>
+Hey, all passing today!
+This page is a window into one of the key features of CRAN: it runs continuous-integration tests of your package against multiple versions of R, on multiple operating systems, with the current version of your dependencies.</description>
     </item>
     
     <item>

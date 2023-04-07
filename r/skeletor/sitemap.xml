@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://enpiar.com/r/skeletor//index.html</loc>
+    <loc>https://enpiar.com/r/skeletor/404.html</loc>
   </url>
   <url>
-    <loc>https://enpiar.com/r/skeletor//reference/configure.html</loc>
+    <loc>https://enpiar.com/r/skeletor/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://enpiar.com/r/skeletor//reference/skeletor.html</loc>
+    <loc>https://enpiar.com/r/skeletor/authors.html</loc>
+  </url>
+  <url>
+    <loc>https://enpiar.com/r/skeletor/index.html</loc>
+  </url>
+  <url>
+    <loc>https://enpiar.com/r/skeletor/news/index.html</loc>
+  </url>
+  <url>
+    <loc>https://enpiar.com/r/skeletor/reference/configure.html</loc>
+  </url>
+  <url>
+    <loc>https://enpiar.com/r/skeletor/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://enpiar.com/r/skeletor/reference/skeletor.html</loc>
   </url>
 </urlset>

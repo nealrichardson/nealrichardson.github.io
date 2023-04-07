@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <meta name="generator" content="Hugo 0.88.1" />
+  <meta name="generator" content="Hugo 0.111.3">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,7 +27,6 @@
 <meta property="og:url" content="/2017/07/04/better-management-through-code/" /><meta property="og:image" content="https://maritime.org/doc/pt/know/img/pg15.jpg" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2017-07-04T16:49:57-07:00" />
 <meta property="article:modified_time" content="2017-07-04T16:49:57-07:00" />
-
 
   
 
@@ -122,7 +121,7 @@ if (!doNotTrack) {
     <meta itemprop="name" content="Better Management Through Code">
 <meta itemprop="description" content="When becoming an engineering leader means you don&#39;t have time to write code anymore, scratch your itch by automating some of your management duties."><meta itemprop="datePublished" content="2017-07-04T16:49:57-07:00" />
 <meta itemprop="dateModified" content="2017-07-04T16:49:57-07:00" />
-<meta itemprop="wordCount" content="1481"><meta itemprop="image" content="https://maritime.org/doc/pt/know/img/pg15.jpg">
+<meta itemprop="wordCount" content="1482"><meta itemprop="image" content="https://maritime.org/doc/pt/know/img/pg15.jpg">
 <meta itemprop="keywords" content="automation,python,management," />
 <div id="hero">
     <h1 itemprop="headline">  Better Management Through Code</h1>
@@ -167,23 +166,23 @@ if (!doNotTrack) {
 <a class="headline-anchor" href="#the-code"><h2 id="the-code">The code</a> </h2>
 <p>Lucky for me, we&rsquo;d already designed a <a href="https://drive.google.com/file/d/0B5-hFeCNxubxLW9xUHBKUU1jcjg/view">test-and-build system</a> that connects those APIs, so I just needed to extend that. The solution was code that, when deploying to production, scrapes the tickets that correspond to the new code, looks for markers indicating that the tickets were user-reported and by whom, and notifies our support lead in Slack that they should contact the users to let them know that the fixes are deployed.</p>
 <p>Since our deploy job already involves a Python script, I added this block towards the end:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">for</span> story <span style="color:#f92672">in</span> pivotal<span style="color:#f92672">.</span>get_stories(filter<span style="color:#f92672">=</span>search_terms):
-    labels <span style="color:#f92672">=</span> [label[<span style="color:#e6db74">&#39;name&#39;</span>] <span style="color:#66d9ef">for</span> label <span style="color:#f92672">in</span> story[<span style="color:#e6db74">&#39;labels&#39;</span>]]
-    <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#34;user-reported&#34;</span> <span style="color:#f92672">in</span> labels:
-        <span style="color:#75715e"># See if we have any users identified by email in tasks:</span>
-        tasks <span style="color:#f92672">=</span> [task[<span style="color:#e6db74">&#39;description&#39;</span>]
-                    <span style="color:#66d9ef">for</span> task <span style="color:#f92672">in</span> pivotal<span style="color:#f92672">.</span>get_story_tasks(story[<span style="color:#e6db74">&#39;id&#39;</span>])]
-        users <span style="color:#f92672">=</span> [task <span style="color:#66d9ef">for</span> task <span style="color:#f92672">in</span> tasks <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;@&#39;</span> <span style="color:#f92672">in</span> task <span style="color:#f92672">and</span> <span style="color:#f92672">not</span> <span style="color:#e6db74">&#39; &#39;</span> <span style="color:#f92672">in</span> task]
-        <span style="color:#66d9ef">if</span> users:
-            users <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;, &#39;</span><span style="color:#f92672">.</span>join(set(users))
-        <span style="color:#66d9ef">else</span>:
-            users <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;a user&#39;</span>
-        <span style="color:#75715e"># Ping Chris</span>
-        msg <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;@chris: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> reported &#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;, which was just deployed. &#39;</span> <span style="color:#f92672">%</span> \
-            (users, story[<span style="color:#e6db74">&#39;name&#39;</span>])
-        msg <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#39;Please notify them that their bug has been fixed&#39;</span>
-        slack<span style="color:#f92672">.</span>message(text<span style="color:#f92672">=</span>msg, username<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;jenkins&#34;</span>, icon_emoji<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;:ship:&#34;</span>)
-</code></pre></div><p>The code relies on some conventions of how we use our issue tracker (Pivotal Tracker) for user reports. In addition to tagging issues with &ldquo;user-reported&rdquo;, we&rsquo;ve also include the email addresses of the reporters in the &ldquo;task&rdquo; list on the tickets, for lack of a better place to put them. It&rsquo;s easy enough to do when writing the ticket based on the user&rsquo;s report. (We also have code that looks for email addresses of affected users based on how various other integrations create tickets, but for a more readable example, I pruned them here.)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> story <span style="color:#f92672">in</span> pivotal<span style="color:#f92672">.</span>get_stories(filter<span style="color:#f92672">=</span>search_terms):
+</span></span><span style="display:flex;"><span>    labels <span style="color:#f92672">=</span> [label[<span style="color:#e6db74">&#39;name&#39;</span>] <span style="color:#66d9ef">for</span> label <span style="color:#f92672">in</span> story[<span style="color:#e6db74">&#39;labels&#39;</span>]]
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#34;user-reported&#34;</span> <span style="color:#f92672">in</span> labels:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># See if we have any users identified by email in tasks:</span>
+</span></span><span style="display:flex;"><span>        tasks <span style="color:#f92672">=</span> [task[<span style="color:#e6db74">&#39;description&#39;</span>]
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">for</span> task <span style="color:#f92672">in</span> pivotal<span style="color:#f92672">.</span>get_story_tasks(story[<span style="color:#e6db74">&#39;id&#39;</span>])]
+</span></span><span style="display:flex;"><span>        users <span style="color:#f92672">=</span> [task <span style="color:#66d9ef">for</span> task <span style="color:#f92672">in</span> tasks <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;@&#39;</span> <span style="color:#f92672">in</span> task <span style="color:#f92672">and</span> <span style="color:#f92672">not</span> <span style="color:#e6db74">&#39; &#39;</span> <span style="color:#f92672">in</span> task]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> users:
+</span></span><span style="display:flex;"><span>            users <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;, &#39;</span><span style="color:#f92672">.</span>join(set(users))
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            users <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;a user&#39;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Ping Chris</span>
+</span></span><span style="display:flex;"><span>        msg <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;@chris: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> reported &#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;, which was just deployed. &#39;</span> <span style="color:#f92672">%</span> \
+</span></span><span style="display:flex;"><span>            (users, story[<span style="color:#e6db74">&#39;name&#39;</span>])
+</span></span><span style="display:flex;"><span>        msg <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#39;Please notify them that their bug has been fixed&#39;</span>
+</span></span><span style="display:flex;"><span>        slack<span style="color:#f92672">.</span>message(text<span style="color:#f92672">=</span>msg, username<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;jenkins&#34;</span>, icon_emoji<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;:ship:&#34;</span>)
+</span></span></code></pre></div><p>The code relies on some conventions of how we use our issue tracker (Pivotal Tracker) for user reports. In addition to tagging issues with &ldquo;user-reported&rdquo;, we&rsquo;ve also include the email addresses of the reporters in the &ldquo;task&rdquo; list on the tickets, for lack of a better place to put them. It&rsquo;s easy enough to do when writing the ticket based on the user&rsquo;s report. (We also have code that looks for email addresses of affected users based on how various other integrations create tickets, but for a more readable example, I pruned them here.)</p>
 <p>Problem solved. Now, we don&rsquo;t need to remember to look up this information when a release is deployed. Moreover, the notification happens no matter what time the deploy happens, or who is on vacation, or whatever&mdash;the notice is printed in Slack for all to see. Plus, by having the job ping someone other than me, I just delegated the responsibility in the process! (Hey, it says &ldquo;Please&rdquo;.)</p>
 <a class="headline-anchor" href="#coding-responsibly"><h1 id="coding-responsibly">Coding responsibly</a> </h1>
 <p>And, I got to write code! It <a href="https://cate.blog/2015/12/23/the-hardest-shortest-lesson-becoming-a-manager/">wasn&rsquo;t code that anyone was depending on</a>, and it <a href="https://hackernoon.com/from-engineer-to-manager-keeping-your-technical-skills-40579cc8ea00">didn&rsquo;t matter if it took an extra day</a> for me to get around to finishing it. I got to tighten up our product management process and free up my mental space and that of others on the team.</p>
