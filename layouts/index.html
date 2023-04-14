@@ -8,7 +8,7 @@
     <p>Projects, code, and other infrequently posted thoughts</p>
   </div>
   <ul id="posts">
-    {{ $paginator := .Paginate (where .Site.Pages "Type" "post") }}
+    {{ $paginator := .Paginate (where .Site.RegularPages "Type" "post") }}
     {{ range $paginator.Pages}} {{ partial "page-summary" . }} {{ end }}
     <section>{{ partial "pagination" .}}</section>
   </ul>
