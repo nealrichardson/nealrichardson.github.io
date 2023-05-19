@@ -7,7 +7,7 @@ weight = 1
 
 Here are slides from a few talks I've given in recent years:
 
--   [Solving Big Data Problems With Apache Arrow](/talks/user-2021/) ([video](https://www.youtube.com/watch?v=kwGfwU-_G_o)): Some applications of the [`arrow`](https://arrow.apache.org/docs/r) R package provided by the user community. Presented at [UseR 2021](https://user2021.r-project.org/), July 2021.
+-   [Solving Big Data Problems With Apache Arrow](/talks/user-2021/) ([video](https://www.youtube.com/watch?v=5e7W4ktjASQ)): Some applications of the [`arrow`](https://arrow.apache.org/docs/r) R package provided by the user community. Presented at [UseR 2021](https://user2021.r-project.org/), July 2021.
 
 -   [Bigger Data With Ease Using Apache Arrow](https://www.rstudio.com/resources/rstudioglobal-2021/bigger-data-with-ease-using-apache-arrow/) ([video](https://www.rstudio.com/resources/rstudioglobal-2021/bigger-data-with-ease-using-apache-arrow/)): This talk examines the unique characteristics of the Arrow project that enable it to redefine what is possible in R. It also highlights some of the latest developments in the arrow R package, including how you can query and manipulate multi-file datasets, and it presents strategies for speeding up workflows by up to 100x. Presented at rstudio::global(2021) conference, January 2021.
 

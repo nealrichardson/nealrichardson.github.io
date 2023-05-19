@@ -5,7 +5,7 @@
 <div id="main">
   <div id="hero">
     <h1>{{.Title}}</h1>
-    <p>Projects, code, and other infrequently posted thoughts</p>
+    <p>Infrequent, verbose thoughts on software and leadership</p>
   </div>
   <ul id="posts">
     {{ $paginator := .Paginate (where .Site.RegularPages "Type" "post") }}
