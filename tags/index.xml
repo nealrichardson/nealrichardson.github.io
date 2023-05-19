@@ -6,13 +6,31 @@
     <description>Recent content in Tags on A Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 16 Mar 2020 06:49:57 -0700</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 19 May 2023 06:49:57 -0700</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>leadership</title>
       <link>/tags/leadership/</link>
-      <pubDate>Mon, 16 Mar 2020 06:49:57 -0700</pubDate>
+      <pubDate>Fri, 19 May 2023 06:49:57 -0700</pubDate>
       
       <guid>/tags/leadership/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>management</title>
+      <link>/tags/management/</link>
+      <pubDate>Fri, 19 May 2023 06:49:57 -0700</pubDate>
+      
+      <guid>/tags/management/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>zen</title>
+      <link>/tags/zen/</link>
+      <pubDate>Fri, 19 May 2023 06:49:57 -0700</pubDate>
+      
+      <guid>/tags/zen/</guid>
       <description></description>
     </item>
     
@@ -22,24 +40,6 @@
       <pubDate>Mon, 16 Mar 2020 06:49:57 -0700</pubDate>
       
       <guid>/tags/remote/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>zen</title>
-      <link>/tags/zen/</link>
-      <pubDate>Mon, 16 Mar 2020 06:49:57 -0700</pubDate>
-      
-      <guid>/tags/zen/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>management</title>
-      <link>/tags/management/</link>
-      <pubDate>Wed, 17 Jul 2019 06:49:57 -0700</pubDate>
-      
-      <guid>/tags/management/</guid>
       <description></description>
     </item>
     
