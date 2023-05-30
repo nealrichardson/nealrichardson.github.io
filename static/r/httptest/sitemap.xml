@@ -64,6 +64,9 @@
     <loc>https://enpiar.com/r/httptest/reference/get_current_redactor.html</loc>
   </url>
   <url>
+    <loc>https://enpiar.com/r/httptest/reference/get_current_requester.html</loc>
+  </url>
+  <url>
     <loc>https://enpiar.com/r/httptest/reference/gsub_response.html</loc>
   </url>
   <url>

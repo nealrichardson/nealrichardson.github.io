@@ -16,7 +16,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">httptest</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">4.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">4.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,9 +69,20 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="4.2.0" id="httptest-420">httptest 4.2.0<a class="anchor" aria-label="anchor" href="#httptest-420"></a></h2><p class="text-muted">CRAN release: 2023-05-28</p>
+<ul><li>
+<code><a href="../reference/with_mock_dir.html">with_mock_dir()</a></code> uses the requester set by <code><a href="../reference/set_requester.html">set_requester()</a></code> (<a href="https://github.com/nealrichardson/httptest/issues/70" class="external-link">#70</a>, <a href="https://github.com/maelle" class="external-link">@maelle</a>).</li>
+<li>
+<code><a href="../reference/capture_requests.html">capture_requests()</a></code> can be used without loading <code><a href="https://enpiar.com/r/httptest/">library(httptest)</a></code> (<a href="https://github.com/nealrichardson/httptest/issues/77" class="external-link">#77</a>, <a href="https://github.com/kforner" class="external-link">@kforner</a>).</li>
+<li>
+<code><a href="../reference/stop_mocking.html">stop_mocking()</a></code> correctly untraces all functions (<a href="https://github.com/nealrichardson/httptest/issues/79" class="external-link">#79</a>, <a href="https://github.com/kforner" class="external-link">@kforner</a>).</li>
+<li>
+<code><a href="../reference/get_current_requester.html">get_current_requester()</a></code> is now included within the package exports to match the behavior of <code><a href="../reference/get_current_redactor.html">get_current_redactor()</a></code> (<a href="https://github.com/nealrichardson/httptest/issues/81" class="external-link">#81</a>, <a href="https://github.com/stephenashton-dhsc" class="external-link">@stephenashton-dhsc</a>).</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="4.1.0" id="httptest-410">httptest 4.1.0<a class="anchor" aria-label="anchor" href="#httptest-410"></a></h2><p class="text-muted">CRAN release: 2021-09-22</p>
 <ul><li>Function alias <code>with_mock_API</code>, deprecated in 3.0.0, has been removed.</li>
-<li>Update some test for an upcoming release of <code>testthat</code>.</li>
+<li>Update some tests for an upcoming release of <code>testthat</code>.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="4.0.0" id="httptest-400">httptest 4.0.0<a class="anchor" aria-label="anchor" href="#httptest-400"></a></h2><p class="text-muted">CRAN release: 2021-02-01</p>
