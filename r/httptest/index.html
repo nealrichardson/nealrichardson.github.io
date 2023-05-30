@@ -55,7 +55,7 @@
     
     <a class="navbar-brand me-2" href="index.html">httptest</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">4.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">4.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,11 +110,11 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="httptest-a-test-environment-for-http-requests-in-r">httptest: A Test Environment for HTTP Requests in R<a class="anchor" aria-label="anchor" href="#httptest-a-test-environment-for-http-requests-in-r"></a>
 </h1></div>
-<p><a href="https://github.com/nealrichardson/httptest/actions" class="external-link"><img src="https://github.com/nealrichardson/httptest/workflows/R-CMD-check/badge.svg" alt="Build Status"></a> <a href="https://codecov.io/gh/nealrichardson/httptest" class="external-link"><img src="https://codecov.io/gh/nealrichardson/httptest/branch/master/graph/badge.svg" alt="codecov"></a> <a href="https://cran.r-project.org/package=httptest" class="external-link"><img src="https://www.r-pkg.org/badges/version-last-release/httptest" alt="cran"></a> <a href="https://bestpractices.coreinfrastructure.org/projects/2136" class="external-link"><img src="https://bestpractices.coreinfrastructure.org/projects/2136/badge" alt="CII Best Practices"></a></p>
+<p><a href="https://github.com/nealrichardson/httptest/actions" class="external-link"><img src="https://github.com/nealrichardson/httptest/workflows/R-CMD-check/badge.svg" alt="Build Status"></a> <a href="https://app.codecov.io/gh/nealrichardson/httptest" class="external-link"><img src="https://codecov.io/gh/nealrichardson/httptest/branch/main/graph/badge.svg" alt="codecov"></a> <a href="https://cran.r-project.org/package=httptest" class="external-link"><img src="https://www.r-pkg.org/badges/version-last-release/httptest" alt="cran"></a> <a href="https://bestpractices.coreinfrastructure.org/projects/2136" class="external-link"><img src="https://bestpractices.coreinfrastructure.org/projects/2136/badge" alt="CII Best Practices"></a></p>
 <p><code>httptest</code> makes it easy to write tests for code and packages that wrap web APIs. Testing code that communicates with remote servers can otherwise be painful: things like authentication, server state, and network flakiness can make testing seem too costly to bother with. The <code>httptest</code> package enables you to test all of the logic on the R sides of the API in your package without requiring access to the remote service.</p>
 <p>Importantly, it provides multiple <strong>contexts</strong> that mock the network connection and tools for <strong>recording</strong> real requests for future offline use as fixtures, both in tests and in vignettes. The package also includes additional <strong>expectations</strong> to assert that HTTP requests were—or were not—made.</p>
 <p>Using these tools, you can test that code is making the intended requests and that it handles the expected responses correctly, all without depending on a connection to a remote API. The ability to save responses and load them offline also enables you to write package vignettes and other dynamic documents that can be distributed without access to a live server.</p>
-<p>This package bridges the gap between two others: (1) <a href="https://testthat.r-lib.org/" class="external-link">testthat</a>, which provides a useful (<a href="https://github.com/r-lib/testthat/blob/master/R/test-that.R#L171" class="external-link">and fun</a>) framework for unit testing in R but doesn’t come with tools for testing across web APIs; and (2) <a href="https://httr.r-lib.org/" class="external-link">httr</a>, which <a href="https://github.com/r-lib/httr/blob/master/R/httr.r#L1" class="external-link">makes working with HTTP in R easy</a> but doesn’t make it simple to test the code that uses it. <code>httptest</code> brings the fun and simplicity together.</p>
+<p>This package bridges the gap between two others: (1) <a href="https://testthat.r-lib.org/" class="external-link">testthat</a>, which provides a useful (<a href="https://github.com/r-lib/testthat/blob/6666662844274e8fa1988c8e0cfecf0b13399ee1/R/testthat-package.R#L1" class="external-link">and fun</a>) framework for unit testing in R but doesn’t come with tools for testing across web APIs; and (2) <a href="https://httr.r-lib.org/" class="external-link">httr</a>, which <a href="https://github.com/r-lib/httr/blob/a99126cceb2c2d54e446909417878c875a9ef8bc/R/httr.r#L1" class="external-link">makes working with HTTP in R easy</a> but doesn’t make it simple to test the code that uses it. <code>httptest</code> brings the fun and simplicity together.</p>
 <div class="section level2">
 <h2 id="installing">Installing<a class="anchor" aria-label="anchor" href="#installing"></a>
 </h2>
@@ -240,7 +240,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Neal Richardson <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Neal Richardson <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0009-0002-7992-3520" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
