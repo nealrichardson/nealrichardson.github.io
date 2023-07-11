@@ -27,13 +27,11 @@ ignoreFiles = ["\\.Rmd$", "_files$", "_cache$"]
     name = "fa-github fa-lg"
     url = "https://github.com/nealrichardson"
 [[menu.social]]
-    name = "fa-twitter fa-lg"
-    url = "https://twitter.com/enpiar"
+    name = "fa-linkedin fa-lg"
+    url = "https://www.linkedin.com/in/enpiar/"
 
 [params]
     description = "A website built through Hugo and blogdown."
-
-    twitter = "enpiar"
 
     # options for highlight.js (version, additional languages, and theme)
     highlightjsVersion = "9.10.0"
