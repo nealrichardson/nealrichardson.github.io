@@ -5,11 +5,13 @@ title = "Talks"
 weight = 1
 +++
 
-Here are slides from a few talks I've given in recent years:
+Here are slides from a few talks I've given over the years:
 
--   [Solving Big Data Problems With Apache Arrow](/talks/user-2021/) ([video](https://www.youtube.com/watch?v=5e7W4ktjASQ)): Some applications of the [`arrow`](https://arrow.apache.org/docs/r) R package provided by the user community. Presented at [UseR 2021](https://user2021.r-project.org/), July 2021.
+-   [Scaling Up Data Workflows with Arrow, Parquet, and DuckDB](/user-2025/): How Parquet files, partitioning, and query engines like DuckDB and the one in the [`arrow`](https://arrow.apache.org/docs/r) R package can help you scale up your data workflows in R. Presented at the [useR! 2025 Conference](https://user2025.r-project.org/), August 2025.
 
--   [Bigger Data With Ease Using Apache Arrow](https://www.rstudio.com/resources/rstudioglobal-2021/bigger-data-with-ease-using-apache-arrow/) ([video](https://www.rstudio.com/resources/rstudioglobal-2021/bigger-data-with-ease-using-apache-arrow/)): This talk examines the unique characteristics of the Arrow project that enable it to redefine what is possible in R. It also highlights some of the latest developments in the arrow R package, including how you can query and manipulate multi-file datasets, and it presents strategies for speeding up workflows by up to 100x. Presented at rstudio::global(2021) conference, January 2021.
+-   [Solving Big Data Problems With Apache Arrow](/talks/user-2021/) ([video](https://www.youtube.com/watch?v=5e7W4ktjASQ)): Some applications of the `arrow` R package provided by the user community. Presented at the [useR! 2021 Conference](https://user2021.r-project.org/), July 2021.
+
+-   [Bigger Data With Ease Using Apache Arrow](https://www.rstudio.com/resources/rstudioglobal-2021/bigger-data-with-ease-using-apache-arrow/) ([video](https://www.rstudio.com/resources/rstudioglobal-2021/bigger-data-with-ease-using-apache-arrow/)): This talk examines the unique characteristics of the Arrow project that enable it to redefine what is possible in R. It also highlights some of the latest developments in the `arrow` R package, including how you can query and manipulate multi-file datasets, and it presents strategies for speeding up workflows by up to 100x. Presented at rstudio::global(2021) conference, January 2021.
 
 -   [Fast Data Access With Apache Arrow](/talks/czi-2020/) ([video](https://www.youtube.com/watch?v=KnkN5AoZjZU)): Overview of the [Apache Arrow](https://arrow.apache.org) project and how it improves the speed and efficiency of data access, in many cases without your even being aware of it, plus a discussion of the growth of the Arrow community and [Ursa Labs's apprenticeship program](https://ursalabs.org/blog/2020-czi-ursa-labs/). Chan-Zuckerberg Initiative Essential Open Source Software for Science Meeting, December 2020.
 
