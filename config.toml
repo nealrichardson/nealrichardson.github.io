@@ -3,8 +3,6 @@ relativeurls = false
 languageCode = "en-us"
 title = "A Blog"
 theme = "kube"
-googleAnalytics = "UA-104182925-1"
-disqusShortname = ""
 ignoreFiles = ["\\.Rmd$", "_files$", "_cache$"]
 
 [permalinks]
