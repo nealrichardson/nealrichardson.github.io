@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <meta name="generator" content="Hugo 0.115.2">
+  <meta name="generator" content="Hugo 0.148.2">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,12 +21,19 @@
   <meta name="author" content="">
 
 
-  <meta property="og:title" content="The S-Curve" />
-<meta property="og:description" content="In engineering as in life, sometimes the best path forward isn&#39;t a straight line." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="/2019/01/03/the-s-curve/" /><meta property="og:image" content="https://enpiar.com/img/s-curve.jpeg" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2019-01-03T16:49:57-07:00" />
-<meta property="article:modified_time" content="2019-01-03T16:49:57-07:00" />
+  <meta property="og:url" content="/2019/01/03/the-s-curve/">
+  <meta property="og:site_name" content="A Blog">
+  <meta property="og:title" content="The S-Curve">
+  <meta property="og:description" content="In engineering as in life, sometimes the best path forward isn&#39;t a straight line.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2019-01-03T16:49:57-07:00">
+    <meta property="article:modified_time" content="2019-01-03T16:49:57-07:00">
+    <meta property="article:tag" content="Management">
+    <meta property="article:tag" content="Product">
+    <meta property="article:tag" content="Project Management">
+    <meta property="og:image" content="https://enpiar.com/img/s-curve.jpeg">
 
   
 
@@ -37,17 +44,6 @@
   
   
   
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-104182925-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
-
   
 
   <link rel="canonical" href="/2019/01/03/the-s-curve/">  
@@ -113,11 +109,14 @@ if (!doNotTrack) {
  </header>
   <main>
 <div class="push-center" itemscope itemtype="http://schema.org/BlogPosting">
-    <meta itemprop="name" content="The S-Curve">
-<meta itemprop="description" content="In engineering as in life, sometimes the best path forward isn&#39;t a straight line."><meta itemprop="datePublished" content="2019-01-03T16:49:57-07:00" />
-<meta itemprop="dateModified" content="2019-01-03T16:49:57-07:00" />
-<meta itemprop="wordCount" content="2418"><meta itemprop="image" content="https://enpiar.com/img/s-curve.jpeg">
-<meta itemprop="keywords" content="management,product,project management," />
+    
+  <meta itemprop="name" content="The S-Curve">
+  <meta itemprop="description" content="In engineering as in life, sometimes the best path forward isn&#39;t a straight line.">
+  <meta itemprop="datePublished" content="2019-01-03T16:49:57-07:00">
+  <meta itemprop="dateModified" content="2019-01-03T16:49:57-07:00">
+  <meta itemprop="wordCount" content="2418">
+  <meta itemprop="image" content="https://enpiar.com/img/s-curve.jpeg">
+  <meta itemprop="keywords" content="Management,Product,Project Management">
 <div id="hero">
     <h1 itemprop="headline">  The S-Curve</h1>
     
@@ -133,10 +132,10 @@ if (!doNotTrack) {
 
     <p>At <a href="https://crunch.io/">Crunch</a>, we&rsquo;ve built up our product over the span of six years, and what we&rsquo;ve built helps a lot of people analyze their data quickly and painlessly. As ever, our ambitions are great and we want to build more. Sometimes this requires changing data contracts and APIs, and that poses an additional challenge: not only do we have to design a good solution to our users&rsquo; problems, we have to transition to it with minimal disruption.</p>
 <p>We&rsquo;re not so much <a href="https://www.csmonitor.com/The-Culture/The-Home-Forum/2016/0324/Build-the-plane-while-you-re-flying-it">&ldquo;building the plane while flying it&rdquo;</a> as replacing one of the engines of our fully functioning airplane&mdash;and while we&rsquo;re doing it, we don&rsquo;t want to cause passenger 16C to spill her drink on the sales presentation she&rsquo;s preparing in flight.</p>
-<figure class="floating-left halfwidth"><img src="/img/bamboo-scaffold.jpg"/><figcaption>
-            <p>
-                    <a href="https://en.wikipedia.org/wiki/Scaffolding">Building in order to build</a></p>
-        </figcaption>
+<figure class="floating-left halfwidth"><img src="/img/bamboo-scaffold.jpg"><figcaption>
+      <p>
+          <a href="https://en.wikipedia.org/wiki/Scaffolding">Building in order to build</a></p>
+    </figcaption>
 </figure>
 
 <p>In many ways, replacing a structure is far more challenging than building it from nothing, and we learned that lesson a few times last year.
@@ -144,19 +143,18 @@ After a few turbulent rollouts, we stepped back and thought about what was missi
 <p>The most direct path to the new feature is not the best one if you consider that current users need to be able to continue their daily work. There is a lot of temporary work and scaffolding needed to transition from one API to another. In addition, the product plan needs to be broken down into much smaller intermediate milestones, each with their own scaffold work, and some of which may not seem like they directly advance the product vision.</p>
 <p>As a long-time Bay Area resident, a metaphor came to mind: the building of the new Bay Bridge.</p>
 <a class="headline-anchor" href="#the-s-curve"><h1 id="the-s-curve">The S-Curve</a> </h1>
-<figure class="floating-right halfwidth"><img src="/img/loma-prieta.jpg"/><figcaption>
-            <p>
-                    <a href="https://www.flickr.com/photos/sanbeiji/220645446">Collapse</a></p>
-        </figcaption>
+<figure class="floating-right halfwidth"><img src="/img/loma-prieta.jpg"><figcaption>
+      <p>
+          <a href="https://www.flickr.com/photos/sanbeiji/220645446">Collapse</a></p>
+    </figcaption>
 </figure>
 
 <p>The 1989 Loma Prieta earthquake exposed many structural weaknesses across the Bay Area, including on the Bay Bridge connecting San Francisco and Oakland. The eastern span was supported on pillars that did not go down to bedrock, and they suffered from the liquefaction of the sea floor, famously collapsing in a few places. It would need to be replaced before the next Big One.</p>
 <p>How do you replace a bridge that hundreds of thousands of vehicles cross daily? Very carefully. Building the new bridge next to the old one is the easy part. The hard parts are how to connect to the anchorages on each side and have the resulting new bridge have a natural traffic flow&mdash;no hard turns to drive around what used to be the old bridge.</p>
 <p>A critical step in the replacement of the eastern span was the &ldquo;S-Curve&rdquo;. In the summer of 2009, workers built a structure next to the connection between the bridge and Yerba Buena Island. The new structure would bend the flow of traffic out to the south (the S-Curve) so that the new bridge, when it was completed, could make a natural approach to the tunnel. The S-Curve structure also provided the points where the new bridge would connect.</p>
-
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-  <iframe src="https://www.youtube.com/embed/HZ3rTq59x5U" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
-</div>
+      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/HZ3rTq59x5U?autoplay=0&amp;controls=1&amp;end=0&amp;loop=0&amp;mute=0&amp;start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"></iframe>
+    </div>
 
 <p>With the bridge closed over Labor Day weekend, the contractor demolished the old section of bridge and then literally slid the new structure into place. For the next four years until the new bridge opened, drivers passed over this S-Curve. Then it was demolished, along with the rest of the old bridge.</p>
 <a class="headline-anchor" href="#lessons"><h1 id="lessons">Lessons</a> </h1>
@@ -178,20 +176,20 @@ After a few turbulent rollouts, we stepped back and thought about what was missi
 <p>The stages you need for a project like this are less about delivering incremental value and more about breaking apart the complexity and disruption so that each piece is less risky. If you need to create a new API with a new persistence layer, there&rsquo;s a data migration involved and you need to get all API users to update to use the new API. And it needs to perform at scale. Trying to pull all of that off in one step has far too many points where it could completely fail.</p>
 <p>Where we had success this year with major feature rollouts, the final step that released it to everyone was anticlimactic from a development perspective: all of the heavy lifting had already been done, and most of the possible failure modes had already been discovered and handled. In the bridge-building metaphor, the last step before opening to traffic is painting the lane lines, not constructing towers.</p>
 <a class="headline-anchor" href="#but-focus-only-on-current-stage"><h2 id="but-focus-only-on-current-stage">But focus only on current stage</a> </h2>
-<figure class="floating-right halfwidth"><img src="/img/horse-blinders.jpg"/><figcaption>
-            <p>
-                    <a href="https://en.wikipedia.org/wiki/Blinkers_%28horse_tack%29">Nothing to see here</a></p>
-        </figcaption>
+<figure class="floating-right halfwidth"><img src="/img/horse-blinders.jpg"><figcaption>
+      <p>
+          <a href="https://en.wikipedia.org/wiki/Blinkers_%28horse_tack%29">Nothing to see here</a></p>
+    </figcaption>
 </figure>
 
 <p>Once you&rsquo;ve broken the grand vision into clear, self contained steps, show the team the ultimate plan at the beginning so they know where everyone is going. From then on, exclusively refer to the current stage.</p>
 <p>If the team is looking at the product spec that describes the end goal, they may be tempted to add parts of the feature that are outside of the current stage. You very much want to avoid the &ldquo;while I&rsquo;m in there I&rsquo;ll just&rdquo; scope creep. If the stages you&rsquo;ve outlined have meaningful boundaries, there&rsquo;s a reason you deferred parts of the feature until later stages. Each stage depends on the previous ones being completed. If you violate those stage boundaries, all of those dependencies stack up. We had one big project where this happened, and it turned our nice iterative plan into a big waterfall because everything depended on something else before it could ship.</p>
 <a class="headline-anchor" href="#embrace-the-indirect-route"><h2 id="embrace-the-indirect-route">Embrace the indirect route</a> </h2>
 <p>Our development culture values writing high-quality code to solve real problems. We don&rsquo;t like to &ldquo;hack&rdquo;: we prefer to take the extra minute to think about the right way to solve a problem and make sure that we have test coverage for whatever we add. We love deleting dead code and simplifying things so that we can delete code. These are great norms, and we&rsquo;ve worked hard to cultivate them.</p>
-<figure class="floating-left halfwidth"><img src="/img/s-curve.jpeg"/><figcaption>
-            <p>
-                    <a href="https://commons.wikimedia.org/w/index.php?curid=7966067">S-Curve in place</a></p>
-        </figcaption>
+<figure class="floating-left halfwidth"><img src="/img/s-curve.jpeg"><figcaption>
+      <p>
+          <a href="https://commons.wikimedia.org/w/index.php?curid=7966067">S-Curve in place</a></p>
+    </figcaption>
 </figure>
 
 <p>That said, as the S-Curve example shows, sometimes the process of replacing a structure means building structures that you intend to throw away. Structures that on their own make no sense&mdash;who would design a bridge that had a sharp S-shaped bend in it? It&rsquo;s ugly, unnecessary, and less functional than a bridge that goes point to point. For bridge-building purists, it&rsquo;s a horrible design.</p>
@@ -217,10 +215,10 @@ After a few turbulent rollouts, we stepped back and thought about what was missi
     3 Jan 2019
   </time>
   
-    in <span itemprop="articleSection"><a href="/categories/management/">management</a></span>
+    in <span itemprop="articleSection">&lt;a href=&#34;/categories/management/&#34;&gt;management&lt;/a&gt;</span>
   
   
-    and tagged <a href="/tags/management/">management</a>, <a href="/tags/product/">product</a> and <a href="/tags/project-management/">project management</a>
+    and tagged &lt;a href=&#34;/tags/management/&#34;&gt;management&lt;/a&gt;, &lt;a href=&#34;/tags/product/&#34;&gt;product&lt;/a&gt; and &lt;a href=&#34;/tags/project-management/&#34;&gt;project management&lt;/a&gt;
   
 </p>
 
@@ -248,8 +246,6 @@ After a few turbulent rollouts, we stepped back and thought about what was missi
 
 
     </div>
-
-    
 
 </div>
 </div>

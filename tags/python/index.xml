@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>python on A Blog</title>
+    <title>Python on A Blog</title>
     <link>/tags/python/</link>
-    <description>Recent content in python on A Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Python on A Blog</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 04 Jul 2017 16:49:57 -0700</lastBuildDate><atom:link href="/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 04 Jul 2017 16:49:57 -0700</lastBuildDate>
+    <atom:link href="/tags/python/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Better Management Through Code</title>
       <link>/2017/07/04/better-management-through-code/</link>
       <pubDate>Tue, 04 Jul 2017 16:49:57 -0700</pubDate>
-      
       <guid>/2017/07/04/better-management-through-code/</guid>
-      <description>At Crunch, I lead both engineering and product management. Over the last few years, what that entails has changed greatly. How I spent my day when we were getting started, with a team of four developers and zero users, is very different from how I spend my time now with 16 on the team and thousands of users around the world. In fact, my day-to-day has evolved through several phases as we&amp;rsquo;ve grown, and each phase has come with its own challenges and learning opportunities&amp;mdash;or rather, challenges that are learning opportunities.</description>
+      <description>&lt;p&gt;At &lt;a href=&#34;https://crunch.io/&#34;&gt;Crunch&lt;/a&gt;, I lead both engineering and product management. Over the last few years, what that entails has changed greatly. How I spent my day when we were getting started, with a team of four developers and zero users, is very different from how I spend my time now with 16 on the team and thousands of users around the world. In fact, my day-to-day has evolved through several phases as we&amp;rsquo;ve grown, and each phase has come with its own challenges and learning opportunities&amp;mdash;or rather, challenges that are learning opportunities.&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

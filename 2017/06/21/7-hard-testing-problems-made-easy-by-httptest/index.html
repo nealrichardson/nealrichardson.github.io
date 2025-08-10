@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <meta name="generator" content="Hugo 0.115.2">
+  <meta name="generator" content="Hugo 0.148.2">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,12 +21,18 @@
   <meta name="author" content="">
 
 
-  <meta property="og:title" content="7 Hard Testing Problems Made Easy By httptest" />
-<meta property="og:description" content="Testing code that communicates with remote APIs can be challenging, but it doesn&#39;t have to be. The &#39;httptest&#39; package for R makes testing HTTP code simple. Here are some examples of scenarios that are easily testable using httptest." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="/2017/06/21/7-hard-testing-problems-made-easy-by-httptest/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2017-06-21T21:49:57-07:00" />
-<meta property="article:modified_time" content="2017-06-21T21:49:57-07:00" />
+  <meta property="og:url" content="/2017/06/21/7-hard-testing-problems-made-easy-by-httptest/">
+  <meta property="og:site_name" content="A Blog">
+  <meta property="og:title" content="7 Hard Testing Problems Made Easy By httptest">
+  <meta property="og:description" content="Testing code that communicates with remote APIs can be challenging, but it doesn&#39;t have to be. The &#39;httptest&#39; package for R makes testing HTTP code simple. Here are some examples of scenarios that are easily testable using httptest.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2017-06-21T21:49:57-07:00">
+    <meta property="article:modified_time" content="2017-06-21T21:49:57-07:00">
+    <meta property="article:tag" content="Httptest">
+    <meta property="article:tag" content="R">
+    <meta property="article:tag" content="Testing">
 
   
 
@@ -37,17 +43,6 @@
   
   
   
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-104182925-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
-
   
 
   <link rel="canonical" href="/2017/06/21/7-hard-testing-problems-made-easy-by-httptest/">  
@@ -118,11 +113,13 @@ if (!doNotTrack) {
  </header>
   <main>
 <div class="push-center" itemscope itemtype="http://schema.org/BlogPosting">
-    <meta itemprop="name" content="7 Hard Testing Problems Made Easy By httptest">
-<meta itemprop="description" content="Testing code that communicates with remote APIs can be challenging, but it doesn&#39;t have to be. The &#39;httptest&#39; package for R makes testing HTTP code simple. Here are some examples of scenarios that are easily testable using httptest."><meta itemprop="datePublished" content="2017-06-21T21:49:57-07:00" />
-<meta itemprop="dateModified" content="2017-06-21T21:49:57-07:00" />
-<meta itemprop="wordCount" content="2225">
-<meta itemprop="keywords" content="httptest,R,testing," />
+    
+  <meta itemprop="name" content="7 Hard Testing Problems Made Easy By httptest">
+  <meta itemprop="description" content="Testing code that communicates with remote APIs can be challenging, but it doesn&#39;t have to be. The &#39;httptest&#39; package for R makes testing HTTP code simple. Here are some examples of scenarios that are easily testable using httptest.">
+  <meta itemprop="datePublished" content="2017-06-21T21:49:57-07:00">
+  <meta itemprop="dateModified" content="2017-06-21T21:49:57-07:00">
+  <meta itemprop="wordCount" content="2225">
+  <meta itemprop="keywords" content="Httptest,R,Testing">
 <div id="hero">
     <h1 itemprop="headline">  7 Hard Testing Problems Made Easy By httptest</h1>
     
@@ -139,10 +136,10 @@ if (!doNotTrack) {
     <p>I&rsquo;m a big advocate of testing and test automation, both on <a href="https://crunch.io/dev/">the team I lead</a> and in <a href="https://github.com/nealrichardson">my own projects</a>. Tests provide valuable evidence that your code works. Without tests, you&rsquo;re engaging in <a href="https://twitter.com/enpiar/status/748082354455969796">faith-based development</a>: you believe your code works because you believe in your own infallibility as a coder. Theology aside, as a practical matter, tests are liberating because they allow you to modify and extend your code without fear of breaking existing functionality. Unfortunately, testing code that communicates with remote services can be challenging. Dealing with authentication, bootstrapping server state, cleaning up objects that may get created during the test run, network flakiness, and other complications can make testing seem too costly to bother with.</p>
 <p>To solve these problems, I developed the <a href="https://enpiar.com/r/httptest/">httptest</a> package for R. The latest <a href="https://cran.r-project.org/package=httptest">2.0.0 CRAN release</a> adds a range of new features that allow testing practically any request and response behavior without actually connecting to the remote service. It also includes a <a href="https://enpiar.com/r/httptest/articles/httptest.html">vignette</a> that illustrates how to get started using the package. Drawing from examples of several R packages that use <code>httptest</code> (and one that doesn&rsquo;t), this post outlines a set of testing challenges, both common and esoteric, that it makes easy.</p>
 <a class="headline-anchor" href="#the-basics"><h1 id="the-basics">The basics</a> </h1>
-<figure class="floating-right halfwidth"><img src="https://charlespaolino.files.wordpress.com/2010/10/tin-can-1.jpg"/><figcaption>
-            <p>
-                    <a href="https://charlespaolino.com/tag/tin-can-and-string-telephone/">&lsquo;Can you hear me now?&rsquo;</a></p>
-        </figcaption>
+<figure class="floating-right halfwidth"><img src="https://charlespaolino.files.wordpress.com/2010/10/tin-can-1.jpg"><figcaption>
+      <p>
+          <a href="https://charlespaolino.com/tag/tin-can-and-string-telephone/">&lsquo;Can you hear me now?&rsquo;</a></p>
+    </figcaption>
 </figure>
 
 <p>APIs provide a contract: if you make this request, the service will return this response. So writing an API client is all about making the right requests and handling the responses correctly. Even though these questions are the essentials that you&rsquo;d want to have covered, without a testing setup like <code>httptest</code>, they can be challenging to test. <code>httptest</code> is designed not only to make testing requests and responses simple but also to make your tests easily readable.</p>
@@ -151,7 +148,7 @@ if (!doNotTrack) {
 fail, as in when you are without an internet connection. Any HTTP request will raise
 an error with a message containing the request information is raised. Together with the package&rsquo;s custom <strong>expectation</strong> functions, you can make assertions about the HTTP requests made in those contexts. The verb-expectation functions, such as <code>expect_GET</code> and <code>expect_POST</code>, look for the formatted error message that <code>without_internet</code> raises.</p>
 <p>For example, suppose we have a simple function that wraps the <a href="http://httpbin.org">httpbin</a> API:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>httpbin <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(method, path, <span style="color:#66d9ef">...</span>) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>httpbin <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (method, path, <span style="color:#66d9ef">...</span>) {
 </span></span><span style="display:flex;"><span>    VERB <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">get</span>(method, <span style="color:#a6e22e">asNamespace</span>(<span style="color:#e6db74">&#34;httr&#34;</span>))
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">VERB</span>(<span style="color:#a6e22e">file.path</span>(<span style="color:#e6db74">&#34;http://httpbin.org&#34;</span>, path), <span style="color:#66d9ef">...</span>)
 </span></span><span style="display:flex;"><span>}
@@ -180,10 +177,10 @@ an error with a message containing the request information is raised. Together w
 </span></span><span style="display:flex;"><span>})
 </span></span></code></pre></div><p>The expected results themselves are strings, easily readable in your test code.</p>
 <a class="headline-anchor" href="#3-can-i-handle-the-servers-response"><h2 id="3-can-i-handle-the-servers-response">3. Can I handle the server&rsquo;s response?</a> </h2>
-<figure class="floating-right halfwidth"><img src="https://img.memecdn.com/what-is-this_o_2856875.jpg"/><figcaption>
-            <p>
-                    <a href="https://www.memecenter.com/fun/2856875/what-is-this">&lsquo;What Is This?&rsquo;</a></p>
-        </figcaption>
+<figure class="floating-right halfwidth"><img src="https://img.memecdn.com/what-is-this_o_2856875.jpg"><figcaption>
+      <p>
+          <a href="https://www.memecenter.com/fun/2856875/what-is-this">&lsquo;What Is This?&rsquo;</a></p>
+    </figcaption>
 </figure>
 
 <p>In a second context that the package provides, <code>with_mock_api</code>, HTTP requests are intercepted and mapped to local file paths, factoring in the request URL, query, and method. If the file exists, it is loaded and returned as the response; if it does not, an error with a message containing the request information is raised, just as in <code>without_internet</code>. By supplying mock files, we can test the behavior of our code that handles API responses.</p>
@@ -209,10 +206,10 @@ an error with a message containing the request information is raised. Together w
 <p>You can test this basic request and response handling without <code>httptest</code> if you point your tests at a real live server. However, running against a real server, while useful for integration testing, has some limitations. You may likely need to authenticate with the API, which means that in order to run your tests, one needs access to an API token, and perhaps even <em>your</em> API token. This complicates (though does not make impossible) running tests on a continuous integration platform. You may also have to worry about API rate limiting, which could cause spurious test failures. Another big concern is what is stored on the server: do you need some state to exist in order to run your tests, and can others alter that state and disrupt you? Lastly, it&rsquo;s slow to connect to a remote server, which makes you <a href="http://www.draconianoverlord.com/pages/first-principles.html#the-speed-of-your-tdd-cycle-is-the-primary-driver-of-productivity">less productive</a> when you&rsquo;re writing code and running the tests as you go.</p>
 <p>This next set of issues are either difficult, costly, or impossible to test even with a real API to connect to, but <code>httptest</code> lets you ensure that your code does the right thing even in these cases.</p>
 <a class="headline-anchor" href="#4-error-handling"><h2 id="4-error-handling">4. Error handling</a> </h2>
-<figure class="floating-left halfwidth"><img src="https://httpstatusdogs.com/img/400.jpg"/><figcaption>
-            <p>
-                    <a href="https://httpstatusdogs.com/400-bad-request">HTTP Status Dogs</a></p>
-        </figcaption>
+<figure class="floating-left halfwidth"><img src="https://httpstatusdogs.com/img/400.jpg"><figcaption>
+      <p>
+          <a href="https://httpstatusdogs.com/400-bad-request">HTTP Status Dogs</a></p>
+    </figcaption>
 </figure>
 
 <p>When you make an invalid API request, the server may return useful information about why your request was bad. Different APIs have different conventions for returning that information, however, so your code will probably need special logic for handling different server responses. You can include fast, networkless tests for your error handling code by first using <code>capture_requests</code> to record the server&rsquo;s response to an invalid (real) request, and then writing tests against that fixture.</p>
@@ -227,10 +224,10 @@ an error with a message containing the request information is raised. Together w
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">capture_requests</span>(<span style="color:#a6e22e">getStories</span>(created<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-5days..now&#34;</span>))
 </span></span></code></pre></div><p>in an R session against the real Pivotal Tracker API using my authentication token, then sanitizing the response to remove sensitive information. This lets us exercise the <a href="https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/R/api.R#L24-L33">lines of code in our API handler</a> that deal with 400 Bad Request responses.</p>
 <a class="headline-anchor" href="#5-rare-or-difficult-to-trigger-server-behavior"><h2 id="5-rare-or-difficult-to-trigger-server-behavior">5. Rare or difficult-to-trigger server behavior</a> </h2>
-<figure class="floating-right halfwidth"><img src="https://httpstatusdogs.com/img/429.jpg"/><figcaption>
-            <p>
-                    <a href="https://httpstatusdogs.com/429-too-many-requests">HTTP Status Dogs</a></p>
-        </figcaption>
+<figure class="floating-right halfwidth"><img src="https://httpstatusdogs.com/img/429.jpg"><figcaption>
+      <p>
+          <a href="https://httpstatusdogs.com/429-too-many-requests">HTTP Status Dogs</a></p>
+    </figcaption>
 </figure>
 
 <p>APIs may behave differently in extreme circumstances. When handling large requests or a high volume of requests, some APIs respond by advising users that they should back off. This rate-limiting behavior needs to be handled by your code that communicates with the API, yet it is difficult to test against a real server: you may not know what threshold triggers the rate limiting; if you did, it would likely take a lot of requesting (i.e. time) to trigger the limit; and then if you manage to hit the limit, then you can&rsquo;t run anymore tests against the API!</p>
@@ -264,10 +261,10 @@ an error with a message containing the request information is raised. Together w
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>and the <a href="https://github.com/nealrichardson/pivotaltrackR/blob/0852ae8ff5fd3dcd0bf036e011dd59d9211cf707/tests/testthat/www.pivotaltracker.com/services/v5/projects/12345/stories-97adb9.json">second one</a> has <code>&quot;offset&quot;:3</code> and contains records 4 and 5. The mock file paths contain the hash of the query parameters in the requests made, which is how they are distinguished. I did create them from an actual API response, but because the fixtures are plain-text files I can see and edit, I could reduce the actual size down from the 100 results per page that the API paginates at to 3 per page so that the size of the test data is smaller. The code follows the correct logic, following what the server responds with.</p>
 <a class="headline-anchor" href="#7-code-that-shouldnt-make-a-request"><h2 id="7-code-that-shouldnt-make-a-request">7. Code that shouldn&rsquo;t make a request</a> </h2>
-<figure class="floating-right halfwidth"><img src="http://cf.chucklesnetwork.com/items/8/3/5/2/3/original/what-if-silence-is-just-another-type-of-sound.jpg"/><figcaption>
-            <p>
-                    <a href="http://creatememe.chucklesnetwork.com/memes/83523/what-if-silence-is-just-another-type-of-sound/">Conspiracy Keanu</a></p>
-        </figcaption>
+<figure class="floating-right halfwidth"><img src="http://cf.chucklesnetwork.com/items/8/3/5/2/3/original/what-if-silence-is-just-another-type-of-sound.jpg"><figcaption>
+      <p>
+          <a href="http://creatememe.chucklesnetwork.com/memes/83523/what-if-silence-is-just-another-type-of-sound/">Conspiracy Keanu</a></p>
+    </figcaption>
 </figure>
 
 <p>Mocking API responses isn&rsquo;t the only thing you might want to do in order to test your code. Sometimes, the request that matters is the one you don&rsquo;t make. Here&rsquo;s a example of how <code>without_internet</code> can be used to assert that code that should not make network requests in fact does not. This is a simplified version of a test from the <a href="https://enpiar.com/r/httpcache/">httpcache</a> package, a library that implements a query cache for HTTP requests in R. The point of the query cache is that only the first time you make a certain GET request should it hit the remote API; subsequent requests should read from the cache and not make a request. The test first makes a request (artificially, using <code>with_fake_http</code>, the third test context the package provides) to prime the cache.</p>
@@ -305,10 +302,10 @@ an error with a message containing the request information is raised. Together w
     21 Jun 2017
   </time>
   
-    in <span itemprop="articleSection"><a href="/categories/code/">code</a></span>
+    in <span itemprop="articleSection">&lt;a href=&#34;/categories/code/&#34;&gt;code&lt;/a&gt;</span>
   
   
-    and tagged <a href="/tags/httptest/">httptest</a>, <a href="/tags/r/">R</a> and <a href="/tags/testing/">testing</a>
+    and tagged &lt;a href=&#34;/tags/httptest/&#34;&gt;httptest&lt;/a&gt;, &lt;a href=&#34;/tags/r/&#34;&gt;R&lt;/a&gt; and &lt;a href=&#34;/tags/testing/&#34;&gt;testing&lt;/a&gt;
   
 </p>
 
@@ -342,8 +339,6 @@ an error with a message containing the request information is raised. Together w
 
 
     </div>
-
-    
 
 </div>
 </div>

@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <meta name="generator" content="Hugo 0.115.2">
+  <meta name="generator" content="Hugo 0.148.2">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,12 +21,19 @@
   <meta name="author" content="">
 
 
-  <meta property="og:title" content="Better Management Through Code" />
-<meta property="og:description" content="When becoming an engineering leader means you don&#39;t have time to write code anymore, scratch your itch by automating some of your management duties." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="/2017/07/04/better-management-through-code/" /><meta property="og:image" content="https://maritime.org/doc/pt/know/img/pg15.jpg" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2017-07-04T16:49:57-07:00" />
-<meta property="article:modified_time" content="2017-07-04T16:49:57-07:00" />
+  <meta property="og:url" content="/2017/07/04/better-management-through-code/">
+  <meta property="og:site_name" content="A Blog">
+  <meta property="og:title" content="Better Management Through Code">
+  <meta property="og:description" content="When becoming an engineering leader means you don&#39;t have time to write code anymore, scratch your itch by automating some of your management duties.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2017-07-04T16:49:57-07:00">
+    <meta property="article:modified_time" content="2017-07-04T16:49:57-07:00">
+    <meta property="article:tag" content="Automation">
+    <meta property="article:tag" content="Python">
+    <meta property="article:tag" content="Management">
+    <meta property="og:image" content="https://maritime.org/doc/pt/know/img/pg15.jpg">
 
   
 
@@ -37,17 +44,6 @@
   
   
   
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-104182925-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
-
   
 
   <link rel="canonical" href="/2017/07/04/better-management-through-code/">  
@@ -118,11 +114,14 @@ if (!doNotTrack) {
  </header>
   <main>
 <div class="push-center" itemscope itemtype="http://schema.org/BlogPosting">
-    <meta itemprop="name" content="Better Management Through Code">
-<meta itemprop="description" content="When becoming an engineering leader means you don&#39;t have time to write code anymore, scratch your itch by automating some of your management duties."><meta itemprop="datePublished" content="2017-07-04T16:49:57-07:00" />
-<meta itemprop="dateModified" content="2017-07-04T16:49:57-07:00" />
-<meta itemprop="wordCount" content="1482"><meta itemprop="image" content="https://maritime.org/doc/pt/know/img/pg15.jpg">
-<meta itemprop="keywords" content="automation,python,management," />
+    
+  <meta itemprop="name" content="Better Management Through Code">
+  <meta itemprop="description" content="When becoming an engineering leader means you don&#39;t have time to write code anymore, scratch your itch by automating some of your management duties.">
+  <meta itemprop="datePublished" content="2017-07-04T16:49:57-07:00">
+  <meta itemprop="dateModified" content="2017-07-04T16:49:57-07:00">
+  <meta itemprop="wordCount" content="1482">
+  <meta itemprop="image" content="https://maritime.org/doc/pt/know/img/pg15.jpg">
+  <meta itemprop="keywords" content="Automation,Python,Management">
 <div id="hero">
     <h1 itemprop="headline">  Better Management Through Code</h1>
     
@@ -138,18 +137,18 @@ if (!doNotTrack) {
 
     <p>At <a href="https://crunch.io/">Crunch</a>, I lead both engineering and product management. Over the last few years, what that entails has changed greatly. How I spent my day when we were getting started, with a team of four developers and zero users, is very different from how I spend my time now with 16 on the team and thousands of users around the world. In fact, my day-to-day has evolved through several phases as we&rsquo;ve grown, and each phase has come with its own challenges and learning opportunities&mdash;or rather, challenges that are learning opportunities.</p>
 <a class="headline-anchor" href="#more-managing-less-making"><h1 id="more-managing-less-making">More managing, less making</a> </h1>
-<figure class="floating-right halfwidth"><img src="https://maritime.org/doc/pt/know/img/pg15.jpg"/><figcaption>
-            <p>
-                    <a href="https://maritime.org/doc/pt/know/">&lsquo;Jam sessions, razzle-dazzle cowboy stuff, and hot-shot vocalizing are all very amusing to you if you are a lunk head.&rsquo;</a></p>
-        </figcaption>
+<figure class="floating-right halfwidth"><img src="https://maritime.org/doc/pt/know/img/pg15.jpg"><figcaption>
+      <p>
+          <a href="https://maritime.org/doc/pt/know/">&lsquo;Jam sessions, razzle-dazzle cowboy stuff, and hot-shot vocalizing are all very amusing to you if you are a lunk head.&rsquo;</a></p>
+    </figcaption>
 </figure>
 
 <p>In this current phase, two challenges have become particularly acute. First, since the range of topics I need to coordinate has expanded, <strong>I&rsquo;m spread thin</strong>. I work with stakeholders to set the product roadmap, with product leads to turn those needs into requirements and specifications, and with the engineering teams to get those built; and then I communicate about what we&rsquo;ve built. (And then there&rsquo;s support, recruiting, and all sorts of fun things that pop up.) The more we build, the more users and other stakeholders we get, and the more developers we hire, the more work each of those becomes. That&rsquo;s good&mdash;I just have less time and attention to devote to each.</p>
 <p>Delegating helps, and indeed, we recently promoted a few developers to be team leads, so I now manage managers. (That&rsquo;s its own <a href="http://larahogan.me/blog/transition-meta-management/">learning experience</a>.) Delegation isn&rsquo;t a cure-all, though: I still need to check in and make sure that things have been carried out as needed and on schedule. That means a lot of interrupting and context switching, which are productivity draining. Moreover, I have to <em>remember</em> that I need to follow up&mdash;that takes up too much mental space. It&rsquo;s easy to forget&mdash;or worry that I&rsquo;m forgetting important things.</p>
-<figure class="floating-left halfwidth"><img src="https://rforcats.net/assets/img/programmer.png"/><figcaption>
-            <p>
-                    <a href="https://rforcats.net/">R for Cats&mdash;a good cause</a></p>
-        </figcaption>
+<figure class="floating-left halfwidth"><img src="https://rforcats.net/assets/img/programmer.png"><figcaption>
+      <p>
+          <a href="https://rforcats.net/">R for Cats&mdash;a good cause</a></p>
+    </figcaption>
 </figure>
 
 <p>Second, <strong>I like writing code, but I don&rsquo;t get to do it anymore</strong>. My time is better spent supporting the team to ship the best product, helping everyone else be more productive: in short, being a <strong><a href="http://aboveandbeyondkm.com/2011/09/are-you-a-force-multiplier.html">force</a> <a href="https://medium.com/javascript-scene/the-essential-guide-to-building-balanced-development-teams-b051a62acc80">multiplier</a></strong>. Taking an afternoon to write code means I&rsquo;m neglecting those other needs. Moreover, insisting on contributing code would be irresponsible because I would inevitably not deliver on time&mdash;I get interrupted too much.</p>
@@ -198,10 +197,10 @@ if (!doNotTrack) {
     4 Jul 2017
   </time>
   
-    in <span itemprop="articleSection"><a href="/categories/management/">management</a></span>
+    in <span itemprop="articleSection">&lt;a href=&#34;/categories/management/&#34;&gt;management&lt;/a&gt;</span>
   
   
-    and tagged <a href="/tags/automation/">automation</a>, <a href="/tags/management/">management</a> and <a href="/tags/python/">python</a>
+    and tagged &lt;a href=&#34;/tags/automation/&#34;&gt;automation&lt;/a&gt;, &lt;a href=&#34;/tags/management/&#34;&gt;management&lt;/a&gt; and &lt;a href=&#34;/tags/python/&#34;&gt;python&lt;/a&gt;
   
 </p>
 
@@ -229,8 +228,6 @@ if (!doNotTrack) {
 
 
     </div>
-
-    
 
 </div>
 </div>

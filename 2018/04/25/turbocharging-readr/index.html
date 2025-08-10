@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <meta name="generator" content="Hugo 0.115.2">
+  <meta name="generator" content="Hugo 0.148.2">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,12 +21,21 @@
   <meta name="author" content="">
 
 
-  <meta property="og:title" content="Turbocharging &#39;readr&#39;" />
-<meta property="og:description" content="The &#39;readr&#39; package is a fast reader for text data files, and with a couple of tricks, we can make it even faster by only reading the parts of the files we care about." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="/2018/04/25/turbocharging-readr/" /><meta property="og:image" content="https://enpiar.com/img/star-wars-light-speed.gif" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2018-04-25T21:49:57-07:00" />
-<meta property="article:modified_time" content="2018-04-25T21:49:57-07:00" />
+  <meta property="og:url" content="/2018/04/25/turbocharging-readr/">
+  <meta property="og:site_name" content="A Blog">
+  <meta property="og:title" content="Turbocharging &#39;readr&#39;">
+  <meta property="og:description" content="The &#39;readr&#39; package is a fast reader for text data files, and with a couple of tricks, we can make it even faster by only reading the parts of the files we care about.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-04-25T21:49:57-07:00">
+    <meta property="article:modified_time" content="2018-04-25T21:49:57-07:00">
+    <meta property="article:tag" content="R">
+    <meta property="article:tag" content="Performance">
+    <meta property="article:tag" content="Benchmark">
+    <meta property="article:tag" content="Readr">
+    <meta property="article:tag" content="Logs">
+    <meta property="og:image" content="https://enpiar.com/img/star-wars-light-speed.gif">
 
   
 
@@ -37,17 +46,6 @@
   
   
   
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-104182925-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
-
   
 
   <link rel="canonical" href="/2018/04/25/turbocharging-readr/">  
@@ -118,11 +116,14 @@ if (!doNotTrack) {
  </header>
   <main>
 <div class="push-center" itemscope itemtype="http://schema.org/BlogPosting">
-    <meta itemprop="name" content="Turbocharging &#39;readr&#39;">
-<meta itemprop="description" content="The &#39;readr&#39; package is a fast reader for text data files, and with a couple of tricks, we can make it even faster by only reading the parts of the files we care about."><meta itemprop="datePublished" content="2018-04-25T21:49:57-07:00" />
-<meta itemprop="dateModified" content="2018-04-25T21:49:57-07:00" />
-<meta itemprop="wordCount" content="3063"><meta itemprop="image" content="https://enpiar.com/img/star-wars-light-speed.gif">
-<meta itemprop="keywords" content="R,performance,benchmark,readr,logs," />
+    
+  <meta itemprop="name" content="Turbocharging &#39;readr&#39;">
+  <meta itemprop="description" content="The &#39;readr&#39; package is a fast reader for text data files, and with a couple of tricks, we can make it even faster by only reading the parts of the files we care about.">
+  <meta itemprop="datePublished" content="2018-04-25T21:49:57-07:00">
+  <meta itemprop="dateModified" content="2018-04-25T21:49:57-07:00">
+  <meta itemprop="wordCount" content="3063">
+  <meta itemprop="image" content="https://enpiar.com/img/star-wars-light-speed.gif">
+  <meta itemprop="keywords" content="R,Performance,Benchmark,Readr,Logs">
 <div id="hero">
     <h1 itemprop="headline">  Turbocharging 'readr'</h1>
     
@@ -136,8 +137,7 @@ if (!doNotTrack) {
 <div id="post-box">
 <div id="post" itemprop="articleBody">
 
-    <!-- raw HTML omitted -->
-<p>Recently I analyzed some web traffic for my <a href="https://crunch.io/team">team</a> at an all-hands meetup. I suspected there were some misconceptions about the frequency of certain kinds of requests, and that some basic descriptive statistics could help.</p>
+    <p>Recently I analyzed some web traffic for my <a href="https://crunch.io/team">team</a> at an all-hands meetup. I suspected there were some misconceptions about the frequency of certain kinds of requests, and that some basic descriptive statistics could help.</p>
 <p>Whenever I start an analysis like this, I also think about how to make it easier to repeat it. If the question is interesting enough to merit analysis now, it will probably be interesting next month too&mdash;particularly if it reveals things we want to improve. In this particular exercise, not only did I get statistics for my presentation, I also got a <a href="https://github.com/nealrichardson/elbr">new R package</a> and some insights into how to read in data stored in lots of text files in an efficient, fast way, using <a href="http://readr.tidyverse.org/"><code>readr</code></a>.</p>
 <p>This post shares some of the insights I learned about <code>readr</code> and some tactics for squeezing more performance out of it. The <code>readr</code> package is fast, and by incorporating knowledge about the data structure and the questions we want to answer, we can selectively read the parts of the files we care about to make it load even faster.</p>
 <a class="headline-anchor" href="#the-data-source-aws-elastic-load-balancer"><h1 id="the-data-source-aws-elastic-load-balancer">The data source: AWS Elastic Load Balancer</a> </h1>
@@ -153,7 +153,7 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;backend_status_code&#34;</span>, <span style="color:#e6db74">&#34;received_bytes&#34;</span>, <span style="color:#e6db74">&#34;sent_bytes&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;request&#34;</span>, <span style="color:#e6db74">&#34;user_agent&#34;</span>, <span style="color:#e6db74">&#34;ssl_cipher&#34;</span>, <span style="color:#e6db74">&#34;ssl_protocol&#34;</span>
 </span></span><span style="display:flex;"><span>)
-</span></span><span style="display:flex;"><span>read.elb <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(file, <span style="color:#66d9ef">...</span>) {
+</span></span><span style="display:flex;"><span>read.elb <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (file, <span style="color:#66d9ef">...</span>) {
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">read.delim</span>(
 </span></span><span style="display:flex;"><span>        file,
 </span></span><span style="display:flex;"><span>        sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#34; &#34;</span>,
@@ -164,17 +164,16 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span>    )
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><a class="headline-anchor" href="#the-readr-package"><h1 id="the-readr-package">The <code>readr</code> package</a> </h1>
-<figure class="floating-left"><img src="/img/millennium-falcon-awareness.gif"/><figcaption>
-            <p>
-                    <a href="https://meandtenforever1216.tumblr.com/post/126611741283/star-wars-episode-iv-a-new-hope-gifs-and-pics">Yes, it&rsquo;s a fast ship.</a></p>
-        </figcaption>
+<figure class="floating-left"><img src="/img/millennium-falcon-awareness.gif"><figcaption>
+      <p>
+          <a href="https://meandtenforever1216.tumblr.com/post/126611741283/star-wars-episode-iv-a-new-hope-gifs-and-pics">Yes, it&rsquo;s a fast ship.</a></p>
+    </figcaption>
 </figure>
 
-<!-- raw HTML omitted -->
 <p>I had heard that <code>readr</code> was fast, but I hadn&rsquo;t bothered to check it out before. In the three years since it was first released, I haven&rsquo;t had to read much text data in R, and when I have, I could stand to wait an extra second or two that the base R reader might take.</p>
 <p>In this case, though, I was reading in lots of large files that took around 4-6 seconds each to read with <code>read.elb()</code>. With 2 files per hour, that&rsquo;s 48 per day, 336 per week. That&rsquo;s about a half hour just to <em>read</em> a week&rsquo;s data, no analysis.</p>
 <p>I tried the simplest change to <code>read.elb()</code>&mdash;replace <code>.</code> with <code>_</code> and otherwise make the argument names line up&mdash;and tested it out. Read time dropped to about a second for the same file (around 82,000 rows), a savings of about three seconds. Three seconds itself isn&rsquo;t a huge win, but compounded over a week of files, it added up to around 20 minutes.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>read_elb <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(file, <span style="color:#66d9ef">...</span>) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>read_elb <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (file, <span style="color:#66d9ef">...</span>) {
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">read_delim</span>(
 </span></span><span style="display:flex;"><span>        file,
 </span></span><span style="display:flex;"><span>        col_names<span style="color:#f92672">=</span>.elb.column.names,
@@ -194,7 +193,7 @@ if (!doNotTrack) {
 <a class="headline-anchor" href="#specify-column-schema"><h2 id="specify-column-schema">Specify column schema</a> </h2>
 <p>Since I had to read the <code>readr</code> docs to learn how to adapt my old function to use <code>read_delim()</code>, I saw that there was a convenient way to specify the types of the data in each column of the file. I&rsquo;m generally too cynical to trust that any data file I&rsquo;ve found is coded in an internally consistent way&mdash;to paraphrase Jean-Paul Sartre, hell is other people&rsquo;s data&mdash;so I generally let the reader sniff and then correct any miscoding in R. In this case, however, I trusted well enough that the ELB would write consistent data.</p>
 <p>In the interest of comparing apples to apples, I opened the man page for <code>base::read.table()</code> to look for a similar option, and it turns out that it had been there all along too (albeit inconsistently named). So I wrote two versions of the function specifying column types: <code>base</code> and <code>readr</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>read.elb2 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(file, <span style="color:#66d9ef">...</span>) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>read.elb2 <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (file, <span style="color:#66d9ef">...</span>) {
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">read.delim</span>(
 </span></span><span style="display:flex;"><span>        file,
 </span></span><span style="display:flex;"><span>        sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#34; &#34;</span>,
@@ -206,7 +205,7 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span>    )
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>read_elb2 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(file, <span style="color:#66d9ef">...</span>) {
+</span></span><span style="display:flex;"><span>read_elb2 <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (file, <span style="color:#66d9ef">...</span>) {
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">read_delim</span>(
 </span></span><span style="display:flex;"><span>        file,
 </span></span><span style="display:flex;"><span>        col_names<span style="color:#f92672">=</span>.elb.column.names,
@@ -227,7 +226,7 @@ if (!doNotTrack) {
 <a class="headline-anchor" href="#select-columns"><h2 id="select-columns">Select columns</a> </h2>
 <p>Specifying the schema didn&rsquo;t really give us much for this file, but while reading the docs about column types, I noticed that there was an option to skip columns. Given that I only cared about a couple of the columns in the dataset, I wondered whether skipping columns would save some time.</p>
 <p>The approach I took was to add a <code>col_names</code> argument to my <code>read_elb()</code> that let you specify a subset of the column names. The default of <code>col_names</code> is all of the columns, so that makes it easy to document/show what the options are. This made for some interesting code to validate the column selections and construct the type mask appropriately:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>read_elb3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(file, col_names<span style="color:#f92672">=</span>.elb.column.names, <span style="color:#66d9ef">...</span>) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>read_elb3 <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (file, col_names<span style="color:#f92672">=</span>.elb.column.names, <span style="color:#66d9ef">...</span>) {
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">## Allow specifying only a selection of cols. Fill in &#34;col_types&#34; with &#34;-&#34;</span>
 </span></span><span style="display:flex;"><span>    col_types <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">unlist</span>(<span style="color:#a6e22e">strsplit</span>(<span style="color:#e6db74">&#34;Tcccdddiiiicccc&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>))
 </span></span><span style="display:flex;"><span>    keepcols <span style="color:#f92672">&lt;-</span> .elb.column.names <span style="color:#f92672">%in%</span> <span style="color:#a6e22e">match.arg</span>(col_names, several.ok<span style="color:#f92672">=</span><span style="color:#66d9ef">TRUE</span>)
@@ -242,7 +241,7 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span>    )
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>Once again, it turned out that this was also possible in <code>base::read.table()</code> too:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>read.elb3 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(file, col.names<span style="color:#f92672">=</span>.elb.column.names, <span style="color:#66d9ef">...</span>) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>read.elb3 <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (file, col.names<span style="color:#f92672">=</span>.elb.column.names, <span style="color:#66d9ef">...</span>) {
 </span></span><span style="display:flex;"><span>    colClasses <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">list</span>(<span style="color:#e6db74">&#34;POSIXct&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>,
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;character&#34;</span>, <span style="color:#e6db74">&#34;numeric&#34;</span>, <span style="color:#e6db74">&#34;numeric&#34;</span>, <span style="color:#e6db74">&#34;numeric&#34;</span>, <span style="color:#e6db74">&#34;integer&#34;</span>,
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;integer&#34;</span>, <span style="color:#e6db74">&#34;integer&#34;</span>, <span style="color:#e6db74">&#34;integer&#34;</span>, <span style="color:#e6db74">&#34;character&#34;</span>,
@@ -285,7 +284,7 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span><span style="color:#75715e">##       contain at least one new line to be recognised as data</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">##       (instead of a path).</span>
 </span></span></code></pre></div><p>So I tried shelling out to <code>egrep</code>, capturing stdout in R, and passing that as literal data.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>read_elb4 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(file,
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>read_elb4 <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (file,
 </span></span><span style="display:flex;"><span>                       col_names<span style="color:#f92672">=</span>.elb.column.names,
 </span></span><span style="display:flex;"><span>                       line_filter<span style="color:#f92672">=</span><span style="color:#66d9ef">NULL</span>,
 </span></span><span style="display:flex;"><span>                       <span style="color:#66d9ef">...</span>) {
@@ -294,7 +293,7 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span>    keepcols <span style="color:#f92672">&lt;-</span> .elb.column.names <span style="color:#f92672">%in%</span> <span style="color:#a6e22e">match.arg</span>(col_names, several.ok<span style="color:#f92672">=</span><span style="color:#66d9ef">TRUE</span>)
 </span></span><span style="display:flex;"><span>    col_types[<span style="color:#f92672">!</span>keepcols] <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#34;-&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">if </span>(<span style="color:#f92672">!</span><span style="color:#a6e22e">is.null</span>(line_filter)) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">is.null</span>(line_filter)) {
 </span></span><span style="display:flex;"><span>        <span style="color:#75715e">## Shell out to egrep</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#75715e">## If there are no matches, egrep returns status 1, which creates</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#75715e">## a warning in R (with system2 when stdout=TRUE)</span>
@@ -304,7 +303,7 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span>        nmatches <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">length</span>(file)
 </span></span><span style="display:flex;"><span>        <span style="color:#75715e">## Concatenate</span>
 </span></span><span style="display:flex;"><span>        file <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">paste</span>(file, collapse<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;\n&#34;</span>)
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">if </span>(nmatches <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">2</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (nmatches <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">2</span>) {
 </span></span><span style="display:flex;"><span>            <span style="color:#75715e">## Append a newline so that readr recognizes this as literal data</span>
 </span></span><span style="display:flex;"><span>            file <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">paste0</span>(file, <span style="color:#e6db74">&#34;\n&#34;</span>)
 </span></span><span style="display:flex;"><span>        }
@@ -318,7 +317,7 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span>    )
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>For the base R die-hards, yes, there is a pure base version:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>read.elb4 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(file,         
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>read.elb4 <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (file,         
 </span></span><span style="display:flex;"><span>                       col.names<span style="color:#f92672">=</span>.elb.column.names,
 </span></span><span style="display:flex;"><span>                       line_filter<span style="color:#f92672">=</span><span style="color:#66d9ef">NULL</span>,
 </span></span><span style="display:flex;"><span>                       <span style="color:#66d9ef">...</span>) {
@@ -331,7 +330,7 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span>    keepcols <span style="color:#f92672">&lt;-</span> .elb.column.names <span style="color:#f92672">%in%</span> <span style="color:#a6e22e">match.arg</span>(col.names, several.ok<span style="color:#f92672">=</span><span style="color:#66d9ef">TRUE</span>)
 </span></span><span style="display:flex;"><span>    colClasses[<span style="color:#f92672">!</span>keepcols] <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">list</span>(<span style="color:#66d9ef">NULL</span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">if </span>(<span style="color:#f92672">!</span><span style="color:#a6e22e">is.null</span>(line_filter)) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">is.null</span>(line_filter)) {
 </span></span><span style="display:flex;"><span>        file <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">textConnection</span>(
 </span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">system2</span>(<span style="color:#e6db74">&#34;egrep&#34;</span>, <span style="color:#a6e22e">c</span>(<span style="color:#a6e22e">shQuote</span>(line_filter), file), stdout<span style="color:#f92672">=</span><span style="color:#66d9ef">TRUE</span>)
 </span></span><span style="display:flex;"><span>        )
@@ -378,10 +377,10 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span><span style="color:#75715e">##   1776.117  2060.066    25</span>
 </span></span></code></pre></div><p>Alright, so that&rsquo;s worse than without the filtering. Clearly, this raw row filtering has its biggest benefits when the number of rows that match your search is small. I didn&rsquo;t attempt to nail down the specific threshold where one is faster than the other, but clearly it&rsquo;s somewhere less than this. In general, it&rsquo;s important to have an intuition about your data.</p>
 <p>A few final notes. First, I tried a version using the <a href="https://github.com/r-lib/processx"><code>processx</code></a> package for managing external processes, but the overhead it added eroded the filtering benefits: the direct <code>system2</code> call was notably faster. Second, I suspect that this code isn&rsquo;t platform-independent; I knew <code>egrep</code> was on my log server, so that wasn&rsquo;t a concern for me, but if you&rsquo;re looking to use this pattern on Windows, you may need to adapt the code or install a tool.</p>
-<a class="headline-anchor" href="#update-_il-y-a-une-pipe_"><h2 id="update-_il-y-a-une-pipe_">Update: <em>il y a une pipe!</em></a> </h2>
+<a class="headline-anchor" href="#update-il-y-a-une-pipe"><h2 id="update-il-y-a-une-pipe">Update: <em>il y a une pipe!</em></a> </h2>
 <p>After this was first published, <a href="https://twitter.com/jimhester_/status/993172484458508289">Jim Hester pointed out</a> that you could use the <code>pipe()</code> connection as an input and that would save having to read the standard output into an R object and <code>paste()</code>ing it together.</p>
 <p>I made a <code>read_elb5()</code> version that replaced the <code>line_filter</code> block with this much simpler code:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">if </span>(<span style="color:#f92672">!</span><span style="color:#a6e22e">is.null</span>(line_filter)) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">is.null</span>(line_filter)) {
 </span></span><span style="display:flex;"><span>    cmd <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">paste</span>(<span style="color:#e6db74">&#34;egrep&#34;</span>, <span style="color:#a6e22e">shQuote</span>(line_filter), file)
 </span></span><span style="display:flex;"><span>    file <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">pipe</span>(cmd)
 </span></span><span style="display:flex;"><span>}
@@ -402,10 +401,10 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span><span style="color:#75715e">## 10.83446    25</span>
 </span></span></code></pre></div><p>That is, even after spending several seconds to read in all of the data, it&rsquo;s another 9-10 seconds to identify which rows to keep. If you can skip that work, why not?</p>
 <a class="headline-anchor" href="#conclusion-turbocharging-readr"><h2 id="conclusion-turbocharging-readr">Conclusion: Turbocharging readr</a> </h2>
-<figure class="floating-left"><img src="/img/star-wars-light-speed.gif"/><figcaption>
-            <p>
-                    <a href="https://meandtenforever1216.tumblr.com/post/126611741283/star-wars-episode-iv-a-new-hope-gifs-and-pics">Cropdusting this is not.</a></p>
-        </figcaption>
+<figure class="floating-left"><img src="/img/star-wars-light-speed.gif"><figcaption>
+      <p>
+          <a href="https://meandtenforever1216.tumblr.com/post/126611741283/star-wars-episode-iv-a-new-hope-gifs-and-pics">Cropdusting this is not.</a></p>
+    </figcaption>
 </figure>
 
 <p><code>readr</code> is fast, and if we know up front a bit about what questions we want to answer with the data, we can select and filter out of the files intelligently and make it even faster.</p>
@@ -415,8 +414,7 @@ if (!doNotTrack) {
 <li>Reading from connections in text mode is buffered, significantly
 improving the performance of readLines(), as well as scan() and
 read.table(), at least when specifying colClasses.</li>
-</ul>
-</blockquote>
+</ul></blockquote>
 <p>These benchmarks were done on R 3.4.2. It would be interesting to replicate these benchmarks on the new R release and see if that core R improvement closes the performance gap between <code>base</code> and <code>readr</code> functions.</p>
 <a class="headline-anchor" href="#the-elbr-package"><h1 id="the-elbr-package">The &rsquo;elbr&rsquo; package</a> </h1>
 <p>I&rsquo;ve incorporated these insights into the new <code>elbr</code> package, available <a href="https://github.com/nealrichardson/elbr">on GitHub</a> now. The package is more than a single file reader: it provides a <code>dplyr</code> interface to the entire directory of log files, allowing you to <code>select</code>, <code>filter</code>, and aggregate over multiple files as if you were querying a single database. It does so as efficiently as possible, only reading and returning the minimum necessary from each file and binding together the results into a single table. This allows you to work with log data much larger than can fit comfortably into memory, without needing to set up an external database or even thinking much about the file system.</p>
@@ -444,10 +442,10 @@ read.table(), at least when specifying colClasses.</li>
     25 Apr 2018
   </time>
   
-    in <span itemprop="articleSection"><a href="/categories/code/">code</a></span>
+    in <span itemprop="articleSection">&lt;a href=&#34;/categories/code/&#34;&gt;code&lt;/a&gt;</span>
   
   
-    and tagged <a href="/tags/benchmark/">benchmark</a>, <a href="/tags/logs/">logs</a>, <a href="/tags/performance/">performance</a>, <a href="/tags/r/">R</a> and <a href="/tags/readr/">readr</a>
+    and tagged &lt;a href=&#34;/tags/benchmark/&#34;&gt;benchmark&lt;/a&gt;, &lt;a href=&#34;/tags/logs/&#34;&gt;logs&lt;/a&gt;, &lt;a href=&#34;/tags/performance/&#34;&gt;performance&lt;/a&gt;, &lt;a href=&#34;/tags/r/&#34;&gt;R&lt;/a&gt; and &lt;a href=&#34;/tags/readr/&#34;&gt;readr&lt;/a&gt;
   
 </p>
 
@@ -481,8 +479,6 @@ read.table(), at least when specifying colClasses.</li>
 
 
     </div>
-
-    
 
 </div>
 </div>

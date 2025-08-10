@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <meta name="generator" content="Hugo 0.115.2">
+  <meta name="generator" content="Hugo 0.148.2">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,12 +21,20 @@
   <meta name="author" content="">
 
 
-  <meta property="og:title" content="One-Hour Package" />
-<meta property="og:description" content="Here&#39;s the story of the time I wrote a R package for an undocumented web API in under an hour, with documentation and full test coverage. With the right tools, creating an API client can be quick and painless." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="/2017/08/11/one-hour-package/" /><meta property="og:image" content="https://enpiar.com/img/fotomat.jpg" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2017-08-11T16:49:57-07:00" />
-<meta property="article:modified_time" content="2017-08-11T16:49:57-07:00" />
+  <meta property="og:url" content="/2017/08/11/one-hour-package/">
+  <meta property="og:site_name" content="A Blog">
+  <meta property="og:title" content="One-Hour Package">
+  <meta property="og:description" content="Here&#39;s the story of the time I wrote a R package for an undocumented web API in under an hour, with documentation and full test coverage. With the right tools, creating an API client can be quick and painless.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2017-08-11T16:49:57-07:00">
+    <meta property="article:modified_time" content="2017-08-11T16:49:57-07:00">
+    <meta property="article:tag" content="Httptest">
+    <meta property="article:tag" content="R">
+    <meta property="article:tag" content="Tdd">
+    <meta property="article:tag" content="Packages">
+    <meta property="og:image" content="https://enpiar.com/img/fotomat.jpg">
 
   
 
@@ -37,17 +45,6 @@
   
   
   
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-104182925-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
-
   
 
   <link rel="canonical" href="/2017/08/11/one-hour-package/">  
@@ -118,11 +115,14 @@ if (!doNotTrack) {
  </header>
   <main>
 <div class="push-center" itemscope itemtype="http://schema.org/BlogPosting">
-    <meta itemprop="name" content="One-Hour Package">
-<meta itemprop="description" content="Here&#39;s the story of the time I wrote a R package for an undocumented web API in under an hour, with documentation and full test coverage. With the right tools, creating an API client can be quick and painless."><meta itemprop="datePublished" content="2017-08-11T16:49:57-07:00" />
-<meta itemprop="dateModified" content="2017-08-11T16:49:57-07:00" />
-<meta itemprop="wordCount" content="2808"><meta itemprop="image" content="https://enpiar.com/img/fotomat.jpg">
-<meta itemprop="keywords" content="httptest,R,tdd,packages," />
+    
+  <meta itemprop="name" content="One-Hour Package">
+  <meta itemprop="description" content="Here&#39;s the story of the time I wrote a R package for an undocumented web API in under an hour, with documentation and full test coverage. With the right tools, creating an API client can be quick and painless.">
+  <meta itemprop="datePublished" content="2017-08-11T16:49:57-07:00">
+  <meta itemprop="dateModified" content="2017-08-11T16:49:57-07:00">
+  <meta itemprop="wordCount" content="2808">
+  <meta itemprop="image" content="https://enpiar.com/img/fotomat.jpg">
+  <meta itemprop="keywords" content="Httptest,R,Tdd,Packages">
 <div id="hero">
     <h1 itemprop="headline">  One-Hour Package</h1>
     
@@ -137,10 +137,10 @@ if (!doNotTrack) {
 <div id="post" itemprop="articleBody">
 
     <p>At <a href="https://crunch.io/">Crunch</a>, I occasionally pick up small <a href="../../../07/04/better-management-through-code/">coding projects to help with project management</a>. Recently, I wanted a way to get automated reporting on our open issues in <a href="http://usersnap.com/">Usersnap</a>, a service embedded in our web application that allows users to report bugs from within the app. My thought was to set up a cron job to report daily summaries in our Slack channel on things like the number of reports created, resolved, and so on, so that we could make sure that bug reports were being addressed quickly.</p>
-<figure class="floating-right halfwidth"><img src="/img/fotomat.jpg"/><figcaption>
-            <p>
-                    <a href="https://commons.wikimedia.org/wiki/File:This_is_a_typical_drive-up_Fotomat_booth..jpg">Wikimedia Commons</a></p>
-        </figcaption>
+<figure class="floating-right halfwidth"><img src="/img/fotomat.jpg"><figcaption>
+      <p>
+          <a href="https://commons.wikimedia.org/wiki/File:This_is_a_typical_drive-up_Fotomat_booth..jpg">Wikimedia Commons</a></p>
+    </figcaption>
 </figure>
 
 <p>Given that I don&rsquo;t have much time to code, and that I&rsquo;ve been working on <a href="https://enpiar.com/r/httptest/">tools to make working with APIs easier</a>, I wanted to challenge myself: how quickly could I write an R package for a new API? In addition to getting the job done, I set a few additional requirements: the package must have full test coverage, be fully documented, and pass <code>R CMD check</code>&mdash;that is, it must be complete enough for <a href="https://cran.r-project.org/">CRAN</a> submission.</p>
@@ -183,37 +183,37 @@ atom .
 <p>The next step is to integrate these parameters into our boilerplate functions. In this API, it appeared that the &ldquo;project&rdquo; was built into the request URLs, so the URL-constructing utility looks like:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>apiRoot <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#34;https://ec2.usersnap.com/angular/apikeys&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>usURL <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(segment, project<span style="color:#f92672">=</span><span style="color:#a6e22e">getOption</span>(<span style="color:#e6db74">&#34;usersnap.project&#34;</span>), <span style="color:#66d9ef">...</span>) {
+</span></span><span style="display:flex;"><span>usURL <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (segment, project<span style="color:#f92672">=</span><span style="color:#a6e22e">getOption</span>(<span style="color:#e6db74">&#34;usersnap.project&#34;</span>), <span style="color:#66d9ef">...</span>) {
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">file.path</span>(apiRoot, project, segment)
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>This means that <code>usURL(&quot;reports/42&quot;)</code> would return <code>&quot;https://ec2.usersnap.com/angular/apikeys/some-project-slug/reports/42&quot;</code>.</p>
 <p>The auth cookie needs to be set as <code>httr</code> request &ldquo;config&rdquo; for all requests, so I defined a config function that pulls the cookie string from the options and included that result in all requests that go through the generic API function:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e">#&#39; @importFrom httr config</span>
-</span></span><span style="display:flex;"><span>usConfig <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>() {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">return</span>(<span style="color:#a6e22e">config</span>(cookie<span style="color:#f92672">=</span><span style="color:#a6e22e">getOption</span>(<span style="color:#e6db74">&#34;usersnap.cookie&#34;</span>)))
+</span></span><span style="display:flex;"><span>usConfig <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> () {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>(<span style="color:#a6e22e">config</span>(cookie<span style="color:#f92672">=</span><span style="color:#a6e22e">getOption</span>(<span style="color:#e6db74">&#34;usersnap.cookie&#34;</span>)))
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#&#39; @importFrom httr GET</span>
-</span></span><span style="display:flex;"><span>usAPI <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(verb, url, config<span style="color:#f92672">=</span><span style="color:#a6e22e">list</span>(), <span style="color:#66d9ef">...</span>) {
+</span></span><span style="display:flex;"><span>usAPI <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (verb, url, config<span style="color:#f92672">=</span><span style="color:#a6e22e">list</span>(), <span style="color:#66d9ef">...</span>) {
 </span></span><span style="display:flex;"><span>    FUN <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">get</span>(verb, envir<span style="color:#f92672">=</span><span style="color:#a6e22e">asNamespace</span>(<span style="color:#e6db74">&#34;httr&#34;</span>))
 </span></span><span style="display:flex;"><span>    x <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">FUN</span>(url, <span style="color:#66d9ef">...</span>, config<span style="color:#f92672">=</span><span style="color:#a6e22e">c</span>(<span style="color:#a6e22e">usConfig</span>(), config))
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">return</span>(<span style="color:#a6e22e">handleUSResponse</span>(x))
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>(<span style="color:#a6e22e">handleUSResponse</span>(x))
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>So <code>usAPI(&quot;GET&quot;, usURL(&quot;reports/42&quot;))</code> would perform a <code>GET</code> request on the report URL mentioned above, including our Usersnap auth cookie in the request.</p>
 <p>The other basic functions are the response handler</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e">#&#39; @importFrom httr http_status content</span>
-</span></span><span style="display:flex;"><span>handleUSResponse <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(resp) {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">if </span>(resp<span style="color:#f92672">$</span>status_code <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">400L</span>)  {
+</span></span><span style="display:flex;"><span>handleUSResponse <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (resp) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (resp<span style="color:#f92672">$</span>status_code <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">400L</span>)  {
 </span></span><span style="display:flex;"><span>        msg <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">http_status</span>(resp)<span style="color:#f92672">$</span>message
 </span></span><span style="display:flex;"><span>        <span style="color:#75715e">## The API tends not to respond with anything else useful, so there&#39;s</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#75715e">## nothing to add to that message</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">stop</span>(msg, call.<span style="color:#f92672">=</span><span style="color:#66d9ef">FALSE</span>)
-</span></span><span style="display:flex;"><span>    } else {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">return</span>(<span style="color:#a6e22e">content</span>(resp))
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>(<span style="color:#a6e22e">content</span>(resp))
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>which doesn&rsquo;t yet do much other than stop on error and otherwise return the response content, but it will grow as we learn more about the API and its standard response behaviors; and a convenience <code>GET</code> method that passes through the API function:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>usGET <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(url, <span style="color:#66d9ef">...</span>) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>usGET <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (url, <span style="color:#66d9ef">...</span>) {
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">usAPI</span>(<span style="color:#e6db74">&#34;GET&#34;</span>, url, <span style="color:#66d9ef">...</span>)
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>I like to namespace these core functions, primarily so that you can call, for example, <code>usGET(&quot;some/url&quot;)</code> and you know that it will include the right authentication credentials for that API. That&rsquo;s why these functions all have &ldquo;us&rdquo; in the name.</p>
@@ -223,14 +223,14 @@ atom .
 <p>Now, with the core infrastructure in place, let&rsquo;s pick our first endpoint and write a wrapper for it. The one I was most interested in was the &ldquo;reports&rdquo; list so that I could get a catalog of recently opened issues. This is the first view you see when you open up a project in Usersnap&rsquo;s web interface.</p>
 <p>While I usually like to write tests before I write the main code, for this initial case, it made sense to debug interactively, against the live API, just to make sure the end-to-end works. Then we can set up the unit tests, with and without API mocks.</p>
 <p>Normally, you&rsquo;d read the docs and set up something that matches their guidelines. Good documentation usually gives example requests and responses as well. In this case, my available documentation was &ldquo;whatever the web app does&rdquo;. In some ways, not having API documentation helped to keep the initial implementation lean: because I have no idea what the API supports other than what I see the web app doing, there was no sense in trying to be too clever about designing the R function interface. I just set the web app&rsquo;s query as the default, allowed it to be overridden in the <code>...</code> arguments so that I could experiment and not be limited by those defaults, and wrapped it up neatly:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>getReports <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(<span style="color:#66d9ef">...</span>) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>getReports <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (<span style="color:#66d9ef">...</span>) {
 </span></span><span style="display:flex;"><span>    query <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">modifyList</span>(<span style="color:#a6e22e">list</span>(
 </span></span><span style="display:flex;"><span>        includeapikey<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;false&#34;</span>,
 </span></span><span style="display:flex;"><span>        offset<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,
 </span></span><span style="display:flex;"><span>        limit<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>,
 </span></span><span style="display:flex;"><span>        search<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;[{&#34;type&#34;:&#34;state&#34;,&#34;id&#34;:&#34;open&#34;}]&#39;</span>
 </span></span><span style="display:flex;"><span>    ), <span style="color:#a6e22e">list</span>(<span style="color:#66d9ef">...</span>))
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">return</span>(<span style="color:#a6e22e">usGET</span>(<span style="color:#a6e22e">usURL</span>(<span style="color:#e6db74">&#34;reports&#34;</span>), query<span style="color:#f92672">=</span>query)<span style="color:#f92672">$</span>data)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>(<span style="color:#a6e22e">usGET</span>(<span style="color:#a6e22e">usURL</span>(<span style="color:#e6db74">&#34;reports&#34;</span>), query<span style="color:#f92672">=</span>query)<span style="color:#f92672">$</span>data)
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>So, drop that in, install the package, and try it out against the live API.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(useRsnap)
@@ -282,10 +282,10 @@ atom .
     11 Aug 2017
   </time>
   
-    in <span itemprop="articleSection"><a href="/categories/code/">code</a></span>
+    in <span itemprop="articleSection">&lt;a href=&#34;/categories/code/&#34;&gt;code&lt;/a&gt;</span>
   
   
-    and tagged <a href="/tags/httptest/">httptest</a>, <a href="/tags/packages/">packages</a>, <a href="/tags/r/">R</a> and <a href="/tags/tdd/">tdd</a>
+    and tagged &lt;a href=&#34;/tags/httptest/&#34;&gt;httptest&lt;/a&gt;, &lt;a href=&#34;/tags/packages/&#34;&gt;packages&lt;/a&gt;, &lt;a href=&#34;/tags/r/&#34;&gt;R&lt;/a&gt; and &lt;a href=&#34;/tags/tdd/&#34;&gt;tdd&lt;/a&gt;
   
 </p>
 
@@ -319,8 +319,6 @@ atom .
 
 
     </div>
-
-    
 
 </div>
 </div>

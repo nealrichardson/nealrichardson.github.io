@@ -4,8 +4,9 @@
     <title>Code on A Blog</title>
     <link>/r/</link>
     <description>Recent content in Code on A Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 07 Apr 2023 00:08:35 +0200</lastBuildDate><atom:link href="/r/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate></lastBuildDate>
+    <atom:link href="/r/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

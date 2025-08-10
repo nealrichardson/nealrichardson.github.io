@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>remote on A Blog</title>
+    <title>Remote on A Blog</title>
     <link>/tags/remote/</link>
-    <description>Recent content in remote on A Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Remote on A Blog</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 16 Mar 2020 06:49:57 -0700</lastBuildDate><atom:link href="/tags/remote/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 16 Mar 2020 06:49:57 -0700</lastBuildDate>
+    <atom:link href="/tags/remote/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Flow Like Water</title>
       <link>/2020/03/16/flow-like-water/</link>
       <pubDate>Mon, 16 Mar 2020 06:49:57 -0700</pubDate>
-      
       <guid>/2020/03/16/flow-like-water/</guid>
-      <description>A rip current is a powerful flow that can drag an unsuspecting swimmer out to sea. When visiting a beach with rip currents, you&amp;rsquo;re told that if you get caught in one, you shouldn&amp;rsquo;t try to swim back toward the beach, against the current&amp;mdash;it&amp;rsquo;s too strong. Instead, you should swim parallel to the beach to get out of the current, and then you can get back to shore more easily.</description>
+      <description>&lt;p&gt;A rip current is a powerful flow that can drag an unsuspecting swimmer out to sea. When visiting a beach with rip currents, you&amp;rsquo;re told that if you get caught in one, you shouldn&amp;rsquo;t try to swim back toward the beach, against the current&amp;mdash;it&amp;rsquo;s too strong. Instead, you should swim parallel to the beach to get out of the current, and then you can get back to shore more easily.&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

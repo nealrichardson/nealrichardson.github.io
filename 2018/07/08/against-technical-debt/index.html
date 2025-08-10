@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <meta name="generator" content="Hugo 0.115.2">
+  <meta name="generator" content="Hugo 0.148.2">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,12 +21,19 @@
   <meta name="author" content="">
 
 
-  <meta property="og:title" content="Against Technical Debt" />
-<meta property="og:description" content="&#39;Technical debt&#39; is neither technical nor debt. Discuss." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="/2018/07/08/against-technical-debt/" /><meta property="og:image" content="https://enpiar.com/img/discuss.jpg" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2018-07-08T21:49:57-07:00" />
-<meta property="article:modified_time" content="2018-07-08T21:49:57-07:00" />
+  <meta property="og:url" content="/2018/07/08/against-technical-debt/">
+  <meta property="og:site_name" content="A Blog">
+  <meta property="og:title" content="Against Technical Debt">
+  <meta property="og:description" content="&#39;Technical debt&#39; is neither technical nor debt. Discuss.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2018-07-08T21:49:57-07:00">
+    <meta property="article:modified_time" content="2018-07-08T21:49:57-07:00">
+    <meta property="article:tag" content="Technical Debt">
+    <meta property="article:tag" content="Productivity">
+    <meta property="article:tag" content="Prioritization">
+    <meta property="og:image" content="https://enpiar.com/img/discuss.jpg">
 
   
 
@@ -37,17 +44,6 @@
   
   
   
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-104182925-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
-
   
 
   <link rel="canonical" href="/2018/07/08/against-technical-debt/">  
@@ -113,11 +109,14 @@ if (!doNotTrack) {
  </header>
   <main>
 <div class="push-center" itemscope itemtype="http://schema.org/BlogPosting">
-    <meta itemprop="name" content="Against Technical Debt">
-<meta itemprop="description" content="&#39;Technical debt&#39; is neither technical nor debt. Discuss."><meta itemprop="datePublished" content="2018-07-08T21:49:57-07:00" />
-<meta itemprop="dateModified" content="2018-07-08T21:49:57-07:00" />
-<meta itemprop="wordCount" content="2122"><meta itemprop="image" content="https://enpiar.com/img/discuss.jpg">
-<meta itemprop="keywords" content="technical debt,productivity,prioritization," />
+    
+  <meta itemprop="name" content="Against Technical Debt">
+  <meta itemprop="description" content="&#39;Technical debt&#39; is neither technical nor debt. Discuss.">
+  <meta itemprop="datePublished" content="2018-07-08T21:49:57-07:00">
+  <meta itemprop="dateModified" content="2018-07-08T21:49:57-07:00">
+  <meta itemprop="wordCount" content="2122">
+  <meta itemprop="image" content="https://enpiar.com/img/discuss.jpg">
+  <meta itemprop="keywords" content="Technical Debt,Productivity,Prioritization">
 <div id="hero">
     <h1 itemprop="headline">  Against Technical Debt</h1>
     
@@ -132,19 +131,16 @@ if (!doNotTrack) {
 <div id="post" itemprop="articleBody">
 
     <p>As a product owner and development leader, I often hear that &ldquo;we have to pay our technical debt&rdquo; in order to proceed with our product plan. As the metaphor goes, when you choose to take shortcuts now, you incur a debt that you&rsquo;ll eventually have to repay with interest. The implication when a developer raises it is that those interest payments are too high and are preventing us from moving forward as effectively as we should.</p>
-<figure class="floating-right halfwidth"><img src="/img/discuss.jpg"/><figcaption>
-            <p>Discuss.</p>
-        </figcaption>
+<figure class="floating-right halfwidth"><img src="/img/discuss.jpg"><figcaption>
+      <p>Discuss.</p>
+    </figcaption>
 </figure>
 
 <p>After years of debt service and refinance, I&rsquo;ve come to find this metaphor problematic and unpersuasive. Using the framing of debt only interferes with the real, difficult discussion about prioritization. On further reflection, technical debt isn&rsquo;t really debt, and the actual problem isn&rsquo;t technical. Even so, whenever someone blames tech debt, there is a message that should be decoded and heard.</p>
 <a class="headline-anchor" href="#technical-debt-is-not-a-moral-issue"><h1 id="technical-debt-is-not-a-moral-issue">Technical debt is not a moral issue</a> </h1>
-<!-- raw HTML omitted -->
 <p>Calling some work &ldquo;tech debt&rdquo; interferes with our ability to discuss whether it should be done.
 When a developer refers to something as technical debt, they&rsquo;re implying that there is an imperative to pay it. This is because the language around debt in general is <a href="https://www.amazon.com/Debt-First-5-000-Years/dp/1612191290">loaded with moral overtones</a>: of course, debts must be paid, right?
 But it&rsquo;s not true that something that is a debt, technical or otherwise, must necessarily be paid&mdash;and it&rsquo;s certainly not the case that it must be paid right now.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <p>The existence of technical debt is not inherently a problem. Let&rsquo;s allow that debt is an appropriate metaphor for some decisions we make in software: that means there are times and occasions when you should take on debt. Another term for debt in this context is <em>leverage</em>. You borrow so that you can do more now. Borrowing comes with a cost, of course, but that&rsquo;s a cost to be paid in the future, and in taking the debt, you determine that that&rsquo;s an appropriate tradeoff.</p>
 <p>In economic terms, we can say that the marginal utility of future consumption is equal to that of current consumption scaled by a discount factor. Different people in different circumstances may have higher or lower discount factors, but resources you have today are more valuable than resources you might have tomorrow. Particularly when building a new product, you should assume a low discount factor: it doesn&rsquo;t much matter how much technical debt you have in a year if your product doesn&rsquo;t launch and you&rsquo;re out of business. So, it is good in that circumstance to take on debt and to defer paying existing debts&mdash;you need more leverage now.</p>
 <p>Even when the technical-debt metaphor helps you to think about implementation tradeoffs, it&rsquo;s not helpful in the future when deciding whether it&rsquo;s time to &ldquo;pay it off&rdquo;. At that point, paying the debt is just work to be scheduled&mdash;it doesn&rsquo;t matter that it&rsquo;s origins are in some past decision to take shortcuts. But when the discussion is framed with the language of debt, invoking the moral righteousness of paying ones debts, it&rsquo;s hard to evaluate our priorities fairly.</p>
@@ -152,7 +148,6 @@ But it&rsquo;s not true that something that is a debt, technical or otherwise, m
 <p>Which it usually does not.</p>
 <a class="headline-anchor" href="#it-isnt-really-debt"><h1 id="it-isnt-really-debt">It isn&rsquo;t really debt</a> </h1>
 <p>By calling something technical debt, the implication is that the messy or difficult code we&rsquo;re dealing with now was the result of a deliberate choice, a tradeoff made for expediency&rsquo;s sake that may have made sense at the time, but the daily costs of that choice are now too high.</p>
-<!-- raw HTML omitted -->
 <p>I&rsquo;ve certainly taken on this ideal-type technical debt a few times. Of the instances I can recall where we deliberately chose to ship something early but hacky, I have zero regrets. Often, it was the Agile solution to a problem: either get something in front of users quickly to validate assumptions and guide the development of the &ldquo;right way&rdquo;, or spend as little as possible to satisfy a peripheral need. In the former case, the prototype version was quickly replaced, as intended&mdash;short-term credit&mdash;and in the latter, any shortcomings in the implementation are well contained and don&rsquo;t affect us on a daily basis&mdash;long-term, low-rate bonds. On reflection, if anything I&rsquo;ve been too reluctant to let us take on this debt.</p>
 <p>However, none of these cases are what our developers bring up when they say we need to pay our technical debt.</p>
 <p>Instead, when the specter of technical debt is raised, I see other origins: <a href="https://hackernoon.com/there-are-3-main-types-of-technical-debt-heres-how-to-manage-them-4a3328a4c50c">premature or misguided attempts to architect</a> for some future that never came; <a href="https://einarwh.wordpress.com/2015/12/05/technical-debt-isnt-technical/">solutions built before the problem was well enough understood</a>; or even (especially in the JavaScript world) adherence to conventions and patterns that were standard at the time but have <a href="https://blog.aurynn.com/2015/12/16-contempt-culture">fallen out of fashion</a>. In a sense, <a href="http://laughingmeme.org/2016/01/10/towards-an-understanding-of-technical-debt/">all code is technical debt</a>.</p>
@@ -172,10 +167,10 @@ It&rsquo;s a waste of energy to focus on who&rsquo;s at fault rather than on col
 <p>Thinking about it from the other direction, happy, motivated people do better work. That&rsquo;s reason enough to hear out their proposals for dealing with their tech debt and try to accommodate some of the work in the product roadmap. Encourage them to propose the work in a forward-looking way&mdash;how it will strengthen our product, improve some user experience, or even allow us to hire more talent in the future&mdash;rather than what past grievances it addresses. It won&rsquo;t actually solve the technical debt problem (because that&rsquo;s impossible), but if the team can agree on a course of action that makes them happier to work in their codebase and proud of their team and its craftsmanship, it may nevertheless make everyone more productive and satisfied.</p>
 <a class="headline-anchor" href="#conclusion"><h1 id="conclusion">Conclusion</a> </h1>
 <p>I may have a skewed perception of technical debt based on my experiences. Perhaps I&rsquo;m fortunate to work in a low-debt codebase, and my team is full of deficit hawks who are alarmed at the thought of saddling their future selves with debt. So I won&rsquo;t claim that there is no such thing as technical debt. But, I think it&rsquo;s fair to say that much of what developers call technical debt doesn&rsquo;t match the ideal (metaphorical) model, and that even when it does characterize how decisions now can add costs to future work, when that future comes, the language of debt interferes with our ability to weigh the opportunity cost of &ldquo;paying it off now&rdquo; versus whatever else we&rsquo;d do.</p>
-<figure class="floating-left halfwidth"><img src="/img/tawk-amongst-yourselves.gif"/><figcaption>
-            <p>
-                    <a href="https://giphy.com/gifs/mike-myers-coffee-talk-verklempt-3oz8xsfiFFiDPjgye4">Tawk amongst yourselves.</a></p>
-        </figcaption>
+<figure class="floating-left halfwidth"><img src="/img/tawk-amongst-yourselves.gif"><figcaption>
+      <p>
+          <a href="https://giphy.com/gifs/mike-myers-coffee-talk-verklempt-3oz8xsfiFFiDPjgye4">Tawk amongst yourselves.</a></p>
+    </figcaption>
 </figure>
 
 <p>A better metaphor, if we&rsquo;re looking for one, might be infrastructure: it needs continual upkeep and <a href="http://laughingmeme.org/2016/01/10/towards-an-understanding-of-technical-debt/">maintenance</a>. Particularly as circumstances change and technology generally evolves, it is completely reasonable to keep investing in the quality of the product and its code.
@@ -194,10 +189,10 @@ If our design is proven to be unstable, it may need a retrofit.</p>
     8 Jul 2018
   </time>
   
-    in <span itemprop="articleSection"><a href="/categories/management/">management</a></span>
+    in <span itemprop="articleSection">&lt;a href=&#34;/categories/management/&#34;&gt;management&lt;/a&gt;</span>
   
   
-    and tagged <a href="/tags/prioritization/">prioritization</a>, <a href="/tags/productivity/">productivity</a> and <a href="/tags/technical-debt/">technical debt</a>
+    and tagged &lt;a href=&#34;/tags/prioritization/&#34;&gt;prioritization&lt;/a&gt;, &lt;a href=&#34;/tags/productivity/&#34;&gt;productivity&lt;/a&gt; and &lt;a href=&#34;/tags/technical-debt/&#34;&gt;technical debt&lt;/a&gt;
   
 </p>
 
@@ -206,8 +201,6 @@ If our design is proven to be unstable, it may need a retrofit.</p>
 
 
     </div>
-
-    
 
 </div>
 </div>

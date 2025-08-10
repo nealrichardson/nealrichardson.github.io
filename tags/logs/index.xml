@@ -1,30 +1,26 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>logs on A Blog</title>
+    <title>Logs on A Blog</title>
     <link>/tags/logs/</link>
-    <description>Recent content in logs on A Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Logs on A Blog</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 08 Feb 2019 16:49:57 -0700</lastBuildDate><atom:link href="/tags/logs/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 08 Feb 2019 16:49:57 -0700</lastBuildDate>
+    <atom:link href="/tags/logs/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Analyzing Logs with AWS Athena</title>
       <link>/2019/02/08/analyzing-logs-with-aws-athena/</link>
       <pubDate>Fri, 08 Feb 2019 16:49:57 -0700</pubDate>
-      
       <guid>/2019/02/08/analyzing-logs-with-aws-athena/</guid>
-      <description>This week, I wanted to analyze some web traffic patterns back over several years. For contemporary analysis, we sync the last couple of months of load balancer (AWS ELB) log files from S3 to a EC2 instance, and I&amp;rsquo;ve written some tools in R to query them using dplyr methods. The elbr R package I wrote does some clever things to take advantage of the directory structure for fast filtering by date, and it supports parallelized reading and querying of the files, among other optimizations, so it&amp;rsquo;s reasonably fast.</description>
+      <description>&lt;p&gt;This week, I wanted to analyze some web traffic patterns back over several years. For contemporary analysis, we sync the last couple of months of load balancer (AWS ELB) log files from S3 to a EC2 instance, and I&amp;rsquo;ve &lt;a href=&#34;https://enpiar.com/2018/04/25/turbocharging-readr/&#34;&gt;written some tools in R&lt;/a&gt; to query them using &lt;code&gt;dplyr&lt;/code&gt; methods. The &lt;a href=&#34;https://github.com/nealrichardson/elbr&#34;&gt;&lt;code&gt;elbr&lt;/code&gt;&lt;/a&gt; R package I wrote does some clever things to take advantage of the directory structure for fast filtering by date, and it supports parallelized reading and querying of the files, among other optimizations, so it&amp;rsquo;s reasonably fast. But it assumes that the source files are local.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Turbocharging &#39;readr&#39;</title>
       <link>/2018/04/25/turbocharging-readr/</link>
       <pubDate>Wed, 25 Apr 2018 21:49:57 -0700</pubDate>
-      
       <guid>/2018/04/25/turbocharging-readr/</guid>
-      <description>Recently I analyzed some web traffic for my team at an all-hands meetup. I suspected there were some misconceptions about the frequency of certain kinds of requests, and that some basic descriptive statistics could help.
-Whenever I start an analysis like this, I also think about how to make it easier to repeat it. If the question is interesting enough to merit analysis now, it will probably be interesting next month too&amp;mdash;particularly if it reveals things we want to improve.</description>
+      <description>&lt;p&gt;Recently I analyzed some web traffic for my &lt;a href=&#34;https://crunch.io/team&#34;&gt;team&lt;/a&gt; at an all-hands meetup. I suspected there were some misconceptions about the frequency of certain kinds of requests, and that some basic descriptive statistics could help.&lt;/p&gt;&#xA;&lt;p&gt;Whenever I start an analysis like this, I also think about how to make it easier to repeat it. If the question is interesting enough to merit analysis now, it will probably be interesting next month too&amp;mdash;particularly if it reveals things we want to improve. In this particular exercise, not only did I get statistics for my presentation, I also got a &lt;a href=&#34;https://github.com/nealrichardson/elbr&#34;&gt;new R package&lt;/a&gt; and some insights into how to read in data stored in lots of text files in an efficient, fast way, using &lt;a href=&#34;http://readr.tidyverse.org/&#34;&gt;&lt;code&gt;readr&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

@@ -4,8 +4,9 @@
     <title>Talks on A Blog</title>
     <link>/talks/</link>
     <description>Recent content in Talks on A Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 15 Oct 2017 14:08:35 +0200</lastBuildDate><atom:link href="/talks/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate></lastBuildDate>
+    <atom:link href="/talks/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

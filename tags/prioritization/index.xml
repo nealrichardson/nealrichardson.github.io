@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>prioritization on A Blog</title>
+    <title>Prioritization on A Blog</title>
     <link>/tags/prioritization/</link>
-    <description>Recent content in prioritization on A Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Prioritization on A Blog</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 08 Jul 2018 21:49:57 -0700</lastBuildDate><atom:link href="/tags/prioritization/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 08 Jul 2018 21:49:57 -0700</lastBuildDate>
+    <atom:link href="/tags/prioritization/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Against Technical Debt</title>
       <link>/2018/07/08/against-technical-debt/</link>
       <pubDate>Sun, 08 Jul 2018 21:49:57 -0700</pubDate>
-      
       <guid>/2018/07/08/against-technical-debt/</guid>
-      <description>As a product owner and development leader, I often hear that &amp;ldquo;we have to pay our technical debt&amp;rdquo; in order to proceed with our product plan. As the metaphor goes, when you choose to take shortcuts now, you incur a debt that you&amp;rsquo;ll eventually have to repay with interest. The implication when a developer raises it is that those interest payments are too high and are preventing us from moving forward as effectively as we should.</description>
+      <description>&lt;p&gt;As a product owner and development leader, I often hear that &amp;ldquo;we have to pay our technical debt&amp;rdquo; in order to proceed with our product plan. As the metaphor goes, when you choose to take shortcuts now, you incur a debt that you&amp;rsquo;ll eventually have to repay with interest. The implication when a developer raises it is that those interest payments are too high and are preventing us from moving forward as effectively as we should.&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

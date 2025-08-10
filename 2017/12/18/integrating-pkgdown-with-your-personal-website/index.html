@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <meta name="generator" content="Hugo 0.115.2">
+  <meta name="generator" content="Hugo 0.148.2">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,12 +21,22 @@
   <meta name="author" content="">
 
 
-  <meta property="og:title" content="Integrating &#39;pkgdown&#39; with Your Personal Website" />
-<meta property="og:description" content="You don&#39;t have to be a web developer to have smooth flow and consistent style across your personal website or blog and your R package websites." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="/2017/12/18/integrating-pkgdown-with-your-personal-website/" /><meta property="og:image" content="https://enpiar.com/img/css_is_awesome_mug.jpg" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2017-12-18T16:49:57-07:00" />
-<meta property="article:modified_time" content="2017-12-18T16:49:57-07:00" />
+  <meta property="og:url" content="/2017/12/18/integrating-pkgdown-with-your-personal-website/">
+  <meta property="og:site_name" content="A Blog">
+  <meta property="og:title" content="Integrating &#39;pkgdown&#39; with Your Personal Website">
+  <meta property="og:description" content="You don&#39;t have to be a web developer to have smooth flow and consistent style across your personal website or blog and your R package websites.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2017-12-18T16:49:57-07:00">
+    <meta property="article:modified_time" content="2017-12-18T16:49:57-07:00">
+    <meta property="article:tag" content="R">
+    <meta property="article:tag" content="Packages">
+    <meta property="article:tag" content="Website">
+    <meta property="article:tag" content="Hugo">
+    <meta property="article:tag" content="Blogdown">
+    <meta property="article:tag" content="Documentation">
+    <meta property="og:image" content="https://enpiar.com/img/css_is_awesome_mug.jpg">
 
   
 
@@ -37,17 +47,6 @@
   
   
   
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-104182925-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
-
   
 
   <link rel="canonical" href="/2017/12/18/integrating-pkgdown-with-your-personal-website/">  
@@ -118,11 +117,14 @@ if (!doNotTrack) {
  </header>
   <main>
 <div class="push-center" itemscope itemtype="http://schema.org/BlogPosting">
-    <meta itemprop="name" content="Integrating &#39;pkgdown&#39; with Your Personal Website">
-<meta itemprop="description" content="You don&#39;t have to be a web developer to have smooth flow and consistent style across your personal website or blog and your R package websites."><meta itemprop="datePublished" content="2017-12-18T16:49:57-07:00" />
-<meta itemprop="dateModified" content="2017-12-18T16:49:57-07:00" />
-<meta itemprop="wordCount" content="2174"><meta itemprop="image" content="https://enpiar.com/img/css_is_awesome_mug.jpg">
-<meta itemprop="keywords" content="R,packages,website,hugo,blogdown,documentation," />
+    
+  <meta itemprop="name" content="Integrating &#39;pkgdown&#39; with Your Personal Website">
+  <meta itemprop="description" content="You don&#39;t have to be a web developer to have smooth flow and consistent style across your personal website or blog and your R package websites.">
+  <meta itemprop="datePublished" content="2017-12-18T16:49:57-07:00">
+  <meta itemprop="dateModified" content="2017-12-18T16:49:57-07:00">
+  <meta itemprop="wordCount" content="2174">
+  <meta itemprop="image" content="https://enpiar.com/img/css_is_awesome_mug.jpg">
+  <meta itemprop="keywords" content="R,Packages,Website,Hugo,Blogdown,Documentation">
 <div id="hero">
     <h1 itemprop="headline">  Integrating 'pkgdown' with Your Personal Website</h1>
     
@@ -153,19 +155,17 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span>@<span style="color:#66d9ef">import</span> <span style="color:#f92672">url</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;https://enpiar.com/css/custom.css&#34;</span><span style="color:#f92672">)</span>;
 </span></span></code></pre></div><p>That got the basics. To work out the rest of the styling, I had to do some exploration of the pkgdown site markup, figure out how to identify elements on the page there, and then add special CSS classes to <code>pkgdown/extra.css</code> (after the <code>@import</code> statements). These styles overrode the defaults with styles that aligned with my personal site. In a few cases (notably, the navbar), it was easier&mdash;and more visually appealing&mdash;to edit the style of my personal site to make it align more closely with the pkgdown site.</p>
 <p>This styling involved a bit of spelunking and iteration. I like to open up the dev console in the browser, interactively tweak the CSS on the page to find the right appearance, then copy the resulting styles into <code>extra.css</code>. Here&rsquo;s some references on how to use the browser dev tools in <a href="https://developers.google.com/web/tools/chrome-devtools/inspect-styles/">Chrome</a> and <a href="https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector/How_to/Examine_and_edit_CSS">Firefox</a>.</p>
-<figure class="floating-left halfwidth"><img src="/img/css_is_awesome_mug.jpg"/><figcaption>
-            <p>
-                    <a href="https://www.zazzle.com/css_is_awesome_mug-168113658720373401">Truth</a></p>
-        </figcaption>
+<figure class="floating-left halfwidth"><img src="/img/css_is_awesome_mug.jpg"><figcaption>
+      <p>
+          <a href="https://www.zazzle.com/css_is_awesome_mug-168113658720373401">Truth</a></p>
+    </figcaption>
 </figure>
 
 <p>As for how to use CSS properly, Google around. I&rsquo;m not the one to teach good CSS skills: remember, IANAWD. At work earlier this year, I had this exchange while trying to style a website template:</p>
 <blockquote>
-<p>&lt;npr&gt; now it’s just getting worse</p>
-</blockquote>
+<p>&lt;npr&gt; now it’s just getting worse</p></blockquote>
 <blockquote>
-<p>&lt;mike&gt; welcome to css!</p>
-</blockquote>
+<p>&lt;mike&gt; welcome to css!</p></blockquote>
 <p>That said, I didn&rsquo;t have to do any advanced CSS to make the sites line up. In fact, <a href="https://github.com/nealrichardson/httptest/blob/39da46541306d79f14fa9bd4d6401b932f8bd7e2/pkgdown/extra.css">I didn&rsquo;t have to add much CSS at all</a>, and most of what is there is basic font size/weight definitions, like this:</p>
 <!-- raw HTML omitted -->
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-css" data-lang="css"><span style="display:flex;"><span><span style="color:#f92672">body</span> {
@@ -175,7 +175,7 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">font-weight</span>: <span style="color:#ae81ff">200</span>;
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>The trickiest parts were finding the right selector to specify to override some <a href="https://getbootstrap.com/">Bootstrap</a> theme defaults, but that could usually just be copied straight from the browser inspector.</p>
-<figure class="centered-image bordered-image"><img src="/img/browser-inspector.png"/>
+<figure class="centered-image bordered-image"><img src="/img/browser-inspector.png">
 </figure>
 
 <p>Speaking of Bootstrap: I suspect that if my personal site had been using a <a href="https://themes.gohugo.io/tags/bootstrap/">Bootstrap theme</a>, the CSS imports alone may have been enough to style the pkgdown site, and I wouldn&rsquo;t have had to mess with the inspector and custom CSS. Because <code>pkgdown</code> uses Bootstrap, if my site also used Bootstrap, the CSS class names would have been consistent between the two sites, and the right styles should have been applied naturally.</p>
@@ -232,7 +232,7 @@ if (!doNotTrack) {
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ae81ff">feed_tags = [&#34;r&#34;, &#34;R&#34;]</span>
 </span></span></code></pre></div><p>For some reason (my Hugo ignorance, no doubt), I didn&rsquo;t figure out how to just inline that <code>[&quot;r&quot;, &quot;R&quot;]</code> into the <code>where</code> statement, but it worked when reading from the index page front matter.</p>
 <p>The result looks like <a href="https://enpiar.com/r/">this</a>:</p>
-<figure class="centered-image bordered-image"><img src="/img/enpiar-r-index.png"/>
+<figure class="centered-image bordered-image"><img src="/img/enpiar-r-index.png">
 </figure>
 
 <p>We have a page on the personal site with links to all of the pkgdown sites, plus a dynamically generated list of recent R blog posts from the personal site, seamlessly appearing together. Magic!</p>
@@ -249,10 +249,10 @@ if (!doNotTrack) {
     18 Dec 2017
   </time>
   
-    in <span itemprop="articleSection"><a href="/categories/code/">code</a></span>
+    in <span itemprop="articleSection">&lt;a href=&#34;/categories/code/&#34;&gt;code&lt;/a&gt;</span>
   
   
-    and tagged <a href="/tags/blogdown/">blogdown</a>, <a href="/tags/documentation/">documentation</a>, <a href="/tags/hugo/">hugo</a>, <a href="/tags/packages/">packages</a>, <a href="/tags/r/">R</a> and <a href="/tags/website/">website</a>
+    and tagged &lt;a href=&#34;/tags/blogdown/&#34;&gt;blogdown&lt;/a&gt;, &lt;a href=&#34;/tags/documentation/&#34;&gt;documentation&lt;/a&gt;, &lt;a href=&#34;/tags/hugo/&#34;&gt;hugo&lt;/a&gt;, &lt;a href=&#34;/tags/packages/&#34;&gt;packages&lt;/a&gt;, &lt;a href=&#34;/tags/r/&#34;&gt;R&lt;/a&gt; and &lt;a href=&#34;/tags/website/&#34;&gt;website&lt;/a&gt;
   
 </p>
 
@@ -286,8 +286,6 @@ if (!doNotTrack) {
 
 
     </div>
-
-    
 
 </div>
 </div>

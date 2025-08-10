@@ -1,40 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>documentation on A Blog</title>
+    <title>Documentation on A Blog</title>
     <link>/tags/documentation/</link>
-    <description>Recent content in documentation on A Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Documentation on A Blog</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 17 Feb 2019 16:49:57 -0700</lastBuildDate><atom:link href="/tags/documentation/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 17 Feb 2019 16:49:57 -0700</lastBuildDate>
+    <atom:link href="/tags/documentation/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Writing Docs Is Better Than Having Docs</title>
       <link>/2019/02/17/writing-docs-is-better-than-having-docs/</link>
       <pubDate>Sun, 17 Feb 2019 16:49:57 -0700</pubDate>
-      
       <guid>/2019/02/17/writing-docs-is-better-than-having-docs/</guid>
-      <description>When interviewing developers at Crunch, we sometimes do a live coding exercise using a JavaScript data visualization library. It&amp;rsquo;s basic, and we don&amp;rsquo;t assume any prior knowledge of the library. To start, we tell the candidate that they can use the full internet to help them solve the problem (we&amp;rsquo;re trying to simulate real working conditions, after all), and by the way, this library has excellent documentation.
-It&amp;rsquo;s about 50-50 the candidates that ever open the docs&amp;mdash;the other half go straight to Stack Overflow to look for code to copy.</description>
+      <description>&lt;p&gt;When interviewing developers at &lt;a href=&#34;https://crunch.io/jobs&#34;&gt;Crunch&lt;/a&gt;, we sometimes do a live coding exercise using a JavaScript data visualization library. It&amp;rsquo;s basic, and we don&amp;rsquo;t assume any prior knowledge of the library. To start, we tell the candidate that they can use the full internet to help them solve the problem (we&amp;rsquo;re trying to simulate real working conditions, after all), and by the way, this library has excellent documentation.&lt;/p&gt;&#xA;&lt;p&gt;It&amp;rsquo;s about 50-50 the candidates that ever open the docs&amp;mdash;the other half go straight to Stack Overflow to look for code to copy.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Integrating &#39;pkgdown&#39; with Your Personal Website</title>
       <link>/2017/12/18/integrating-pkgdown-with-your-personal-website/</link>
       <pubDate>Mon, 18 Dec 2017 16:49:57 -0700</pubDate>
-      
       <guid>/2017/12/18/integrating-pkgdown-with-your-personal-website/</guid>
-      <description>Publishing a website for your R package is simple with pkgdown. As I recently discussed, you can build a basic site and host it on GitHub Pages with just a handful of commands and clicks.
-That&amp;rsquo;s a great start, but why stop there? If you have a personal website or blog, it would be nice to have your package page mesh with it&amp;mdash;that is, it should fit with your &amp;ldquo;brand&amp;rdquo;. Your personal site has a style (font, color, layout, etc.</description>
+      <description>&lt;p&gt;Publishing a website for your R package is simple with &lt;a href=&#34;http://pkgdown.r-lib.org/&#34;&gt;&lt;code&gt;pkgdown&lt;/code&gt;&lt;/a&gt;. &lt;a href=&#34;https://enpiar.com/2017/11/21/getting-down-with-pkgdown/&#34;&gt;As I recently discussed&lt;/a&gt;, you can build a basic site and host it on GitHub Pages with just a handful of commands and clicks.&lt;/p&gt;&#xA;&lt;p&gt;That&amp;rsquo;s a great start, but why stop there? If you have a personal website or blog, it would be nice to have your package page mesh with it&amp;mdash;that is, it should fit with your &amp;ldquo;brand&amp;rdquo;. Your personal site has a style (font, color, layout, etc.), and ideally your pkgdown site should match it. If you have a custom domain name for your website, it would be great to serve your pkgdown site under the same domain, rather than the default &lt;code&gt;username.github.io/pkgname&lt;/code&gt; GitHub Pages convention. And if you have more than one R package with a website, they should all have a coherent presentation.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Getting Down with pkgdown</title>
       <link>/2017/11/21/getting-down-with-pkgdown/</link>
       <pubDate>Tue, 21 Nov 2017 16:49:57 -0700</pubDate>
-      
       <guid>/2017/11/21/getting-down-with-pkgdown/</guid>
-      <description>pkgdown is an incredibly powerful tool for building beautiful websites for R packages. With pkgdown and services like GitHub Pages, deploying a package website is so simple and straightforward that I&amp;rsquo;m starting to see it as an essential part of writing a package. What&amp;rsquo;s more, I&amp;rsquo;ve found that the act of preparing a package website has led me to improve the package itself, particularly the readability and usefulness of its documentation.</description>
+      <description>&lt;p&gt;&lt;a href=&#34;http://pkgdown.r-lib.org/&#34;&gt;&lt;code&gt;pkgdown&lt;/code&gt;&lt;/a&gt; is an incredibly powerful tool for building beautiful websites for R packages. With &lt;code&gt;pkgdown&lt;/code&gt; and services like &lt;a href=&#34;https://pages.github.com/&#34;&gt;GitHub Pages&lt;/a&gt;, deploying a package website is so simple and straightforward that I&amp;rsquo;m starting to see it as an essential part of writing a package. What&amp;rsquo;s more, I&amp;rsquo;ve found that the act of preparing a package website has led me to improve the package itself, particularly the readability and usefulness of its documentation.&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

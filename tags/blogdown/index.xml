@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>blogdown on A Blog</title>
+    <title>Blogdown on A Blog</title>
     <link>/tags/blogdown/</link>
-    <description>Recent content in blogdown on A Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Blogdown on A Blog</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 18 Dec 2017 16:49:57 -0700</lastBuildDate><atom:link href="/tags/blogdown/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 18 Dec 2017 16:49:57 -0700</lastBuildDate>
+    <atom:link href="/tags/blogdown/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Integrating &#39;pkgdown&#39; with Your Personal Website</title>
       <link>/2017/12/18/integrating-pkgdown-with-your-personal-website/</link>
       <pubDate>Mon, 18 Dec 2017 16:49:57 -0700</pubDate>
-      
       <guid>/2017/12/18/integrating-pkgdown-with-your-personal-website/</guid>
-      <description>Publishing a website for your R package is simple with pkgdown. As I recently discussed, you can build a basic site and host it on GitHub Pages with just a handful of commands and clicks.
-That&amp;rsquo;s a great start, but why stop there? If you have a personal website or blog, it would be nice to have your package page mesh with it&amp;mdash;that is, it should fit with your &amp;ldquo;brand&amp;rdquo;. Your personal site has a style (font, color, layout, etc.</description>
+      <description>&lt;p&gt;Publishing a website for your R package is simple with &lt;a href=&#34;http://pkgdown.r-lib.org/&#34;&gt;&lt;code&gt;pkgdown&lt;/code&gt;&lt;/a&gt;. &lt;a href=&#34;https://enpiar.com/2017/11/21/getting-down-with-pkgdown/&#34;&gt;As I recently discussed&lt;/a&gt;, you can build a basic site and host it on GitHub Pages with just a handful of commands and clicks.&lt;/p&gt;&#xA;&lt;p&gt;That&amp;rsquo;s a great start, but why stop there? If you have a personal website or blog, it would be nice to have your package page mesh with it&amp;mdash;that is, it should fit with your &amp;ldquo;brand&amp;rdquo;. Your personal site has a style (font, color, layout, etc.), and ideally your pkgdown site should match it. If you have a custom domain name for your website, it would be great to serve your pkgdown site under the same domain, rather than the default &lt;code&gt;username.github.io/pkgname&lt;/code&gt; GitHub Pages convention. And if you have more than one R package with a website, they should all have a coherent presentation.&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-  <meta name="generator" content="Hugo 0.115.2">
+  <meta name="generator" content="Hugo 0.148.2">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,12 +21,20 @@
   <meta name="author" content="">
 
 
-  <meta property="og:title" content="Analyzing Logs with AWS Athena" />
-<meta property="og:description" content="With Athena, I got some answers out of several years of log data in S3 relatively quickly. I also had an opportunity to learn some new tricks." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="/2019/02/08/analyzing-logs-with-aws-athena/" /><meta property="og:image" content="https://enpiar.com/img/aquarius.gif" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2019-02-08T16:49:57-07:00" />
-<meta property="article:modified_time" content="2019-02-08T16:49:57-07:00" />
+  <meta property="og:url" content="/2019/02/08/analyzing-logs-with-aws-athena/">
+  <meta property="og:site_name" content="A Blog">
+  <meta property="og:title" content="Analyzing Logs with AWS Athena">
+  <meta property="og:description" content="With Athena, I got some answers out of several years of log data in S3 relatively quickly. I also had an opportunity to learn some new tricks.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2019-02-08T16:49:57-07:00">
+    <meta property="article:modified_time" content="2019-02-08T16:49:57-07:00">
+    <meta property="article:tag" content="Athena">
+    <meta property="article:tag" content="Serverless">
+    <meta property="article:tag" content="Sql">
+    <meta property="article:tag" content="Logs">
+    <meta property="og:image" content="https://enpiar.com/img/aquarius.gif">
 
   
 
@@ -37,17 +45,6 @@
   
   
   
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-104182925-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
-
   
 
   <link rel="canonical" href="/2019/02/08/analyzing-logs-with-aws-athena/">  
@@ -118,11 +115,14 @@ if (!doNotTrack) {
  </header>
   <main>
 <div class="push-center" itemscope itemtype="http://schema.org/BlogPosting">
-    <meta itemprop="name" content="Analyzing Logs with AWS Athena">
-<meta itemprop="description" content="With Athena, I got some answers out of several years of log data in S3 relatively quickly. I also had an opportunity to learn some new tricks."><meta itemprop="datePublished" content="2019-02-08T16:49:57-07:00" />
-<meta itemprop="dateModified" content="2019-02-08T16:49:57-07:00" />
-<meta itemprop="wordCount" content="2468"><meta itemprop="image" content="https://enpiar.com/img/aquarius.gif">
-<meta itemprop="keywords" content="athena,serverless,sql,logs," />
+    
+  <meta itemprop="name" content="Analyzing Logs with AWS Athena">
+  <meta itemprop="description" content="With Athena, I got some answers out of several years of log data in S3 relatively quickly. I also had an opportunity to learn some new tricks.">
+  <meta itemprop="datePublished" content="2019-02-08T16:49:57-07:00">
+  <meta itemprop="dateModified" content="2019-02-08T16:49:57-07:00">
+  <meta itemprop="wordCount" content="2468">
+  <meta itemprop="image" content="https://enpiar.com/img/aquarius.gif">
+  <meta itemprop="keywords" content="Athena,Serverless,Sql,Logs">
 <div id="hero">
     <h1 itemprop="headline">  Analyzing Logs with AWS Athena</h1>
     
@@ -138,10 +138,10 @@ if (!doNotTrack) {
 
     <p>This week, I wanted to analyze some web traffic patterns back over several years. For contemporary analysis, we sync the last couple of months of load balancer (AWS ELB) log files from S3 to a EC2 instance, and I&rsquo;ve <a href="https://enpiar.com/2018/04/25/turbocharging-readr/">written some tools in R</a> to query them using <code>dplyr</code> methods. The <a href="https://github.com/nealrichardson/elbr"><code>elbr</code></a> R package I wrote does some clever things to take advantage of the directory structure for fast filtering by date, and it supports parallelized reading and querying of the files, among other optimizations, so it&rsquo;s reasonably fast. But it assumes that the source files are local.</p>
 <p>To get access to the full history of 1.6 billion requests, I&rsquo;d need a different way to query the data in S3. I&rsquo;d read some interesting things about AWS&rsquo;s <a href="https://aws.amazon.com/athena/">Athena</a> query service, including examples of how to use it to read ELB logs in S3, my exact need, and thought I&rsquo;d give it a try. And rather than check out the fun-looking <a href="https://rud.is/b/2018/04/20/painless-odbc-dplyr-connections-to-amazon-athena-and-apache-drill-with-r-odbc/">R bindings</a>, I decided to do the SQL the old-fashioned way&mdash;by googling for help and trying things I found on Stack Overflow.</p>
-<figure class="floating-right halfwidth"><img src="/img/respect.gif"/><figcaption>
-            <p>
-                    <a href="https://gifer.com/en/41AV">source</a></p>
-        </figcaption>
+<figure class="floating-right halfwidth"><img src="/img/respect.gif"><figcaption>
+      <p>
+          <a href="https://gifer.com/en/41AV">source</a></p>
+    </figcaption>
 </figure>
 
 <p>I partly chose the old-fashioned way because of a dark secret: I had never actually written a SQL query before. I&rsquo;m not sure how I&rsquo;ve made it this far without having done it. I&rsquo;ve been analyzing data for many years using all kinds of tools, and I&rsquo;ve scraped, coded, cajoled, and assembled by any means necessary lots of kinds of data in both academia and industry. I&rsquo;ve run jobs on big compute clusters, I&rsquo;ve written lots of code to manage working with datasets too big to fit into memory, and I&rsquo;ve gotten the results I needed. But not with a direct SQL query.</p>
@@ -189,10 +189,10 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">AND</span> <span style="color:#66d9ef">month</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;02&#39;</span>
 </span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">AND</span> <span style="color:#66d9ef">day</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;05&#39;</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">LIMIT</span> <span style="color:#ae81ff">10</span>;
-</span></span></code></pre></div><figure class="floating-left halfwidth"><img src="/img/use-it.gif"/><figcaption>
-            <p>
-                    <a href="https://uproxx.files.wordpress.com/2012/06/40yearoldvirgin-useit.gif?w=650">It&rsquo;s important to ask the right questions</a></p>
-        </figcaption>
+</span></span></code></pre></div><figure class="floating-left halfwidth"><img src="/img/use-it.gif"><figcaption>
+      <p>
+          <a href="https://uproxx.files.wordpress.com/2012/06/40yearoldvirgin-useit.gif?w=650">It&rsquo;s important to ask the right questions</a></p>
+    </figcaption>
 </figure>
 
 <p>In hindsight, there&rsquo;s probably a <code>REGEXP_MATCH</code> or something that does more naturally what I wanted (turns out it&rsquo;s spelled <a href="https://prestodb.github.io/docs/0.172/functions/regexp.html"><code>REGEXP_LIKE</code></a> in Presto), but one of my challenges as an inexperienced SQL writer was learning how to search for help. Sorting out all of the flavors of SQL and knowing which ones are valid in this environment took some practice.</p>
@@ -223,10 +223,10 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">GROUP</span> <span style="color:#66d9ef">BY</span> segment, <span style="color:#66d9ef">day</span>, <span style="color:#66d9ef">month</span>, <span style="color:#66d9ef">year</span>
 </span></span></code></pre></div><p>The way I computed the counts of subgroups (for example, requests that returned 504 Gateway Timeout status) with <code>CASE WHEN</code> seemed verbose and like there should be an easier way, but that was how the blog post did it, and it worked so I didn&rsquo;t try to polish. One sticky point was the ELB status code, which needed to be cast from string to an integer (and that&rsquo;s <code>INTEGER</code> not <code>INT</code>) in the inner <code>SELECT</code> statement, but that was easy enough to figure out from the error messages and some persistent googling.</p>
 <p>Before running against all of the data, I checked that the counts I was getting from Athena matched the results from my R code that runs against local copies of the log files. It looked sensible&hellip; except the counts of error responses were too low. Doing some exploration and querying counts grouped by <code>elb_response_code</code>, it appeared that all of the rows that corresponded to 504 Gateway Timeouts were all missing. (Once again, the first rule of working with data is <em>look at your data</em>!)</p>
-<figure class="floating-left halfwidth"><img src="/img/wax.gif"/><figcaption>
-            <p>
-                    <a href="https://media3.giphy.com/media/8JKuFdUW7PVcs/giphy.gif">Surprise!</a></p>
-        </figcaption>
+<figure class="floating-left halfwidth"><img src="/img/wax.gif"><figcaption>
+      <p>
+          <a href="https://media3.giphy.com/media/8JKuFdUW7PVcs/giphy.gif">Surprise!</a></p>
+    </figcaption>
 </figure>
 
 <p>Seeing how <code>REGEXP_EXTRACT</code> behaved and knowing that 504 responses look a little different in the ELB logs, my first guess was that the <code>CREATE TABLE</code>&rsquo;s <code>'input.regex'</code> was to blame. I compared what I had in my table definition with the blog post and found that the blog post one was more complex. Specifically, the regular expression didn&rsquo;t account for a <code>-1</code> response time. Apparently starting with the one from the tutorial was a bad idea&mdash;the sample data probably didn&rsquo;t have this request behavior and didn&rsquo;t need the more complex regular expression to parse the fields correctly.</p>
@@ -236,7 +236,7 @@ if (!doNotTrack) {
 <p>To do that, I needed to generate <code>PARTITION</code> statements for every date for which there was data. When I need something quick and dirty, R is my go-to tool. This was indeed quick and dirty, not code that I find aesthetically pleasing, but it got it done.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e"># PARTITION (year=&#39;2019&#39;,month=&#39;02&#39;,day=&#39;05&#39;) location &#39;s3://my/elb/logs/2019/02/05&#39;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>partition_statement <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function </span>(date) {
+</span></span><span style="display:flex;"><span>partition_statement <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (date) {
 </span></span><span style="display:flex;"><span>    date <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">format</span>(date, <span style="color:#e6db74">&#34;%Y/%m/%d&#34;</span>)
 </span></span><span style="display:flex;"><span>    parts <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">unlist</span>(<span style="color:#a6e22e">strsplit</span>(date, <span style="color:#e6db74">&#34;/&#34;</span>))
 </span></span><span style="display:flex;"><span>    part1 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#34;(year=&#39;&#34;</span>, parts[1], <span style="color:#e6db74">&#34;&#39;,month=&#39;&#34;</span>, parts[2], <span style="color:#e6db74">&#34;&#39;,day=&#39;&#34;</span>, parts[3], <span style="color:#e6db74">&#34;&#39;)&#34;</span>)
@@ -250,10 +250,10 @@ if (!doNotTrack) {
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">cat</span>(<span style="color:#a6e22e">sapply</span>(dates, partition_statement), file<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;athena-partitions.sql&#34;</span>)
 </span></span></code></pre></div><p>Then, I just needed to paste those contents into the <code>ALTER TABLE ADD PARTITION</code> query, and we&rsquo;re ready to run over all the data.</p>
 <p>A query for a single day&rsquo;s worth of data took somewhere between two and four seconds to compute. Split the difference, and project over 3+ years of data, and if it scaled linearly, the query would take something on the order of an hour to finish; let&rsquo;s be generous and cut that in half because we had less traffic three years ago so the files are smaller back then. Surely, though, it would do better than 30 minutes&mdash;the whole point of the system is that it scales automatically&mdash;but how much better?</p>
-<figure class="floating-right"><img src="/img/aquarius.gif"/><figcaption>
-            <p>
-                    <a href="https://media2.giphy.com/media/OEDhjYlskC3O8/giphy.gif">Aquarius</a></p>
-        </figcaption>
+<figure class="floating-right"><img src="/img/aquarius.gif"><figcaption>
+      <p>
+          <a href="https://media2.giphy.com/media/OEDhjYlskC3O8/giphy.gif">Aquarius</a></p>
+    </figcaption>
 </figure>
 
 <p>I hit &ldquo;submit&rdquo; on the query, waited to see the progress bar indicating that it hadn&rsquo;t errored and was running, and went to the kitchen to get some coffee. When I came back&hellip; it was done! Half a terabyte of data, and results in 105 seconds. And I didn&rsquo;t have to configure a server or do anything beyond learn how to type a query. That was awesome.</p>
@@ -274,10 +274,10 @@ if (!doNotTrack) {
     8 Feb 2019
   </time>
   
-    in <span itemprop="articleSection"><a href="/categories/code/">code</a></span>
+    in <span itemprop="articleSection">&lt;a href=&#34;/categories/code/&#34;&gt;code&lt;/a&gt;</span>
   
   
-    and tagged <a href="/tags/athena/">athena</a>, <a href="/tags/logs/">logs</a>, <a href="/tags/serverless/">serverless</a> and <a href="/tags/sql/">sql</a>
+    and tagged &lt;a href=&#34;/tags/athena/&#34;&gt;athena&lt;/a&gt;, &lt;a href=&#34;/tags/logs/&#34;&gt;logs&lt;/a&gt;, &lt;a href=&#34;/tags/serverless/&#34;&gt;serverless&lt;/a&gt; and &lt;a href=&#34;/tags/sql/&#34;&gt;sql&lt;/a&gt;
   
 </p>
 
@@ -299,8 +299,6 @@ if (!doNotTrack) {
 
 
     </div>
-
-    
 
 </div>
 </div>

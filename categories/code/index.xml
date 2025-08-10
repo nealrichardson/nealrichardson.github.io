@@ -1,109 +1,82 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>code on A Blog</title>
+    <title>Code on A Blog</title>
     <link>/categories/code/</link>
-    <description>Recent content in code on A Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Code on A Blog</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 17 Feb 2019 16:49:57 -0700</lastBuildDate><atom:link href="/categories/code/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 17 Feb 2019 16:49:57 -0700</lastBuildDate>
+    <atom:link href="/categories/code/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Writing Docs Is Better Than Having Docs</title>
       <link>/2019/02/17/writing-docs-is-better-than-having-docs/</link>
       <pubDate>Sun, 17 Feb 2019 16:49:57 -0700</pubDate>
-      
       <guid>/2019/02/17/writing-docs-is-better-than-having-docs/</guid>
-      <description>When interviewing developers at Crunch, we sometimes do a live coding exercise using a JavaScript data visualization library. It&amp;rsquo;s basic, and we don&amp;rsquo;t assume any prior knowledge of the library. To start, we tell the candidate that they can use the full internet to help them solve the problem (we&amp;rsquo;re trying to simulate real working conditions, after all), and by the way, this library has excellent documentation.
-It&amp;rsquo;s about 50-50 the candidates that ever open the docs&amp;mdash;the other half go straight to Stack Overflow to look for code to copy.</description>
+      <description>&lt;p&gt;When interviewing developers at &lt;a href=&#34;https://crunch.io/jobs&#34;&gt;Crunch&lt;/a&gt;, we sometimes do a live coding exercise using a JavaScript data visualization library. It&amp;rsquo;s basic, and we don&amp;rsquo;t assume any prior knowledge of the library. To start, we tell the candidate that they can use the full internet to help them solve the problem (we&amp;rsquo;re trying to simulate real working conditions, after all), and by the way, this library has excellent documentation.&lt;/p&gt;&#xA;&lt;p&gt;It&amp;rsquo;s about 50-50 the candidates that ever open the docs&amp;mdash;the other half go straight to Stack Overflow to look for code to copy.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Analyzing Logs with AWS Athena</title>
       <link>/2019/02/08/analyzing-logs-with-aws-athena/</link>
       <pubDate>Fri, 08 Feb 2019 16:49:57 -0700</pubDate>
-      
       <guid>/2019/02/08/analyzing-logs-with-aws-athena/</guid>
-      <description>This week, I wanted to analyze some web traffic patterns back over several years. For contemporary analysis, we sync the last couple of months of load balancer (AWS ELB) log files from S3 to a EC2 instance, and I&amp;rsquo;ve written some tools in R to query them using dplyr methods. The elbr R package I wrote does some clever things to take advantage of the directory structure for fast filtering by date, and it supports parallelized reading and querying of the files, among other optimizations, so it&amp;rsquo;s reasonably fast.</description>
+      <description>&lt;p&gt;This week, I wanted to analyze some web traffic patterns back over several years. For contemporary analysis, we sync the last couple of months of load balancer (AWS ELB) log files from S3 to a EC2 instance, and I&amp;rsquo;ve &lt;a href=&#34;https://enpiar.com/2018/04/25/turbocharging-readr/&#34;&gt;written some tools in R&lt;/a&gt; to query them using &lt;code&gt;dplyr&lt;/code&gt; methods. The &lt;a href=&#34;https://github.com/nealrichardson/elbr&#34;&gt;&lt;code&gt;elbr&lt;/code&gt;&lt;/a&gt; R package I wrote does some clever things to take advantage of the directory structure for fast filtering by date, and it supports parallelized reading and querying of the files, among other optimizations, so it&amp;rsquo;s reasonably fast. But it assumes that the source files are local.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>httptest 3.2.0 Released</title>
       <link>/2018/11/11/httptest-3.2.0-released/</link>
       <pubDate>Sun, 11 Nov 2018 09:00:57 -0700</pubDate>
-      
       <guid>/2018/11/11/httptest-3.2.0-released/</guid>
-      <description>The 3.2.0 release of httptest is now on CRAN. This is a minor release with several enhancements suggested by package users. Details can be found in the release notes.
-A few of the changes improve the behavior of httptest in interactive use. There is one new function, use_httptest(), which configures your package to use httptest when you&amp;rsquo;re setting it up.
-Thanks to everyone who filed issues and submitted pull requests. Included in this release are contributions from and improvements prompted by GitHub users brooklynbagel, jameslamb, jjankowiak, npelikan, and ramiromagno.</description>
+      <description>&lt;p&gt;The 3.2.0 release of &lt;a href=&#34;https://enpiar.com/r/httptest/&#34;&gt;&lt;code&gt;httptest&lt;/code&gt;&lt;/a&gt; is now on &lt;a href=&#34;https://cran.r-project.org/package=httptest&#34;&gt;CRAN&lt;/a&gt;. This is a minor release with several enhancements suggested by package users. Details can be found in the &lt;a href=&#34;https://enpiar.com/r/httptest/news/#httptest-3-2-0&#34;&gt;release notes&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;A few of the changes improve the behavior of &lt;code&gt;httptest&lt;/code&gt; in interactive use. There is one new function, &lt;a href=&#34;https://enpiar.com/r/httptest/reference/use_httptest.html&#34;&gt;&lt;code&gt;use_httptest()&lt;/code&gt;&lt;/a&gt;, which configures your package to use &lt;code&gt;httptest&lt;/code&gt; when you&amp;rsquo;re setting it up.&lt;/p&gt;&#xA;&lt;p&gt;Thanks to everyone who filed issues and submitted pull requests. Included in this release are contributions from and improvements prompted by GitHub users &lt;code&gt;brooklynbagel&lt;/code&gt;, &lt;code&gt;jameslamb&lt;/code&gt;, &lt;code&gt;jjankowiak&lt;/code&gt;, &lt;code&gt;npelikan&lt;/code&gt;, and &lt;code&gt;ramiromagno&lt;/code&gt;.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Turbocharging &#39;readr&#39;</title>
       <link>/2018/04/25/turbocharging-readr/</link>
       <pubDate>Wed, 25 Apr 2018 21:49:57 -0700</pubDate>
-      
       <guid>/2018/04/25/turbocharging-readr/</guid>
-      <description>Recently I analyzed some web traffic for my team at an all-hands meetup. I suspected there were some misconceptions about the frequency of certain kinds of requests, and that some basic descriptive statistics could help.
-Whenever I start an analysis like this, I also think about how to make it easier to repeat it. If the question is interesting enough to merit analysis now, it will probably be interesting next month too&amp;mdash;particularly if it reveals things we want to improve.</description>
+      <description>&lt;p&gt;Recently I analyzed some web traffic for my &lt;a href=&#34;https://crunch.io/team&#34;&gt;team&lt;/a&gt; at an all-hands meetup. I suspected there were some misconceptions about the frequency of certain kinds of requests, and that some basic descriptive statistics could help.&lt;/p&gt;&#xA;&lt;p&gt;Whenever I start an analysis like this, I also think about how to make it easier to repeat it. If the question is interesting enough to merit analysis now, it will probably be interesting next month too&amp;mdash;particularly if it reveals things we want to improve. In this particular exercise, not only did I get statistics for my presentation, I also got a &lt;a href=&#34;https://github.com/nealrichardson/elbr&#34;&gt;new R package&lt;/a&gt; and some insights into how to read in data stored in lots of text files in an efficient, fast way, using &lt;a href=&#34;http://readr.tidyverse.org/&#34;&gt;&lt;code&gt;readr&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Back to the Future</title>
       <link>/2018/02/01/back-to-the-future/</link>
       <pubDate>Thu, 01 Feb 2018 16:49:57 -0700</pubDate>
-      
       <guid>/2018/02/01/back-to-the-future/</guid>
-      <description>When you submit a package update to CRAN, they ask you to check some boxes confirming that you&amp;rsquo;ve done your due diligence on your submission: that it passes its checks. One confirmation is that you&amp;rsquo;ve addressed any failures on the CRAN package check page, which looks like this.
-Hey, all passing today!
-This page is a window into one of the key features of CRAN: it runs continuous-integration tests of your package against multiple versions of R, on multiple operating systems, with the current version of your dependencies.</description>
+      <description>&lt;p&gt;When you submit a package update to CRAN, they ask you to check some boxes confirming that you&amp;rsquo;ve done your due diligence on your submission: that it passes its checks. One confirmation is that you&amp;rsquo;ve addressed any failures on the CRAN package check page, which looks &lt;a href=&#34;https://cran.r-project.org/web/checks/check_results_httptest.html&#34;&gt;like this&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;/img/cran-check-httptest.png&#34;&gt;&lt;figcaption&gt;&#xA;      &lt;p&gt;Hey, all passing today!&lt;/p&gt;&#xA;    &lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&lt;p&gt;This page is a window into one of the key features of CRAN: it runs continuous-integration tests of your package against multiple versions of R, on multiple operating systems, with the current version of your dependencies. You can&amp;rsquo;t (without a special dispensation) submit a package to CRAN that doesn&amp;rsquo;t work on all platforms that R supports, and you always have to pass against the bleeding-edge development version.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Integrating &#39;pkgdown&#39; with Your Personal Website</title>
       <link>/2017/12/18/integrating-pkgdown-with-your-personal-website/</link>
       <pubDate>Mon, 18 Dec 2017 16:49:57 -0700</pubDate>
-      
       <guid>/2017/12/18/integrating-pkgdown-with-your-personal-website/</guid>
-      <description>Publishing a website for your R package is simple with pkgdown. As I recently discussed, you can build a basic site and host it on GitHub Pages with just a handful of commands and clicks.
-That&amp;rsquo;s a great start, but why stop there? If you have a personal website or blog, it would be nice to have your package page mesh with it&amp;mdash;that is, it should fit with your &amp;ldquo;brand&amp;rdquo;. Your personal site has a style (font, color, layout, etc.</description>
+      <description>&lt;p&gt;Publishing a website for your R package is simple with &lt;a href=&#34;http://pkgdown.r-lib.org/&#34;&gt;&lt;code&gt;pkgdown&lt;/code&gt;&lt;/a&gt;. &lt;a href=&#34;https://enpiar.com/2017/11/21/getting-down-with-pkgdown/&#34;&gt;As I recently discussed&lt;/a&gt;, you can build a basic site and host it on GitHub Pages with just a handful of commands and clicks.&lt;/p&gt;&#xA;&lt;p&gt;That&amp;rsquo;s a great start, but why stop there? If you have a personal website or blog, it would be nice to have your package page mesh with it&amp;mdash;that is, it should fit with your &amp;ldquo;brand&amp;rdquo;. Your personal site has a style (font, color, layout, etc.), and ideally your pkgdown site should match it. If you have a custom domain name for your website, it would be great to serve your pkgdown site under the same domain, rather than the default &lt;code&gt;username.github.io/pkgname&lt;/code&gt; GitHub Pages convention. And if you have more than one R package with a website, they should all have a coherent presentation.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Getting Down with pkgdown</title>
       <link>/2017/11/21/getting-down-with-pkgdown/</link>
       <pubDate>Tue, 21 Nov 2017 16:49:57 -0700</pubDate>
-      
       <guid>/2017/11/21/getting-down-with-pkgdown/</guid>
-      <description>pkgdown is an incredibly powerful tool for building beautiful websites for R packages. With pkgdown and services like GitHub Pages, deploying a package website is so simple and straightforward that I&amp;rsquo;m starting to see it as an essential part of writing a package. What&amp;rsquo;s more, I&amp;rsquo;ve found that the act of preparing a package website has led me to improve the package itself, particularly the readability and usefulness of its documentation.</description>
+      <description>&lt;p&gt;&lt;a href=&#34;http://pkgdown.r-lib.org/&#34;&gt;&lt;code&gt;pkgdown&lt;/code&gt;&lt;/a&gt; is an incredibly powerful tool for building beautiful websites for R packages. With &lt;code&gt;pkgdown&lt;/code&gt; and services like &lt;a href=&#34;https://pages.github.com/&#34;&gt;GitHub Pages&lt;/a&gt;, deploying a package website is so simple and straightforward that I&amp;rsquo;m starting to see it as an essential part of writing a package. What&amp;rsquo;s more, I&amp;rsquo;ve found that the act of preparing a package website has led me to improve the package itself, particularly the readability and usefulness of its documentation.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>httptest 2.3.2 Released</title>
       <link>/2017/10/20/httptest-2.3.2-released/</link>
       <pubDate>Fri, 20 Oct 2017 09:00:57 -0700</pubDate>
-      
       <guid>/2017/10/20/httptest-2.3.2-released/</guid>
-      <description>The 2.3.2 release of httptest has just been published on CRAN. Since the 2.0.0 release in June, several key additions have been made. See the NEWS for the full list. If you follow those links, you&amp;rsquo;ll see the first new &amp;ldquo;feature&amp;rdquo;: httptest now has a proper website, using the pkgdown site generator!
-In terms of functionality, the biggest change has been the addition of a framework for &amp;ldquo;redacting&amp;rdquo;, or removing sensitive information like tokens and ids from test fixtures.</description>
+      <description>&lt;p&gt;The 2.3.2 release of &lt;a href=&#34;https://enpiar.com/r/httptest/&#34;&gt;httptest&lt;/a&gt; has just been published on &lt;a href=&#34;https://cran.r-project.org/package=httptest&#34;&gt;CRAN&lt;/a&gt;. Since the 2.0.0 release in June, several key additions have been made. See the &lt;a href=&#34;https://enpiar.com/r/httptest/news/&#34;&gt;NEWS&lt;/a&gt; for the full list. If you follow those links, you&amp;rsquo;ll see the first new &amp;ldquo;feature&amp;rdquo;: &lt;code&gt;httptest&lt;/code&gt; now has a proper website, using the &lt;a href=&#34;http://pkgdown.r-lib.org/&#34;&gt;pkgdown&lt;/a&gt; site generator!&lt;/p&gt;&#xA;&lt;p&gt;In terms of functionality, the biggest change has been the addition of a framework for &amp;ldquo;redacting&amp;rdquo;, or removing sensitive information like tokens and ids from test fixtures. While most API responses recorded by &lt;code&gt;capture_requests&lt;/code&gt; wouldn&amp;rsquo;t contain your authentication credentials&amp;mdash;the default &amp;ldquo;simplified&amp;rdquo; behavior writes out only the JSON response bodies&amp;mdash;I more than once had to edit files by hand to remove cookies and tokens. I even had to sanitize code pushed to GitHub that contained secret tokens and needed to reset API tokens elsewhere. After watching others struggle with the same issue, it was time to implement a solution.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>One-Hour Package</title>
       <link>/2017/08/11/one-hour-package/</link>
       <pubDate>Fri, 11 Aug 2017 16:49:57 -0700</pubDate>
-      
       <guid>/2017/08/11/one-hour-package/</guid>
-      <description>At Crunch, I occasionally pick up small coding projects to help with project management. Recently, I wanted a way to get automated reporting on our open issues in Usersnap, a service embedded in our web application that allows users to report bugs from within the app. My thought was to set up a cron job to report daily summaries in our Slack channel on things like the number of reports created, resolved, and so on, so that we could make sure that bug reports were being addressed quickly.</description>
+      <description>&lt;p&gt;At &lt;a href=&#34;https://crunch.io/&#34;&gt;Crunch&lt;/a&gt;, I occasionally pick up small &lt;a href=&#34;../../../07/04/better-management-through-code/&#34;&gt;coding projects to help with project management&lt;/a&gt;. Recently, I wanted a way to get automated reporting on our open issues in &lt;a href=&#34;http://usersnap.com/&#34;&gt;Usersnap&lt;/a&gt;, a service embedded in our web application that allows users to report bugs from within the app. My thought was to set up a cron job to report daily summaries in our Slack channel on things like the number of reports created, resolved, and so on, so that we could make sure that bug reports were being addressed quickly.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>7 Hard Testing Problems Made Easy By httptest</title>
       <link>/2017/06/21/7-hard-testing-problems-made-easy-by-httptest/</link>
       <pubDate>Wed, 21 Jun 2017 21:49:57 -0700</pubDate>
-      
       <guid>/2017/06/21/7-hard-testing-problems-made-easy-by-httptest/</guid>
-      <description>I&amp;rsquo;m a big advocate of testing and test automation, both on the team I lead and in my own projects. Tests provide valuable evidence that your code works. Without tests, you&amp;rsquo;re engaging in faith-based development: you believe your code works because you believe in your own infallibility as a coder. Theology aside, as a practical matter, tests are liberating because they allow you to modify and extend your code without fear of breaking existing functionality.</description>
+      <description>&lt;p&gt;I&amp;rsquo;m a big advocate of testing and test automation, both on &lt;a href=&#34;https://crunch.io/dev/&#34;&gt;the team I lead&lt;/a&gt; and in &lt;a href=&#34;https://github.com/nealrichardson&#34;&gt;my own projects&lt;/a&gt;. Tests provide valuable evidence that your code works. Without tests, you&amp;rsquo;re engaging in &lt;a href=&#34;https://twitter.com/enpiar/status/748082354455969796&#34;&gt;faith-based development&lt;/a&gt;: you believe your code works because you believe in your own infallibility as a coder. Theology aside, as a practical matter, tests are liberating because they allow you to modify and extend your code without fear of breaking existing functionality. Unfortunately, testing code that communicates with remote services can be challenging. Dealing with authentication, bootstrapping server state, cleaning up objects that may get created during the test run, network flakiness, and other complications can make testing seem too costly to bother with.&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

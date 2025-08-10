@@ -4,8 +4,9 @@
     <title>Hi 👋 on A Blog</title>
     <link>/about/</link>
     <description>Recent content in Hi 👋 on A Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 01 May 2017 21:48:51 -0700</lastBuildDate><atom:link href="/about/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate></lastBuildDate>
+    <atom:link href="/about/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

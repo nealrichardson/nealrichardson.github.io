@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>tdd on A Blog</title>
+    <title>Tdd on A Blog</title>
     <link>/tags/tdd/</link>
-    <description>Recent content in tdd on A Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Tdd on A Blog</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 11 Aug 2017 16:49:57 -0700</lastBuildDate><atom:link href="/tags/tdd/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 11 Aug 2017 16:49:57 -0700</lastBuildDate>
+    <atom:link href="/tags/tdd/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>One-Hour Package</title>
       <link>/2017/08/11/one-hour-package/</link>
       <pubDate>Fri, 11 Aug 2017 16:49:57 -0700</pubDate>
-      
       <guid>/2017/08/11/one-hour-package/</guid>
-      <description>At Crunch, I occasionally pick up small coding projects to help with project management. Recently, I wanted a way to get automated reporting on our open issues in Usersnap, a service embedded in our web application that allows users to report bugs from within the app. My thought was to set up a cron job to report daily summaries in our Slack channel on things like the number of reports created, resolved, and so on, so that we could make sure that bug reports were being addressed quickly.</description>
+      <description>&lt;p&gt;At &lt;a href=&#34;https://crunch.io/&#34;&gt;Crunch&lt;/a&gt;, I occasionally pick up small &lt;a href=&#34;../../../07/04/better-management-through-code/&#34;&gt;coding projects to help with project management&lt;/a&gt;. Recently, I wanted a way to get automated reporting on our open issues in &lt;a href=&#34;http://usersnap.com/&#34;&gt;Usersnap&lt;/a&gt;, a service embedded in our web application that allows users to report bugs from within the app. My thought was to set up a cron job to report daily summaries in our Slack channel on things like the number of reports created, resolved, and so on, so that we could make sure that bug reports were being addressed quickly.&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>
