@@ -1,26 +1,2 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>General on A Blog</title>
-    <link>/categories/general/</link>
-    <description>Recent content in General on A Blog</description>
-    <generator>Hugo</generator>
-    <language>en-us</language>
-    <lastBuildDate>Mon, 13 Aug 2018 12:49:57 -0700</lastBuildDate>
-    <atom:link href="/categories/general/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Talk Slides Now Available</title>
-      <link>/2018/08/13/talk-slides-now-available/</link>
-      <pubDate>Mon, 13 Aug 2018 12:49:57 -0700</pubDate>
-      <guid>/2018/08/13/talk-slides-now-available/</guid>
-      <description>&lt;p&gt;In putting up the &lt;a href=&#34;/talks/api-in-r/&#34;&gt;slides for the talk I gave at last week&amp;rsquo;s Bay Area R meetup&lt;/a&gt;, I figured it would be good to dig up the slides from previous talks and post them here too. (In fact, I linked to one of them in the slides from last week.) So, there&amp;rsquo;s now a &lt;a href=&#34;/talks/&#34;&gt;&amp;ldquo;Talks&amp;rdquo;&lt;/a&gt; section of the site.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>This Is a Blog</title>
-      <link>/2017/05/22/this-is-a-blog/</link>
-      <pubDate>Mon, 22 May 2017 21:11:48 -0700</pubDate>
-      <guid>/2017/05/22/this-is-a-blog/</guid>
-      <description>&lt;p&gt;This page left intentionally blank.&lt;/p&gt;</description>
-    </item>
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>General on A Blog</title><link>/categories/general/</link><description>Recent content in General on A Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 13 Aug 2018 12:49:57 -0700</lastBuildDate><atom:link href="/categories/general/index.xml" rel="self" type="application/rss+xml"/><item><title>Talk Slides Now Available</title><link>/2018/08/13/talk-slides-now-available/</link><pubDate>Mon, 13 Aug 2018 12:49:57 -0700</pubDate><guid>/2018/08/13/talk-slides-now-available/</guid><description>&lt;p>In putting up the &lt;a href="/talks/api-in-r/">slides for the talk I gave at last week&amp;rsquo;s Bay Area R meetup&lt;/a>, I figured it would be good to dig up the slides from previous talks and post them here too. (In fact, I linked to one of them in the slides from last week.) So, there&amp;rsquo;s now a &lt;a href="/talks/">&amp;ldquo;Talks&amp;rdquo;&lt;/a> section of the site.&lt;/p></description></item><item><title>Building a Blogdown Site with Travis-CI</title><link>/2017/06/01/building-a-blogdown-site-with-travis-ci/</link><pubDate>Thu, 01 Jun 2017 21:49:57 -0700</pubDate><guid>/2017/06/01/building-a-blogdown-site-with-travis-ci/</guid><description>&lt;p>&lt;a href="https://crunch.io/dev/blog/building-the-blog-on-travis/">Over on the Crunch.io dev blog&lt;/a>, I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I&amp;rsquo;d do the same for my personal blog, though with one twist: using R and the &lt;a href="https://github.com/rstudio/blogdown">blogdown&lt;/a> package on top of Hugo.&lt;/p>
+&lt;p>&lt;a href="https://github.com/rstudio/blogdown/issues/26">This blogdown GitHub issue&lt;/a> pointed to &lt;a href="https://bookdown.org/yihui/bookdown/github.html">Yihui&amp;rsquo;s guide to building bookdown projects on Travis&lt;/a>, as well as a project that had &lt;a href="https://github.com/curso-r/verao2017">adapted&lt;/a> that flow for &lt;code>blogdown&lt;/code>. Both were helpful, and with my prior experience, I was able to build on those examples to come up with a simple workflow. It was shockingly straightforward.&lt;/p></description></item><item><title>This Is a Blog</title><link>/2017/05/22/this-is-a-blog/</link><pubDate>Mon, 22 May 2017 21:11:48 -0700</pubDate><guid>/2017/05/22/this-is-a-blog/</guid><description>&lt;p>This page left intentionally blank.&lt;/p></description></item></channel></rss>

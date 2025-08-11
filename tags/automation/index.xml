@@ -1,19 +1,2 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Automation on A Blog</title>
-    <link>/tags/automation/</link>
-    <description>Recent content in Automation on A Blog</description>
-    <generator>Hugo</generator>
-    <language>en-us</language>
-    <lastBuildDate>Tue, 04 Jul 2017 16:49:57 -0700</lastBuildDate>
-    <atom:link href="/tags/automation/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Better Management Through Code</title>
-      <link>/2017/07/04/better-management-through-code/</link>
-      <pubDate>Tue, 04 Jul 2017 16:49:57 -0700</pubDate>
-      <guid>/2017/07/04/better-management-through-code/</guid>
-      <description>&lt;p&gt;At &lt;a href=&#34;https://crunch.io/&#34;&gt;Crunch&lt;/a&gt;, I lead both engineering and product management. Over the last few years, what that entails has changed greatly. How I spent my day when we were getting started, with a team of four developers and zero users, is very different from how I spend my time now with 16 on the team and thousands of users around the world. In fact, my day-to-day has evolved through several phases as we&amp;rsquo;ve grown, and each phase has come with its own challenges and learning opportunities&amp;mdash;or rather, challenges that are learning opportunities.&lt;/p&gt;</description>
-    </item>
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Automation on A Blog</title><link>/tags/automation/</link><description>Recent content in Automation on A Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 04 Jul 2017 16:49:57 -0700</lastBuildDate><atom:link href="/tags/automation/index.xml" rel="self" type="application/rss+xml"/><item><title>Better Management Through Code</title><link>/2017/07/04/better-management-through-code/</link><pubDate>Tue, 04 Jul 2017 16:49:57 -0700</pubDate><guid>/2017/07/04/better-management-through-code/</guid><description>&lt;p>At &lt;a href="https://crunch.io/">Crunch&lt;/a>, I lead both engineering and product management. Over the last few years, what that entails has changed greatly. How I spent my day when we were getting started, with a team of four developers and zero users, is very different from how I spend my time now with 16 on the team and thousands of users around the world. In fact, my day-to-day has evolved through several phases as we&amp;rsquo;ve grown, and each phase has come with its own challenges and learning opportunities&amp;mdash;or rather, challenges that are learning opportunities.&lt;/p></description></item><item><title>Building a Blogdown Site with Travis-CI</title><link>/2017/06/01/building-a-blogdown-site-with-travis-ci/</link><pubDate>Thu, 01 Jun 2017 21:49:57 -0700</pubDate><guid>/2017/06/01/building-a-blogdown-site-with-travis-ci/</guid><description>&lt;p>&lt;a href="https://crunch.io/dev/blog/building-the-blog-on-travis/">Over on the Crunch.io dev blog&lt;/a>, I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I&amp;rsquo;d do the same for my personal blog, though with one twist: using R and the &lt;a href="https://github.com/rstudio/blogdown">blogdown&lt;/a> package on top of Hugo.&lt;/p>
+&lt;p>&lt;a href="https://github.com/rstudio/blogdown/issues/26">This blogdown GitHub issue&lt;/a> pointed to &lt;a href="https://bookdown.org/yihui/bookdown/github.html">Yihui&amp;rsquo;s guide to building bookdown projects on Travis&lt;/a>, as well as a project that had &lt;a href="https://github.com/curso-r/verao2017">adapted&lt;/a> that flow for &lt;code>blogdown&lt;/code>. Both were helpful, and with my prior experience, I was able to build on those examples to come up with a simple workflow. It was shockingly straightforward.&lt;/p></description></item></channel></rss>

@@ -1,19 +1,7 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>CRAN on A Blog</title>
-    <link>/tags/cran/</link>
-    <description>Recent content in CRAN on A Blog</description>
-    <generator>Hugo</generator>
-    <language>en-us</language>
-    <lastBuildDate>Thu, 01 Feb 2018 16:49:57 -0700</lastBuildDate>
-    <atom:link href="/tags/cran/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Back to the Future</title>
-      <link>/2018/02/01/back-to-the-future/</link>
-      <pubDate>Thu, 01 Feb 2018 16:49:57 -0700</pubDate>
-      <guid>/2018/02/01/back-to-the-future/</guid>
-      <description>&lt;p&gt;When you submit a package update to CRAN, they ask you to check some boxes confirming that you&amp;rsquo;ve done your due diligence on your submission: that it passes its checks. One confirmation is that you&amp;rsquo;ve addressed any failures on the CRAN package check page, which looks &lt;a href=&#34;https://cran.r-project.org/web/checks/check_results_httptest.html&#34;&gt;like this&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;/img/cran-check-httptest.png&#34;&gt;&lt;figcaption&gt;&#xA;      &lt;p&gt;Hey, all passing today!&lt;/p&gt;&#xA;    &lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&lt;p&gt;This page is a window into one of the key features of CRAN: it runs continuous-integration tests of your package against multiple versions of R, on multiple operating systems, with the current version of your dependencies. You can&amp;rsquo;t (without a special dispensation) submit a package to CRAN that doesn&amp;rsquo;t work on all platforms that R supports, and you always have to pass against the bleeding-edge development version.&lt;/p&gt;</description>
-    </item>
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>CRAN on A Blog</title><link>/tags/cran/</link><description>Recent content in CRAN on A Blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 01 Feb 2018 16:49:57 -0700</lastBuildDate><atom:link href="/tags/cran/index.xml" rel="self" type="application/rss+xml"/><item><title>Back to the Future</title><link>/2018/02/01/back-to-the-future/</link><pubDate>Thu, 01 Feb 2018 16:49:57 -0700</pubDate><guid>/2018/02/01/back-to-the-future/</guid><description>&lt;p>When you submit a package update to CRAN, they ask you to check some boxes confirming that you&amp;rsquo;ve done your due diligence on your submission: that it passes its checks. One confirmation is that you&amp;rsquo;ve addressed any failures on the CRAN package check page, which looks &lt;a href="https://cran.r-project.org/web/checks/check_results_httptest.html">like this&lt;/a>.&lt;/p>
+&lt;figure>&lt;img src="/img/cran-check-httptest.png">&lt;figcaption>
+ &lt;p>Hey, all passing today!&lt;/p>
+ &lt;/figcaption>
+&lt;/figure>
+
+&lt;p>This page is a window into one of the key features of CRAN: it runs continuous-integration tests of your package against multiple versions of R, on multiple operating systems, with the current version of your dependencies. You can&amp;rsquo;t (without a special dispensation) submit a package to CRAN that doesn&amp;rsquo;t work on all platforms that R supports, and you always have to pass against the bleeding-edge development version.&lt;/p></description></item></channel></rss>

@@ -1,259 +1,61 @@
-<!DOCTYPE html>
-<html lang="en-us">
-
-<head>
-  <meta name="generator" content="Hugo 0.148.2">
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> One-Hour Package </title>
-
-  
-  <meta name="description" content="Here&#39;s the story of the time I wrote a R package for an undocumented web API in under an hour, with documentation and full test coverage. With the right tools, creating an API client can be quick and painless."> 
-  
-  
-  
-  
-  
-
-  
-
-  <meta name="author" content="">
-
-
-  <meta property="og:url" content="/2017/08/11/one-hour-package/">
-  <meta property="og:site_name" content="A Blog">
-  <meta property="og:title" content="One-Hour Package">
-  <meta property="og:description" content="Here&#39;s the story of the time I wrote a R package for an undocumented web API in under an hour, with documentation and full test coverage. With the right tools, creating an API client can be quick and painless.">
-  <meta property="og:locale" content="en_us">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="post">
-    <meta property="article:published_time" content="2017-08-11T16:49:57-07:00">
-    <meta property="article:modified_time" content="2017-08-11T16:49:57-07:00">
-    <meta property="article:tag" content="Httptest">
-    <meta property="article:tag" content="R">
-    <meta property="article:tag" content="Tdd">
-    <meta property="article:tag" content="Packages">
-    <meta property="og:image" content="https://enpiar.com/img/fotomat.jpg">
-
-  
-
-
-
-
-  
-  
-  
-  
-  
-
-  <link rel="canonical" href="/2017/08/11/one-hour-package/">  
-
-  <link rel="shortcut icon" type="image/png" href="/favicon.ico">
-
-
-  <link href="/css/font.css" rel="stylesheet" type="text/css">
-  <link href="/css/kube.min.css" rel="stylesheet" type="text/css">
-  <link href="/css/kube.legenda.css" rel="stylesheet" type="text/css">
-  <link href="/css/highlight.css" rel="stylesheet" type="text/css">
-  <link href="/css/main.css" rel="stylesheet" type="text/css">
-  
-
- <link href="/css/custom.css" rel="stylesheet" type="text/css">
-
-  <script src="/js/jquery-2.1.4.min.js" type="text/javascript">
-  </script>
-
-  <script type="text/javascript" src="/js/tocbot.min.js"></script>
-</head>
-
-
-<body class="page-kube">
-  <header> 
-
-
-<link href='//cdn.bootcss.com/highlight.js/9.10.0/styles/color-brewer.min.css' rel='stylesheet' type='text/css'>
-
-
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-
-<div class="show-sm">
-    <div id="nav-toggle-box">
-      <div id="nav-toggle-brand">
-        <a href="/">All posts</a>
-      </div><a data-component="toggleme" data-target="#top" href="#" id="nav-toggle"><i class="kube-menu"></i></a>
-    </div>
-  </div>
-  <div class="hide-sm" id="top">
-    <div id="top-brand">
-        enpiar
-    </div>
-    <nav id="top-nav-main">
-      <ul>
-          
-          
-              <li><a href="/about/" >About</a></li>
-          
-              <li><a href="/" >Blog</a></li>
-          
-              <li><a href="/r/" >Code</a></li>
-          
-              <li><a href="/talks/" >Talks</a></li>
-          
-      </ul>
-    </nav>
-    <nav id="top-nav-extra">
-      <ul>
-          
-              <li><a href="https://github.com/nealrichardson"><span class="fa fa-github fa-lg"></span></a></li>
-          
-              <li><a href="https://www.linkedin.com/in/enpiar/"><span class="fa fa-linkedin fa-lg"></span></a></li>
-          
-      </ul>
-    </nav>
-  </div>
- </header>
-  <main>
-<div class="push-center" itemscope itemtype="http://schema.org/BlogPosting">
-    
-  <meta itemprop="name" content="One-Hour Package">
-  <meta itemprop="description" content="Here&#39;s the story of the time I wrote a R package for an undocumented web API in under an hour, with documentation and full test coverage. With the right tools, creating an API client can be quick and painless.">
-  <meta itemprop="datePublished" content="2017-08-11T16:49:57-07:00">
-  <meta itemprop="dateModified" content="2017-08-11T16:49:57-07:00">
-  <meta itemprop="wordCount" content="2808">
-  <meta itemprop="image" content="https://enpiar.com/img/fotomat.jpg">
-  <meta itemprop="keywords" content="Httptest,R,Tdd,Packages">
-<div id="hero">
-    <h1 itemprop="headline">  One-Hour Package</h1>
-    
-<blockquote itemprop="description">Here's the story of the time I wrote a R package for an undocumented web API in under an hour, with documentation and full test coverage. With the right tools, creating an API client can be quick and painless.</blockquote>
-
-<time class="post-time">
-   <span datetime="2017-08-11T16:49:57-07:00">11 Aug 2017</span>
-
-</time>
-</div>
-<div id="post-box">
-<div id="post" itemprop="articleBody">
-
-    <p>At <a href="https://crunch.io/">Crunch</a>, I occasionally pick up small <a href="../../../07/04/better-management-through-code/">coding projects to help with project management</a>. Recently, I wanted a way to get automated reporting on our open issues in <a href="http://usersnap.com/">Usersnap</a>, a service embedded in our web application that allows users to report bugs from within the app. My thought was to set up a cron job to report daily summaries in our Slack channel on things like the number of reports created, resolved, and so on, so that we could make sure that bug reports were being addressed quickly.</p>
-<figure class="floating-right halfwidth"><img src="/img/fotomat.jpg"><figcaption>
-      <p>
-          <a href="https://commons.wikimedia.org/wiki/File:This_is_a_typical_drive-up_Fotomat_booth..jpg">Wikimedia Commons</a></p>
-    </figcaption>
-</figure>
-
-<p>Given that I don&rsquo;t have much time to code, and that I&rsquo;ve been working on <a href="https://enpiar.com/r/httptest/">tools to make working with APIs easier</a>, I wanted to challenge myself: how quickly could I write an R package for a new API? In addition to getting the job done, I set a few additional requirements: the package must have full test coverage, be fully documented, and pass <code>R CMD check</code>&mdash;that is, it must be complete enough for <a href="https://cran.r-project.org/">CRAN</a> submission.</p>
-<p>Just to make it interesting, it turns out that the API I set out to tackle is neither documented nor even officially acknowledged. When I asked Usersnap about their API, they responded that they &ldquo;currently do not offer API access.&rdquo; Clearly, though, there was an API behind their web application, so I was going to have to infer how the API works by examining how their app uses their unpublished API. It reminded me of my days in grad school collecting data by scraping Brazilian government websites, so with a touch of nostalgia, I embraced the challenge.</p>
-<p>Despite the obstacles, from start to finish, it took me an hour between generating the package skeleton and getting passing builds on <a href="https://travis-ci.org/">Travis-CI</a> and <a href="https://www.appveyor.com/">Appveyor</a> with <a href="https://codecov.io/gh/nealrichardson/useRsnap">100 percent line coverage</a>. I&rsquo;ve written a few public <a href="https://github.com/Crunch-io/rcrunch">API</a> <a href="https://nealrichardson/pivotaltrackR">client</a> <a href="https://github.com/nealrichardson/useRsnap">packages</a> now, and in the process have worked out a good system that gets them started quickly and makes them easy to both test and extend. This approach worked well here too, and in the discussion below, I&rsquo;ll show you how. There are code snippets inline, but it may be easier to get a more complete picture of the project by <a href="https://github.com/nealrichardson/useRsnap">browsing it on GitHub</a>.</p>
-<a class="headline-anchor" href="#tools"><h1 id="tools">Tools</a> </h1>
-<p>We&rsquo;ll need a few R packages to move forward. A couple merit highlighting here; the rest I&rsquo;ll mention in the discussion below. First, when dealing with HTTP APIs in R, the <a href="http://httr.r-lib.org/">httr</a> package is essential. It handles requests and responses and lets you focus on how to translate your (users&rsquo;) intuitions about the data you&rsquo;re accessing into sensible R functions and objects.</p>
-<p>Next, we&rsquo;ll need some tools for writing tests. <a href="https://t.co/IljRyeTIsj">Testing is especially important</a> when writing packages. The <a href="http://testthat.r-lib.org/">testthat</a> package is the current standard for R package test suites, but it lacks some useful tools for working with remote APIs. To make it easy to test API packages, I wrote <a href="https://enpiar.com/r/httptest/">httptest</a>, which extends <code>testthat</code>. As we&rsquo;ll see below, <code>httptest</code> allowed me to get test coverage for all of the lines of code I wrote and enabled me to run the tests quickly and without complication on public continuous-integration services (Travis-CI and Appveyor).</p>
-<a class="headline-anchor" href="#step-1-set-up-the-package-skeleton"><h1 id="step-1-set-up-the-package-skeleton">Step 1: Set up the package skeleton</a> </h1>
-<p>The first step is to set up some basic scaffolding for the R package. Base R has a <code>package.skeleton</code> function that I don&rsquo;t find particularly useful. There are some helpers in the <code>devtools</code> package as well, but for simplicity, I like the <a href="https://github.com/nealrichardson/skeletor">skeletor</a> package skeleton generator. With just one line of code, it sets everything up for using GitHub, Travis-CI, Codecov.io, and Appveyor, gives you a basic test suite setup, and includes helpful instructions for things like how to write a package &ldquo;Description&rdquo; that will pass muster with CRAN.</p>
-<p>So, make the skeleton and open up the files in your preferred editor or IDE:</p>
-<pre><code>R -e 'skeletor::skeletor(&quot;useRsnap&quot;)'
+<!doctype html><html lang=en-us><head><meta name=generator content="Hugo 0.148.2"><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1"><title>One-Hour Package</title><meta name=description content="Here's the story of the time I wrote a R package for an undocumented web API in under an hour, with documentation and full test coverage. With the right tools, creating an API client can be quick and painless."><meta name=author content><meta property="og:url" content="/2017/08/11/one-hour-package/"><meta property="og:site_name" content="A Blog"><meta property="og:title" content="One-Hour Package"><meta property="og:description" content="Here's the story of the time I wrote a R package for an undocumented web API in under an hour, with documentation and full test coverage. With the right tools, creating an API client can be quick and painless."><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="post"><meta property="article:published_time" content="2017-08-11T16:49:57-07:00"><meta property="article:modified_time" content="2017-08-11T16:49:57-07:00"><meta property="article:tag" content="Httptest"><meta property="article:tag" content="R"><meta property="article:tag" content="Tdd"><meta property="article:tag" content="Packages"><meta property="og:image" content="https://enpiar.com/img/fotomat.jpg"><link rel=canonical href=/2017/08/11/one-hour-package/><link rel="shortcut icon" type=image/png href=/favicon.ico><link href=/css/font.css rel=stylesheet type=text/css><link href=/css/kube.min.css rel=stylesheet type=text/css><link href=/css/kube.legenda.css rel=stylesheet type=text/css><link href=/css/highlight.css rel=stylesheet type=text/css><link href=/css/main.css rel=stylesheet type=text/css><link href=/css/custom.css rel=stylesheet type=text/css><script src=/js/jquery-2.1.4.min.js type=text/javascript></script><script type=text/javascript src=/js/tocbot.min.js></script></head><body class=page-kube><header><link href=//cdn.bootcss.com/highlight.js/9.10.0/styles/color-brewer.min.css rel=stylesheet type=text/css><link href=https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css rel=stylesheet integrity=sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1 crossorigin=anonymous><div class=show-sm><div id=nav-toggle-box><div id=nav-toggle-brand><a href=/>All posts</a></div><a data-component=toggleme data-target=#top href=# id=nav-toggle><i class=kube-menu></i></a></div></div><div class=hide-sm id=top><div id=top-brand>enpiar</div><nav id=top-nav-main><ul><li><a href=/about/>About</a></li><li><a href=/>Blog</a></li><li><a href=/r/>Code</a></li><li><a href=/talks/>Talks</a></li></ul></nav><nav id=top-nav-extra><ul><li><a href=https://github.com/nealrichardson><span class="fa fa-github fa-lg"></span></a></li><li><a href=https://www.linkedin.com/in/enpiar/><span class="fa fa-linkedin fa-lg"></span></a></li></ul></nav></div></header><main><div class=push-center itemscope itemtype=http://schema.org/BlogPosting><meta itemprop=name content="One-Hour Package"><meta itemprop=description content="Here's the story of the time I wrote a R package for an undocumented web API in under an hour, with documentation and full test coverage. With the right tools, creating an API client can be quick and painless."><meta itemprop=datePublished content="2017-08-11T16:49:57-07:00"><meta itemprop=dateModified content="2017-08-11T16:49:57-07:00"><meta itemprop=wordCount content="2808"><meta itemprop=image content="https://enpiar.com/img/fotomat.jpg"><meta itemprop=keywords content="Httptest,R,Tdd,Packages"><div id=hero><h1 itemprop=headline>One-Hour Package</h1><blockquote itemprop=description>Here's the story of the time I wrote a R package for an undocumented web API in under an hour, with documentation and full test coverage. With the right tools, creating an API client can be quick and painless.</blockquote><time class=post-time><span datetime=2017-08-11T16:49:57-07:00>11 Aug 2017</span></time></div><div id=post-box><div id=post itemprop=articleBody><p>At <a href=https://crunch.io/>Crunch</a>, I occasionally pick up small <a href=../../../07/04/better-management-through-code/>coding projects to help with project management</a>. Recently, I wanted a way to get automated reporting on our open issues in <a href=http://usersnap.com/>Usersnap</a>, a service embedded in our web application that allows users to report bugs from within the app. My thought was to set up a cron job to report daily summaries in our Slack channel on things like the number of reports created, resolved, and so on, so that we could make sure that bug reports were being addressed quickly.</p><figure class="floating-right halfwidth"><img src=/img/fotomat.jpg><figcaption><p><a href=https://commons.wikimedia.org/wiki/File:This_is_a_typical_drive-up_Fotomat_booth..jpg>Wikimedia Commons</a></p></figcaption></figure><p>Given that I don&rsquo;t have much time to code, and that I&rsquo;ve been working on <a href=https://enpiar.com/r/httptest/>tools to make working with APIs easier</a>, I wanted to challenge myself: how quickly could I write an R package for a new API? In addition to getting the job done, I set a few additional requirements: the package must have full test coverage, be fully documented, and pass <code>R CMD check</code>&mdash;that is, it must be complete enough for <a href=https://cran.r-project.org/>CRAN</a> submission.</p><p>Just to make it interesting, it turns out that the API I set out to tackle is neither documented nor even officially acknowledged. When I asked Usersnap about their API, they responded that they &ldquo;currently do not offer API access.&rdquo; Clearly, though, there was an API behind their web application, so I was going to have to infer how the API works by examining how their app uses their unpublished API. It reminded me of my days in grad school collecting data by scraping Brazilian government websites, so with a touch of nostalgia, I embraced the challenge.</p><p>Despite the obstacles, from start to finish, it took me an hour between generating the package skeleton and getting passing builds on <a href=https://travis-ci.org/>Travis-CI</a> and <a href=https://www.appveyor.com/>Appveyor</a> with <a href=https://codecov.io/gh/nealrichardson/useRsnap>100 percent line coverage</a>. I&rsquo;ve written a few public <a href=https://github.com/Crunch-io/rcrunch>API</a> <a href=https://nealrichardson/pivotaltrackR>client</a> <a href=https://github.com/nealrichardson/useRsnap>packages</a> now, and in the process have worked out a good system that gets them started quickly and makes them easy to both test and extend. This approach worked well here too, and in the discussion below, I&rsquo;ll show you how. There are code snippets inline, but it may be easier to get a more complete picture of the project by <a href=https://github.com/nealrichardson/useRsnap>browsing it on GitHub</a>.</p><a class=headline-anchor href=#tools><h1 id=tools>Tools</a></h1><p>We&rsquo;ll need a few R packages to move forward. A couple merit highlighting here; the rest I&rsquo;ll mention in the discussion below. First, when dealing with HTTP APIs in R, the <a href=http://httr.r-lib.org/>httr</a> package is essential. It handles requests and responses and lets you focus on how to translate your (users&rsquo;) intuitions about the data you&rsquo;re accessing into sensible R functions and objects.</p><p>Next, we&rsquo;ll need some tools for writing tests. <a href=https://t.co/IljRyeTIsj>Testing is especially important</a> when writing packages. The <a href=http://testthat.r-lib.org/>testthat</a> package is the current standard for R package test suites, but it lacks some useful tools for working with remote APIs. To make it easy to test API packages, I wrote <a href=https://enpiar.com/r/httptest/>httptest</a>, which extends <code>testthat</code>. As we&rsquo;ll see below, <code>httptest</code> allowed me to get test coverage for all of the lines of code I wrote and enabled me to run the tests quickly and without complication on public continuous-integration services (Travis-CI and Appveyor).</p><a class=headline-anchor href=#step-1-set-up-the-package-skeleton><h1 id=step-1-set-up-the-package-skeleton>Step 1: Set up the package skeleton</a></h1><p>The first step is to set up some basic scaffolding for the R package. Base R has a <code>package.skeleton</code> function that I don&rsquo;t find particularly useful. There are some helpers in the <code>devtools</code> package as well, but for simplicity, I like the <a href=https://github.com/nealrichardson/skeletor>skeletor</a> package skeleton generator. With just one line of code, it sets everything up for using GitHub, Travis-CI, Codecov.io, and Appveyor, gives you a basic test suite setup, and includes helpful instructions for things like how to write a package &ldquo;Description&rdquo; that will pass muster with CRAN.</p><p>So, make the skeleton and open up the files in your preferred editor or IDE:</p><pre><code>R -e 'skeletor::skeletor(&quot;useRsnap&quot;)'
 cd useRsnap
 atom .
-</code></pre>
-<a class="headline-anchor" href="#step-2-add-general-api-wrappers"><h1 id="step-2-add-general-api-wrappers">Step 2: Add general API wrappers</a> </h1>
-<p>Our next step is to create <a href="https://github.com/nealrichardson/useRsnap/blob/8c2662de5e726ad99e5985b92b97ef5b092c5e0a/R/api.R">R/api.R</a> and drop in a few boilerplate functions, which we&rsquo;ll extend as needed. It&rsquo;s brief: only 33 lines long including comments, with five functions, three of which are one-liners. The core functions, through which every request and response for every API endpoint will go, include</p>
-<ol>
-<li>a function through which all API requests will pass;</li>
-<li>a function that assembles necessary request configuration for this API, such as authentication headers or cookies;</li>
-<li>a generic API response handler, which handles success and error responses according to the API&rsquo;s conventions;</li>
-<li>a URL-constructing utility.</li>
-</ol>
-<p>By centralizing this logic, it will be cheaper to implement each new API endpoint in our package. APIs follow conventions; good APIs have strict internal coherence of these conventions. Every request will require authentication to be expressed in the same way, and response status codes and error message formats will be standardized, so it makes sense that all requests and responses pass through the same core logic in your client code.</p>
-<p>Since these functions build in the configuration needed to make requests of the API, I&rsquo;ll describe them in more detail in the next section.</p>
-<a class="headline-anchor" href="#step-3-work-out-authentication-and-other-configuration"><h1 id="step-3-work-out-authentication-and-other-configuration">Step 3: Work out authentication and other configuration</a> </h1>
-<p>Most APIs require authentication; many also need a project ID or similar to be specified in the request as well. We need to determine what those configuration parameters are, how package users will supply them, and how to incorporate them into requests.</p>
-<p>If the API is well documented, it will be clear what parameters a user needs to supply and how you should supply them. Particularly friendly APIs also give you an easy way to create an API token with limited authorization scope, which you can pass in with your requests from R.</p>
-<a class="headline-anchor" href="#dont-try-this-at-home"><h2 id="dont-try-this-at-home">Don&rsquo;t try this at home</a> </h2>
-<p>In this case, with no documentation available and no official way to request an API token, I had to do some guessing. The project ID was easy to identify&mdash;it was even in the browser URL&mdash;but authentication was trickier. Watching the network panel in the inspector of my web browser when I used the Usersnap web app, I looked at the requests made to see what they were doing and how they included authentication. It was clear that authentication was being sent in a cookie, but there were many cookies being sent with each request, so it was unclear which was the operative one.</p>
-<p>Ultimately, I watched the inspector closely as I logged in again and saw that my authentication request responded with a <code>Set-Cookie</code> header containing one key: &ldquo;bugrep&rdquo;. That must be the auth cookie. So I copied it from the console and used that in my R session, as if it were a proper API access token. Some crude testing confirmed that I got a success response from the API when I included it in a request.</p>
-<p>A better solution might have been to implement the same authentication requests that the browser made, so that you&rsquo;d essentially prompt your R user for a username and password and authenticate the same way. But, I was using Google Account OAuth with Usersnap, and while that&rsquo;s possible to do with <code>httr</code>, it wasn&rsquo;t something I wanted to mess with&mdash;not with the limited time I had for writing the API client. Perhaps later.</p>
-<a class="headline-anchor" href="#how-should-users-supply-their-credentials-to-the-r-session"><h2 id="how-should-users-supply-their-credentials-to-the-r-session">How should users supply their credentials to the R session?</a> </h2>
-<p>Once we know what credentials are required to authenticate, we need to determine how package users will provide them. There are a few alternatives: set them as <code>options</code> and thereby be able to specify them in your <code>.Rprofile</code>; set them as environment variables; or some configuration file format. Security-wise, there&rsquo;s really not much difference. And, from the perspective of bootstrapping a new package, it&rsquo;s not an architecturally significant decision: it&rsquo;s easy to support multiple ways of specifying these parameters should you decide you want to do something different in the future. So, just pick one.</p>
-<p>I opted for <code>options</code> purely out of convenience, both for me as a package developer and for ease of setting them as a user&mdash;no special setting and loading functions are required. We need two options, which I namespaced as &ldquo;usersnap.project&rdquo; and &ldquo;usersnap.cookie&rdquo;, so</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">options</span>(usersnap.project<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;some-project-slug&#34;</span>,
-</span></span><span style="display:flex;"><span>        usersnap.cookie<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;bugrep=4de1f6somehashstring912fe0c&#34;</span>)
-</span></span></code></pre></div><p>sets them, either in your current session, or for all sessions if you put it in your <code>.Rprofile</code>.</p>
-<a class="headline-anchor" href="#including-configuration-in-requests"><h2 id="including-configuration-in-requests">Including configuration in requests</a> </h2>
-<p>The next step is to integrate these parameters into our boilerplate functions. In this API, it appeared that the &ldquo;project&rdquo; was built into the request URLs, so the URL-constructing utility looks like:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>apiRoot <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#34;https://ec2.usersnap.com/angular/apikeys&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>usURL <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (segment, project<span style="color:#f92672">=</span><span style="color:#a6e22e">getOption</span>(<span style="color:#e6db74">&#34;usersnap.project&#34;</span>), <span style="color:#66d9ef">...</span>) {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">file.path</span>(apiRoot, project, segment)
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>This means that <code>usURL(&quot;reports/42&quot;)</code> would return <code>&quot;https://ec2.usersnap.com/angular/apikeys/some-project-slug/reports/42&quot;</code>.</p>
-<p>The auth cookie needs to be set as <code>httr</code> request &ldquo;config&rdquo; for all requests, so I defined a config function that pulls the cookie string from the options and included that result in all requests that go through the generic API function:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e">#&#39; @importFrom httr config</span>
-</span></span><span style="display:flex;"><span>usConfig <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> () {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>(<span style="color:#a6e22e">config</span>(cookie<span style="color:#f92672">=</span><span style="color:#a6e22e">getOption</span>(<span style="color:#e6db74">&#34;usersnap.cookie&#34;</span>)))
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#&#39; @importFrom httr GET</span>
-</span></span><span style="display:flex;"><span>usAPI <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (verb, url, config<span style="color:#f92672">=</span><span style="color:#a6e22e">list</span>(), <span style="color:#66d9ef">...</span>) {
-</span></span><span style="display:flex;"><span>    FUN <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">get</span>(verb, envir<span style="color:#f92672">=</span><span style="color:#a6e22e">asNamespace</span>(<span style="color:#e6db74">&#34;httr&#34;</span>))
-</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">FUN</span>(url, <span style="color:#66d9ef">...</span>, config<span style="color:#f92672">=</span><span style="color:#a6e22e">c</span>(<span style="color:#a6e22e">usConfig</span>(), config))
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>(<span style="color:#a6e22e">handleUSResponse</span>(x))
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>So <code>usAPI(&quot;GET&quot;, usURL(&quot;reports/42&quot;))</code> would perform a <code>GET</code> request on the report URL mentioned above, including our Usersnap auth cookie in the request.</p>
-<p>The other basic functions are the response handler</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e">#&#39; @importFrom httr http_status content</span>
-</span></span><span style="display:flex;"><span>handleUSResponse <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (resp) {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (resp<span style="color:#f92672">$</span>status_code <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">400L</span>)  {
-</span></span><span style="display:flex;"><span>        msg <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">http_status</span>(resp)<span style="color:#f92672">$</span>message
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">## The API tends not to respond with anything else useful, so there&#39;s</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">## nothing to add to that message</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">stop</span>(msg, call.<span style="color:#f92672">=</span><span style="color:#66d9ef">FALSE</span>)
-</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>(<span style="color:#a6e22e">content</span>(resp))
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>which doesn&rsquo;t yet do much other than stop on error and otherwise return the response content, but it will grow as we learn more about the API and its standard response behaviors; and a convenience <code>GET</code> method that passes through the API function:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>usGET <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (url, <span style="color:#66d9ef">...</span>) {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">usAPI</span>(<span style="color:#e6db74">&#34;GET&#34;</span>, url, <span style="color:#66d9ef">...</span>)
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>I like to namespace these core functions, primarily so that you can call, for example, <code>usGET(&quot;some/url&quot;)</code> and you know that it will include the right authentication credentials for that API. That&rsquo;s why these functions all have &ldquo;us&rdquo; in the name.</p>
-<p>Note that this is mostly boilerplate code at this point. The only real customization to the current API is the specification of the auth cookie. The <code>usURL</code> is a convenience tool for building URLs that follow an apparent convention, but it&rsquo;s not essential.</p>
-<p>While we don&rsquo;t strictly need a generic requesting function and a generic response handler to start working on our first methods, they will help us as we go forward. They give us a place to put our common API logic, so the cost of adding each additional API endpoint wrapper stays low. Plus, they help encapsulate our code and keep the complexities of the API and of HTTP separated from our R object space as much as possible.</p>
-<a class="headline-anchor" href="#step-4-pick-an-endpoint"><h1 id="step-4-pick-an-endpoint">Step 4: Pick an endpoint</a> </h1>
-<p>Now, with the core infrastructure in place, let&rsquo;s pick our first endpoint and write a wrapper for it. The one I was most interested in was the &ldquo;reports&rdquo; list so that I could get a catalog of recently opened issues. This is the first view you see when you open up a project in Usersnap&rsquo;s web interface.</p>
-<p>While I usually like to write tests before I write the main code, for this initial case, it made sense to debug interactively, against the live API, just to make sure the end-to-end works. Then we can set up the unit tests, with and without API mocks.</p>
-<p>Normally, you&rsquo;d read the docs and set up something that matches their guidelines. Good documentation usually gives example requests and responses as well. In this case, my available documentation was &ldquo;whatever the web app does&rdquo;. In some ways, not having API documentation helped to keep the initial implementation lean: because I have no idea what the API supports other than what I see the web app doing, there was no sense in trying to be too clever about designing the R function interface. I just set the web app&rsquo;s query as the default, allowed it to be overridden in the <code>...</code> arguments so that I could experiment and not be limited by those defaults, and wrapped it up neatly:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>getReports <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">function</span> (<span style="color:#66d9ef">...</span>) {
-</span></span><span style="display:flex;"><span>    query <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">modifyList</span>(<span style="color:#a6e22e">list</span>(
-</span></span><span style="display:flex;"><span>        includeapikey<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;false&#34;</span>,
-</span></span><span style="display:flex;"><span>        offset<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,
-</span></span><span style="display:flex;"><span>        limit<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>,
-</span></span><span style="display:flex;"><span>        search<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;[{&#34;type&#34;:&#34;state&#34;,&#34;id&#34;:&#34;open&#34;}]&#39;</span>
-</span></span><span style="display:flex;"><span>    ), <span style="color:#a6e22e">list</span>(<span style="color:#66d9ef">...</span>))
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>(<span style="color:#a6e22e">usGET</span>(<span style="color:#a6e22e">usURL</span>(<span style="color:#e6db74">&#34;reports&#34;</span>), query<span style="color:#f92672">=</span>query)<span style="color:#f92672">$</span>data)
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>So, drop that in, install the package, and try it out against the live API.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(useRsnap)
-</span></span><span style="display:flex;"><span>reps <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">getReports</span>()
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">length</span>(reps) <span style="color:#75715e"># Should be 10</span>
-</span></span><span style="display:flex;"><span>reps[[1]]    <span style="color:#75715e"># Inspect one</span>
-</span></span></code></pre></div><p>After tweaking to make sure that the response looked as expected (my first attempt didn&rsquo;t return only the <code>$data</code> element of the response object, so <code>length</code> was not 10), I repeated the <code>getReports</code> query but wrapped in <code>httptest</code>&rsquo;s <a href="https://enpiar.com/r/httptest/articles/httptest.html#recording-mocks-with-capture_requests">capture_requests</a> context, which records the responses from real API requests as fixtures that you can use in tests.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>reps <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">capture_requests</span>(<span style="color:#a6e22e">getReports</span>())
-</span></span></code></pre></div><p>Now we can write tests around that fixture using the <a href="https://enpiar.com/r/httptest/articles/httptest.html#the-with_mock_api-context">with_mock_api</a> context, and we can iterate on the R code and tests as needed, all without hitting the actual API or making any potentially expensive network requests. In <a href="https://github.com/nealrichardson/useRsnap/blob/8c2662de5e726ad99e5985b92b97ef5b092c5e0a/tests/testthat/test-get-reports.R">tests/testthat/test-get-reports.R</a>,</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">context</span>(<span style="color:#e6db74">&#34;Get reports&#34;</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">with_mock_api</span>({
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">test_that</span>(<span style="color:#e6db74">&#34;Get reports&#34;</span>, {
-</span></span><span style="display:flex;"><span>        reps <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">getReports</span>()
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">expect_length</span>(reps, <span style="color:#ae81ff">3</span>)
-</span></span><span style="display:flex;"><span>    })
-</span></span><span style="display:flex;"><span>})
-</span></span></code></pre></div><p>Note that this test says there&rsquo;s only 3 records, not the 10 from my fixture. To save on file size, I deleted the other seven from the recorded mock. It&rsquo;s a plain text file, so I could massage it as needed.</p>
-<p>We can add a few more tests from here, but we&rsquo;re basically done with code&mdash;we have a function that returns a list of report entries in our R session. That&rsquo;s enough of an API wrapper to start writing my daily cron job summarizing our support tickets.</p>
-<a class="headline-anchor" href="#step-5-document-and-wrap-up"><h1 id="step-5-document-and-wrap-up">Step 5: Document and wrap up</a> </h1>
-<p>At this point, we&rsquo;ve set up the skeleton for the package, worked out authentication and configuration for the API, added the core functions through which all requests will go, and added the first method that we&rsquo;re going to expose to our package users. It&rsquo;s been about 40 minutes at this point. We&rsquo;ll spend the next 20 minutes on documentation and polishing.</p>
-<p>First, we need to document the <code>getReports</code> function. The <a href="https://github.com/klutometis/roxygen">roxygen2</a> system for inline documentation of functions is the way to go. Add a description of what the function does, what the arguments are (to the best of our understanding of the API), include a usage example, and finally add the <code>@export</code> note so that the function is exported from the package namespace so that it is public to our package users. Typically this would also include external links to the API documentation, but that wasn&rsquo;t available in this particular case. Finally, as in the examples above, our internal functions already have the <code>@importFrom</code> statements to bring into the package namespace the functions from <code>httr</code> that we need.</p>
-<pre tabindex="0"><code>#&#39; Query Your Usersnaps
+</code></pre><a class=headline-anchor href=#step-2-add-general-api-wrappers><h1 id=step-2-add-general-api-wrappers>Step 2: Add general API wrappers</a></h1><p>Our next step is to create <a href=https://github.com/nealrichardson/useRsnap/blob/8c2662de5e726ad99e5985b92b97ef5b092c5e0a/R/api.R>R/api.R</a> and drop in a few boilerplate functions, which we&rsquo;ll extend as needed. It&rsquo;s brief: only 33 lines long including comments, with five functions, three of which are one-liners. The core functions, through which every request and response for every API endpoint will go, include</p><ol><li>a function through which all API requests will pass;</li><li>a function that assembles necessary request configuration for this API, such as authentication headers or cookies;</li><li>a generic API response handler, which handles success and error responses according to the API&rsquo;s conventions;</li><li>a URL-constructing utility.</li></ol><p>By centralizing this logic, it will be cheaper to implement each new API endpoint in our package. APIs follow conventions; good APIs have strict internal coherence of these conventions. Every request will require authentication to be expressed in the same way, and response status codes and error message formats will be standardized, so it makes sense that all requests and responses pass through the same core logic in your client code.</p><p>Since these functions build in the configuration needed to make requests of the API, I&rsquo;ll describe them in more detail in the next section.</p><a class=headline-anchor href=#step-3-work-out-authentication-and-other-configuration><h1 id=step-3-work-out-authentication-and-other-configuration>Step 3: Work out authentication and other configuration</a></h1><p>Most APIs require authentication; many also need a project ID or similar to be specified in the request as well. We need to determine what those configuration parameters are, how package users will supply them, and how to incorporate them into requests.</p><p>If the API is well documented, it will be clear what parameters a user needs to supply and how you should supply them. Particularly friendly APIs also give you an easy way to create an API token with limited authorization scope, which you can pass in with your requests from R.</p><a class=headline-anchor href=#dont-try-this-at-home><h2 id=dont-try-this-at-home>Don&rsquo;t try this at home</a></h2><p>In this case, with no documentation available and no official way to request an API token, I had to do some guessing. The project ID was easy to identify&mdash;it was even in the browser URL&mdash;but authentication was trickier. Watching the network panel in the inspector of my web browser when I used the Usersnap web app, I looked at the requests made to see what they were doing and how they included authentication. It was clear that authentication was being sent in a cookie, but there were many cookies being sent with each request, so it was unclear which was the operative one.</p><p>Ultimately, I watched the inspector closely as I logged in again and saw that my authentication request responded with a <code>Set-Cookie</code> header containing one key: &ldquo;bugrep&rdquo;. That must be the auth cookie. So I copied it from the console and used that in my R session, as if it were a proper API access token. Some crude testing confirmed that I got a success response from the API when I included it in a request.</p><p>A better solution might have been to implement the same authentication requests that the browser made, so that you&rsquo;d essentially prompt your R user for a username and password and authenticate the same way. But, I was using Google Account OAuth with Usersnap, and while that&rsquo;s possible to do with <code>httr</code>, it wasn&rsquo;t something I wanted to mess with&mdash;not with the limited time I had for writing the API client. Perhaps later.</p><a class=headline-anchor href=#how-should-users-supply-their-credentials-to-the-r-session><h2 id=how-should-users-supply-their-credentials-to-the-r-session>How should users supply their credentials to the R session?</a></h2><p>Once we know what credentials are required to authenticate, we need to determine how package users will provide them. There are a few alternatives: set them as <code>options</code> and thereby be able to specify them in your <code>.Rprofile</code>; set them as environment variables; or some configuration file format. Security-wise, there&rsquo;s really not much difference. And, from the perspective of bootstrapping a new package, it&rsquo;s not an architecturally significant decision: it&rsquo;s easy to support multiple ways of specifying these parameters should you decide you want to do something different in the future. So, just pick one.</p><p>I opted for <code>options</code> purely out of convenience, both for me as a package developer and for ease of setting them as a user&mdash;no special setting and loading functions are required. We need two options, which I namespaced as &ldquo;usersnap.project&rdquo; and &ldquo;usersnap.cookie&rdquo;, so</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-r data-lang=r><span style=display:flex><span><span style=color:#a6e22e>options</span>(usersnap.project<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;some-project-slug&#34;</span>,
+</span></span><span style=display:flex><span>        usersnap.cookie<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;bugrep=4de1f6somehashstring912fe0c&#34;</span>)
+</span></span></code></pre></div><p>sets them, either in your current session, or for all sessions if you put it in your <code>.Rprofile</code>.</p><a class=headline-anchor href=#including-configuration-in-requests><h2 id=including-configuration-in-requests>Including configuration in requests</a></h2><p>The next step is to integrate these parameters into our boilerplate functions. In this API, it appeared that the &ldquo;project&rdquo; was built into the request URLs, so the URL-constructing utility looks like:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-r data-lang=r><span style=display:flex><span>apiRoot <span style=color:#f92672>&lt;-</span> <span style=color:#e6db74>&#34;https://ec2.usersnap.com/angular/apikeys&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>usURL <span style=color:#f92672>&lt;-</span> <span style=color:#66d9ef>function</span> (segment, project<span style=color:#f92672>=</span><span style=color:#a6e22e>getOption</span>(<span style=color:#e6db74>&#34;usersnap.project&#34;</span>), <span style=color:#66d9ef>...</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>file.path</span>(apiRoot, project, segment)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>This means that <code>usURL("reports/42")</code> would return <code>"https://ec2.usersnap.com/angular/apikeys/some-project-slug/reports/42"</code>.</p><p>The auth cookie needs to be set as <code>httr</code> request &ldquo;config&rdquo; for all requests, so I defined a config function that pulls the cookie string from the options and included that result in all requests that go through the generic API function:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-r data-lang=r><span style=display:flex><span><span style=color:#75715e>#&#39; @importFrom httr config</span>
+</span></span><span style=display:flex><span>usConfig <span style=color:#f92672>&lt;-</span> <span style=color:#66d9ef>function</span> () {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span>(<span style=color:#a6e22e>config</span>(cookie<span style=color:#f92672>=</span><span style=color:#a6e22e>getOption</span>(<span style=color:#e6db74>&#34;usersnap.cookie&#34;</span>)))
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#&#39; @importFrom httr GET</span>
+</span></span><span style=display:flex><span>usAPI <span style=color:#f92672>&lt;-</span> <span style=color:#66d9ef>function</span> (verb, url, config<span style=color:#f92672>=</span><span style=color:#a6e22e>list</span>(), <span style=color:#66d9ef>...</span>) {
+</span></span><span style=display:flex><span>    FUN <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>get</span>(verb, envir<span style=color:#f92672>=</span><span style=color:#a6e22e>asNamespace</span>(<span style=color:#e6db74>&#34;httr&#34;</span>))
+</span></span><span style=display:flex><span>    x <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>FUN</span>(url, <span style=color:#66d9ef>...</span>, config<span style=color:#f92672>=</span><span style=color:#a6e22e>c</span>(<span style=color:#a6e22e>usConfig</span>(), config))
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span>(<span style=color:#a6e22e>handleUSResponse</span>(x))
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>So <code>usAPI("GET", usURL("reports/42"))</code> would perform a <code>GET</code> request on the report URL mentioned above, including our Usersnap auth cookie in the request.</p><p>The other basic functions are the response handler</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-r data-lang=r><span style=display:flex><span><span style=color:#75715e>#&#39; @importFrom httr http_status content</span>
+</span></span><span style=display:flex><span>handleUSResponse <span style=color:#f92672>&lt;-</span> <span style=color:#66d9ef>function</span> (resp) {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (resp<span style=color:#f92672>$</span>status_code <span style=color:#f92672>&gt;=</span> <span style=color:#ae81ff>400L</span>)  {
+</span></span><span style=display:flex><span>        msg <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>http_status</span>(resp)<span style=color:#f92672>$</span>message
+</span></span><span style=display:flex><span>        <span style=color:#75715e>## The API tends not to respond with anything else useful, so there&#39;s</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>## nothing to add to that message</span>
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>stop</span>(msg, call.<span style=color:#f92672>=</span><span style=color:#66d9ef>FALSE</span>)
+</span></span><span style=display:flex><span>    } <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span>(<span style=color:#a6e22e>content</span>(resp))
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>which doesn&rsquo;t yet do much other than stop on error and otherwise return the response content, but it will grow as we learn more about the API and its standard response behaviors; and a convenience <code>GET</code> method that passes through the API function:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-r data-lang=r><span style=display:flex><span>usGET <span style=color:#f92672>&lt;-</span> <span style=color:#66d9ef>function</span> (url, <span style=color:#66d9ef>...</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>usAPI</span>(<span style=color:#e6db74>&#34;GET&#34;</span>, url, <span style=color:#66d9ef>...</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>I like to namespace these core functions, primarily so that you can call, for example, <code>usGET("some/url")</code> and you know that it will include the right authentication credentials for that API. That&rsquo;s why these functions all have &ldquo;us&rdquo; in the name.</p><p>Note that this is mostly boilerplate code at this point. The only real customization to the current API is the specification of the auth cookie. The <code>usURL</code> is a convenience tool for building URLs that follow an apparent convention, but it&rsquo;s not essential.</p><p>While we don&rsquo;t strictly need a generic requesting function and a generic response handler to start working on our first methods, they will help us as we go forward. They give us a place to put our common API logic, so the cost of adding each additional API endpoint wrapper stays low. Plus, they help encapsulate our code and keep the complexities of the API and of HTTP separated from our R object space as much as possible.</p><a class=headline-anchor href=#step-4-pick-an-endpoint><h1 id=step-4-pick-an-endpoint>Step 4: Pick an endpoint</a></h1><p>Now, with the core infrastructure in place, let&rsquo;s pick our first endpoint and write a wrapper for it. The one I was most interested in was the &ldquo;reports&rdquo; list so that I could get a catalog of recently opened issues. This is the first view you see when you open up a project in Usersnap&rsquo;s web interface.</p><p>While I usually like to write tests before I write the main code, for this initial case, it made sense to debug interactively, against the live API, just to make sure the end-to-end works. Then we can set up the unit tests, with and without API mocks.</p><p>Normally, you&rsquo;d read the docs and set up something that matches their guidelines. Good documentation usually gives example requests and responses as well. In this case, my available documentation was &ldquo;whatever the web app does&rdquo;. In some ways, not having API documentation helped to keep the initial implementation lean: because I have no idea what the API supports other than what I see the web app doing, there was no sense in trying to be too clever about designing the R function interface. I just set the web app&rsquo;s query as the default, allowed it to be overridden in the <code>...</code> arguments so that I could experiment and not be limited by those defaults, and wrapped it up neatly:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-r data-lang=r><span style=display:flex><span>getReports <span style=color:#f92672>&lt;-</span> <span style=color:#66d9ef>function</span> (<span style=color:#66d9ef>...</span>) {
+</span></span><span style=display:flex><span>    query <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>modifyList</span>(<span style=color:#a6e22e>list</span>(
+</span></span><span style=display:flex><span>        includeapikey<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;false&#34;</span>,
+</span></span><span style=display:flex><span>        offset<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>,
+</span></span><span style=display:flex><span>        limit<span style=color:#f92672>=</span><span style=color:#ae81ff>10</span>,
+</span></span><span style=display:flex><span>        search<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;[{&#34;type&#34;:&#34;state&#34;,&#34;id&#34;:&#34;open&#34;}]&#39;</span>
+</span></span><span style=display:flex><span>    ), <span style=color:#a6e22e>list</span>(<span style=color:#66d9ef>...</span>))
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span>(<span style=color:#a6e22e>usGET</span>(<span style=color:#a6e22e>usURL</span>(<span style=color:#e6db74>&#34;reports&#34;</span>), query<span style=color:#f92672>=</span>query)<span style=color:#f92672>$</span>data)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>So, drop that in, install the package, and try it out against the live API.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-r data-lang=r><span style=display:flex><span><span style=color:#a6e22e>library</span>(useRsnap)
+</span></span><span style=display:flex><span>reps <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>getReports</span>()
+</span></span><span style=display:flex><span><span style=color:#a6e22e>length</span>(reps) <span style=color:#75715e># Should be 10</span>
+</span></span><span style=display:flex><span>reps[[1]]    <span style=color:#75715e># Inspect one</span>
+</span></span></code></pre></div><p>After tweaking to make sure that the response looked as expected (my first attempt didn&rsquo;t return only the <code>$data</code> element of the response object, so <code>length</code> was not 10), I repeated the <code>getReports</code> query but wrapped in <code>httptest</code>&rsquo;s <a href=https://enpiar.com/r/httptest/articles/httptest.html#recording-mocks-with-capture_requests>capture_requests</a> context, which records the responses from real API requests as fixtures that you can use in tests.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-r data-lang=r><span style=display:flex><span>reps <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>capture_requests</span>(<span style=color:#a6e22e>getReports</span>())
+</span></span></code></pre></div><p>Now we can write tests around that fixture using the <a href=https://enpiar.com/r/httptest/articles/httptest.html#the-with_mock_api-context>with_mock_api</a> context, and we can iterate on the R code and tests as needed, all without hitting the actual API or making any potentially expensive network requests. In <a href=https://github.com/nealrichardson/useRsnap/blob/8c2662de5e726ad99e5985b92b97ef5b092c5e0a/tests/testthat/test-get-reports.R>tests/testthat/test-get-reports.R</a>,</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-r data-lang=r><span style=display:flex><span><span style=color:#a6e22e>context</span>(<span style=color:#e6db74>&#34;Get reports&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>with_mock_api</span>({
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>test_that</span>(<span style=color:#e6db74>&#34;Get reports&#34;</span>, {
+</span></span><span style=display:flex><span>        reps <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>getReports</span>()
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>expect_length</span>(reps, <span style=color:#ae81ff>3</span>)
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>})
+</span></span></code></pre></div><p>Note that this test says there&rsquo;s only 3 records, not the 10 from my fixture. To save on file size, I deleted the other seven from the recorded mock. It&rsquo;s a plain text file, so I could massage it as needed.</p><p>We can add a few more tests from here, but we&rsquo;re basically done with code&mdash;we have a function that returns a list of report entries in our R session. That&rsquo;s enough of an API wrapper to start writing my daily cron job summarizing our support tickets.</p><a class=headline-anchor href=#step-5-document-and-wrap-up><h1 id=step-5-document-and-wrap-up>Step 5: Document and wrap up</a></h1><p>At this point, we&rsquo;ve set up the skeleton for the package, worked out authentication and configuration for the API, added the core functions through which all requests will go, and added the first method that we&rsquo;re going to expose to our package users. It&rsquo;s been about 40 minutes at this point. We&rsquo;ll spend the next 20 minutes on documentation and polishing.</p><p>First, we need to document the <code>getReports</code> function. The <a href=https://github.com/klutometis/roxygen>roxygen2</a> system for inline documentation of functions is the way to go. Add a description of what the function does, what the arguments are (to the best of our understanding of the API), include a usage example, and finally add the <code>@export</code> note so that the function is exported from the package namespace so that it is public to our package users. Typically this would also include external links to the API documentation, but that wasn&rsquo;t available in this particular case. Finally, as in the examples above, our internal functions already have the <code>@importFrom</code> statements to bring into the package namespace the functions from <code>httr</code> that we need.</p><pre tabindex=0><code>#&#39; Query Your Usersnaps
 #&#39;
 #&#39; @param ... query parameters to include. There&#39;s no documentation, but known
 #&#39; parameters are (1) includeapikey, which should always be `&#34;false&#34;`; (2)
@@ -264,100 +66,7 @@ atom .
 #&#39; @return A list of report entries.
 #&#39; @export
 #&#39; @importFrom utils modifyList
-</code></pre><p>In this phase, we&rsquo;ll run <code>R CMD check</code> until it passes. The main things we&rsquo;ll be battling with here will be namespace (imports and exports) and documentation. Run it, fix whatever it says is wrong, and repeat until the docs and namespace are satisfactory.</p>
-<p>Next, we need a useful README file that gives instructions on how to install and configure the package, particularly with regards to authentication. We want package users to be able to get started quickly.</p>
-<p>Finally, there&rsquo;s some source control and continuous integration setup, which might take you 30 seconds if you know where to go and what to click and type. Fortunately, the <code>skeletor</code> package skeleton puts <a href="https://github.com/nealrichardson/skeletor/blob/master/inst/pkg/README.md#how-to-finish-setting-up-your-new-package">instructions in your README</a> for how to <code>git init</code> and set up your repository on GitHub, Travis-CI, and Appveyor. Follow the instructions, <code>git add .</code>, <code>git commit</code>, and <code>git push</code>. Then we&rsquo;re done.</p>
-<a class="headline-anchor" href="#lean-and-extensible"><h1 id="lean-and-extensible">Lean and extensible</a> </h1>
-<p>So, we&rsquo;ve made a basic package that provides an API client in R, even doing so without any API documentation for support. And it&rsquo;s fully tested.</p>
-<p>Sure, it&rsquo;s bare: it only really supports a single endpoint. But I only needed the one endpoint to make my reporting job work. Any other endpoints or options to this one can be added when they&rsquo;re needed and not sooner, following the <a href="https://martinfowler.com/bliki/Yagni.html">YAGNI principle</a>.</p>
-<p>But even though the package doesn&rsquo;t do much yet, the framework established for making requests and handling responses will make it easy to add more endpoint methods when we need to. And the testing setup makes it simple to make incremental improvements. Indeed, I found it simple to extend <code>getReports</code> to <a href="https://github.com/nealrichardson/useRsnap/commit/bec1472d8f6396270bf675b7cb6fa0a26d9daf7a">query by &ldquo;open&rdquo; or &ldquo;closed&rdquo; state</a> when I needed to access the closed reports list. So, you can use the package and quickly extend it when you need.</p>
-
-
-
-</div>
-    <div class="">
-        <p>
-  Published
-  <time datetime="2017-08-11T16:49:57-07:00">
-    11 Aug 2017
-  </time>
-  
-    in <span itemprop="articleSection">&lt;a href=&#34;/categories/code/&#34;&gt;code&lt;/a&gt;</span>
-  
-  
-    and tagged &lt;a href=&#34;/tags/httptest/&#34;&gt;httptest&lt;/a&gt;, &lt;a href=&#34;/tags/packages/&#34;&gt;packages&lt;/a&gt;, &lt;a href=&#34;/tags/r/&#34;&gt;R&lt;/a&gt; and &lt;a href=&#34;/tags/tdd/&#34;&gt;tdd&lt;/a&gt;
-  
-</p>
-
-        
-  
-
-
-
-  <aside>
-    <heade><strong>Related Content</strong></header>
-    <hr>
-    <ul>
-      
-      
-        <li><a href="/2019/02/17/writing-docs-is-better-than-having-docs/">Writing Docs Is Better Than Having Docs</a> &ndash; 8 minutes
-      
-        <li><a href="/2018/11/11/httptest-3.2.0-released/">httptest 3.2.0 Released</a> &ndash; 1 minutes
-      
-        <li><a href="/2018/04/25/turbocharging-readr/">Turbocharging &#39;readr&#39;</a> &ndash; 15 minutes
-      
-        <li><a href="/2018/02/01/back-to-the-future/">Back to the Future</a> &ndash; 11 minutes
-      
-        <li><a href="/2017/12/18/integrating-pkgdown-with-your-personal-website/">Integrating &#39;pkgdown&#39; with Your Personal Website</a> &ndash; 11 minutes
-      
-        <li><a href="/2017/11/21/getting-down-with-pkgdown/">Getting Down with pkgdown</a> &ndash; 13 minutes
-      
-        <li><a href="/2017/10/20/httptest-2.3.2-released/">httptest 2.3.2 Released</a> &ndash; 3 minutes
-      
-    </ul>
-  </aside>
-
-
-    </div>
-
-</div>
-</div>
-</main>
-  <footer>   <footer id="footer">
-    <nav>
-      <ul>
-        <li><span>enpiar</span></li>
-        <li>
-          <a href="/">Blog</a>
-        </li>
-      <li>
-        <a href="/about/#socials">Socials</a>
-        </li>
-      </ul>
-    </nav>
-    
-  </footer>
-  
-
-
-
-<script src="//cdn.bootcss.com/highlight.js/9.10.0/highlight.min.js"></script>
-
-<script src="//cdn.bootcss.com/highlight.js/9.10.0/languages/r.min.js"></script>
-<script src="//cdn.bootcss.com/highlight.js/9.10.0/languages/yaml.min.js"></script>
-<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
-
-
-
- </footer>
-
-
-  <script src="/js/kube.js" type="text/javascript">
-  </script>
-  <script src="/js/kube.legenda.js" type="text/javascript">
-  </script>
-  <script src="/js/main.js" type="text/javascript">
-  </script>
-</body>
-
-</html>
+</code></pre><p>In this phase, we&rsquo;ll run <code>R CMD check</code> until it passes. The main things we&rsquo;ll be battling with here will be namespace (imports and exports) and documentation. Run it, fix whatever it says is wrong, and repeat until the docs and namespace are satisfactory.</p><p>Next, we need a useful README file that gives instructions on how to install and configure the package, particularly with regards to authentication. We want package users to be able to get started quickly.</p><p>Finally, there&rsquo;s some source control and continuous integration setup, which might take you 30 seconds if you know where to go and what to click and type. Fortunately, the <code>skeletor</code> package skeleton puts <a href=https://github.com/nealrichardson/skeletor/blob/master/inst/pkg/README.md#how-to-finish-setting-up-your-new-package>instructions in your README</a> for how to <code>git init</code> and set up your repository on GitHub, Travis-CI, and Appveyor. Follow the instructions, <code>git add .</code>, <code>git commit</code>, and <code>git push</code>. Then we&rsquo;re done.</p><a class=headline-anchor href=#lean-and-extensible><h1 id=lean-and-extensible>Lean and extensible</a></h1><p>So, we&rsquo;ve made a basic package that provides an API client in R, even doing so without any API documentation for support. And it&rsquo;s fully tested.</p><p>Sure, it&rsquo;s bare: it only really supports a single endpoint. But I only needed the one endpoint to make my reporting job work. Any other endpoints or options to this one can be added when they&rsquo;re needed and not sooner, following the <a href=https://martinfowler.com/bliki/Yagni.html>YAGNI principle</a>.</p><p>But even though the package doesn&rsquo;t do much yet, the framework established for making requests and handling responses will make it easy to add more endpoint methods when we need to. And the testing setup makes it simple to make incremental improvements. Indeed, I found it simple to extend <code>getReports</code> to <a href=https://github.com/nealrichardson/useRsnap/commit/bec1472d8f6396270bf675b7cb6fa0a26d9daf7a>query by &ldquo;open&rdquo; or &ldquo;closed&rdquo; state</a> when I needed to access the closed reports list. So, you can use the package and quickly extend it when you need.</p></div><div><p>Published
+<time datetime=2017-08-11T16:49:57-07:00>11 Aug 2017
+</time>in <span itemprop=articleSection>&lt;a href="/categories/code/">code&lt;/a></span>
+and tagged &lt;a href="/tags/httptest/">httptest&lt;/a>, &lt;a href="/tags/packages/">packages&lt;/a>, &lt;a href="/tags/r/">R&lt;/a> and &lt;a href="/tags/tdd/">tdd&lt;/a></p><aside><heade><strong>Related Content</strong></header><hr><ul><li><a href=/2019/02/17/writing-docs-is-better-than-having-docs/>Writing Docs Is Better Than Having Docs</a> &ndash; 8 minutes<li><a href=/2018/11/11/httptest-3.2.0-released/>httptest 3.2.0 Released</a> &ndash; 1 minutes<li><a href=/2018/04/25/turbocharging-readr/>Turbocharging 'readr'</a> &ndash; 15 minutes<li><a href=/2018/02/01/back-to-the-future/>Back to the Future</a> &ndash; 11 minutes<li><a href=/2017/12/18/integrating-pkgdown-with-your-personal-website/>Integrating 'pkgdown' with Your Personal Website</a> &ndash; 11 minutes<li><a href=/2017/11/21/getting-down-with-pkgdown/>Getting Down with pkgdown</a> &ndash; 13 minutes<li><a href=/2017/10/20/httptest-2.3.2-released/>httptest 2.3.2 Released</a> &ndash; 3 minutes</ul></aside></div></div></div></main><footer><footer id=footer><nav><ul><li><span>enpiar</span></li><li><a href=/>Blog</a></li><li><a href=/about/#socials>Socials</a></li></ul></nav></footer><script src=//cdn.bootcss.com/highlight.js/9.10.0/highlight.min.js></script><script src=//cdn.bootcss.com/highlight.js/9.10.0/languages/r.min.js></script><script src=//cdn.bootcss.com/highlight.js/9.10.0/languages/yaml.min.js></script><script>hljs.configure({languages:[]}),hljs.initHighlightingOnLoad()</script></footer><script src=/js/kube.js type=text/javascript></script><script src=/js/kube.legenda.js type=text/javascript></script><script src=/js/main.js type=text/javascript></script></body></html>
