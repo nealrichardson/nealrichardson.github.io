@@ -29,11 +29,11 @@ ignoreFiles = ["\\.Rmd$", "_files$", "_cache$"]
     url = "https://www.linkedin.com/in/enpiar/"
 
 [params]
-    description = "A website built through Hugo and blogdown."
+    description = "A website built with Hugo."
 
-    # options for highlight.js (version, additional languages, and theme)
-    highlightjsVersion = "9.10.0"
-    highlightjsCDN = "//cdn.bootcss.com"
+    # # options for highlight.js (version, additional languages, and theme)
+    highlightjsVersion = "11.11.1"
+    highlightjsCDN = "//cdnjs.cloudflare.com/ajax/libs/"
     highlightjsLang = ["r", "yaml"]
     highlightjsTheme = "color-brewer"
 

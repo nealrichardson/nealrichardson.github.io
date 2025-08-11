@@ -259,3 +259,7 @@ time.post-time {
 a.headline-anchor {
     text-decoration: none
 }
+
+div.highlight > pre {
+    background-color: #FAFAFA !important;
+}
