@@ -7,7 +7,7 @@ tags: ["travis-ci", "automation", "meta", "R", "website", "hugo", "blogdown"]
 draft: false
 ---
 
-[Over on the Crunch.io dev blog](https://crunch.io/dev/blog/building-the-blog-on-travis/), I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I'd do the same for my personal blog, though with one twist: using R and the [blogdown](https://github.com/rstudio/blogdown) package on top of Hugo.  
+[Over on the Crunch.io dev blog](https://crunch.io/dev/blog/building-the-blog-on-travis/), I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I'd do the same for my personal blog, though with one twist: using R and the [blogdown](https://github.com/rstudio/blogdown) package on top of Hugo.
 
 [This blogdown GitHub issue](https://github.com/rstudio/blogdown/issues/26) pointed to [Yihui's guide to building bookdown projects on Travis](https://bookdown.org/yihui/bookdown/github.html), as well as a project that had [adapted](https://github.com/curso-r/verao2017) that flow for `blogdown`. Both were helpful, and with my prior experience, I was able to build on those examples to come up with a simple workflow. It was shockingly straightforward.
 
@@ -98,15 +98,3 @@ Once you've done all this, commit and `git push` your blogdown code and Travis c
 Given that `blogdown` is a relatively new tool, I expected that using it would show some rough edges, and that trying to build it on Travis would be challenging. It took me ten attempts to figure out the build automation for our Hugo blog at Crunch. I'd hoped I'd learned a few things about how to use Travis for static sites and could do better this time, but adding R to the mix was a complication.
 
 In the end, it was a breeze. The only part I had to tinker with was installing blogdown itself. The complications I feared---having to install go and Hugo on top of a container configured to run R---were seamlessly handled by blogdown.
-
-And finally, to demonstrate that this post is R Markdown and not regular markdown, here's Figure \@ref(fig:pie) from the example site that `blogdown` generates.
-
-```{r pie, fig.cap='The first and last pie chart to appear on this blog', tidy=FALSE}
-par(mar = c(0, 1, 0, 1))
-pie(
-  c(280, 60, 20),
-  c('Sky', 'Sunny side of pyramid', 'Shady side of pyramid'),
-  col = c('#0292D8', '#F7EA39', '#C4B632'),
-  init.angle = -50, border = NA
-)
-```

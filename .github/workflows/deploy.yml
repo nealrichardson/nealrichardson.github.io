@@ -1,31 +1,30 @@
-# Workflow derived from https://github.com/r-lib/actions/tree/master/examples
+# This workflow builds a Hugo site and deploys it to GitHub Pages.
+# It runs on every push to the repository but deploys only if the push is to the
+# 'src' branch.
 on:
   push:
-    branches: [src]
-
-name: blogdown
 
 jobs:
-  blogdown:
+  build:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-      - uses: r-lib/actions/setup-pandoc@v2
-      - uses: r-lib/actions/setup-r@v2
-        with:
-          use-public-rspm: true
-      - uses: r-lib/actions/setup-r-dependencies@v2
-      - name: Install hugo and theme
+      - name: Install Hugo CLI
+        env:
+          HUGO_VERSION: 0.148.2
         run: |
-          R -e 'blogdown::install_hugo()'
+          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb
+          sudo dpkg -i ${{ runner.temp }}/hugo.deb
+      - name: Install theme
+        run: |
           git clone https://github.com/jeblister/kube.git ./themes/kube
-      - name: Build site
+      - name: Build with Hugo
         run: |
-          R -e 'blogdown::build_site()'
+          hugo --gc --minify
       - name: Deploy to GitHub pages 🚀
         uses: JamesIves/github-pages-deploy-action@v4
+        # Always build, but only deploy if on the src branch
+        if: github.ref == 'refs/heads/src'
         with:
           branch: master
           folder: public
