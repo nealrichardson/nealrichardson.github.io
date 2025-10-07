@@ -1,7 +1,7 @@
 ---
 title: "Arrow Turns 10"
 description: "A look back at Apache Arrow's first decade, how we got to where we are now, and how we can continue to thrive in the next decade."
-date: "2025-10-05T16:49:57-07:00"
+date: "2025-10-07T01:49:57-07:00"
 categories: ["general"]
 tags: ["arrow"]
 draft: false
