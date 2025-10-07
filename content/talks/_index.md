@@ -7,6 +7,8 @@ weight = 1
 
 Here are slides from a few talks I've given over the years:
 
+-   [Arrow Turns 10](/arrow-turns-10/): A look back at the first decade of the Apache Arrow project, how we got to where we are now, and how we can continue to thrive in the next decade. Presented at the [Apache Arrow Summit](https://www.meetup.com/pydata-paris/events/310646396/), October 2, 2025. The talk was not recorded, and the linked slides aren't that useful on their own, but I wrote up a blog post version [here](/2025/10/07/arrow-turns-10/).
+
 -   [Scaling Up Data Workflows with Arrow, Parquet, and DuckDB](/user-2025/): How Parquet files, partitioning, and query engines like DuckDB and the one in the [`arrow`](https://arrow.apache.org/docs/r) R package can help you scale up your data workflows in R. Presented at the [useR! 2025 Conference](https://user2025.r-project.org/), August 2025.
 
 -   [Solving Big Data Problems With Apache Arrow](/talks/user-2021/) ([video](https://www.youtube.com/watch?v=5e7W4ktjASQ)): Some applications of the `arrow` R package provided by the user community. Presented at the [useR! 2021 Conference](https://user2021.r-project.org/), July 2021.

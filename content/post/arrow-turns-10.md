@@ -8,7 +8,7 @@ draft: false
 images: ["https://enpiar.com/img/arrow-cake.png"]
 ---
 
-> I gave a talk to open the 2025 Arrow Summit in Paris, looking back at the history of the Apache Arrow project, some factors that have contributed to its success, and what the past can tell us about how to ensure a bright future. The talk wasn't recorded, and while I've published [the slides](https://enpiar.com/arrow-turns-10/), they don't alone capture what the talk was like, so I thought I would publish a version of it in blog form here.
+> I gave a talk to open the [2025 Arrow Summit](https://www.meetup.com/pydata-paris/events/310646396/) in Paris, looking back at the history of the Apache Arrow project, some factors that have contributed to its success, and what the past can tell us about how to ensure a bright future. The talk wasn't recorded, and while I've published [the slides](https://enpiar.com/arrow-turns-10/), they don't alone capture what the talk was like, so I thought I would publish a version of it in blog form here.
 
 
 Arrow was established as a top-level Apache Software Foundation (ASF) project in January 2016.
