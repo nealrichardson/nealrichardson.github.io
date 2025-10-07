@@ -62,7 +62,6 @@ Arrow is about interoperability, and that means that you really get the most val
 
 This was the point from the beginning. There's this [pair of graphics](https://arrow.apache.org/overview/) that's been on the website for as long as I can remember:
 
-<!-- TODO: center these images -->
 ![Image from Arrow website showing pure chaos if projects have to implement adapters to every other project. There must be a better way!](/img/cassandra-impala.png)
 
 ![Image from Arrow website showing that everything is much nicer if all projects just implement an Arrow memory adapter.](/img/shared-format.png)
