@@ -174,7 +174,8 @@ p+h2, p+h3, p+h4 {
 }
 
 #post img {
-    display:block;
+    display: block;
+    margin: auto !important;
 }
 
 figcaption p {
