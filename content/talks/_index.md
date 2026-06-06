@@ -7,6 +7,8 @@ weight = 1
 
 Here are slides from a few talks I've given over the years:
 
+-   MCP, or Not MCP: About [Model Context Protocol](https://modelcontextprotocol.io/), when to use it, and how to build remote MCP servers. [Shorter version](/mcp-newcastle-2026/) presented at [AI in Production](https://ai-in-production.jumpingrivers.com/) in Newcastle Upon Tyne, UK, June 5, 2026, and [longer version](/mcp-london-2026/) with code examples given at [PyData London](https://pydata.org/london2026) on June 6, 2026.
+
 -   [Arrow Turns 10](/arrow-turns-10/): A look back at the first decade of the Apache Arrow project, how we got to where we are now, and how we can continue to thrive in the next decade. Presented at the [Apache Arrow Summit](https://www.meetup.com/pydata-paris/events/310646396/), October 2, 2025. The talk was not recorded, and the linked slides aren't that useful on their own, but I wrote up a blog post version [here](/2025/10/07/arrow-turns-10/).
 
 -   [Scaling Up Data Workflows with Arrow, Parquet, and DuckDB](/user-2025/): How Parquet files, partitioning, and query engines like DuckDB and the one in the [`arrow`](https://arrow.apache.org/docs/r) R package can help you scale up your data workflows in R. Presented at the [useR! 2025 Conference](https://user2025.r-project.org/), August 2025.
