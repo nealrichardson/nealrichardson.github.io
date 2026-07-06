@@ -5,6 +5,7 @@ date: "2017-08-11T16:49:57-07:00"
 categories: ["code"]
 tags: ["httptest", "R", "tdd", "packages"]
 draft: false
+archive: true
 images: ["https://enpiar.com/img/fotomat.jpg"]
 ---
 

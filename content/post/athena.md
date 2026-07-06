@@ -5,6 +5,7 @@ date: "2019-02-08T16:49:57-07:00"
 categories: ["code"]
 tags: ["athena", "serverless", "sql", "logs"]
 draft: false
+archive: true
 images: ["https://enpiar.com/img/aquarius.gif"]
 ---
 

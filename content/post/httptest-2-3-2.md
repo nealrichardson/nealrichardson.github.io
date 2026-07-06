@@ -5,6 +5,7 @@ date: "2017-10-20T09:00:57-07:00"
 categories: ["code"]
 tags: ["httptest", "R", "testing"]
 draft: false
+archive: true
 ---
 
 The 2.3.2 release of [httptest](https://enpiar.com/r/httptest/) has just been published on [CRAN](https://cran.r-project.org/package=httptest). Since the 2.0.0 release in June, several key additions have been made. See the [NEWS](https://enpiar.com/r/httptest/news/) for the full list. If you follow those links, you'll see the first new "feature": `httptest` now has a proper website, using the [pkgdown](http://pkgdown.r-lib.org/) site generator!

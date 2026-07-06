@@ -5,6 +5,7 @@ date: "2017-06-01T21:49:57-07:00"
 categories: ["general"]
 tags: ["travis-ci", "automation", "meta", "R", "website", "hugo", "blogdown"]
 draft: false
+archive: true
 ---
 
 [Over on the Crunch.io dev blog](https://crunch.io/dev/blog/building-the-blog-on-travis/), I wrote about how we used Travis-CI to automate the building of our various static sites. I thought I'd do the same for my personal blog, though with one twist: using R and the [blogdown](https://github.com/rstudio/blogdown) package on top of Hugo.
