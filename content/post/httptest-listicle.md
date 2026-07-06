@@ -5,6 +5,7 @@ date: "2017-06-21T21:49:57-07:00"
 categories: ["code"]
 tags: ["httptest", "R", "testing"]
 draft: false
+archive: true
 ---
 
 I'm a big advocate of testing and test automation, both on [the team I lead](https://crunch.io/dev/) and in [my own projects](https://github.com/nealrichardson). Tests provide valuable evidence that your code works. Without tests, you're engaging in [faith-based development](https://twitter.com/enpiar/status/748082354455969796): you believe your code works because you believe in your own infallibility as a coder. Theology aside, as a practical matter, tests are liberating because they allow you to modify and extend your code without fear of breaking existing functionality. Unfortunately, testing code that communicates with remote services can be challenging. Dealing with authentication, bootstrapping server state, cleaning up objects that may get created during the test run, network flakiness, and other complications can make testing seem too costly to bother with.

@@ -8,7 +8,7 @@
     <p>Infrequent, verbose thoughts on software and leadership</p>
   </div>
   <ul id="posts">
-    {{ $paginator := .Paginate (where .Site.RegularPages "Type" "post") }}
+    {{ $paginator := .Paginate (where (where .Site.RegularPages "Type" "post") "Params.archive" "!=" true) }}
     {{ range $paginator.Pages}} {{ partial "page-summary" . }} {{ end }}
     <section>{{ partial "pagination" .}}</section>
   </ul>

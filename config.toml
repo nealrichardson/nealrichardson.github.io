@@ -1,12 +1,15 @@
 baseurl = "/"
 relativeurls = false
-languageCode = "en-us"
+locale = "en-us"
 title = "A Blog"
 theme = "kube"
-ignoreFiles = ["\\.Rmd$", "_files$", "_cache$"]
+ignoreFiles = ["\\.Rmd$", "_files$", "_cache$", "CLAUDE\\.md$"]
 
 [permalinks]
     post = "/:year/:month/:day/:slug/"
+
+[markup.goldmark.renderer]
+    unsafe = true
 
 [[menu.main]]
     name = "Blog"

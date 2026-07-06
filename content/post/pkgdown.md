@@ -5,6 +5,7 @@ date: "2017-11-21T16:49:57-07:00"
 categories: ["code"]
 tags: ["R", "packages", "website", "documentation"]
 draft: false
+archive: true
 images: []
 ---
 

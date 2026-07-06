@@ -5,6 +5,7 @@ date: "2018-02-01T16:49:57-07:00"
 categories: ["code"]
 tags: ["R", "packages", "CRAN"]
 draft: false
+archive: true
 images: ["https://enpiar.com/img/bttf-cover.png"]
 ---
 

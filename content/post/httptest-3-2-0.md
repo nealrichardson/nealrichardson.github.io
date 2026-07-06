@@ -5,6 +5,7 @@ date: "2018-11-11T09:00:57-07:00"
 categories: ["code"]
 tags: ["httptest", "R", "testing"]
 draft: false
+archive: true
 ---
 
 The 3.2.0 release of [`httptest`](https://enpiar.com/r/httptest/) is now on [CRAN](https://cran.r-project.org/package=httptest). This is a minor release with several enhancements suggested by package users. Details can be found in the [release notes](https://enpiar.com/r/httptest/news/#httptest-3-2-0).

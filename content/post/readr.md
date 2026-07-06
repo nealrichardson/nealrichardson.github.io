@@ -5,6 +5,7 @@ date: "2018-04-25T21:49:57-07:00"
 categories: ["code"]
 tags: ["R", "performance", "benchmark", "readr", "logs"]
 draft: false
+archive: true
 images: ["https://enpiar.com/img/star-wars-light-speed.gif"]
 ---
 

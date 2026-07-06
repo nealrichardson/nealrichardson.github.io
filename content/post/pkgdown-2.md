@@ -5,6 +5,7 @@ date: "2017-12-18T16:49:57-07:00"
 categories: ["code"]
 tags: ["R", "packages", "website", "hugo", "blogdown", "documentation"]
 draft: false
+archive: true
 images: ["https://enpiar.com/img/css_is_awesome_mug.jpg"]
 ---
 
