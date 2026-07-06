@@ -15,9 +15,6 @@ ignoreFiles = ["\\.Rmd$", "_files$", "_cache$", "CLAUDE\\.md$"]
     name = "Blog"
     url = "/"
 [[menu.main]]
-    name = "Code"
-    url = "/r/"
-[[menu.main]]
     name = "Talks"
     url = "/talks/"
 [[menu.main]]

@@ -6,9 +6,9 @@ weight = 1
 feed_tags = ["r", "R"]
 +++
 
-I maintain several R packages on [CRAN](https://cran.r-project.org/) and have others on [GitHub](https://github.com/nealrichardson). For several years, I was the maintainer of the [`arrow`](https://arrow.apache.org/docs/r/) package. 
+For several years, I was the maintainer of the [`arrow`](https://arrow.apache.org/docs/r/) R package. I still maintain a handful of R packages on [CRAN](https://cran.r-project.org/). These days my [open-source activity](https://github.com/nealrichardson) is a bit more diversified.  
 
-Some packages with documentation sites published here:
+Some R packages with documentation sites published here:
 
 -   [`distro`](/distro/): A Standardized Interface to Linux Distribution Version Information
 
